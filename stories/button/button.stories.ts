@@ -1,52 +1,43 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+/* eslint-disable @typescript-eslint/naming-convention */
+import type { Meta, StoryFn } from '@storybook/angular';
+import { applicationConfig, moduleMetadata } from '@storybook/angular';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/button';
 
-import { ButtonComponent } from './button.component';
-
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
-const meta: Meta<ButtonComponent> = {
-  title: 'Example/Button',
-  component: ButtonComponent,
+export default {
+  title: 'Actions/Button',
   tags: ['autodocs'],
-  render: (args: ButtonComponent) => ({
-    props: {
-      backgroundColor: null,
-      ...args,
-    },
-  }),
+  decorators: [
+    applicationConfig({
+      providers: [provideAnimations()],
+    }),
+    moduleMetadata({
+      imports: [ButtonModule],
+    }),
+  ],
+  args: {
+    label: 'Submit',
+  },
   argTypes: {
-    backgroundColor: {
-      control: 'color',
+    onClick: {
+      action: 'onClick',
     },
   },
-};
-
-export default meta;
-type Story = StoryObj<ButtonComponent>;
-
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary: Story = {
-  args: {
-    primary: true,
-    label: 'Button',
+  parameters: {
+    controls: { expanded: true },
   },
-};
+} as Meta;
 
-export const Secondary: Story = {
-  args: {
-    label: 'Button',
-  },
-};
+export const Flat: StoryFn = (args) => ({
+  template: `
+  <p-button [label]="label" (click)="onClick($event)"></p-button>
+  `,
+  props: args,
+});
 
-export const Large: Story = {
-  args: {
-    size: 'large',
-    label: 'Button',
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: 'small',
-    label: 'Button',
-  },
-};
+export const Stroked: StoryFn = (args) => ({
+  template: `
+    <p-button [label]="label" [outlined]="true" (click)="onClick($event)"></p-button>
+  `,
+  props: args,
+});
