@@ -1,18 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { FeedbackFormComponent } from './components/feedback-form/feedback-form.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: FeedbackFormComponent,
-  },
-];
+import { FeedbackRoutingModule } from './feedback.routing';
 
 @NgModule({
   declarations: [FeedbackFormComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  providers: [],
+  imports: [CommonModule, FeedbackRoutingModule],
 })
 export class FeedbackModule {}
