@@ -16,15 +16,12 @@ export default {
     }),
   ],
   args: {
-    label: 'Submit',
+    label: 'Button',
   },
   argTypes: {
     onClick: {
       action: 'onClick',
     },
-  },
-  parameters: {
-    controls: { expanded: true },
   },
 } as Meta;
 
