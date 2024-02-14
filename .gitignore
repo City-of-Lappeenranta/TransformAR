@@ -43,3 +43,8 @@ Thumbs.db
 
 # Storybook
 /storybook-static
+
+# Styles
+svg-icons.generated.ts
+theme.css
+theme.css.map

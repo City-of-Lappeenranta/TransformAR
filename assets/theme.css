@@ -27,9 +27,9 @@
   --surface-d: #dee2e6;
   --surface-e: #ffffff;
   --surface-f: #ffffff;
-  --text-color: #495057;
+  --text-color: #ffffff;
   --text-color-secondary: #6c757d;
-  --primary-color: #2196f3;
+  --primary-color: #275d38;
   --primary-color-text: #ffffff;
   --surface-0: #ffffff;
   --surface-50: #fafafa;
@@ -283,6 +283,16 @@
 @layer primeng {
   * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .flex-column {
+    display: flex;
+    flex-direction: column;
   }
   .p-component {
     font-family: var(--font-family);
@@ -294,7 +304,8 @@
     background-color: rgba(0, 0, 0, 0.4);
     transition-duration: 0.2s;
   }
-  .p-disabled, .p-component:disabled {
+  .p-disabled,
+  .p-component:disabled {
     opacity: 0.8;
   }
   .p-error {
@@ -4376,44 +4387,21 @@
     border-top-color: #ffffff;
   }
   .p-sidebar {
-    background: #ffffff;
-    color: #495057;
-    border: 0 none;
-    box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.1);
+    background-color: #275d38;
   }
   .p-sidebar .p-sidebar-header {
-    padding: 1rem;
-  }
-  .p-sidebar .p-sidebar-header .p-sidebar-close,
-  .p-sidebar .p-sidebar-header .p-sidebar-icon {
-    width: 2rem;
-    height: 2rem;
-    color: #6c757d;
-    border: 0 none;
-    background: transparent;
-    border-radius: 50%;
-    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-  }
-  .p-sidebar .p-sidebar-header .p-sidebar-close:enabled:hover,
-  .p-sidebar .p-sidebar-header .p-sidebar-icon:enabled:hover {
-    color: #495057;
-    border-color: transparent;
-    background: #e9ecef;
-  }
-  .p-sidebar .p-sidebar-header .p-sidebar-close:focus-visible,
-  .p-sidebar .p-sidebar-header .p-sidebar-icon:focus-visible {
-    outline: 0 none;
-    outline-offset: 0;
-    box-shadow: 0 0 0 0.2rem rgba(39, 93, 56, 0);
-  }
-  .p-sidebar .p-sidebar-header + .p-sidebar-content {
-    padding-top: 0;
+    padding: 0;
   }
   .p-sidebar .p-sidebar-content {
-    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
   .p-sidebar .p-sidebar-footer {
-    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    padding: 0 0 75px 0;
   }
   .p-tooltip .p-tooltip-text {
     background: #495057;

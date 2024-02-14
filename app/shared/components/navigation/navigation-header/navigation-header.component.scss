@@ -1,0 +1,50 @@
+:host {
+  .header {
+    width: 100%;
+    height: 56px;
+    position: relative;
+    align-items: center;
+    padding: 0 16px;
+
+    .menu-item {
+      position: relative;
+      z-index: 2;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 12px;
+      color: var(--text-color);
+    }
+
+    .title {
+      position: relative;
+      width: 100%;
+      z-index: 2;
+      padding-right: 44px;
+      text-align: center;
+      color: var(--text-color);
+      font-size: 18px;
+      font-weight: 400;
+      font-family: var(--font-family);
+      line-height: 28px;
+    }
+
+    .background-container {
+      position: absolute;
+      width: 100%;
+      height: 92px;
+      top: 0;
+      right: 0;
+      left: 0;
+      overflow: hidden !important;
+      z-index: 1;
+
+      .background {
+        position: absolute;
+        top: -33px;
+        left: -158px;
+        color: var(--primary-color);
+        overflow: hidden;
+      }
+    }
+  }
+}
