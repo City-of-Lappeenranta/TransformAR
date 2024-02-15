@@ -30,7 +30,7 @@
   } }
 </main>
 <footer class="footer flex-column">
-  <app-steps [amount]="6" [active]="0"></app-steps>
+  <app-steps [amount]="6" [active]="activeStep"></app-steps>
   <div class="flex-row">
     @if(currentFeedbackFormStep > 0) {
     <p-button label="Back" [outlined]="true" (onClick)="back()"></p-button>

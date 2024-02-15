@@ -37,8 +37,11 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public categoryForm = new FormControl<string | null>(null);
   public specificReasonForm = new FormControl<string | null>(null);
 
-  public constructor() {
-    super();
+  public get activeStep(): number {
+    return this.currentFeedbackFormStep === FeedbackFormStep.REPORT_CATEGORY ||
+      this.currentFeedbackFormStep === FeedbackFormStep.REPORT_SPECIFIC
+      ? 0
+      : this.currentFeedbackFormStep - 1;
   }
 
   public ngOnInit(): void {
