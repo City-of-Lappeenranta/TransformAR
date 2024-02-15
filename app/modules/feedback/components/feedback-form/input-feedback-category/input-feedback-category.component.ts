@@ -18,10 +18,18 @@ export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
   implements OnInit
 {
-  @Input({ required: true }) public categories: string[] = [];
+  @Input({ required: true }) public categories:
+    | string[]
+    | { value: string; icon: string }[] = [];
   @Input() public withColor = true;
 
-  public categoriesToShow: { value: string; selected: boolean }[] = [];
+  public categoriesToShow: {
+    value: string;
+    selected: boolean;
+    icon?: string;
+  }[] = [];
+
+  public hasIcons = false;
 
   public constructor(private readonly injector: Injector) {
     super();
@@ -30,24 +38,37 @@ export class InputFeedbackCategoryComponent
   public ngOnInit(): void {
     const ngControl = this.injector.get(NgControl);
 
-    this.categoriesToShow = this.categories.map((value) => ({
-      value,
-      selected: value === ngControl.value,
-    }));
+    this.categoriesToShow = this.categories.map((category) => {
+      if (typeof category === 'string') {
+        return {
+          value: category,
+          selected: category === ngControl.value,
+        };
+      }
+
+      const value = category.value;
+      if (!this.hasIcons) {
+        this.hasIcons = !!category?.icon;
+      }
+
+      return {
+        value,
+        selected: value === ngControl.value,
+        icon: category.icon,
+      };
+    });
   }
 
   public toggleCategory(indexToToggle: number): void {
-    let value = '';
     this.categoriesToShow = this.categoriesToShow.map((category, index) => {
-      let selected = false;
       if (index === indexToToggle) {
-        value = category.value;
-        selected = true;
+        this.writeValue(category.value);
       }
 
-      return { value: category.value, selected };
+      return {
+        ...category,
+        selected: index === indexToToggle,
+      };
     });
-
-    this.writeValue(value);
   }
 }

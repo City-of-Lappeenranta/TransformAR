@@ -34,8 +34,16 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
     'General feedback',
   ];
 
-  public categoryForm = new FormControl<string | null>(null);
-  public specificReasonForm = new FormControl<string | null>(null);
+  public feedbackReasons = [
+    { value: 'Thank you', icon: 'thumbs-up' },
+    { value: 'Reproach', icon: 'thumbs-down' },
+    { value: 'Question', icon: 'question-mark' },
+    { value: 'Action proposal', icon: 'call-to-action' },
+  ];
+
+  public categoryFormControl = new FormControl<string | null>(null);
+  public specificReasonFormControl = new FormControl<string | null>(null);
+  public feedbackReasonFormControl = new FormControl<string | null>(null);
 
   public get activeStep(): number {
     return this.currentFeedbackFormStep === FeedbackFormStep.REPORT_CATEGORY ||
@@ -45,7 +53,11 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    merge(this.categoryForm.valueChanges, this.specificReasonForm.valueChanges)
+    merge(
+      this.categoryFormControl.valueChanges,
+      this.specificReasonFormControl.valueChanges,
+      this.feedbackReasonFormControl.valueChanges
+    )
       .pipe(takeUntil(this.onDestroy))
       .subscribe(() => this.next());
   }
@@ -53,9 +65,12 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
       case FeedbackFormStep.REPORT_CATEGORY:
-        return !!this.categoryForm.value;
+        return !!this.categoryFormControl.value;
       case FeedbackFormStep.REPORT_SPECIFIC: {
-        return !!this.specificReasonForm.value;
+        return !!this.specificReasonFormControl.value;
+      }
+      case FeedbackFormStep.REASON: {
+        return !!this.feedbackReasonFormControl.value;
       }
       default: {
         return false;
