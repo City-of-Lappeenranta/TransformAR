@@ -1,16 +1,45 @@
-<main class="feedback-form" [formGroup]="reasonForm">
+<main class="feedback-form">
+  @switch (currentFeedbackFormStep) { @default {
   <h2 class="title">What would you like to report?</h2>
+
+  @if (currentFeedbackFormStep === feedbackFormStep.REPORT_CATEGORY) {
   <app-input-feedback-category
     class="categories"
-    formControlName="reason"
     [categories]="categories"
+    [formControl]="categoryForm"
   >
   </app-input-feedback-category>
+  } @else {
+  <p class="description">{{ categoryForm.value }}</p>
+  <app-input-feedback-category
+    class="categories"
+    [categories]="specificReasons"
+    [formControl]="specificReasonForm"
+  >
+  </app-input-feedback-category
+  >} } @case (feedbackFormStep.REASON) {
+  <h2 class="title">What's the reason of your feedback?</h2>
+  } @case (feedbackFormStep.FEEDBACK) {
+  <h2 class="title">What's your feedback?</h2>
+  } @case (feedbackFormStep.LOCATION) {
+  <h2 class="title">What's the feedback location?</h2>
+  } @case (feedbackFormStep.CONTACT) {
+  <h2 class="title">How can we contact you?</h2>
+  } @case (feedbackFormStep.CONFIRMATION) {
+  <h2 class="title">Thanks for your feedback!</h2>
+  } }
 </main>
 <footer class="footer flex-column">
   <app-steps [amount]="6" [active]="0"></app-steps>
-  <div class="actions flex-row">
-    <p-button label="Back" [outlined]="true"></p-button>
-    <p-button label="Next" [disabled]="true"></p-button>
+  <div class="flex-row">
+    @if(currentFeedbackFormStep > 0) {
+    <p-button label="Back" [outlined]="true" (onClick)="back()"></p-button>
+    }
+    <p-button
+      class="next-button"
+      label="Next"
+      [disabled]="!canClickNextButton()"
+      (onClick)="next()"
+    ></p-button>
   </div>
 </footer>

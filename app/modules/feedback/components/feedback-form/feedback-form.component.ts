@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { FeedbackFormStep } from './feedback-form-step.enum';
+import { BaseComponent } from '@shared/components/base.component';
+import { merge, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-feedback-form',
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
 })
-export class FeedbackFormComponent {
+export class FeedbackFormComponent extends BaseComponent implements OnInit {
+  public feedbackFormStep = FeedbackFormStep;
+  public currentFeedbackFormStep = FeedbackFormStep.REPORT_CATEGORY;
+
   public categories = [
     'Transactions, customer service, communication and general feedback',
     'Exercise and outdoor activities',
@@ -18,7 +24,47 @@ export class FeedbackFormComponent {
     'Employment and business services',
   ];
 
-  public reasonForm = new FormGroup({
-    reason: new FormControl<string | null>(null),
-  });
+  public specificReasons = [
+    'Customer service center Winkki',
+    'Other customer service points',
+    'Travel advice',
+    'Online transaction',
+    'Websites',
+    'Other city communication and information',
+    'General feedback',
+  ];
+
+  public categoryForm = new FormControl<string | null>(null);
+  public specificReasonForm = new FormControl<string | null>(null);
+
+  public constructor() {
+    super();
+  }
+
+  public ngOnInit(): void {
+    merge(this.categoryForm.valueChanges, this.specificReasonForm.valueChanges)
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(() => this.next());
+  }
+
+  public canClickNextButton(): boolean {
+    switch (this.currentFeedbackFormStep) {
+      case FeedbackFormStep.REPORT_CATEGORY:
+        return !!this.categoryForm.value;
+      case FeedbackFormStep.REPORT_SPECIFIC: {
+        return !!this.specificReasonForm.value;
+      }
+      default: {
+        return false;
+      }
+    }
+  }
+
+  public back(): void {
+    this.currentFeedbackFormStep -= 1;
+  }
+
+  public next(): void {
+    this.currentFeedbackFormStep += 1;
+  }
 }

@@ -1,0 +1,9 @@
+export enum FeedbackFormStep {
+  REPORT_CATEGORY,
+  REPORT_SPECIFIC,
+  REASON,
+  FEEDBACK,
+  LOCATION,
+  CONTACT,
+  CONFIRMATION,
+}

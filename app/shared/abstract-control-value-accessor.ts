@@ -22,7 +22,7 @@ export abstract class ControlValueAccessorHelper<T>
 
   private _value: T | undefined;
 
-  public set value(value: T) {
+  private set value(value: T) {
     this._value = value;
     if (this.onChange) {
       this.onChange(value);
