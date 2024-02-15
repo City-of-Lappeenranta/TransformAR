@@ -30,6 +30,8 @@
   --text-color: #ffffff;
   --text-color-secondary: #6c757d;
   --primary-color: #275d38;
+  --primary-color-dark: #1f4a2d;
+  --primary-color-darker: #173822;
   --primary-color-text: #ffffff;
   --surface-0: #ffffff;
   --surface-50: #fafafa;
@@ -826,8 +828,8 @@
     border-color: #275d38;
   }
   .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
-    border-color: #275d38;
-    background: #275d38;
+    border-color: #173822;
+    background: #173822;
     color: #ffffff;
   }
   p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
@@ -843,7 +845,7 @@
     background-color: #f8f9fa;
   }
   .p-input-filled .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
-    background: #275d38;
+    background: #173822;
   }
   .p-checkbox-label {
     margin-left: 0.5rem;
@@ -1164,7 +1166,7 @@
     background: #ffffff;
   }
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
-    background: #275d38;
+    background: #1f4a2d;
   }
   p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch > .p-inputswitch-slider {
     border-color: #ced4da #ced4da #ced4da #e4677e;
@@ -1554,8 +1556,8 @@
     background: #275d38;
   }
   .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-    border-color: #275d38;
-    background: #275d38;
+    border-color: #173822;
+    background: #173822;
     color: #ffffff;
   }
   p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
@@ -1571,7 +1573,7 @@
     background: #275d38;
   }
   .p-input-filled .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-    background: #275d38;
+    background: #173822;
   }
   .p-radiobutton-label {
     margin-left: 0.5rem;
@@ -1641,8 +1643,8 @@
     color: #ffffff;
   }
   .p-selectbutton .p-button.p-highlight:hover {
-    background: #275d38;
-    border-color: #275d38;
+    background: #1f4a2d;
+    border-color: #1f4a2d;
     color: #ffffff;
   }
   .p-selectbutton .p-button.p-highlight:hover .p-button-icon-left,
@@ -1732,8 +1734,8 @@
     color: #ffffff;
   }
   .p-togglebutton.p-button.p-highlight:hover {
-    background: #275d38;
-    border-color: #275d38;
+    background: #1f4a2d;
+    border-color: #1f4a2d;
     color: #ffffff;
   }
   .p-togglebutton.p-button.p-highlight:hover .p-button-icon-left,
@@ -1870,14 +1872,14 @@
     border-radius: 4px;
   }
   .p-button:not(:disabled):hover {
-    background: #275d38;
+    background: #1f4a2d;
     color: #ffffff;
-    border-color: #275d38;
+    border-color: #1f4a2d;
   }
   .p-button:not(:disabled):active {
-    background: #275d38;
+    background: #173822;
     color: #ffffff;
-    border-color: #275d38;
+    border-color: #173822;
   }
   .p-button.p-button-outlined {
     background-color: transparent;
@@ -2420,13 +2422,13 @@
     color: #f44336;
   }
   .p-button.p-button-link {
-    color: #275d38;
+    color: #173822;
     background: transparent;
     border: transparent;
   }
   .p-button.p-button-link:not(:disabled):hover {
     background: transparent;
-    color: #275d38;
+    color: #173822;
     border-color: transparent;
   }
   .p-button.p-button-link:not(:disabled):hover .p-button-label {
@@ -2439,7 +2441,7 @@
   }
   .p-button.p-button-link:not(:disabled):active {
     background: transparent;
-    color: #275d38;
+    color: #173822;
     border-color: transparent;
   }
   .p-speeddial-button.p-button.p-button-icon-only {
@@ -4367,7 +4369,7 @@
     right: -1rem;
   }
   .p-overlaypanel .p-overlaypanel-close:enabled:hover {
-    background: #275d38;
+    background: #1f4a2d;
     color: #ffffff;
   }
   .p-overlaypanel:after {
@@ -4462,14 +4464,14 @@
     margin-top: 0;
   }
   .p-fileupload-choose:not(.p-disabled):hover {
-    background: #275d38;
+    background: #1f4a2d;
     color: #ffffff;
-    border-color: #275d38;
+    border-color: #1f4a2d;
   }
   .p-fileupload-choose:not(.p-disabled):active {
-    background: #275d38;
+    background: #173822;
     color: #ffffff;
-    border-color: #275d38;
+    border-color: #173822;
   }
   .p-breadcrumb {
     background: #ffffff;

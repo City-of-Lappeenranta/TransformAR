@@ -23,9 +23,6 @@ export default {
       action: 'onClick',
     },
   },
-  parameters: {
-    controls: { expanded: true },
-  },
 } as Meta;
 
 export const Flat: StoryFn = (args) => ({

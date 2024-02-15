@@ -1,7 +1,7 @@
 // Theme Specific Variables
 $primaryColor: #275d38;
-$primaryDarkColor: #275d38;
-$primaryDarkerColor: #275d38;
+$primaryDarkColor: #1f4a2d;
+$primaryDarkerColor: #173822;
 $primaryTextColor: #ffffff;
 
 $colors: (
@@ -43,6 +43,8 @@ $colors: (
   --text-color: #{$primaryTextColor};
   --text-color-secondary: #6c757d;
   --primary-color: #{$primaryColor};
+  --primary-color-dark: #{$primaryDarkColor};
+  --primary-color-darker: #{$primaryDarkerColor};
   --primary-color-text: #ffffff;
   --surface-0: #ffffff;
   --surface-50: #fafafa;
