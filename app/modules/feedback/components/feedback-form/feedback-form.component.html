@@ -7,3 +7,10 @@
   >
   </app-input-feedback-category>
 </main>
+<footer class="footer flex-column">
+  <app-steps [amount]="6" [active]="0"></app-steps>
+  <div class="actions flex-row">
+    <p-button label="Back" [outlined]="true"></p-button>
+    <p-button label="Next" [disabled]="true"></p-button>
+  </div>
+</footer>

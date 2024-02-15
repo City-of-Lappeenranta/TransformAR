@@ -5,6 +5,8 @@ import { FeedbackRoutingModule } from './feedback.routing';
 import { FeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/feedback-category/feedback-category.component';
 import { InputFeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/input-feedback-category.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StepsComponent } from '@shared/components/steps/steps.component';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FeedbackRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    StepsComponent,
+    ButtonModule,
   ],
 })
 export class FeedbackModule {}
