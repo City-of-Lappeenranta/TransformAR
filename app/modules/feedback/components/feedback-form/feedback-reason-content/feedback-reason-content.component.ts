@@ -7,7 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./feedback-reason-content.component.scss'],
 })
 export class FeedbackReasonContentComponent {
-  @Input({ required: true }) public reasonContentForm!: FormGroup<{
+  @Input({ required: true }) public reasonForm!: FormGroup<{
     message: FormControl<string | null>;
     publish: FormControl<boolean | null>;
   }>;

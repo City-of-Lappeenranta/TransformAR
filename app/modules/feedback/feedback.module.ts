@@ -14,6 +14,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FeedbackReasonContentFileComponent } from './components/feedback-form/feedback-reason-content/feedback-reason-content-file/feedback-reason-content-file.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { InputTextModule } from 'primeng/inputtext';
+import { FeedbackLocationComponent } from './components/feedback-form/feedback-location/feedback-location.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
     InputFeedbackCategoryComponent,
     FeedbackReasonContentComponent,
     FeedbackReasonContentFileComponent,
+    FeedbackLocationComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
     CheckboxModule,
     FileUploadModule,
     ProgressBarModule,
+    InputTextModule,
   ],
 })
 export class FeedbackModule {}

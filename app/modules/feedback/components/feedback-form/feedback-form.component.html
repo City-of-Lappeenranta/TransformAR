@@ -1,39 +1,42 @@
-<main class="feedback-form">
+<main class="feedback-form" [formGroup]="feedbackForm">
   @switch (currentFeedbackFormStep) { @default {
   <h2 class="title">What would you like to report?</h2>
 
-  @if (currentFeedbackFormStep === feedbackFormStep.REPORT_CATEGORY) {
+  @if (currentFeedbackFormStep === feedbackFormStep.CATEGORY) {
   <app-input-feedback-category
     class="categories"
     [categories]="categories"
-    [formControl]="categoryFormControl"
+    formControlName="category"
   >
   </app-input-feedback-category>
   } @else {
-  <p class="description">{{ categoryFormControl.value }}</p>
+  <p class="description">{{ feedbackForm.value.category }}</p>
   <app-input-feedback-category
     class="categories"
     [withColor]="false"
-    [categories]="specificReasons"
-    [formControl]="specificReasonFormControl"
+    [categories]="subCategories"
+    formControlName="subCategory"
   >
   </app-input-feedback-category
-  >} } @case (feedbackFormStep.REASON) {
+  >} } @case (feedbackFormStep.TYPE) {
   <h2 class="title">What's the reason of your feedback?</h2>
   <app-input-feedback-category
     class="categories"
     [withColor]="false"
-    [categories]="feedbackReasons"
-    [formControl]="feedbackReasonFormControl"
+    [categories]="reasons"
+    formControlName="type"
   >
   </app-input-feedback-category>
-  } @case (feedbackFormStep.FEEDBACK_CONTENT) {
+  } @case (feedbackFormStep.REASON) {
   <h2 class="title">What's your feedback?</h2>
   <app-feedback-reason-content
-    [reasonContentForm]="reasonContentForm"
+    [reasonForm]="feedbackForm.controls.reason"
   ></app-feedback-reason-content>
   } @case (feedbackFormStep.LOCATION) {
   <h2 class="title">What's the feedback location?</h2>
+  <app-feedback-location
+    [locationFormControl]="feedbackForm.controls.location"
+  ></app-feedback-location>
   } @case (feedbackFormStep.CONTACT) {
   <h2 class="title">How can we contact you?</h2>
   } @case (feedbackFormStep.CONFIRMATION) {

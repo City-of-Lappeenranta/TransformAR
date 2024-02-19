@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { BaseComponent } from '@shared/components/base.component';
 import { merge, takeUntil } from 'rxjs';
+import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 
 @Component({
   selector: 'app-feedback-form',
@@ -11,7 +12,7 @@ import { merge, takeUntil } from 'rxjs';
 })
 export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.REPORT_CATEGORY;
+  public currentFeedbackFormStep = FeedbackFormStep.CATEGORY;
 
   public categories = [
     'Transactions, customer service, communication and general feedback',
@@ -24,7 +25,7 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
     'Employment and business services',
   ];
 
-  public specificReasons = [
+  public subCategories = [
     'Customer service center Winkki',
     'Other customer service points',
     'Travel advice',
@@ -34,35 +35,32 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
     'General feedback',
   ];
 
-  public feedbackReasons = [
+  public reasons = [
     { value: 'Thank you', icon: 'thumbs-up' },
     { value: 'Reproach', icon: 'thumbs-down' },
     { value: 'Question', icon: 'question-mark' },
     { value: 'Action proposal', icon: 'call-to-action' },
   ];
 
-  public categoryFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public specificReasonFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public feedbackReasonFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public reasonContentForm: FormGroup<{
-    message: FormControl<string | null>;
-    publish: FormControl<boolean | null>;
-  }> = new FormGroup({
-    message: new FormControl<string | null>(null, Validators.required),
-    publish: new FormControl<boolean | null>(null),
+  public feedbackForm = new FormGroup({
+    category: new FormControl<string | null>(null, Validators.required),
+    subCategory: new FormControl<string | null>(null, Validators.required),
+    type: new FormControl<string | null>(null, Validators.required),
+    reason: new FormGroup({
+      message: new FormControl<string | null>(null, Validators.required),
+      publish: new FormControl<boolean | null>(null),
+    }),
+    location: new FormControl<string | null>(null, Validators.required),
   });
 
+  public constructor(
+    private readonly navigationHeaderService: NavigationHeaderService
+  ) {
+    super();
+  }
+
   public get activeStep(): number {
-    return this.currentFeedbackFormStep === FeedbackFormStep.REPORT_CATEGORY ||
+    return this.currentFeedbackFormStep === FeedbackFormStep.CATEGORY ||
       this.currentFeedbackFormStep === FeedbackFormStep.REPORT_SPECIFIC
       ? 0
       : this.currentFeedbackFormStep - 1;
@@ -70,9 +68,10 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
 
   public ngOnInit(): void {
     merge(
-      this.categoryFormControl.valueChanges,
-      this.specificReasonFormControl.valueChanges,
-      this.feedbackReasonFormControl.valueChanges
+      this.feedbackForm.controls.category.valueChanges,
+      this.feedbackForm.controls.subCategory.valueChanges,
+      this.feedbackForm.controls.type.valueChanges,
+      this.navigationHeaderService.onActionClick$
     )
       .pipe(takeUntil(this.onDestroy))
       .subscribe(() => this.next());
@@ -80,16 +79,19 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
 
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
-      case FeedbackFormStep.REPORT_CATEGORY:
-        return this.categoryFormControl.valid;
+      case FeedbackFormStep.CATEGORY:
+        return this.feedbackForm.controls.category.valid;
       case FeedbackFormStep.REPORT_SPECIFIC: {
-        return this.specificReasonFormControl.valid;
+        return this.feedbackForm.controls.subCategory.valid;
+      }
+      case FeedbackFormStep.TYPE: {
+        return this.feedbackForm.controls.type.valid;
       }
       case FeedbackFormStep.REASON: {
-        return this.feedbackReasonFormControl.valid;
+        return this.feedbackForm.controls.reason.valid;
       }
-      case FeedbackFormStep.FEEDBACK_CONTENT: {
-        return this.reasonContentForm.valid;
+      case FeedbackFormStep.LOCATION: {
+        return this.feedbackForm.controls.location.valid;
       }
       default: {
         return false;
