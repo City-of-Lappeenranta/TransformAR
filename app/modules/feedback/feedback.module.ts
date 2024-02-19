@@ -16,6 +16,7 @@ import { FeedbackReasonContentFileComponent } from './components/feedback-form/f
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { FeedbackLocationComponent } from './components/feedback-form/feedback-location/feedback-location.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FeedbackLocationComponent } from './components/feedback-form/feedback-l
   ],
   imports: [
     CommonModule,
+    SharedModule,
     FeedbackRoutingModule,
     FormsModule,
     ReactiveFormsModule,
