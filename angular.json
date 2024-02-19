@@ -20,7 +20,9 @@
             "outputPath": "dist/citizen-webapp",
             "index": "index.html",
             "browser": "main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
             "assets": [
@@ -82,7 +84,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "sass",
             "assets": [
@@ -91,8 +96,28 @@
               "manifest.webmanifest",
               "manifest.webmanifest"
             ],
-            "styles": ["styles.sass"],
+            "styles": [
+              "styles.sass"
+            ],
             "scripts": []
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "citizen-webapp:build",
+            "compodoc": false,
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "citizen-webapp:build",
+            "compodoc": false,
+            "outputDir": "storybook-static"
           }
         }
       }
