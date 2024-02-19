@@ -7,7 +7,7 @@
     "start": "npx http-server -p 8080 -c-1 dist/citizen-webapp/browser",
     "watch": "ng build --watch --configuration production",
     "build": "ng build",
-    "test": "ng test",
+    "test": "jest",
     "theme": "sass --update assets/themes/mytheme/theme.scss:assets/theme.css",
     "storybook": "ng run citizen-webapp:storybook",
     "build-storybook": "ng run citizen-webapp:build-storybook"
@@ -41,6 +41,8 @@
     "@types/jasmine": "~5.1.0",
     "http-server": "^14.1.1",
     "jasmine-core": "~5.1.0",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.0.3",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
@@ -48,7 +50,14 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "shallow-render": "^17.0.1",
     "storybook": "^7.6.14",
     "typescript": "~5.3.2"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "<rootDir>/setup-jest.ts"
+    ]
   }
 }
