@@ -9,7 +9,7 @@
       <app-icon
         class="close-icon"
         icon="close"
-        (click)="closeSidebar()"
+        (click)="onSidebarClose.emit()"
       ></app-icon>
     </div>
   </ng-template>
@@ -21,7 +21,7 @@
         <div
           class="menu-item flex-row"
           [routerLink]="item.route"
-          (click)="closeSidebar()"
+          (click)="onSidebarClose.emit()"
         >
           <app-icon class="icon" [icon]="item.icon"></app-icon>
           <p>{{ item.name }}</p>

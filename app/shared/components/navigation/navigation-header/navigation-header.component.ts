@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./navigation-header.component.scss'],
 })
 export class NavigationHeaderComponent {
-  @Input({ required: true }) public title: string | undefined;
+  @Input({ required: true }) public title!: string;
 
   public sidebarOpen = false;
 }
