@@ -1,0 +1,79 @@
+:host {
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .message-container {
+      .textarea {
+        height: 105px;
+      }
+    }
+
+    .published-container {
+      align-items: start;
+      gap: 8px;
+
+      .checkbox {
+        padding-top: 4px;
+      }
+
+      .title-and-description {
+        h3,
+        p {
+          font-family: var(--font-family);
+          font-size: 14px;
+
+          line-height: 22px;
+        }
+
+        h3 {
+          color: #000;
+          font-weight: 500;
+        }
+
+        p {
+          color: #667085;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .attachments-container {
+      .attachments {
+        padding: 12px 56px;
+        align-items: center;
+        border-radius: 10px;
+        border: 1px dashed rgba(0, 0, 0, 0.25);
+
+        .description {
+          margin-top: 12px;
+          color: rgba(0, 0, 0, 0.4);
+          text-align: center;
+          font-family: "Effra";
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+
+        .button {
+          margin-top: 24px;
+        }
+      }
+    }
+
+    .files-container {
+      margin-top: 12px;
+
+      h4 {
+        color: #344054;
+        font-family: var(--font-family);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+      }
+    }
+  }
+}

@@ -27,8 +27,11 @@
     [formControl]="feedbackReasonFormControl"
   >
   </app-input-feedback-category>
-  } @case (feedbackFormStep.FEEDBACK) {
+  } @case (feedbackFormStep.FEEDBACK_CONTENT) {
   <h2 class="title">What's your feedback?</h2>
+  <app-feedback-reason-content
+    [reasonContentForm]="reasonContentForm"
+  ></app-feedback-reason-content>
   } @case (feedbackFormStep.LOCATION) {
   <h2 class="title">What's the feedback location?</h2>
   } @case (feedbackFormStep.CONTACT) {

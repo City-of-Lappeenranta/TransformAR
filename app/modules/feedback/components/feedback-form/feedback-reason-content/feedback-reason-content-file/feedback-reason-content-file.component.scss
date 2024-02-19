@@ -1,0 +1,36 @@
+:host {
+  .file-content {
+    padding: 8px;
+    align-items: center;
+    gap: 32px;
+
+    .file-details {
+      gap: 16px;
+      padding-right: 28px;
+
+      h5,
+      p {
+        font-family: var(--font-family);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        text-wrap: nowrap;
+      }
+
+      h5 {
+        color: #121212;
+      }
+
+      p {
+        color: #d0d5dd;
+      }
+    }
+
+    .close {
+      min-width: 20px;
+      color: #d0d5dd;
+      margin-left: auto;
+    }
+  }
+}

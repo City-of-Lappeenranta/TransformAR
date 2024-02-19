@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { BaseComponent } from '@shared/components/base.component';
 import { merge, takeUntil } from 'rxjs';
@@ -41,9 +41,25 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
     { value: 'Action proposal', icon: 'call-to-action' },
   ];
 
-  public categoryFormControl = new FormControl<string | null>(null);
-  public specificReasonFormControl = new FormControl<string | null>(null);
-  public feedbackReasonFormControl = new FormControl<string | null>(null);
+  public categoryFormControl = new FormControl<string | null>(
+    null,
+    Validators.required
+  );
+  public specificReasonFormControl = new FormControl<string | null>(
+    null,
+    Validators.required
+  );
+  public feedbackReasonFormControl = new FormControl<string | null>(
+    null,
+    Validators.required
+  );
+  public reasonContentForm: FormGroup<{
+    message: FormControl<string | null>;
+    publish: FormControl<boolean | null>;
+  }> = new FormGroup({
+    message: new FormControl<string | null>(null, Validators.required),
+    publish: new FormControl<boolean | null>(null),
+  });
 
   public get activeStep(): number {
     return this.currentFeedbackFormStep === FeedbackFormStep.REPORT_CATEGORY ||
@@ -65,12 +81,15 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
       case FeedbackFormStep.REPORT_CATEGORY:
-        return !!this.categoryFormControl.value;
+        return this.categoryFormControl.valid;
       case FeedbackFormStep.REPORT_SPECIFIC: {
-        return !!this.specificReasonFormControl.value;
+        return this.specificReasonFormControl.valid;
       }
       case FeedbackFormStep.REASON: {
-        return !!this.feedbackReasonFormControl.value;
+        return this.feedbackReasonFormControl.valid;
+      }
+      case FeedbackFormStep.FEEDBACK_CONTENT: {
+        return this.reasonContentForm.valid;
       }
       default: {
         return false;

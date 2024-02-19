@@ -1,0 +1,51 @@
+<article class="content" [formGroup]="reasonContentForm">
+  <section class="message-container">
+    <label class="p-label" for="message">Feedback message</label>
+    <textarea
+      class="textarea full-width"
+      id="message"
+      formControlName="message"
+      pInputTextarea
+    ></textarea>
+  </section>
+  <section class="published-container flex-row">
+    <p-checkbox class="checkbox" [binary]="true" inputId="binary"></p-checkbox>
+    <div class="title-and-description flex-column">
+      <h3>Feedback may be published</h3>
+      <p>
+        The published feedback can be viewed on the Search and browse feedback
+        page and in RSS feeds.
+      </p>
+    </div>
+  </section>
+  <section class="attachments-container flex-column">
+    <label class="p-label">
+      Attachments
+      <span class="p-optional">Optional</span>
+    </label>
+    <div class="attachments flex-column">
+      <app-icon class="icon" icon="add-image"></app-icon>
+      <p class="description">
+        You can upload one or more images to your feedback. JPG, PNG, maximum
+        size of files is 8MB
+      </p>
+      <p-fileUpload
+        class="button"
+        name="myfile[]"
+        accept="image/*"
+        mode="basic"
+        chooseLabel="Upload or take image"
+        [disabled]="true"
+        [maxFileSize]="10000000"
+      ></p-fileUpload>
+    </div>
+    <div class="files-container">
+      <h4>1 File</h4>
+      <app-feedback-reason-content-file
+        name="Map.pdf"
+        size="15 KB"
+        [percentage]="40"
+      ></app-feedback-reason-content-file>
+    </div>
+  </section>
+</article>
