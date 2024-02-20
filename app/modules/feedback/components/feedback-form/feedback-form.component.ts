@@ -13,7 +13,7 @@ import { LatLong } from '../../../../core/models/location';
 })
 export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.LOCATION;
+  public currentFeedbackFormStep = FeedbackFormStep.CATEGORY;
 
   public categories = [
     'Transactions, customer service, communication and general feedback',
