@@ -24,5 +24,6 @@ import { IconComponent } from '@shared/components/icon/icon.component';
     ButtonModule,
     IconComponent,
   ],
+  exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
 export class FeedbackModule {}

@@ -18,11 +18,6 @@ export default {
     amount: 6,
     active: 2,
   },
-  argTypes: {
-    onClick: {
-      action: 'onClick',
-    },
-  },
   parameters: {
     viewport: {
       defaultViewport: 'mobile2',
@@ -30,7 +25,7 @@ export default {
   },
 } as Meta;
 
-export const Header: StoryFn = (args) => ({
+export const Default: StoryFn = (args) => ({
   template: `
     <app-steps [amount]="amount" [active]="active"></app-steps>
   `,

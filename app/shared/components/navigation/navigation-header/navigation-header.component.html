@@ -1,4 +1,7 @@
-<app-navigation-sidebar [(sidebarOpen)]="sidebarOpen"></app-navigation-sidebar>
+<app-navigation-sidebar
+  [sidebarOpen]="sidebarOpen"
+  (onSidebarClose)="sidebarOpen = false"
+></app-navigation-sidebar>
 <header class="flex-row header">
   <app-icon
     class="menu-item"

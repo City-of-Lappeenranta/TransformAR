@@ -1,5 +1,5 @@
 <div class="steps flex-row">
-  @for (step of steps; track step) {
-  <div class="step" [class.active]="step === active"></div>
+  @for (step of [].constructor(this.amount); track step; ; let index = $index) {
+  <div class="step" [class.active]="isActive(index)"></div>
   }
 </div>
