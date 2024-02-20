@@ -46,6 +46,7 @@
     "@storybook/test": "^7.6.14",
     "@types/jasmine": "~5.1.0",
     "@types/leaflet": "^1.9.8",
+    "@types/node": "^20.11.19",
     "http-server": "^14.1.1",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",

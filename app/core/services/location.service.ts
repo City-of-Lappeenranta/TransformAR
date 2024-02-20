@@ -36,6 +36,10 @@ export class LocationService {
       return [];
     }
 
+    if (!environment.radarApiKey) {
+      throw Error('Invalid or missing Radar API key');
+    }
+
     try {
       const response = await fetch(
         `https://api.radar.io/v1/search/autocomplete?query=${query}`,
