@@ -18,11 +18,6 @@ export default {
     amount: 6,
     active: 2,
   },
-  argTypes: {
-    onClick: {
-      action: 'onClick',
-    },
-  },
   parameters: {
     viewport: {
       defaultViewport: 'mobile2',
