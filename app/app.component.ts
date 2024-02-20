@@ -10,11 +10,11 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrl: './app.component.sass',
 })
 export class AppComponent {
-  title = 'citizen-webapp';
+  public title = 'citizen-webapp';
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  public constructor(private readonly primengConfig: PrimeNGConfig) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.primengConfig.ripple = true;
   }
 }

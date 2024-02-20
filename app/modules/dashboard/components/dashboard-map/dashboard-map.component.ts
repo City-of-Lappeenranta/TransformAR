@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard-map.component.sass'],
 })
 export class DashboardMapComponent {
-  constructor() {}
+  public constructor() {}
 }
