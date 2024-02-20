@@ -9,6 +9,6 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [NavigationHeaderComponent, NavigationSidebarComponent],
   imports: [CommonModule, IconComponent, SidebarModule, RouterModule],
-  exports: [NavigationHeaderComponent, NavigationSidebarComponent],
+  exports: [NavigationHeaderComponent],
 })
 export class NavigationModule {}
