@@ -51,10 +51,10 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   private initialiseMap() {
-    this.map = L.map('map-host').setView(
-      new L.LatLng(...this.center),
-      this.zoom
-    );
+    this.map = L.map('map-host', {
+      zoomControl: false,
+      attributionControl: false,
+    }).setView(new L.LatLng(...this.center), this.zoom);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       minZoom: 0,
