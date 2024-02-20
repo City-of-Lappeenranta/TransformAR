@@ -20,9 +20,7 @@
             "outputPath": "dist/citizen-webapp",
             "index": "index.html",
             "browser": "main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
             "assets": [
@@ -79,27 +77,6 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "buildTarget": "citizen-webapp:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "sass",
-            "assets": [
-              "favicon.ico",
-              "assets",
-              "manifest.webmanifest",
-              "manifest.webmanifest"
-            ],
-            "styles": [
-              "styles.sass"
-            ],
-            "scripts": []
           }
         },
         "storybook": {

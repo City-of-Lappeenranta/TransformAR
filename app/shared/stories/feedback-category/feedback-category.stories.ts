@@ -2,37 +2,40 @@
 import type { Meta, StoryFn } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { StepsComponent } from '@shared/components/steps/steps.component';
+import { FeedbackModule } from '../../../modules/feedback/feedback.module';
 
 export default {
-  title: 'Components/Steps',
+  title: 'Components/Feedback category',
+  tags: ['autodocs'],
   decorators: [
     applicationConfig({
       providers: [provideAnimations()],
     }),
     moduleMetadata({
-      imports: [StepsComponent],
+      imports: [FeedbackModule],
     }),
   ],
   args: {
-    amount: 6,
-    active: 2,
+    value: 'Submit',
+    withColor: true,
+    selected: false,
   },
   argTypes: {
     onClick: {
       action: 'onClick',
     },
   },
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile2',
-    },
-  },
 } as Meta;
 
 export const Default: StoryFn = (args) => ({
   template: `
-    <app-steps [amount]="amount" [active]="active"></app-steps>
+  <app-feedback-category
+    [withColor]="withColor"
+    [selected]="selected"
+    (click)="onClick($event)"
+  >
+    {{ value }}
+  </app-feedback-category>
   `,
   props: args,
 });

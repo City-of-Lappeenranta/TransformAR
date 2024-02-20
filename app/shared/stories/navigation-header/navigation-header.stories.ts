@@ -29,7 +29,7 @@ export default {
   },
 } as Meta;
 
-export const Header: StoryFn = (args) => ({
+export const Default: StoryFn = (args) => ({
   styles: [
     `
       ::ng-deep .sb-main-padded {
