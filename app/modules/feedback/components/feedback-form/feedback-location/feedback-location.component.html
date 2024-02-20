@@ -1,8 +1,11 @@
 <article class="location-container flex-column">
   <p-autoComplete
     optionLabel="name"
+    optionDisabled="disabled"
     [dropdown]="true"
-    [suggestions]="locationSearchResults"
+    [style]="{ width: '100%' }"
+    [inputStyle]="{ width: '100%' }"
+    [suggestions]="(locationSuggestions$ | async) ?? []"
     (completeMethod)="onSearchLocation($event)"
     (onSelect)="onSelectLocation($event)"
   ></p-autoComplete>
@@ -11,6 +14,13 @@
     *ngIf="this.mapCenter$ | async as center"
     class="map-container full-width full-height"
   >
-    <app-map [center]="center"></app-map>
+    <app-map
+      [center]="center"
+      [markers]="
+        this.locationFormControl.value
+          ? [{ location: this.locationFormControl.value }]
+          : []
+      "
+    ></app-map>
   </div>
 </article>

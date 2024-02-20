@@ -6,6 +6,10 @@
 
 1. `npm install`
 2. `npm run serve` to serve the Angular app on `localhost:4200` without service workers
+3. `ng generate environments` with following values:
+
+- defaultLocation: `[latitude, longitude]`
+- radarApiKey: `string`
 
 #### Use of service workers
 

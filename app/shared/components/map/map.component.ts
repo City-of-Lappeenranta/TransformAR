@@ -6,7 +6,12 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as L from 'leaflet';
-import { LatLong } from '../../../core/models/location';
+import { LatLong } from '@core/models/location';
+
+export interface Marker {
+  location: LatLong;
+  // icon, pop up...
+}
 
 @Component({
   standalone: true,
@@ -17,6 +22,7 @@ import { LatLong } from '../../../core/models/location';
 export class MapComponent implements OnInit, OnChanges {
   @Input() center: LatLong = [0, 0];
   @Input() zoom = 13;
+  @Input() markers: Marker[] = [];
 
   public map: L.Map | undefined;
 
@@ -26,7 +32,20 @@ export class MapComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['center']) {
-      this.map?.setView(changes['center'].currentValue);
+      this.map?.setView(this.center);
+    }
+
+    if (changes['markers']) {
+      this.markers.forEach(
+        ({ location }) =>
+          this.map &&
+          L.marker(new L.LatLng(...location), {
+            icon: new L.Icon({
+              iconUrl: '/assets/icons/user-marker.svg',
+              iconSize: [40, 40],
+            }),
+          }).addTo(this.map)
+      );
     }
   }
 
