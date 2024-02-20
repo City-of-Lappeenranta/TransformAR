@@ -41,8 +41,9 @@ export class MapComponent implements OnInit, OnChanges {
           this.map &&
           L.marker(new L.LatLng(...location), {
             icon: new L.Icon({
-              iconUrl: '/assets/icons/user-marker.svg',
+              iconUrl: '/assets/icons/marker.svg',
               iconSize: [40, 40],
+              iconAnchor: [20, 40],
             }),
           }).addTo(this.map)
       );
