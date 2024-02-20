@@ -7,6 +7,7 @@ import { InputFeedbackCategoryComponent } from './components/feedback-form/input
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StepsComponent } from '@shared/components/steps/steps.component';
 import { ButtonModule } from 'primeng/button';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule,
     StepsComponent,
     ButtonModule,
+    IconComponent,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
