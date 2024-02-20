@@ -18,5 +18,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
+  exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
 export class FeedbackModule {}
