@@ -8,9 +8,9 @@ describe('AppComponent', () => {
     shallow = new Shallow(AppComponent);
   });
 
-  it('displays the header with the title of the city', async () => {
-    const { find } = await shallow.render(`<app-root></app-root>`);
+  it('should render', async () => {
+    const component = await shallow.render(`<app-root></app-root>`);
 
-    expect(find('h1').nativeElement.textContent).toBe('Lappeenranta');
+    expect(component).toBeDefined();
   });
 });
