@@ -22,5 +22,6 @@ import { ButtonModule } from 'primeng/button';
     StepsComponent,
     ButtonModule,
   ],
+  exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
 export class FeedbackModule {}

@@ -17,17 +17,13 @@ export abstract class ControlValueAccessorHelper<T>
   }
 
   public writeValue(value: T): void {
-    this.value = value;
-  }
-
-  private _value: T | undefined;
-
-  private set value(value: T) {
     this._value = value;
     if (this.onChange) {
       this.onChange(value);
     }
   }
+
+  private _value: T | undefined;
 
   public get value(): T | undefined {
     return this._value;

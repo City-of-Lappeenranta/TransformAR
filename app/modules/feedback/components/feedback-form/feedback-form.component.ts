@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { BaseComponent } from '@shared/components/base.component';
 import { merge, takeUntil } from 'rxjs';

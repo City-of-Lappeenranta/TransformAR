@@ -8,9 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class StepsComponent {
   @Input() public amount: number | undefined;
-  @Input() public active: number | undefined;
+  @Input() public active: number = -1;
 
-  public get steps(): number[] {
-    return [...Array(this.amount).keys()];
+  public isActive(step: number): boolean {
+    return step === this.active || step < this.active;
   }
 }
