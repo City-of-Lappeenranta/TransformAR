@@ -1,6 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import * as L from 'leaflet';
-import { environment } from '../../../environment/environment';
+import { LatLong } from '../../../core/models/location';
 
 @Component({
   standalone: true,
@@ -8,11 +14,9 @@ import { environment } from '../../../environment/environment';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
-  @Input() initialLocation: L.LatLng = new L.LatLng(
-    ...(environment.defaultLocation as [number, number])
-  );
-  @Input() initialZoom = 13;
+export class MapComponent implements OnInit, OnChanges {
+  @Input() center: LatLong = [0, 0];
+  @Input() zoom = 13;
 
   public map: L.Map | undefined;
 
@@ -20,10 +24,16 @@ export class MapComponent implements OnInit {
     this.initialiseMap();
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['center']) {
+      this.map?.setView(changes['center'].currentValue);
+    }
+  }
+
   private initialiseMap() {
     this.map = L.map('map-host').setView(
-      this.initialLocation,
-      this.initialZoom
+      new L.LatLng(...this.center),
+      this.zoom
     );
 
     L.tileLayer(

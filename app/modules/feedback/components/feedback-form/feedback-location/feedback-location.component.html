@@ -1,12 +1,16 @@
 <article class="location-container flex-column">
-  <input
-    type="text"
-    id="location"
-    pInputText
-    class="full-width"
-    [formControl]="locationFormControl"
-  />
-  <div class="map-container full-width full-height">
-    <app-map></app-map>
+  <p-autoComplete
+    optionLabel="name"
+    [dropdown]="true"
+    [suggestions]="locationSearchResults"
+    (completeMethod)="onSearchLocation($event)"
+    (onSelect)="onSelectLocation($event)"
+  ></p-autoComplete>
+
+  <div
+    *ngIf="this.mapCenter$ | async as center"
+    class="map-container full-width full-height"
+  >
+    <app-map [center]="center"></app-map>
   </div>
 </article>

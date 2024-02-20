@@ -4,6 +4,7 @@ import { FeedbackFormStep } from './feedback-form-step.enum';
 import { BaseComponent } from '@shared/components/base.component';
 import { merge, takeUntil } from 'rxjs';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
+import { LatLong } from '../../../../core/models/location';
 
 @Component({
   selector: 'app-feedback-form',
@@ -12,7 +13,7 @@ import { NavigationHeaderService } from '@shared/components/navigation/navigatio
 })
 export class FeedbackFormComponent extends BaseComponent implements OnInit {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.CATEGORY;
+  public currentFeedbackFormStep = FeedbackFormStep.LOCATION;
 
   public categories = [
     'Transactions, customer service, communication and general feedback',
@@ -50,7 +51,7 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
     }),
-    location: new FormControl<string | null>(null, Validators.required),
+    location: new FormControl<LatLong | null>(null, Validators.required),
   });
 
   public constructor(
