@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.component';
 import { SharedModule } from '../../shared/shared.module';
+import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.component';
 import { DashboardRoutingModule } from './dashboard.routing';
 
 @NgModule({
