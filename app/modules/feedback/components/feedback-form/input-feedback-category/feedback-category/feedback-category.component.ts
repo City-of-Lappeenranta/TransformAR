@@ -11,22 +11,13 @@ export class FeedbackCategoryComponent {
   @Input() public index: number | undefined;
   @Input() public icon: string | undefined;
 
-  @HostListener('click', ['$event']) public inClick(e: MouseEvent) {
+  @HostListener('click', ['$event']) public inClick(e: MouseEvent): void {
     e.stopPropagation();
     this.selected = !this.selected;
   }
 
   public get color(): string {
-    const colors = [
-      'green',
-      'blue',
-      'lime',
-      'grey',
-      'cream',
-      'pink',
-      'orange',
-      'yellow',
-    ];
+    const colors = ['green', 'blue', 'lime', 'grey', 'cream', 'pink', 'orange', 'yellow'];
 
     return colors[this.index ?? 0 % colors.length];
   }

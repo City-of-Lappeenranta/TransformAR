@@ -5,35 +5,35 @@ $primaryDarkerColor: #173822;
 $primaryTextColor: #ffffff;
 
 $colors: (
-  "blue": #2196f3,
-  "green": #4caf50,
-  "yellow": #fbc02d,
-  "cyan": #00bcd4,
-  "pink": #e91e63,
-  "indigo": #3f51b5,
-  "teal": #009688,
-  "orange": #f57c00,
-  "bluegray": #607d8b,
-  "purple": #9c27b0,
-  "red": #ff4032,
-  "primary": $primaryColor,
+  'blue': #2196f3,
+  'green': #4caf50,
+  'yellow': #fbc02d,
+  'cyan': #00bcd4,
+  'pink': #e91e63,
+  'indigo': #3f51b5,
+  'teal': #009688,
+  'orange': #f57c00,
+  'bluegray': #607d8b,
+  'purple': #9c27b0,
+  'red': #ff4032,
+  'primary': $primaryColor,
 );
 
 // Mandatory Designer Variables
-@import "./variables/general";
-@import "./variables/form";
-@import "./variables/button";
-@import "./variables/panel";
-@import "./variables/_data";
-@import "./variables/_overlay";
-@import "./variables/_message";
-@import "./variables/_menu";
-@import "./variables/_media";
-@import "./variables/_misc";
+@import './variables/general';
+@import './variables/form';
+@import './variables/button';
+@import './variables/panel';
+@import './variables/_data';
+@import './variables/_overlay';
+@import './variables/_message';
+@import './variables/_menu';
+@import './variables/_media';
+@import './variables/_misc';
 
 :root {
-  font-family: "Effra", sans-serif;
-  --font-family: "Effra", sans-serif;
+  font-family: 'Effra', sans-serif;
+  --font-family: 'Effra', sans-serif;
   --surface-a: #ffffff;
   --surface-b: #f8f9fa;
   --surface-c: #e9ecef;
@@ -71,6 +71,5 @@ $colors: (
   --highlight-text-color: #{$highlightTextColor};
   --focus-ring: #{$focusShadow};
   color-scheme: light;
-  --shadow-md: 0px 2px 4px -2px rgba(16, 24, 40, 0.06),
-    0px 4px 8px -2px rgba(16, 24, 40, 0.1);
+  --shadow-md: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.1);
 }

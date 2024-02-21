@@ -21,10 +21,7 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
     },
   ],
 })
-export class InputFeedbackCategoryComponent
-  extends ControlValueAccessorHelper<string>
-  implements OnInit
-{
+export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnInit {
   @Input({ required: true }) public categories!: {
     value: string;
     icon?: string;
@@ -82,12 +79,9 @@ export class InputFeedbackCategoryComponent
     const injectedControl = this.injector.get(NgControl);
 
     if (injectedControl.constructor === FormControlName) {
-      return this.injector
-        .get(FormGroupDirective)
-        .getControl(injectedControl as FormControlName).value;
+      return this.injector.get(FormGroupDirective).getControl(injectedControl as FormControlName).value;
     }
 
-    return ((injectedControl as FormControlDirective).form as FormControl)
-      .value;
+    return ((injectedControl as FormControlDirective).form as FormControl).value;
   }
 }

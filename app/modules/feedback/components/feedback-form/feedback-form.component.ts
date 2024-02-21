@@ -16,8 +16,7 @@ export class FeedbackFormComponent {
 
   public mainCategories = [
     {
-      value:
-        'Transactions, customer service, communication and general feedback',
+      value: 'Transactions, customer service, communication and general feedback',
     },
     { value: 'Exercise and outdoor activities' },
     { value: 'Zoning, construction and housing' },
@@ -60,7 +59,7 @@ export class FeedbackFormComponent {
     merge(
       this.feedbackForm.controls.mainCategory.valueChanges,
       this.feedbackForm.controls.subCategory.valueChanges,
-      this.feedbackForm.controls.motivation.valueChanges
+      this.feedbackForm.controls.motivation.valueChanges,
     )
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.next());

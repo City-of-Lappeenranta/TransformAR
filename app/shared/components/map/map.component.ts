@@ -1,11 +1,5 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import * as L from 'leaflet';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import * as leaflet from 'leaflet';
 import { LatLong } from '@core/models/location';
 
 export interface Marker {
@@ -20,11 +14,11 @@ export interface Marker {
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnChanges {
-  @Input() center: LatLong = [0, 0];
-  @Input() zoom = 13;
-  @Input() markers: Marker[] = [];
+  @Input() public center: LatLong = [0, 0];
+  @Input() public zoom = 13;
+  @Input() public markers: Marker[] = [];
 
-  public map: L.Map | undefined;
+  public map: leaflet.Map | undefined;
 
   public ngOnInit(): void {
     this.initialiseMap();
@@ -37,7 +31,7 @@ export class MapComponent implements OnInit, OnChanges {
 
     if (changes['markers']) {
       this.map?.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
+        if (layer instanceof leaflet.Marker) {
           layer.remove();
         }
       });
@@ -45,26 +39,32 @@ export class MapComponent implements OnInit, OnChanges {
       this.markers.forEach(
         ({ location }) =>
           this.map &&
-          L.marker(new L.LatLng(...location), {
-            icon: new L.Icon({
-              iconUrl: '/assets/icons/marker.svg',
-              iconSize: [40, 40],
-              iconAnchor: [20, 40],
-            }),
-          }).addTo(this.map)
+          leaflet
+            .marker(new leaflet.LatLng(...location), {
+              icon: new leaflet.Icon({
+                iconUrl: '/assets/icons/marker.svg',
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+              }),
+            })
+            .addTo(this.map),
       );
     }
   }
 
-  private initialiseMap() {
-    this.map = L.map('map-host', {
-      zoomControl: false,
-      attributionControl: false,
-    }).setView(new L.LatLng(...this.center), this.zoom);
+  private initialiseMap(): void {
+    this.map = leaflet
+      .map('map-host', {
+        zoomControl: false,
+        attributionControl: false,
+      })
+      .setView(new leaflet.LatLng(...this.center), this.zoom);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      minZoom: 0,
-      maxZoom: 20,
-    }).addTo(this.map);
+    leaflet
+      .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 0,
+        maxZoom: 20,
+      })
+      .addTo(this.map);
   }
 }
