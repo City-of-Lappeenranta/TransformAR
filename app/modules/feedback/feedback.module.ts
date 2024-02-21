@@ -8,12 +8,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StepsComponent } from '@shared/components/steps/steps.component';
 import { ButtonModule } from 'primeng/button';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
+import { FeedbackAttachmentFileComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-attachment-file/feedback-attachment-file.component';
 
 @NgModule({
   declarations: [
     FeedbackFormComponent,
     FeedbackCategoryComponent,
     InputFeedbackCategoryComponent,
+    FeedbackMessageAndAttachmentComponent,
+    FeedbackAttachmentFileComponent,
   ],
   imports: [
     CommonModule,
@@ -23,6 +31,10 @@ import { IconComponent } from '@shared/components/icon/icon.component';
     StepsComponent,
     ButtonModule,
     IconComponent,
+    InputTextareaModule,
+    CheckboxModule,
+    FileUploadModule,
+    ProgressBarModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })

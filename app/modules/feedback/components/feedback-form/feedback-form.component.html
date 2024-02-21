@@ -27,6 +27,11 @@
     formControlName="motivation"
   >
   </app-input-feedback-category>
+  } @case (feedbackFormStep.MESSAGE_AND_ATTACHMENTS) {
+  <h2 class="title">What's your feedback?</h2>
+  <app-feedback-message-and-attachments
+    [reasonForm]="feedbackForm.controls.message"
+  ></app-feedback-message-and-attachments>
   } }
 </main>
 <footer class="footer flex-column">

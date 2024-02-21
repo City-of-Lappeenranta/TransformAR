@@ -27,7 +27,7 @@ export default {
 
 export const Flat: StoryFn = (args) => ({
   template: `
-  <p-button [label]="label" (click)="onClick($event)"></p-button>
+    <p-button [label]="label" (click)="onClick($event)"></p-button>
   `,
   props: args,
 });

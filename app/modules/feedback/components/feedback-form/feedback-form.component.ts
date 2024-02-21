@@ -48,12 +48,17 @@ export class FeedbackFormComponent {
     mainCategory: new FormControl<string | null>(null, Validators.required),
     subCategory: new FormControl<string | null>(null, Validators.required),
     motivation: new FormControl<string | null>(null, Validators.required),
+    message: new FormGroup({
+      message: new FormControl<string | null>(null, Validators.required),
+      publish: new FormControl<boolean | null>(null),
+    }),
   });
 
   public constructor() {
     merge(
       this.feedbackForm.controls.mainCategory.valueChanges,
-      this.feedbackForm.controls.subCategory.valueChanges
+      this.feedbackForm.controls.subCategory.valueChanges,
+      this.feedbackForm.controls.motivation.valueChanges
     )
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.next());
@@ -72,6 +77,9 @@ export class FeedbackFormComponent {
         return this.feedbackForm.controls.mainCategory.valid;
       case FeedbackFormStep.SUB_CATEGORY:
         return this.feedbackForm.controls.subCategory.valid;
+      case FeedbackFormStep.MOTIVATION: {
+        return this.feedbackForm.controls.motivation.valid;
+      }
       default: {
         return false;
       }
