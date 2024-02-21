@@ -1,5 +1,12 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import {
+  FormControl,
+  FormControlDirective,
+  FormControlName,
+  FormGroupDirective,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 
 @Component({
@@ -16,10 +23,12 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
 })
 export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
-  implements OnInit {
-  @Input({ required: true }) public categories:
-    | string[]
-    | { value: string; icon: string }[] = [];
+  implements OnInit
+{
+  @Input({ required: true }) public categories!: {
+    value: string;
+    icon?: string;
+  }[];
   @Input() public withColor = true;
 
   public categoriesToShow: {
@@ -35,13 +44,11 @@ export class InputFeedbackCategoryComponent
   }
 
   public ngOnInit(): void {
-    const ngControl = this.injector.get(NgControl);
-
     this.categoriesToShow = this.categories.map((category) => {
       if (typeof category === 'string') {
         return {
           value: category,
-          selected: category === ngControl.value,
+          selected: category === this.getFormValue(),
         };
       }
 
@@ -52,7 +59,7 @@ export class InputFeedbackCategoryComponent
 
       return {
         value,
-        selected: value === ngControl.value,
+        selected: value === this.getFormValue(),
         icon: category.icon,
       };
     });
@@ -69,5 +76,18 @@ export class InputFeedbackCategoryComponent
         selected: index === indexToToggle,
       };
     });
+  }
+
+  private getFormValue(): string {
+    const injectedControl = this.injector.get(NgControl);
+
+    if (injectedControl.constructor === FormControlName) {
+      return this.injector
+        .get(FormGroupDirective)
+        .getControl(injectedControl as FormControlName).value;
+    }
+
+    return ((injectedControl as FormControlDirective).form as FormControl)
+      .value;
   }
 }

@@ -1,42 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FeedbackFormStep } from './feedback-form-step.enum';
-import { BaseComponent } from '@shared/components/base.component';
-import { merge, takeUntil } from 'rxjs';
-import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
+import { merge } from 'rxjs';
 import { LatLong } from '../../../../core/models/location';
+import { FeedbackFormStep } from './feedback-form-step.enum';
 
 @Component({
   selector: 'app-feedback-form',
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
 })
-export class FeedbackFormComponent extends BaseComponent implements OnInit {
+export class FeedbackFormComponent {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.CATEGORY;
+  public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
 
-  public categories = [
-    'Transactions, customer service, communication and general feedback',
-    'Exercise and outdoor activities',
-    'Zoning, construction and housing',
-    'Streets and traffic',
-    'Urban environment and accessibility and nature',
-    'Library, cultural institutions and cultural events',
-    'Early childhood education, teaching and youth',
-    'Employment and business services',
+  public mainCategories = [
+    {
+      value:
+        'Transactions, customer service, communication and general feedback',
+    },
+    { value: 'Exercise and outdoor activities' },
+    { value: 'Zoning, construction and housing' },
+    { value: 'Streets and traffic' },
+    { value: 'Urban environment and accessibility and nature' },
+    { value: 'Library, cultural institutions and cultural events' },
+    { value: 'Early childhood education, teaching and youth' },
+    { value: 'Employment and business services' },
   ];
 
   public subCategories = [
-    'Customer service center Winkki',
-    'Other customer service points',
-    'Travel advice',
-    'Online transaction',
-    'Websites',
-    'Other city communication and information',
-    'General feedback',
+    { value: 'Customer service center Winkki' },
+    { value: 'Other customer service points' },
+    { value: 'Travel advice' },
+    { value: 'Online transaction' },
+    { value: 'Websites' },
+    { value: 'Other city communication and information' },
+    { value: 'General feedback' },
   ];
 
-  public reasons = [
+  public motivations = [
     { value: 'Thank you', icon: 'thumbs-up' },
     { value: 'Reproach', icon: 'thumbs-down' },
     { value: 'Question', icon: 'question-mark' },
@@ -44,52 +46,44 @@ export class FeedbackFormComponent extends BaseComponent implements OnInit {
   ];
 
   public feedbackForm = new FormGroup({
-    category: new FormControl<string | null>(null, Validators.required),
+    mainCategory: new FormControl<string | null>(null, Validators.required),
     subCategory: new FormControl<string | null>(null, Validators.required),
-    type: new FormControl<string | null>(null, Validators.required),
-    reason: new FormGroup({
+    motivation: new FormControl<string | null>(null, Validators.required),
+    message: new FormGroup({
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),
   });
 
-  public constructor(
-    private readonly navigationHeaderService: NavigationHeaderService
-  ) {
-    super();
+  public constructor() {
+    merge(
+      this.feedbackForm.controls.mainCategory.valueChanges,
+      this.feedbackForm.controls.subCategory.valueChanges,
+      this.feedbackForm.controls.motivation.valueChanges
+    )
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.next());
   }
 
   public get activeStep(): number {
-    return this.currentFeedbackFormStep === FeedbackFormStep.CATEGORY ||
-      this.currentFeedbackFormStep === FeedbackFormStep.REPORT_SPECIFIC
+    return this.currentFeedbackFormStep === FeedbackFormStep.MAIN_CATEGORY ||
+      this.currentFeedbackFormStep === FeedbackFormStep.SUB_CATEGORY
       ? 0
       : this.currentFeedbackFormStep - 1;
   }
 
-  public ngOnInit(): void {
-    merge(
-      this.feedbackForm.controls.category.valueChanges,
-      this.feedbackForm.controls.subCategory.valueChanges,
-      this.feedbackForm.controls.type.valueChanges,
-      this.navigationHeaderService.onActionClick$
-    )
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(() => this.next());
-  }
-
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
-      case FeedbackFormStep.CATEGORY:
-        return this.feedbackForm.controls.category.valid;
-      case FeedbackFormStep.REPORT_SPECIFIC: {
+      case FeedbackFormStep.MAIN_CATEGORY:
+        return this.feedbackForm.controls.mainCategory.valid;
+      case FeedbackFormStep.SUB_CATEGORY:
         return this.feedbackForm.controls.subCategory.valid;
+      case FeedbackFormStep.MOTIVATION: {
+        return this.feedbackForm.controls.motivation.valid;
       }
-      case FeedbackFormStep.TYPE: {
-        return this.feedbackForm.controls.type.valid;
-      }
-      case FeedbackFormStep.REASON: {
-        return this.feedbackForm.controls.reason.valid;
+      case FeedbackFormStep.MESSAGE_AND_ATTACHMENTS: {
+        return this.feedbackForm.controls.message.valid;
       }
       case FeedbackFormStep.LOCATION: {
         return this.feedbackForm.controls.location.valid;
