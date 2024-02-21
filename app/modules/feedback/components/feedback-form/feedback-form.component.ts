@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { FeedbackFormStep } from './feedback-form-step.enum';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { merge } from 'rxjs';
+import { LatLong } from '../../../../core/models/location';
+import { FeedbackFormStep } from './feedback-form-step.enum';
 
 @Component({
   selector: 'app-feedback-form',
@@ -52,7 +53,7 @@ export class FeedbackFormComponent {
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
     }),
-    location: new FormControl<string | null>(null, Validators.required),
+    location: new FormControl<LatLong | null>(null, Validators.required),
   });
 
   public constructor() {
@@ -83,6 +84,9 @@ export class FeedbackFormComponent {
       }
       case FeedbackFormStep.MESSAGE_AND_ATTACHMENTS: {
         return this.feedbackForm.controls.message.valid;
+      }
+      case FeedbackFormStep.LOCATION: {
+        return this.feedbackForm.controls.location.valid;
       }
       default: {
         return false;

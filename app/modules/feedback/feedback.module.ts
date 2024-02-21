@@ -13,6 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { FeedbackLocationComponent } from './components/feedback-form/feedback-location/feedback-location.component';
+import { SharedModule } from '@shared/shared.module';
 import { FeedbackAttachmentFileComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-attachment-file/feedback-attachment-file.component';
 import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,6 +29,7 @@ import { InputTextModule } from 'primeng/inputtext';
   ],
   imports: [
     CommonModule,
+    SharedModule,
     FeedbackRoutingModule,
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { SharedModule } from './shared/shared.module';
@@ -10,7 +10,7 @@ import { SharedModule } from './shared/shared.module';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public title = 'citizen-webapp';
 
   public constructor(private readonly primengConfig: PrimeNGConfig) {}
