@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./feedback-form.component.sass'],
 })
 export class FeedbackFormComponent {
-  constructor() {}
+  public constructor() {}
 }
