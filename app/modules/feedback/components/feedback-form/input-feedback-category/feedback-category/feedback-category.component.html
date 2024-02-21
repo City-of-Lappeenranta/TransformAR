@@ -1,10 +1,6 @@
-<div
-  class="feedback-category flex-row {{ color }}"
-  [class.no-border]="!withColor"
-  [class.selected]="selected"
->
-  @if(icon) {
-  <app-icon class="icon" [icon]="icon"></app-icon>
+<div class="feedback-category flex-row {{ color }}" [class.no-border]="!withColor" [class.selected]="selected">
+  @if (icon) {
+    <app-icon class="icon" [icon]="icon"></app-icon>
   }
   <ng-content></ng-content>
 </div>

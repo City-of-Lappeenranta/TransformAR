@@ -12,10 +12,9 @@ describe('NavigationHeaderComponent', () => {
 
   it('should render the navigation header', async () => {
     const title = 'Title';
-    const { find } = await shallow.render(
-      `<app-navigation-header [title]="title"></app-navigation-header>`,
-      { bind: { title } }
-    );
+    const { find } = await shallow.render(`<app-navigation-header [title]="title"></app-navigation-header>`, {
+      bind: { title },
+    });
 
     expect(find('h1').nativeElement.textContent).toEqual(title);
     expect(find('app-icon.menu-item')).toHaveFoundOne();
@@ -25,12 +24,10 @@ describe('NavigationHeaderComponent', () => {
     const title = 'Title';
     const { fixture, find, findComponent } = await shallow.render(
       `<app-navigation-header [title]="title"></app-navigation-header>`,
-      { bind: { title } }
+      { bind: { title } },
     );
 
-    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(
-      false
-    );
+    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(false);
 
     find('app-icon.menu-item').triggerEventHandler('click', {});
     fixture.detectChanges();
@@ -40,8 +37,6 @@ describe('NavigationHeaderComponent', () => {
     findComponent(NavigationSidebarComponent).onSidebarClose.emit();
     fixture.detectChanges();
 
-    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(
-      false
-    );
+    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(false);
   });
 });

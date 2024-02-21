@@ -1,12 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { NavigationHeaderService } from './navigation-header.service';
-import { NavigationHeaderAction } from './navigation-header-action.interface';
+import { Component, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationHeaderAction } from './navigation-header-action.interface';
+import { NavigationHeaderService } from './navigation-header.service';
 
 @Component({
   selector: 'app-navigation-header',
@@ -19,14 +14,10 @@ export class NavigationHeaderComponent {
   public sidebarOpen = false;
   public action: NavigationHeaderAction | null | undefined;
 
-  constructor(
-    private readonly navigationHeaderService: NavigationHeaderService
-  ) {
-    this.navigationHeaderService.action$
-      .pipe(takeUntilDestroyed())
-      .subscribe((action: NavigationHeaderAction | null) => {
-        this.action = action;
-      });
+  public constructor(private readonly navigationHeaderService: NavigationHeaderService) {
+    this.navigationHeaderService.action$.pipe(takeUntilDestroyed()).subscribe((action: NavigationHeaderAction | null) => {
+      this.action = action;
+    });
   }
 
   public onActionClick(): void {

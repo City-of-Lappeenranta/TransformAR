@@ -26,9 +26,7 @@ function generateSvgIconNames(dirPath) {
           name: iconName,
           width,
           height,
-          svg: svgContent
-            .replace(/width="([^"]+)"/, 'width="100%"')
-            .replace(/height="([^"]+)"/, 'height="100%"'),
+          svg: svgContent.replace(/width="([^"]+)"/, 'width="100%"').replace(/height="([^"]+)"/, 'height="100%"'),
         });
       } else if (fileStat.isDirectory()) {
         processDirectory(filePath);
@@ -55,14 +53,7 @@ function getSvgDimensions(svgContent) {
 }
 
 const svgIconNames = generateSvgIconNames(directoryPath);
-const outputFilePath = path.join(
-  __dirname,
-  './app/shared/components/icon/svg-icons.generated.ts'
-);
-const exportContent = `export const SVG_ICONS = ${JSON.stringify(
-  svgIconNames,
-  null,
-  2
-)}`;
+const outputFilePath = path.join(__dirname, './app/shared/components/icon/svg-icons.generated.ts');
+const exportContent = `export const SVG_ICONS = ${JSON.stringify(svgIconNames, null, 2)}`;
 
 fs.writeFileSync(outputFilePath, exportContent);

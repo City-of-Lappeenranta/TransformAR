@@ -23,12 +23,7 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
-            "assets": [
-              "favicon.ico",
-              "assets",
-              "manifest.webmanifest",
-              "manifest.webmanifest"
-            ],
+            "assets": ["favicon.ico", "assets", "manifest.webmanifest", "manifest.webmanifest"],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",

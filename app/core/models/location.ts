@@ -28,6 +28,6 @@ export interface RadarSearchReponse {
       layer: string;
       formattedAddress: string;
       placeLabel: string;
-    }
+    },
   ];
 }

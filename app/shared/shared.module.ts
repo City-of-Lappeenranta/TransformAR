@@ -8,13 +8,6 @@ import { MapComponent } from './components/map/map.component';
 
 @NgModule({
   imports: [NavigationModule, IconComponent, MapComponent],
-  exports: [
-    ButtonModule,
-    AutoCompleteModule,
-    CommonModule,
-    NavigationModule,
-    IconComponent,
-    MapComponent,
-  ],
+  exports: [ButtonModule, AutoCompleteModule, CommonModule, NavigationModule, IconComponent, MapComponent],
 })
 export class SharedModule {}

@@ -1,13 +1,13 @@
 <div class="categories flex-column" [class.icons]="hasIcons">
   @for (category of categoriesToShow; track category; let index = $index) {
-  <app-feedback-category
-    [withColor]="withColor"
-    [selected]="category.selected"
-    [index]="index"
-    [icon]="category?.icon"
-    (click)="toggleCategory(index)"
-  >
-    {{ category.value }}
-  </app-feedback-category>
+    <app-feedback-category
+      [withColor]="withColor"
+      [selected]="category.selected"
+      [index]="index"
+      [icon]="category?.icon"
+      (click)="toggleCategory(index)"
+    >
+      {{ category.value }}
+    </app-feedback-category>
   }
 </div>

@@ -12,22 +12,15 @@ export class IconComponent implements OnInit {
 
   public constructor(private readonly elementRef: ElementRef) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     const svgIcon = svgIcons.find(
-      (icon: { name: string; width: number; height: number; svg: string }) =>
-        icon.name === this.icon
+      (icon: { name: string; width: number; height: number; svg: string }) => icon.name === this.icon,
     );
 
     if (svgIcon) {
-      this.elementRef.nativeElement.style.setProperty(
-        `--icon-width`,
-        `${svgIcon.width}px`
-      );
+      this.elementRef.nativeElement.style.setProperty(`--icon-width`, `${svgIcon.width}px`);
 
-      this.elementRef.nativeElement.style.setProperty(
-        `--icon-height`,
-        `${svgIcon.height}px`
-      );
+      this.elementRef.nativeElement.style.setProperty(`--icon-height`, `${svgIcon.height}px`);
 
       (this.elementRef.nativeElement as HTMLElement).innerHTML = svgIcon.svg;
     } else {

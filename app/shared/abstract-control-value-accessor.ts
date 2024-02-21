@@ -2,11 +2,11 @@ import { Directive } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 @Directive()
-export abstract class ControlValueAccessorHelper<T>
-  implements ControlValueAccessor
-{
+export abstract class ControlValueAccessorHelper<T> implements ControlValueAccessor {
   protected onChange?: (value: T) => void;
   protected onTouched?: () => void;
+
+  private _value: T | undefined;
 
   public registerOnChange(fn: (_: T) => void): void {
     this.onChange = fn;
@@ -22,8 +22,6 @@ export abstract class ControlValueAccessorHelper<T>
       this.onChange(value);
     }
   }
-
-  private _value: T | undefined;
 
   public get value(): T | undefined {
     return this._value;

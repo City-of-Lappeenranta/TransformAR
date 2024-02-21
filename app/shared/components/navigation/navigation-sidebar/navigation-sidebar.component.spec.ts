@@ -12,26 +12,20 @@ describe('NavigationSidebarComponent', () => {
   it('should not render the navigation sidebar when the sidebar is closed', async () => {
     const sidebarOpen = false;
 
-    const { find } = await shallow.render(
-      `<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`,
-      { bind: { sidebarOpen } }
-    );
+    const { find } = await shallow.render(`<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`, {
+      bind: { sidebarOpen },
+    });
 
-    expect(find('.sidebar').attributes['ng-reflect-visible']).toEqual(
-      `${sidebarOpen}`
-    );
+    expect(find('.sidebar').attributes['ng-reflect-visible']).toEqual(`${sidebarOpen}`);
   });
 
   it('should render the navigation sidebar with menu items if the sidebar is open', async () => {
     const sidebarOpen = true;
 
-    const { find } = await shallow.render(
-      `<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`,
-      { bind: { sidebarOpen } }
-    );
+    const { find } = await shallow.render(`<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`, {
+      bind: { sidebarOpen },
+    });
 
-    expect(find('.sidebar').attributes['ng-reflect-visible']).toEqual(
-      `${sidebarOpen}`
-    );
+    expect(find('.sidebar').attributes['ng-reflect-visible']).toEqual(`${sidebarOpen}`);
   });
 });
