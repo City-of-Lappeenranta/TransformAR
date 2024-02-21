@@ -32,6 +32,11 @@
   <app-feedback-message-and-attachments
     [reasonForm]="feedbackForm.controls.message"
   ></app-feedback-message-and-attachments>
+  } @case (feedbackFormStep.LOCATION) {
+  <h2 class="title">What's the feedback location?</h2>
+  <app-feedback-location
+    [locationFormControl]="feedbackForm.controls.location"
+  ></app-feedback-location>
   } }
 </main>
 <footer class="footer flex-column">

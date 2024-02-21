@@ -3,4 +3,5 @@ export enum FeedbackFormStep {
   SUB_CATEGORY,
   MOTIVATION,
   MESSAGE_AND_ATTACHMENTS,
+  LOCATION,
 }

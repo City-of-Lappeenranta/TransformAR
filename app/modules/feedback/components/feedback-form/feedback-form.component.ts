@@ -52,6 +52,7 @@ export class FeedbackFormComponent {
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
     }),
+    location: new FormControl<string | null>(null, Validators.required),
   });
 
   public constructor() {
@@ -79,6 +80,9 @@ export class FeedbackFormComponent {
         return this.feedbackForm.controls.subCategory.valid;
       case FeedbackFormStep.MOTIVATION: {
         return this.feedbackForm.controls.motivation.valid;
+      }
+      case FeedbackFormStep.MESSAGE_AND_ATTACHMENTS: {
+        return this.feedbackForm.controls.message.valid;
       }
       default: {
         return false;

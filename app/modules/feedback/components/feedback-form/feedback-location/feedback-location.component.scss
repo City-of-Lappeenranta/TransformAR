@@ -1,0 +1,11 @@
+:host {
+  .location-container {
+    height: calc(100% - 36px);
+    margin-top: 16px;
+    gap: 16px;
+
+    .map {
+      background-color: grey;
+    }
+  }
+}

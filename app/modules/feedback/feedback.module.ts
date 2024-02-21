@@ -12,8 +12,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
+import { FeedbackLocationComponent } from './components/feedback-form/feedback-location/feedback-location.component';
 import { FeedbackAttachmentFileComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-attachment-file/feedback-attachment-file.component';
+import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { FeedbackAttachmentFileComponent } from './components/feedback-form/feed
     InputFeedbackCategoryComponent,
     FeedbackMessageAndAttachmentComponent,
     FeedbackAttachmentFileComponent,
+    FeedbackLocationComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { FeedbackAttachmentFileComponent } from './components/feedback-form/feed
     CheckboxModule,
     FileUploadModule,
     ProgressBarModule,
+    InputTextModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })

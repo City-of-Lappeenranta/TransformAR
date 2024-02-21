@@ -9,7 +9,12 @@
     ></textarea>
   </section>
   <section class="published-container flex-row">
-    <p-checkbox class="checkbox" [binary]="true" inputId="binary"></p-checkbox>
+    <p-checkbox
+      class="checkbox"
+      inputId="binary"
+      formControlName="publish"
+      [binary]="true"
+    ></p-checkbox>
     <div class="title-and-description flex-column">
       <h3>Feedback may be published</h3>
       <p>

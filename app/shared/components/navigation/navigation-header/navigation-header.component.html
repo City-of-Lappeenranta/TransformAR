@@ -8,7 +8,18 @@
     icon="menu"
     (click)="sidebarOpen = true"
   ></app-icon>
-  <h1 class="title">{{ title }}</h1>
+  <h1 class="title" [class.padding-right]="!action">{{ title }}</h1>
+  @if(action && action.type === 'icon'){
+  <app-icon
+    class="menu-item"
+    [icon]="action.value"
+    (click)="onActionClick()"
+  ></app-icon>
+  } @else if (action) {
+  <u class="action-item" (click)="onActionClick()">{{
+    action.value | lowercase
+  }}</u>
+  }
   <div class="background-container">
     <app-icon class="background" icon="header-wave"></app-icon>
   </div>

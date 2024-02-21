@@ -6,26 +6,40 @@
     align-items: center;
     padding: 0 16px;
 
-    .menu-item {
+    .menu-item,
+    .action-item {
       position: relative;
       z-index: 999;
+      color: var(--text-color);
+    }
+
+    .menu-item {
       min-width: 44px;
       min-height: 44px;
       padding: 12px;
-      color: var(--text-color);
+    }
+
+    .action-item {
+      padding-right: 8px;
+      font-family: var(--font-family);
+      font-size: 14px;
+      line-height: 22px;
     }
 
     .title {
       position: relative;
       width: 100%;
       z-index: 999;
-      padding-right: 44px;
       text-align: center;
       color: var(--text-color);
       font-size: 18px;
-      font-weight: 400;
+      font-weight: 500;
       font-family: var(--font-family);
       line-height: 28px;
+
+      &.padding-right {
+        padding-right: 44px;
+      }
     }
 
     .background-container {
