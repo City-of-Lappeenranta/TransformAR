@@ -6,8 +6,8 @@ import { Component, HostListener, Input } from '@angular/core';
   styleUrls: ['./feedback-category.component.scss'],
 })
 export class FeedbackCategoryComponent {
-  @Input() public withColor: boolean | undefined;
-  @Input() public selected: boolean | undefined;
+  @Input({ required: true }) public withColor: boolean | undefined;
+  @Input({ required: true }) public selected: boolean | undefined;
   @Input() public index: number | undefined;
 
   @HostListener('click', ['$event']) public inClick(e: MouseEvent) {

@@ -1,7 +1,7 @@
 <div class="categories flex-column">
   @for (category of categoriesToShow; track category; let index = $index) {
   <app-feedback-category
-    [withColor]="true"
+    [withColor]="withColor"
     [selected]="category.selected"
     [index]="index"
     (click)="toggleCategory(index)"

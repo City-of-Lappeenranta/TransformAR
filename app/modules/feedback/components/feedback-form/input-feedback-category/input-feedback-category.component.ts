@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 
 @Component({
@@ -18,14 +18,21 @@ export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
   implements OnInit
 {
-  @Input() public categories: string[] = [];
+  @Input({ required: true }) public categories: string[] = [];
+  @Input() public withColor = true;
 
   public categoriesToShow: { value: string; selected: boolean }[] = [];
 
+  public constructor(private readonly injector: Injector) {
+    super();
+  }
+
   public ngOnInit(): void {
+    const ngControl = this.injector.get(NgControl);
+
     this.categoriesToShow = this.categories.map((value) => ({
       value,
-      selected: false,
+      selected: value === ngControl.value,
     }));
   }
 

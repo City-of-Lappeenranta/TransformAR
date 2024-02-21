@@ -1,1 +1,37 @@
-<p>Hello Feedback Form</p>
+<main class="feedback-form">
+  <h2 class="title">What would you like to report?</h2>
+
+  @if (currentFeedbackFormStep === feedbackFormStep.MAIN_CATEGORY) {
+  <app-input-feedback-category
+    class="categories"
+    [categories]="mainCategories"
+    [formControl]="mainCategoryForm"
+  >
+  </app-input-feedback-category>
+  } @else {
+  <p class="description">{{ mainCategoryForm.value }}</p>
+  <app-input-feedback-category
+    class="categories"
+    [categories]="subCategories"
+    [formControl]="subCategoryForm"
+  >
+  </app-input-feedback-category>
+  }
+</main>
+<footer class="footer flex-column">
+  <app-steps [amount]="6" [active]="0"></app-steps>
+  <div class="flex-row">
+    @if(currentFeedbackFormStep > 0) {
+    <p-button label="Back" [outlined]="true" (onClick)="back()"></p-button>
+    }
+    <p-button
+      class="next-button"
+      label="Next"
+      [disabled]="!canClickNextButton()"
+      (onClick)="next()"
+    ></p-button>
+  </div>
+</footer>
+<div class="background-container">
+  <app-icon class="background" icon="logo"></app-icon>
+</div>
