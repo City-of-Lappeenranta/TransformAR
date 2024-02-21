@@ -36,6 +36,12 @@ export class MapComponent implements OnInit, OnChanges {
     }
 
     if (changes['markers']) {
+      this.map?.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          layer.remove();
+        }
+      });
+
       this.markers.forEach(
         ({ location }) =>
           this.map &&
