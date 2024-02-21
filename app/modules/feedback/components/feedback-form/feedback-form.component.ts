@@ -14,24 +14,27 @@ export class FeedbackFormComponent {
   public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
 
   public mainCategories = [
-    'Transactions, customer service, communication and general feedback',
-    'Exercise and outdoor activities',
-    'Zoning, construction and housing',
-    'Streets and traffic',
-    'Urban environment and accessibility and nature',
-    'Library, cultural institutions and cultural events',
-    'Early childhood education, teaching and youth',
-    'Employment and business services',
+    {
+      value:
+        'Transactions, customer service, communication and general feedback',
+    },
+    { value: 'Exercise and outdoor activities' },
+    { value: 'Zoning, construction and housing' },
+    { value: 'Streets and traffic' },
+    { value: 'Urban environment and accessibility and nature' },
+    { value: 'Library, cultural institutions and cultural events' },
+    { value: 'Early childhood education, teaching and youth' },
+    { value: 'Employment and business services' },
   ];
 
   public subCategories = [
-    'Customer service center Winkki',
-    'Other customer service points',
-    'Travel advice',
-    'Online transaction',
-    'Websites',
-    'Other city communication and information',
-    'General feedback',
+    { value: 'Customer service center Winkki' },
+    { value: 'Other customer service points' },
+    { value: 'Travel advice' },
+    { value: 'Online transaction' },
+    { value: 'Websites' },
+    { value: 'Other city communication and information' },
+    { value: 'General feedback' },
   ];
 
   public motivations = [

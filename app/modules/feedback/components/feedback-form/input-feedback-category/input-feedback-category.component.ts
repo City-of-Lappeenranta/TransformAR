@@ -18,9 +18,10 @@ export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
   implements OnInit
 {
-  @Input({ required: true }) public categories:
-    | string[]
-    | { value: string; icon: string }[] = [];
+  @Input({ required: true }) public categories!: {
+    value: string;
+    icon?: string;
+  }[];
   @Input() public withColor = true;
 
   public categoriesToShow: {
