@@ -2,21 +2,23 @@
 import type { Meta, StoryFn } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { ButtonModule } from 'primeng/button';
+import { FeedbackModule } from '../../../modules/feedback/feedback.module';
 
 export default {
-  title: 'Actions/Button',
+  title: 'Components/Feedback category',
   tags: ['autodocs'],
   decorators: [
     applicationConfig({
       providers: [provideAnimations()],
     }),
     moduleMetadata({
-      imports: [ButtonModule],
+      imports: [FeedbackModule],
     }),
   ],
   args: {
-    label: 'Submit',
+    value: 'Submit',
+    withColor: true,
+    selected: false,
   },
   argTypes: {
     onClick: {
@@ -25,16 +27,15 @@ export default {
   },
 } as Meta;
 
-export const Flat: StoryFn = (args) => ({
+export const Default: StoryFn = (args) => ({
   template: `
-  <p-button [label]="label" (click)="onClick($event)"></p-button>
-  `,
-  props: args,
-});
-
-export const Stroked: StoryFn = (args) => ({
-  template: `
-    <p-button [label]="label" [outlined]="true" (click)="onClick($event)"></p-button>
+  <app-feedback-category
+    [withColor]="withColor"
+    [selected]="selected"
+    (click)="onClick($event)"
+  >
+    {{ value }}
+  </app-feedback-category>
   `,
   props: args,
 });
