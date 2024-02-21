@@ -1,95 +1,84 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { FeedbackFormStep } from './feedback-form-step.enum';
-import { BaseComponent } from '@shared/components/base.component';
-import { merge, takeUntil } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-feedback-form',
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
 })
-export class FeedbackFormComponent extends BaseComponent implements OnInit {
+export class FeedbackFormComponent {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.REPORT_CATEGORY;
+  public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
 
-  public categories = [
-    'Transactions, customer service, communication and general feedback',
-    'Exercise and outdoor activities',
-    'Zoning, construction and housing',
-    'Streets and traffic',
-    'Urban environment and accessibility and nature',
-    'Library, cultural institutions and cultural events',
-    'Early childhood education, teaching and youth',
-    'Employment and business services',
+  public mainCategories = [
+    {
+      value:
+        'Transactions, customer service, communication and general feedback',
+    },
+    { value: 'Exercise and outdoor activities' },
+    { value: 'Zoning, construction and housing' },
+    { value: 'Streets and traffic' },
+    { value: 'Urban environment and accessibility and nature' },
+    { value: 'Library, cultural institutions and cultural events' },
+    { value: 'Early childhood education, teaching and youth' },
+    { value: 'Employment and business services' },
   ];
 
-  public specificReasons = [
-    'Customer service center Winkki',
-    'Other customer service points',
-    'Travel advice',
-    'Online transaction',
-    'Websites',
-    'Other city communication and information',
-    'General feedback',
+  public subCategories = [
+    { value: 'Customer service center Winkki' },
+    { value: 'Other customer service points' },
+    { value: 'Travel advice' },
+    { value: 'Online transaction' },
+    { value: 'Websites' },
+    { value: 'Other city communication and information' },
+    { value: 'General feedback' },
   ];
 
-  public feedbackReasons = [
+  public motivations = [
     { value: 'Thank you', icon: 'thumbs-up' },
     { value: 'Reproach', icon: 'thumbs-down' },
     { value: 'Question', icon: 'question-mark' },
     { value: 'Action proposal', icon: 'call-to-action' },
   ];
 
-  public categoryFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public specificReasonFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public feedbackReasonFormControl = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public reasonContentForm: FormGroup<{
-    message: FormControl<string | null>;
-    publish: FormControl<boolean | null>;
-  }> = new FormGroup({
-    message: new FormControl<string | null>(null, Validators.required),
-    publish: new FormControl<boolean | null>(null),
+  public feedbackForm = new FormGroup({
+    mainCategory: new FormControl<string | null>(null, Validators.required),
+    subCategory: new FormControl<string | null>(null, Validators.required),
+    motivation: new FormControl<string | null>(null, Validators.required),
+    message: new FormGroup({
+      message: new FormControl<string | null>(null, Validators.required),
+      publish: new FormControl<boolean | null>(null),
+    }),
   });
 
+  public constructor() {
+    merge(
+      this.feedbackForm.controls.mainCategory.valueChanges,
+      this.feedbackForm.controls.subCategory.valueChanges,
+      this.feedbackForm.controls.motivation.valueChanges
+    )
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.next());
+  }
+
   public get activeStep(): number {
-    return this.currentFeedbackFormStep === FeedbackFormStep.REPORT_CATEGORY ||
-      this.currentFeedbackFormStep === FeedbackFormStep.REPORT_SPECIFIC
+    return this.currentFeedbackFormStep === FeedbackFormStep.MAIN_CATEGORY ||
+      this.currentFeedbackFormStep === FeedbackFormStep.SUB_CATEGORY
       ? 0
       : this.currentFeedbackFormStep - 1;
   }
 
-  public ngOnInit(): void {
-    merge(
-      this.categoryFormControl.valueChanges,
-      this.specificReasonFormControl.valueChanges,
-      this.feedbackReasonFormControl.valueChanges
-    )
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(() => this.next());
-  }
-
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
-      case FeedbackFormStep.REPORT_CATEGORY:
-        return this.categoryFormControl.valid;
-      case FeedbackFormStep.REPORT_SPECIFIC: {
-        return this.specificReasonFormControl.valid;
-      }
-      case FeedbackFormStep.REASON: {
-        return this.feedbackReasonFormControl.valid;
-      }
-      case FeedbackFormStep.FEEDBACK_CONTENT: {
-        return this.reasonContentForm.valid;
+      case FeedbackFormStep.MAIN_CATEGORY:
+        return this.feedbackForm.controls.mainCategory.valid;
+      case FeedbackFormStep.SUB_CATEGORY:
+        return this.feedbackForm.controls.subCategory.valid;
+      case FeedbackFormStep.MOTIVATION: {
+        return this.feedbackForm.controls.motivation.valid;
       }
       default: {
         return false;

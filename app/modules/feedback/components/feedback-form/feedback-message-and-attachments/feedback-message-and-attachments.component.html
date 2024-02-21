@@ -1,4 +1,4 @@
-<article class="content" [formGroup]="reasonContentForm">
+<article class="content" [formGroup]="reasonForm">
   <section class="message-container">
     <label class="p-label" for="message">Feedback message</label>
     <textarea
@@ -41,11 +41,11 @@
     </div>
     <div class="files-container">
       <h4>1 File</h4>
-      <app-feedback-reason-content-file
+      <app-feedback-attachment-file
         name="Map.pdf"
         size="15 KB"
         [percentage]="40"
-      ></app-feedback-reason-content-file>
+      ></app-feedback-attachment-file>
     </div>
   </section>
 </article>

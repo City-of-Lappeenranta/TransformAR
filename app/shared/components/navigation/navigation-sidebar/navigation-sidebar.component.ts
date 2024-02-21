@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-navigation-sidebar',
@@ -14,8 +6,8 @@ import {
   styleUrls: ['./navigation-sidebar.component.scss'],
 })
 export class NavigationSidebarComponent {
-  @Input() public sidebarOpen: boolean = false;
-  @Output() public sidebarOpenChange = new EventEmitter<boolean>();
+  @Input({ required: true }) public sidebarOpen!: boolean;
+  @Output() public onSidebarClose = new EventEmitter<void>();
 
   public menuItems: {
     name: string;
@@ -48,9 +40,4 @@ export class NavigationSidebarComponent {
       route: '',
     },
   ];
-
-  public closeSidebar(): void {
-    this.sidebarOpen = false;
-    this.sidebarOpenChange.emit(false);
-  }
 }

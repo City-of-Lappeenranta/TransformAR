@@ -9,19 +9,19 @@ import { StepsComponent } from '@shared/components/steps/steps.component';
 import { ButtonModule } from 'primeng/button';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { FeedbackReasonContentComponent } from './components/feedback-form/feedback-reason-content/feedback-reason-content.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FeedbackReasonContentFileComponent } from './components/feedback-form/feedback-reason-content/feedback-reason-content-file/feedback-reason-content-file.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
+import { FeedbackAttachmentFileComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-attachment-file/feedback-attachment-file.component';
 
 @NgModule({
   declarations: [
     FeedbackFormComponent,
     FeedbackCategoryComponent,
     InputFeedbackCategoryComponent,
-    FeedbackReasonContentComponent,
-    FeedbackReasonContentFileComponent,
+    FeedbackMessageAndAttachmentComponent,
+    FeedbackAttachmentFileComponent,
   ],
   imports: [
     CommonModule,
@@ -36,5 +36,6 @@ import { ProgressBarModule } from 'primeng/progressbar';
     FileUploadModule,
     ProgressBarModule,
   ],
+  exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
 export class FeedbackModule {}
