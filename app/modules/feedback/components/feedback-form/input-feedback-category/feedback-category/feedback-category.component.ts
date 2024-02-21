@@ -9,6 +9,7 @@ export class FeedbackCategoryComponent {
   @Input({ required: true }) public withColor: boolean | undefined;
   @Input({ required: true }) public selected: boolean | undefined;
   @Input() public index: number | undefined;
+  @Input() public icon: string | undefined;
 
   @HostListener('click', ['$event']) public inClick(e: MouseEvent) {
     e.stopPropagation();

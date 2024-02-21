@@ -15,6 +15,14 @@
     font-weight: 500;
     line-height: 20px;
 
+    &:has(.icon) {
+      padding: 16px 8px;
+    }
+
+    .icon {
+      margin-right: 16px;
+    }
+
     &.no-border {
       border-left-color: transparent !important;
     }

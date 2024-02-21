@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FeedbackFormStep } from './feedback-form-step.enum';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-feedback-form',
@@ -13,47 +14,64 @@ export class FeedbackFormComponent {
   public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
 
   public mainCategories = [
-    'Transactions, customer service, communication and general feedback',
-    'Exercise and outdoor activities',
-    'Zoning, construction and housing',
-    'Streets and traffic',
-    'Urban environment and accessibility and nature',
-    'Library, cultural institutions and cultural events',
-    'Early childhood education, teaching and youth',
-    'Employment and business services',
+    {
+      value:
+        'Transactions, customer service, communication and general feedback',
+    },
+    { value: 'Exercise and outdoor activities' },
+    { value: 'Zoning, construction and housing' },
+    { value: 'Streets and traffic' },
+    { value: 'Urban environment and accessibility and nature' },
+    { value: 'Library, cultural institutions and cultural events' },
+    { value: 'Early childhood education, teaching and youth' },
+    { value: 'Employment and business services' },
   ];
 
   public subCategories = [
-    'Customer service center Winkki',
-    'Other customer service points',
-    'Travel advice',
-    'Online transaction',
-    'Websites',
-    'Other city communication and information',
-    'General feedback',
+    { value: 'Customer service center Winkki' },
+    { value: 'Other customer service points' },
+    { value: 'Travel advice' },
+    { value: 'Online transaction' },
+    { value: 'Websites' },
+    { value: 'Other city communication and information' },
+    { value: 'General feedback' },
   ];
 
-  public mainCategoryForm = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
-  public subCategoryForm = new FormControl<string | null>(
-    null,
-    Validators.required
-  );
+  public motivations = [
+    { value: 'Thank you', icon: 'thumbs-up' },
+    { value: 'Reproach', icon: 'thumbs-down' },
+    { value: 'Question', icon: 'question-mark' },
+    { value: 'Action proposal', icon: 'call-to-action' },
+  ];
+
+  public feedbackForm = new FormGroup({
+    mainCategory: new FormControl<string | null>(null, Validators.required),
+    subCategory: new FormControl<string | null>(null, Validators.required),
+    motivation: new FormControl<string | null>(null, Validators.required),
+  });
 
   public constructor() {
-    this.mainCategoryForm.valueChanges
+    merge(
+      this.feedbackForm.controls.mainCategory.valueChanges,
+      this.feedbackForm.controls.subCategory.valueChanges
+    )
       .pipe(takeUntilDestroyed())
-      .subscribe(() => {
-        this.currentFeedbackFormStep = FeedbackFormStep.SUB_CATEGORY;
-      });
+      .subscribe(() => this.next());
+  }
+
+  public get activeStep(): number {
+    return this.currentFeedbackFormStep === FeedbackFormStep.MAIN_CATEGORY ||
+      this.currentFeedbackFormStep === FeedbackFormStep.SUB_CATEGORY
+      ? 0
+      : this.currentFeedbackFormStep - 1;
   }
 
   public canClickNextButton(): boolean {
     switch (this.currentFeedbackFormStep) {
       case FeedbackFormStep.MAIN_CATEGORY:
-        return this.mainCategoryForm.valid;
+        return this.feedbackForm.controls.mainCategory.valid;
+      case FeedbackFormStep.SUB_CATEGORY:
+        return this.feedbackForm.controls.subCategory.valid;
       default: {
         return false;
       }
@@ -61,10 +79,10 @@ export class FeedbackFormComponent {
   }
 
   public back(): void {
-    this.currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
+    this.currentFeedbackFormStep -= 1;
   }
 
   public next(): void {
-    this.currentFeedbackFormStep = FeedbackFormStep.SUB_CATEGORY;
+    this.currentFeedbackFormStep += 1;
   }
 }

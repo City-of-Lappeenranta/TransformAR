@@ -1,5 +1,12 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import {
+  FormControl,
+  FormControlDirective,
+  FormControlName,
+  FormGroupDirective,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 
 @Component({
@@ -18,36 +25,69 @@ export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
   implements OnInit
 {
-  @Input({ required: true }) public categories: string[] = [];
+  @Input({ required: true }) public categories!: {
+    value: string;
+    icon?: string;
+  }[];
   @Input() public withColor = true;
 
-  public categoriesToShow: { value: string; selected: boolean }[] = [];
+  public categoriesToShow: {
+    value: string;
+    selected: boolean;
+    icon?: string;
+  }[] = [];
+
+  public hasIcons = false;
 
   public constructor(private readonly injector: Injector) {
     super();
   }
 
   public ngOnInit(): void {
-    const ngControl = this.injector.get(NgControl);
+    this.categoriesToShow = this.categories.map((category) => {
+      if (typeof category === 'string') {
+        return {
+          value: category,
+          selected: category === this.getFormValue(),
+        };
+      }
 
-    this.categoriesToShow = this.categories.map((value) => ({
-      value,
-      selected: value === ngControl.value,
-    }));
+      const value = category.value;
+      if (!this.hasIcons) {
+        this.hasIcons = !!category?.icon;
+      }
+
+      return {
+        value,
+        selected: value === this.getFormValue(),
+        icon: category.icon,
+      };
+    });
   }
 
   public toggleCategory(indexToToggle: number): void {
-    let value = '';
     this.categoriesToShow = this.categoriesToShow.map((category, index) => {
-      let selected = false;
       if (index === indexToToggle) {
-        value = category.value;
-        selected = true;
+        this.writeValue(category.value);
       }
 
-      return { value: category.value, selected };
+      return {
+        ...category,
+        selected: index === indexToToggle,
+      };
     });
+  }
 
-    this.writeValue(value);
+  private getFormValue(): string {
+    const injectedControl = this.injector.get(NgControl);
+
+    if (injectedControl.constructor === FormControlName) {
+      return this.injector
+        .get(FormGroupDirective)
+        .getControl(injectedControl as FormControlName).value;
+    }
+
+    return ((injectedControl as FormControlDirective).form as FormControl)
+      .value;
   }
 }

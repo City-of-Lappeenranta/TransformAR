@@ -1,25 +1,36 @@
-<main class="feedback-form">
+<main class="feedback-form" [formGroup]="feedbackForm">
+  @switch (currentFeedbackFormStep) { @default {
   <h2 class="title">What would you like to report?</h2>
 
   @if (currentFeedbackFormStep === feedbackFormStep.MAIN_CATEGORY) {
   <app-input-feedback-category
     class="categories"
     [categories]="mainCategories"
-    [formControl]="mainCategoryForm"
+    formControlName="mainCategory"
   >
   </app-input-feedback-category>
   } @else {
-  <p class="description">{{ mainCategoryForm.value }}</p>
+  <p class="description">{{ feedbackForm.value.mainCategory }}</p>
   <app-input-feedback-category
     class="categories"
+    [withColor]="false"
     [categories]="subCategories"
-    [formControl]="subCategoryForm"
+    formControlName="subCategory"
   >
   </app-input-feedback-category>
-  }
+  } } @case (feedbackFormStep.MOTIVATION) {
+  <h2 class="title">What's the reason of your feedback?</h2>
+  <app-input-feedback-category
+    class="categories"
+    [withColor]="false"
+    [categories]="motivations"
+    formControlName="motivation"
+  >
+  </app-input-feedback-category>
+  } }
 </main>
 <footer class="footer flex-column">
-  <app-steps [amount]="6" [active]="0"></app-steps>
+  <app-steps [amount]="6" [active]="activeStep"></app-steps>
   <div class="flex-row">
     @if(currentFeedbackFormStep > 0) {
     <p-button label="Back" [outlined]="true" (onClick)="back()"></p-button>
