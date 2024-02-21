@@ -1,0 +1,15 @@
+<app-navigation-sidebar
+  [sidebarOpen]="sidebarOpen"
+  (onSidebarClose)="sidebarOpen = false"
+></app-navigation-sidebar>
+<header class="flex-row header">
+  <app-icon
+    class="menu-item"
+    icon="menu"
+    (click)="sidebarOpen = true"
+  ></app-icon>
+  <h1 class="title">{{ title }}</h1>
+  <div class="background-container">
+    <app-icon class="background" icon="header-wave"></app-icon>
+  </div>
+</header>

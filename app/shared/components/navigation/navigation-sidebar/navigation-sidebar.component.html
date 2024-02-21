@@ -1,0 +1,40 @@
+<p-sidebar
+  class="sidebar"
+  [(visible)]="sidebarOpen"
+  [fullScreen]="true"
+  [showCloseIcon]="false"
+>
+  <ng-template pTemplate="header">
+    <div class="close-container flex-row">
+      <app-icon
+        class="close-icon"
+        icon="close"
+        (click)="onSidebarClose.emit()"
+      ></app-icon>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="menu-items-container flex-row">
+      <div class="menu-items flex-column">
+        @for (item of menuItems; track item.name) {
+        <div
+          class="menu-item flex-row"
+          [routerLink]="item.route"
+          (click)="onSidebarClose.emit()"
+        >
+          <app-icon class="icon" [icon]="item.icon"></app-icon>
+          <p>{{ item.name }}</p>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="background-container">
+      <app-icon class="background" icon="logo"></app-icon>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <app-icon class="logo" icon="logo-with-name"></app-icon>
+  </ng-template>
+</p-sidebar>

@@ -3,12 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "preserve": "npm run theme; npm run generate-icons",
     "serve": "ng serve",
+    "prestart": "npm run theme; npm run generate-icons",
     "start": "npx http-server -p 8080 -c-1 dist/citizen-webapp/browser",
     "watch": "ng build --watch --configuration production",
+    "prebuild": "npm run theme; npm run generate-icons",
     "build": "ng build",
     "test": "jest",
     "theme": "sass --update assets/themes/mytheme/theme.scss:assets/theme.css",
+    "generate-icons": "node generate-svg-icons.ts",
+    "prestorybook": "npm run theme; npm run generate-icons",
     "storybook": "ng run citizen-webapp:storybook",
     "build-storybook": "ng run citizen-webapp:build-storybook"
   },
