@@ -2,25 +2,21 @@
 import type { Meta, StoryFn } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { NavigationModule } from '../../components/navigation/navigation.module';
+import { StepsComponent } from '@shared/components/steps/steps.component';
 
 export default {
-  title: 'Components/Navigation header',
+  title: 'Components/Steps',
   decorators: [
     applicationConfig({
       providers: [provideAnimations()],
     }),
     moduleMetadata({
-      imports: [NavigationModule],
+      imports: [StepsComponent],
     }),
   ],
   args: {
-    title: 'Lappeenranta',
-  },
-  argTypes: {
-    onClick: {
-      action: 'onClick',
-    },
+    amount: 6,
+    active: 2,
   },
   parameters: {
     viewport: {
@@ -30,15 +26,8 @@ export default {
 } as Meta;
 
 export const Default: StoryFn = (args) => ({
-  styles: [
-    `
-      ::ng-deep .sb-main-padded {
-      padding: 0 !important;
-      }
-  `,
-  ],
   template: `
-    <app-navigation-header [title]="title"></app-navigation-header>
+    <app-steps [amount]="amount" [active]="active"></app-steps>
   `,
   props: args,
 });
