@@ -11,11 +11,11 @@ import { SharedModule } from './shared/shared.module';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'citizen-webapp';
+  public title = 'citizen-webapp';
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  public constructor(private readonly primengConfig: PrimeNGConfig) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.primengConfig.ripple = true;
   }
 }

@@ -16,8 +16,7 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
 })
 export class InputFeedbackCategoryComponent
   extends ControlValueAccessorHelper<string>
-  implements OnInit
-{
+  implements OnInit {
   @Input({ required: true }) public categories:
     | string[]
     | { value: string; icon: string }[] = [];

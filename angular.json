@@ -85,22 +85,6 @@
             "buildTarget": "citizen-webapp:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "sass",
-            "assets": [
-              "favicon.ico",
-              "assets",
-              "manifest.webmanifest",
-              "manifest.webmanifest"
-            ],
-            "styles": ["styles.sass"],
-            "scripts": []
-          }
-        },
         "storybook": {
           "builder": "@storybook/angular:start-storybook",
           "options": {
