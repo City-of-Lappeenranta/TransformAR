@@ -1,5 +1,12 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import {
+  FormControl,
+  FormControlDirective,
+  FormControlName,
+  FormGroupDirective,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 
 @Component({
@@ -37,13 +44,11 @@ export class InputFeedbackCategoryComponent
   }
 
   public ngOnInit(): void {
-    const ngControl = this.injector.get(NgControl);
-
     this.categoriesToShow = this.categories.map((category) => {
       if (typeof category === 'string') {
         return {
           value: category,
-          selected: category === ngControl.value,
+          selected: category === this.getFormValue(),
         };
       }
 
@@ -54,7 +59,7 @@ export class InputFeedbackCategoryComponent
 
       return {
         value,
-        selected: value === ngControl.value,
+        selected: value === this.getFormValue(),
         icon: category.icon,
       };
     });
@@ -71,5 +76,18 @@ export class InputFeedbackCategoryComponent
         selected: index === indexToToggle,
       };
     });
+  }
+
+  private getFormValue(): string {
+    const injectedControl = this.injector.get(NgControl);
+
+    if (injectedControl.constructor === FormControlName) {
+      return this.injector
+        .get(FormGroupDirective)
+        .getControl(injectedControl as FormControlName).value;
+    }
+
+    return ((injectedControl as FormControlDirective).form as FormControl)
+      .value;
   }
 }
