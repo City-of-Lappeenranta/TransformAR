@@ -2,43 +2,40 @@
 import type { Meta, StoryFn } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { NavigationModule } from '../../components/navigation/navigation.module';
+import { FeedbackModule } from '../../../modules/feedback/feedback.module';
 
 export default {
-  title: 'Components/Navigation header',
+  title: 'Components/Feedback category',
+  tags: ['autodocs'],
   decorators: [
     applicationConfig({
       providers: [provideAnimations()],
     }),
     moduleMetadata({
-      imports: [NavigationModule],
+      imports: [FeedbackModule],
     }),
   ],
   args: {
-    title: 'Lappeenranta',
+    value: 'Submit',
+    withColor: true,
+    selected: false,
   },
   argTypes: {
     onClick: {
       action: 'onClick',
     },
   },
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile2',
-    },
-  },
 } as Meta;
 
 export const Default: StoryFn = (args) => ({
-  styles: [
-    `
-      ::ng-deep .sb-main-padded {
-      padding: 0 !important;
-      }
-  `,
-  ],
   template: `
-    <app-navigation-header [title]="title"></app-navigation-header>
+  <app-feedback-category
+    [withColor]="withColor"
+    [selected]="selected"
+    (click)="onClick($event)"
+  >
+    {{ value }}
+  </app-feedback-category>
   `,
   props: args,
 });

@@ -2,45 +2,41 @@
   @switch (currentFeedbackFormStep) { @default {
   <h2 class="title">What would you like to report?</h2>
 
-  @if (currentFeedbackFormStep === feedbackFormStep.CATEGORY) {
+  @if (currentFeedbackFormStep === feedbackFormStep.MAIN_CATEGORY) {
   <app-input-feedback-category
     class="categories"
-    [categories]="categories"
-    formControlName="category"
+    [categories]="mainCategories"
+    formControlName="mainCategory"
   >
   </app-input-feedback-category>
   } @else {
-  <p class="description">{{ feedbackForm.value.category }}</p>
+  <p class="description">{{ feedbackForm.value.mainCategory }}</p>
   <app-input-feedback-category
     class="categories"
     [withColor]="false"
     [categories]="subCategories"
     formControlName="subCategory"
   >
-  </app-input-feedback-category
-  >} } @case (feedbackFormStep.TYPE) {
+  </app-input-feedback-category>
+  } } @case (feedbackFormStep.MOTIVATION) {
   <h2 class="title">What's the reason of your feedback?</h2>
   <app-input-feedback-category
     class="categories"
     [withColor]="false"
-    [categories]="reasons"
-    formControlName="type"
+    [categories]="motivations"
+    formControlName="motivation"
   >
   </app-input-feedback-category>
-  } @case (feedbackFormStep.REASON) {
+  } @case (feedbackFormStep.MESSAGE_AND_ATTACHMENTS) {
   <h2 class="title">What's your feedback?</h2>
-  <app-feedback-reason-content
-    [reasonForm]="feedbackForm.controls.reason"
-  ></app-feedback-reason-content>
+  <app-feedback-message-and-attachments
+    [reasonForm]="feedbackForm.controls.message"
+  ></app-feedback-message-and-attachments>
   } @case (feedbackFormStep.LOCATION) {
   <h2 class="title">What's the feedback location?</h2>
   <app-feedback-location
     [locationFormControl]="feedbackForm.controls.location"
   ></app-feedback-location>
-  } @case (feedbackFormStep.CONTACT) {
-  <h2 class="title">How can we contact you?</h2>
-  } @case (feedbackFormStep.CONFIRMATION) {
-  <h2 class="title">Thanks for your feedback!</h2>
   } }
 </main>
 <footer class="footer flex-column">
@@ -57,3 +53,6 @@
     ></p-button>
   </div>
 </footer>
+<div class="background-container">
+  <app-icon class="background" icon="logo"></app-icon>
+</div>

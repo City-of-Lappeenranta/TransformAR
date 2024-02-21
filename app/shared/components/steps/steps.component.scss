@@ -5,7 +5,7 @@
     .step {
       width: 100%;
       height: 4px;
-      background-color: #eaecf0;
+      background-color: var(--surface-200);
       border-radius: 2px;
 
       &.active {

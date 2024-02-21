@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration production",
     "prebuild": "npm run theme; npm run generate-icons",
     "build": "ng build",
-    "test": "ng test",
+    "test": "jest",
     "theme": "sass --update assets/themes/mytheme/theme.scss:assets/theme.css",
     "generate-icons": "node generate-svg-icons.ts",
     "prestorybook": "npm run theme; npm run generate-icons",
@@ -43,17 +43,23 @@
     "@storybook/angular": "^7.6.14",
     "@storybook/blocks": "^7.6.14",
     "@storybook/test": "^7.6.14",
-    "@types/jasmine": "~5.1.0",
+    "@types/jest": "^29.5.12",
     "http-server": "^14.1.1",
-    "jasmine-core": "~5.1.0",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.0.3",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "shallow-render": "^17.0.1",
     "storybook": "^7.6.14",
     "typescript": "~5.3.2"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "<rootDir>/setup-jest.ts"
+    ]
   }
 }
