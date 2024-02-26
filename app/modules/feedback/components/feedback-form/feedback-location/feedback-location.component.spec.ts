@@ -60,7 +60,7 @@ describe('FeedbackLocationComponent', () => {
     it('should search by query and update location search results', async () => {
       const locationFormControl = new FormControl();
 
-      const { inject, find, instance } = await shallow
+      const { inject, find, instance, fixture } = await shallow
         .mock(LocationService, {
           searchLocationByQuery: jest.fn(() => Promise.resolve([{ name: 'location-result', latLong: [3, 3] as LatLong }])),
         })
@@ -73,7 +73,7 @@ describe('FeedbackLocationComponent', () => {
 
       expect(locationService.searchLocationByQuery).toHaveBeenCalledWith('location-query');
 
-      await new Promise((resolve) => setTimeout(() => resolve(true), 0));
+      await fixture.whenStable();
 
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         { disabled: false, latLong: [52, 52], name: 'Your current location' },
