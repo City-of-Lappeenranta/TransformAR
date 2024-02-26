@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FeedbackFormComponent should render the properties 1`] = `
+exports[`FeedbackFormComponent should render the main and the footer 1`] = `
 <ng-component>
   <app-feedback-form>
     <main

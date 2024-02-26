@@ -34,7 +34,7 @@ describe('InputFeedbackCategoryComponent', () => {
   it('should toggle category on click', async () => {
     const categories = [{ value: 'Category 1' }, { value: 'Category 2' }];
 
-    const { instance } = await shallow.render(
+    const { find, instance } = await shallow.render(
       `
         <app-input-feedback-category 
           [categories]="categories"
@@ -45,7 +45,7 @@ describe('InputFeedbackCategoryComponent', () => {
       },
     );
 
-    instance.toggleCategory(0);
+    find('app-feedback-category')[0].triggerEventHandler('click', {});
 
     expect(instance.categoriesToShow[0].selected).toBe(true);
     expect(instance.categoriesToShow[1].selected).toBe(false);
