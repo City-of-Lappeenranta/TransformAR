@@ -7,12 +7,12 @@ import { environment } from '@environments/environment';
 })
 export class RadarService {
   public async autocomplete(query: string): Promise<LocationSearchResult[]> {
-    if (!query) {
-      return [];
-    }
-
     if (!environment.radarApiKey) {
       throw Error('Invalid or missing Radar API key');
+    }
+
+    if (!query) {
+      return [];
     }
 
     try {
