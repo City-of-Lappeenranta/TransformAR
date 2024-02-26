@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeedbackFormComponent should render the properties 1`] = `
+<ng-component>
+  <app-feedback-form>
+    <main
+      class="feedback-form ng-untouched ng-pristine ng-invalid"
+    >
+      <h2
+        class="title"
+      >
+        What would you like to report?
+      </h2>
+      <app-input-feedback-category
+        class="categories ng-untouched ng-pristine ng-invalid"
+        formcontrolname="mainCategory"
+      />
+    </main>
+    <footer
+      class="footer flex-column"
+    >
+      <app-steps />
+      <div
+        class="flex-row"
+      >
+        <p-button
+          class="next-button"
+          label="Next"
+        />
+      </div>
+    </footer>
+    <div
+      class="background-container"
+    >
+      <app-icon
+        class="background"
+        icon="logo"
+      />
+    </div>
+  </app-feedback-form>
+</ng-component>
+`;

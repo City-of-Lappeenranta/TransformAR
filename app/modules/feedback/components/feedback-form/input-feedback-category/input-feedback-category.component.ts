@@ -42,13 +42,6 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
 
   public ngOnInit(): void {
     this.categoriesToShow = this.categories.map((category) => {
-      if (typeof category === 'string') {
-        return {
-          value: category,
-          selected: category === this.getFormValue(),
-        };
-      }
-
       const value = category.value;
       if (!this.hasIcons) {
         this.hasIcons = !!category?.icon;
@@ -82,6 +75,6 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
       return this.injector.get(FormGroupDirective).getControl(injectedControl as FormControlName).value;
     }
 
-    return ((injectedControl as FormControlDirective).form as FormControl).value;
+    return ((injectedControl as FormControlDirective).form as FormControl)?.value;
   }
 }
