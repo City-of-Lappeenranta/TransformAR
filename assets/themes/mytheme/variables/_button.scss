@@ -352,7 +352,7 @@ $toggleButtonTextColor: $textColor;
 
 /// Icon color of a toggle button
 /// @group button
-$toggleButtonIconColor: $textSecondaryColor;
+$toggleButtonIconColor: $secondaryTextColor;
 
 /// Background of a toggle button in hover state
 /// @group button
@@ -368,7 +368,7 @@ $toggleButtonTextHoverColor: $textColor;
 
 /// Icon color of a toggle button in hover state
 /// @group button
-$toggleButtonIconHoverColor: $textSecondaryColor;
+$toggleButtonIconHoverColor: $secondaryTextColor;
 
 /// Background of a toggle button in selected state
 /// @group button
