@@ -20,11 +20,11 @@ interface LocationSearchResult {
   styleUrls: ['./feedback-location.component.scss'],
 })
 export class FeedbackLocationComponent implements OnInit, OnDestroy {
-  private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
-  private _locationSearchResults$: Subject<LocationSearchResult[]> = new Subject();
+  @Input({ required: true }) public locationFormControl!: FormControl<LatLong | null>;
 
-  @Input({ required: true })
-  public locationFormControl!: FormControl<LatLong | null>;
+  private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
+  private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
+
   public mapCenter$: Subject<LatLong> = new BehaviorSubject(environment.defaultLocation as [number, number]);
   public locationSuggestions$: Observable<LocationSearchResult[]> = combineLatest([
     this._currentUserLocation$,
