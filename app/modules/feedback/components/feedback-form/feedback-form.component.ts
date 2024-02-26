@@ -12,7 +12,7 @@ import { FeedbackFormStep } from './feedback-form-step.enum';
 })
 export class FeedbackFormComponent {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.LOCATION;
+  public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
 
   public mainCategories = [
     {
