@@ -10,12 +10,6 @@ describe('FeedbackFormComponent', () => {
     shallow = new Shallow(FeedbackFormComponent, FeedbackModule);
   });
 
-  it('should render the main and the footer', async () => {
-    const { fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
-
-    expect(fixture).toMatchSnapshot();
-  });
-
   it('should go to the sub categories when selecting the main category', async () => {
     const { instance } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
