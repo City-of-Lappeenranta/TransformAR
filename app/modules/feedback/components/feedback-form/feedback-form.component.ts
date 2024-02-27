@@ -53,6 +53,14 @@ export class FeedbackFormComponent {
       publish: new FormControl<boolean | null>(null),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),
+    contact: new FormGroup({
+      email: new FormControl<string | null>(null, Validators.email),
+      firstName: new FormControl<string | null>(null),
+      lastName: new FormControl<string | null>(null),
+      phone: new FormControl<string | null>(null),
+      receiveResponseByMail: new FormControl<boolean | null>(null),
+      termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+    }),
   });
 
   public constructor() {
@@ -86,6 +94,9 @@ export class FeedbackFormComponent {
       }
       case FeedbackFormStep.LOCATION: {
         return this.feedbackForm.controls.location.valid;
+      }
+      case FeedbackFormStep.CONTACT: {
+        return this.feedbackForm.controls.contact.valid;
       }
       default: {
         return false;
