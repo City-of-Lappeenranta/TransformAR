@@ -1,0 +1,41 @@
+:host {
+  z-index: 999;
+  margin-top: -1px; //TODO: find what is causing this
+  height: 100%;
+
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 32px;
+    gap: 16px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+
+    app-icon {
+      width: 78px;
+      height: 78px;
+    }
+  }
+
+  .wave {
+    color: var(--primary-color);
+  }
+
+  .button {
+    display: block;
+    margin: 64px 0 32px 0;
+  }
+}
