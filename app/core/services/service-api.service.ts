@@ -1,0 +1,39 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Service, ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
+import { environment } from '@environments/environment';
+import { Observable, map } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ServiceApi {
+  private baseUrl = environment.serviceApiUrl;
+  private jurisdictionId = environment.serviceApiJurisdictionId;
+
+  public constructor(private readonly httpClient: HttpClient) {}
+
+  public getServices(): Observable<ServiceDictionary> {
+    return this.httpClient
+      .get<ServiceListApiResponse>(`${this.baseUrl}services.json?jurisdiction_id=${this.jurisdictionId}`)
+      .pipe(map(this.mapServiceListApiResponseToServiceList));
+  }
+
+  private mapServiceListApiResponseToServiceList(response: ServiceListApiResponse): ServiceDictionary {
+    const serviceList: ServiceDictionary = {};
+
+    response.forEach(({ service_code, service_name, description, group }) => {
+      const service: Service = {
+        code: service_code,
+        name: service_name,
+        description,
+      };
+
+      serviceList[group] = [...(serviceList[group] ?? []), service];
+    });
+
+    return serviceList;
+  }
+}
