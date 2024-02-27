@@ -43,7 +43,6 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['categories']) {
-      console.log(changes['categories']);
       this.setCategoriesToShow();
     }
   }
