@@ -16,8 +16,9 @@ export class ServiceApi {
   public constructor(private readonly httpClient: HttpClient) {}
 
   public getServices(): Observable<ServiceDictionary> {
+    /* TODO: cache data */
     return this.httpClient
-      .get<ServiceListApiResponse>(`${this.baseUrl}services.json?jurisdiction_id=${this.jurisdictionId}`)
+      .get<ServiceListApiResponse>(`${this.baseUrl}/services.json?jurisdiction_id=${this.jurisdictionId}`)
       .pipe(map(this.mapServiceListApiResponseToServiceList));
   }
 

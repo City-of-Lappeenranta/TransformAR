@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component, Injector, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {
   FormControl,
   FormControlDirective,
@@ -8,6 +8,15 @@ import {
   NgControl,
 } from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+
+export interface Category {
+  value: string;
+  icon?: string;
+}
+
+type CategoryToShow = Category & {
+  selected: boolean;
+};
 
 @Component({
   selector: 'app-input-feedback-category',
@@ -21,26 +30,38 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
     },
   ],
 })
-export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnInit {
-  @Input({ required: true }) public categories!: {
-    value: string;
-    icon?: string;
-  }[];
+export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnChanges {
+  @Input({ required: true }) public categories!: Category[];
   @Input() public withColor = true;
 
-  public categoriesToShow: {
-    value: string;
-    selected: boolean;
-    icon?: string;
-  }[] = [];
-
+  public categoriesToShow: CategoryToShow[] = [];
   public hasIcons = false;
 
   public constructor(private readonly injector: Injector) {
     super();
   }
 
-  public ngOnInit(): void {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['categories']) {
+      console.log(changes['categories']);
+      this.setCategoriesToShow();
+    }
+  }
+
+  public toggleCategory(indexToToggle: number): void {
+    this.categoriesToShow = this.categoriesToShow.map((category, index) => {
+      if (index === indexToToggle) {
+        this.writeValue(category.value);
+      }
+
+      return {
+        ...category,
+        selected: index === indexToToggle,
+      };
+    });
+  }
+
+  private setCategoriesToShow(): void {
     this.categoriesToShow = this.categories.map((category) => {
       if (typeof category === 'string') {
         return {
@@ -58,19 +79,6 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
         value,
         selected: value === this.getFormValue(),
         icon: category.icon,
-      };
-    });
-  }
-
-  public toggleCategory(indexToToggle: number): void {
-    this.categoriesToShow = this.categoriesToShow.map((category, index) => {
-      if (index === indexToToggle) {
-        this.writeValue(category.value);
-      }
-
-      return {
-        ...category,
-        selected: index === indexToToggle,
       };
     });
   }

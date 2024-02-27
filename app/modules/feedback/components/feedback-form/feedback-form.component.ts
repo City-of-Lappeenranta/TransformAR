@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { merge } from 'rxjs';
+import { ServiceDictionary } from '@core/models/service-api';
+import { ServiceApi } from '@core/services/service-api.service';
+import { Observable, ReplaySubject, Subject, combineLatest, map, merge } from 'rxjs';
 import { LatLong } from '../../../../core/models/location';
 import { FeedbackFormStep } from './feedback-form-step.enum';
+import { Category } from './input-feedback-category/input-feedback-category.component';
 
 @Component({
   selector: 'app-feedback-form',
@@ -13,29 +16,6 @@ import { FeedbackFormStep } from './feedback-form-step.enum';
 export class FeedbackFormComponent {
   public feedbackFormStep = FeedbackFormStep;
   public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
-
-  public mainCategories = [
-    {
-      value: 'Transactions, customer service, communication and general feedback',
-    },
-    { value: 'Exercise and outdoor activities' },
-    { value: 'Zoning, construction and housing' },
-    { value: 'Streets and traffic' },
-    { value: 'Urban environment and accessibility and nature' },
-    { value: 'Library, cultural institutions and cultural events' },
-    { value: 'Early childhood education, teaching and youth' },
-    { value: 'Employment and business services' },
-  ];
-
-  public subCategories = [
-    { value: 'Customer service center Winkki' },
-    { value: 'Other customer service points' },
-    { value: 'Travel advice' },
-    { value: 'Online transaction' },
-    { value: 'Websites' },
-    { value: 'Other city communication and information' },
-    { value: 'General feedback' },
-  ];
 
   public motivations = [
     { value: 'Thank you', icon: 'thumbs-up' },
@@ -55,14 +35,16 @@ export class FeedbackFormComponent {
     location: new FormControl<LatLong | null>(null, Validators.required),
   });
 
-  public constructor() {
-    merge(
-      this.feedbackForm.controls.mainCategory.valueChanges,
-      this.feedbackForm.controls.subCategory.valueChanges,
-      this.feedbackForm.controls.motivation.valueChanges,
-    )
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.next());
+  public mainCategories$: Observable<Category[]> = this.serviceApi
+    .getServices()
+    .pipe(map(this.mapServiceListToMainCategories));
+
+  private subCategoriesSubject$: Subject<Category[]> = new ReplaySubject();
+  public subCategories$ = this.subCategoriesSubject$.asObservable();
+
+  public constructor(private readonly serviceApi: ServiceApi) {
+    this.handleFeedbackFormValueChanges();
+    this.getSubCategoryOnMainCategoryChange();
   }
 
   public get activeStep(): number {
@@ -99,5 +81,32 @@ export class FeedbackFormComponent {
 
   public next(): void {
     this.currentFeedbackFormStep += 1;
+  }
+
+  private handleFeedbackFormValueChanges(): void {
+    merge(
+      this.feedbackForm.controls.mainCategory.valueChanges,
+      this.feedbackForm.controls.subCategory.valueChanges,
+      this.feedbackForm.controls.motivation.valueChanges,
+    )
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.next());
+  }
+
+  private mapServiceListToMainCategories(serviceList: ServiceDictionary): Category[] {
+    return Object.keys(serviceList).map((key) => ({ value: key }));
+  }
+
+  private getSubCategoryOnMainCategoryChange(): void {
+    combineLatest([this.serviceApi.getServices(), this.feedbackForm.controls.mainCategory.valueChanges])
+      .pipe(takeUntilDestroyed())
+      .subscribe(([serviceList, mainCategory]) => {
+        if (!mainCategory) {
+          return this.subCategoriesSubject$.next([]);
+        }
+
+        const subCategories = serviceList[mainCategory].map(({ name }) => ({ value: name }));
+        this.subCategoriesSubject$.next(subCategories);
+      });
   }
 }
