@@ -99,8 +99,7 @@
   }
 }
 
-.p-label,
-.p-checkbox-label {
+.p-label {
   color: #000;
   font-family: var(--font-family);
   font-size: 14px;
@@ -123,8 +122,4 @@
     margin-left: auto;
     font-size: 12px;
   }
-}
-
-.p-checkbox-label {
-  margin-left: 8px;
 }
