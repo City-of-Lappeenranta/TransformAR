@@ -41,6 +41,18 @@ describe('FeedbackFormComponent', () => {
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
 
+    instance.feedbackForm.controls.message.controls.message.setValue('message');
+    expect(instance.canClickNextButton()).toEqual(true);
+
+    find('p-button.next-button').triggerEventHandler('click', {});
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
+
+    instance.back();
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+    expect(instance.canClickNextButton()).toEqual(true);
+
     instance.back();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);

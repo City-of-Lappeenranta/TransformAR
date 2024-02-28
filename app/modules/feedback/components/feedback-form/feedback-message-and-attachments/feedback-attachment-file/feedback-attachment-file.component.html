@@ -3,8 +3,9 @@
     <h5>{{ name }}</h5>
     <p>{{ size }}</p>
   </div>
-  @if (percentage) {
+  @if (percentage && percentage < 100) {
     <p-progressBar class="full-width" [style]="{ height: '4px' }" [value]="percentage"></p-progressBar>
   }
-  <app-icon class="close" icon="close-circle" (click)="onDelete.emit()"></app-icon>
+  <app-icon class="close" [icon]="getIcon()" (click)="onDelete.emit()"></app-icon>
 </div>
+<p-divider></p-divider>

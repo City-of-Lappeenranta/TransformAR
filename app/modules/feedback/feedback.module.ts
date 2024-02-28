@@ -19,6 +19,7 @@ import { FeedbackMessageAndAttachmentComponent } from './components/feedback-for
 import { InputTextModule } from 'primeng/inputtext';
 import { FeedbackContactComponent } from './components/feedback-form/feedback-contact/feedback-contact.component';
 import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { FeedbackConfirmationComponent } from './components/feedback-confirmatio
     InputTextModule,
     CheckboxModule,
     InputTextModule,
+    DividerModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
