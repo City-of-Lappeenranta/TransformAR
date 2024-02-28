@@ -1,15 +1,18 @@
 :host {
+  $z-index: 999;
+
   .header {
+    position: relative;
     width: 100%;
     height: 56px;
-    position: relative;
-    align-items: center;
     padding: 0 16px;
+    align-items: center;
+    justify-content: space-between;
 
     .menu-item,
     .action-item {
       position: relative;
-      z-index: 999;
+      z-index: $z-index;
       color: var(--text-color);
     }
 
@@ -27,19 +30,16 @@
     }
 
     .title {
-      position: relative;
+      position: absolute;
       width: 100%;
-      z-index: 999;
+      left: 0;
+      z-index: $z-index - 1;
       text-align: center;
       color: var(--text-color);
       font-size: 18px;
       font-weight: 500;
       font-family: var(--font-family);
       line-height: 28px;
-
-      &.padding-right {
-        padding-right: 44px;
-      }
     }
 
     .background-container {
@@ -50,7 +50,7 @@
       right: 0;
       left: 0;
       overflow: hidden !important;
-      z-index: 998;
+      z-index: $z-index - 2;
 
       .background {
         position: absolute;
