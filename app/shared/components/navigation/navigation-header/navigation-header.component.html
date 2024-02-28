@@ -1,7 +1,7 @@
 <app-navigation-sidebar [sidebarOpen]="sidebarOpen" (onSidebarClose)="sidebarOpen = false"></app-navigation-sidebar>
 <header class="flex-row header">
   <app-icon class="menu-item" icon="menu" (click)="sidebarOpen = true"></app-icon>
-  <h1 class="title">{{ title }}</h1>
+  <h1 class="title" [class.padding-right]="!action">{{ title }}</h1>
   @if (action && action.type === 'icon') {
     <app-icon class="menu-item" [icon]="action.value" (click)="onActionClick()"></app-icon>
   } @else if (action) {

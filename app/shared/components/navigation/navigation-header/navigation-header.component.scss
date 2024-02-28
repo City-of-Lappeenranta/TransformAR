@@ -23,16 +23,17 @@
     }
 
     .action-item {
-      padding-right: 8px;
+      min-width: 44px;
+      width: 44px;
+      padding-left: 8px;
       font-family: var(--font-family);
       font-size: 14px;
       line-height: 22px;
     }
 
     .title {
-      position: absolute;
+      position: relative;
       width: 100%;
-      left: 0;
       z-index: $z-index - 1;
       text-align: center;
       color: var(--text-color);
@@ -40,6 +41,10 @@
       font-weight: 500;
       font-family: var(--font-family);
       line-height: 28px;
+
+      &.padding-right {
+        padding-right: 44px;
+      }
     }
 
     .background-container {
