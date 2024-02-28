@@ -113,6 +113,12 @@
   }
 }
 
+.p-autocomplete {
+  .p-overlay {
+    max-width: 100%;
+  }
+}
+
 p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   @include invalid-input();
 }
