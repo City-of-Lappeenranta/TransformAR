@@ -12,6 +12,12 @@ body {
   overflow: hidden;
 }
 
+small {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -20,6 +26,10 @@ body {
 .flex-column {
   display: flex;
   flex-direction: column;
+}
+
+.space-between {
+  justify-content: space-between;
 }
 
 .full-width {

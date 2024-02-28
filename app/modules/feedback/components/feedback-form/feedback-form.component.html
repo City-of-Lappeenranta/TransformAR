@@ -37,6 +37,10 @@
       <h2 class="title">What's the feedback location?</h2>
       <app-feedback-location [locationFormControl]="feedbackForm.controls.location"></app-feedback-location>
     }
+    @case (feedbackFormStep.CONTACT) {
+      <h2 class="title">Get in touch</h2>
+      <app-feedback-contact [contactForm]="feedbackForm.controls.contact"></app-feedback-contact>
+    }
   }
 </main>
 <footer class="footer flex-column">

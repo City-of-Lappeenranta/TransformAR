@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { merge } from 'rxjs';
 import { LatLong } from '../../../../core/models/location';
 import { FeedbackFormStep } from './feedback-form-step.enum';
@@ -53,9 +54,17 @@ export class FeedbackFormComponent {
       publish: new FormControl<boolean | null>(null),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),
+    contact: new FormGroup({
+      email: new FormControl<string | null>(null, Validators.email),
+      firstName: new FormControl<string | null>(null),
+      lastName: new FormControl<string | null>(null),
+      phone: new FormControl<string | null>(null),
+      receiveResponseByMail: new FormControl<boolean | null>(null),
+      termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+    }),
   });
 
-  public constructor() {
+  public constructor(private readonly navigationHeaderService: NavigationHeaderService) {
     merge(
       this.feedbackForm.controls.mainCategory.valueChanges,
       this.feedbackForm.controls.subCategory.valueChanges,
@@ -63,6 +72,12 @@ export class FeedbackFormComponent {
     )
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.next());
+
+    this.navigationHeaderService.onActionClick$.pipe(takeUntilDestroyed()).subscribe((value) => {
+      if (value.toLowerCase() === 'skip') {
+        this.next();
+      }
+    });
   }
 
   public get activeStep(): number {
@@ -85,7 +100,10 @@ export class FeedbackFormComponent {
         return this.feedbackForm.controls.message.valid;
       }
       case FeedbackFormStep.LOCATION: {
-        return this.feedbackForm.controls.location.valid;
+        return true;
+      }
+      case FeedbackFormStep.CONTACT: {
+        return this.feedbackForm.controls.contact.valid;
       }
       default: {
         return false;

@@ -100,15 +100,22 @@
 }
 
 .p-label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 6px;
   color: #000;
   font-family: var(--font-family);
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 22px;
+
+  a {
+    color: var(--primary-color);
+  }
+}
+
+.p-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
 
   .p-optional {
     color: #98a2b3;
