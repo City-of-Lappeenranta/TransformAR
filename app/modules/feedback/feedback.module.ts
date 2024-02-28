@@ -17,6 +17,7 @@ import { SharedModule } from '@shared/shared.module';
 import { FeedbackAttachmentFileComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-attachment-file/feedback-attachment-file.component';
 import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { FeedbackContactComponent } from './components/feedback-form/feedback-contact/feedback-contact.component';
 import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
 
 @NgModule({
@@ -27,7 +28,8 @@ import { FeedbackConfirmationComponent } from './components/feedback-confirmatio
     FeedbackMessageAndAttachmentComponent,
     FeedbackAttachmentFileComponent,
     FeedbackLocationComponent,
-    FeedbackConfirmationComponent
+    FeedbackContactComponent,
+    FeedbackConfirmationComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,9 @@ import { FeedbackConfirmationComponent } from './components/feedback-confirmatio
     CheckboxModule,
     FileUploadModule,
     ProgressBarModule,
-    InputTextModule
+    InputTextModule,
+    CheckboxModule,
+    InputTextModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
