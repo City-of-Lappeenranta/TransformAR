@@ -11,7 +11,7 @@ describe('FeedbackFormComponent', () => {
   });
 
   it('feedback form flow', async () => {
-    const { instance } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+    const { find, instance } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
     expect(instance.activeStep).toEqual(0);
@@ -35,6 +35,18 @@ describe('FeedbackFormComponent', () => {
     instance.feedbackForm.controls.motivation.setValue(motivation);
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+
+    instance.feedbackForm.controls.message.controls.message.setValue('message');
+    expect(instance.canClickNextButton()).toEqual(true);
+
+    find('p-button.next-button').triggerEventHandler('click', {});
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
+
+    instance.back();
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+    expect(instance.canClickNextButton()).toEqual(true);
 
     instance.back();
 
