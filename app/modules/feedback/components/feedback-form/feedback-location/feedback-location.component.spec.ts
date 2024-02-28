@@ -1,12 +1,12 @@
 import { FormControl } from '@angular/forms';
+import { LatLong } from '@core/models/location';
 import { LocationService } from '@core/services/location.service';
+import { environment } from '@environments/environment';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
-import { EMPTY, first, firstValueFrom, of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
-import { environment } from '@environments/environment';
-import { LatLong } from '@core/models/location';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
@@ -62,7 +62,9 @@ describe('FeedbackLocationComponent', () => {
 
       const { inject, find, instance, fixture } = await shallow
         .mock(LocationService, {
-          searchLocationByQuery: jest.fn(() => Promise.resolve([{ name: 'location-result', latLong: [3, 3] as LatLong }])),
+          searchLocationByQuery: jest.fn(() =>
+            Promise.resolve([{ address: 'Noordlaan 18, Kuurne, Belgium', latLong: [3, 3] as LatLong }]),
+          ),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl },
@@ -76,8 +78,8 @@ describe('FeedbackLocationComponent', () => {
       await fixture.whenStable();
 
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        { disabled: false, latLong: [52, 52], name: 'Your current location' },
-        { latLong: [3, 3], name: 'location-result' },
+        { disabled: false, latLong: [52, 52], isCurrentLocation: true, address: 'Your current location' },
+        { latLong: [3, 3], address: 'Noordlaan 18, Kuurne, Belgium' },
       ]);
     });
   });
@@ -95,8 +97,9 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [0, 0],
-          name: 'Fetching your location...',
+          address: 'Fetching your location...',
           disabled: true,
+          isCurrentLocation: true,
         },
       ]);
     });
@@ -113,8 +116,9 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [4, 4],
-          name: 'Your current location',
+          address: 'Your current location',
           disabled: false,
+          isCurrentLocation: true,
         },
       ]);
     });
@@ -131,8 +135,9 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [0, 0],
-          name: 'We could not determine your location',
+          address: 'We could not determine your location',
           disabled: true,
+          isCurrentLocation: true,
         },
       ]);
     });

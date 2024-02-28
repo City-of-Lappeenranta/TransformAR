@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LatLong } from '@core/models/location';
+import { LatLong, LocationSearchResult } from '@core/models/location';
 import { BehaviorSubject } from 'rxjs';
 import { RadarService } from './radar.service';
 
@@ -7,11 +7,6 @@ export interface UserLocation {
   loading: boolean;
   available: boolean;
   location?: LatLong;
-}
-
-export interface LocationSearchResult {
-  name: string;
-  latLong: LatLong;
 }
 
 @Injectable({

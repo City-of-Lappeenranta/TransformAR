@@ -8,7 +8,7 @@ $stepsItemBorder: 1px solid #c8c8c8;
 
 /// Text color of a steps item
 /// @group menu
-$stepsItemTextColor: $textSecondaryColor;
+$stepsItemTextColor: $secondaryTextColor;
 
 /// Width of a steps itrem number
 /// @group menu
@@ -64,7 +64,7 @@ $menuitemTextColor: $textColor;
 
 /// Icon color of a menuitem
 /// @group menu
-$menuitemIconColor: $textSecondaryColor;
+$menuitemIconColor: $secondaryTextColor;
 
 /// Text color of a menuitrem in hover state
 /// @group menu
@@ -72,7 +72,7 @@ $menuitemTextHoverColor: $textColor;
 
 /// Icon color of a menuitrem in hover state
 /// @group menu
-$menuitemIconHoverColor: $textSecondaryColor;
+$menuitemIconHoverColor: $secondaryTextColor;
 
 /// Background of a menuitrem in hover state
 /// @group menu
@@ -96,7 +96,7 @@ $menuitemTextActiveColor: $textColor;
 
 /// Icon color of a menuitrem in active state
 /// @group menu
-$menuitemIconActiveColor: $textSecondaryColor;
+$menuitemIconActiveColor: $secondaryTextColor;
 
 /// Background of a menuitrem in active state
 /// @group menu

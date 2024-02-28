@@ -18,13 +18,13 @@ describe('LocationService', () => {
 
       const { instance } = shallow
         .mock(RadarService, {
-          autocomplete: jest.fn().mockReturnValue(Promise.resolve([{ name: 'location', latLong: [52, 52] }])),
+          autocomplete: jest.fn().mockReturnValue(Promise.resolve([{ address: 'location', latLong: [52, 52] }])),
         })
         .createService();
 
       const result = await instance.searchLocationByQuery('location');
 
-      expect(result).toEqual([{ name: 'location', latLong: [52, 52] }]);
+      expect(result).toEqual([{ address: 'location', latLong: [52, 52] }]);
     });
   });
 

@@ -1,6 +1,6 @@
 export type LatLong = [number, number];
 
 export interface LocationSearchResult {
-  name: string;
+  address: string;
   latLong: LatLong;
 }
