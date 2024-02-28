@@ -37,7 +37,7 @@ export class FeedbackFormComponent {
 
   public mainCategories$: Observable<Category[]> = this.serviceApi
     .getServices()
-    .pipe(map(this.mapServiceListToMainCategories));
+    .pipe(map(this.mapServiceDictionaryToMainCategories));
 
   private subCategoriesSubject$: Subject<Category[]> = new ReplaySubject();
   public subCategories$ = this.subCategoriesSubject$.asObservable();
@@ -93,19 +93,15 @@ export class FeedbackFormComponent {
       .subscribe(() => this.next());
   }
 
-  private mapServiceListToMainCategories(serviceList: ServiceDictionary): Category[] {
-    return Object.keys(serviceList).map((key) => ({ value: key }));
+  private mapServiceDictionaryToMainCategories(serviceDictionary: ServiceDictionary): Category[] {
+    return Object.keys(serviceDictionary).map((key) => ({ value: key }));
   }
 
   private getSubCategoryOnMainCategoryChange(): void {
     combineLatest([this.serviceApi.getServices(), this.feedbackForm.controls.mainCategory.valueChanges])
       .pipe(takeUntilDestroyed())
       .subscribe(([serviceList, mainCategory]) => {
-        if (!mainCategory) {
-          return this.subCategoriesSubject$.next([]);
-        }
-
-        const subCategories = serviceList[mainCategory].map(({ name }) => ({ value: name }));
+        const subCategories = mainCategory ? Object.keys(serviceList[mainCategory]).map((key) => ({ value: key })) : [];
         this.subCategoriesSubject$.next(subCategories);
       });
   }

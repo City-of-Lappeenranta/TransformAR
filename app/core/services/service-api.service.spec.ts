@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { ServiceApi } from './service-api.service';
-import { ServiceListApiResponse } from '@core/models/service-api';
+import { ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
 
 describe('ServiceApi', () => {
   let shallow: Shallow<ServiceApi>;
@@ -27,38 +27,52 @@ describe('ServiceApi', () => {
 
 const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
   {
-    service_code: 'sl',
-    service_name: 'lamps',
-    description: 'lamps description',
+    service_code: '1',
+    service_name: 'missing lamp',
+    description: 'streets',
     metadata: false,
     type: 'type',
     keywords: 'keywords',
-    group: 'street',
+    group: 'lamps',
   },
   {
-    service_code: 'sc',
-    service_name: 'curbs',
-    description: 'curbs description',
+    service_code: '2',
+    service_name: 'broken lamp',
+    description: 'streets',
     metadata: false,
     type: 'type',
     keywords: 'keywords',
-    group: 'street',
+    group: 'lamps',
   },
   {
-    service_code: 'pt',
-    service_name: 'trees',
-    description: 'trees description',
+    service_code: '3',
+    service_name: 'dead tree',
+    description: 'parcs',
     metadata: false,
     type: 'type',
     keywords: 'keywords',
-    group: 'parcs',
+    group: 'trees',
+  },
+  {
+    service_code: '4',
+    service_name: 'broken bench',
+    description: 'parcs',
+    metadata: false,
+    type: 'type',
+    keywords: 'keywords',
+    group: 'benches',
   },
 ];
 
-const SERVICE_DICTIONARY = {
-  street: [
-    { code: 'sl', name: 'lamps', description: 'lamps description' },
-    { code: 'sc', name: 'curbs', description: 'curbs description' },
-  ],
-  parcs: [{ code: 'pt', name: 'trees', description: 'trees description' }],
+const SERVICE_DICTIONARY: ServiceDictionary = {
+  streets: {
+    lamps: [
+      { id: '1', name: 'missing lamp' },
+      { id: '2', name: 'broken lamp' },
+    ],
+  },
+  parcs: {
+    trees: [{ id: '3', name: 'dead tree' }],
+    benches: [{ id: '4', name: 'broken bench' }],
+  },
 };

@@ -11,9 +11,8 @@ export type ServiceListApiResponse = {
 }[];
 
 export interface Service {
-  code: string;
+  id: string;
   name: string;
-  description: string;
 }
 
-export type ServiceDictionary = Record<string, Service[]>;
+export type ServiceDictionary = Record<string, Record<string, Service[]>>;

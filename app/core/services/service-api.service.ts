@@ -19,22 +19,29 @@ export class ServiceApi {
     /* TODO: cache data */
     return this.httpClient
       .get<ServiceListApiResponse>(`${this.baseUrl}/services.json?jurisdiction_id=${this.jurisdictionId}`)
-      .pipe(map(this.mapServiceListApiResponseToServiceList));
+      .pipe(map(this.mapServiceListApiResponseToServiceDictionary));
   }
 
-  private mapServiceListApiResponseToServiceList(response: ServiceListApiResponse): ServiceDictionary {
-    const serviceList: ServiceDictionary = {};
+  private mapServiceListApiResponseToServiceDictionary(response: ServiceListApiResponse): ServiceDictionary {
+    const serviceDictionary: ServiceDictionary = {};
 
     response.forEach(({ service_code, service_name, description, group }) => {
       const service: Service = {
-        code: service_code,
+        id: service_code,
         name: service_name,
-        description,
       };
 
-      serviceList[group] = [...(serviceList[group] ?? []), service];
+      if (!serviceDictionary[description]) {
+        serviceDictionary[description] = {};
+      }
+
+      if (!serviceDictionary[description][group]) {
+        serviceDictionary[description][group] = [];
+      }
+
+      serviceDictionary[description][group].push(service);
     });
 
-    return serviceList;
+    return serviceDictionary;
   }
 }
