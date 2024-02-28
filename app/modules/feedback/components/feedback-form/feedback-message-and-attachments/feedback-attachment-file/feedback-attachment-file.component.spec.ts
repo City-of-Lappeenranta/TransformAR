@@ -29,7 +29,7 @@ describe('FeedbackAttachmentFileComponent', () => {
     expect(find('p').nativeElement.innerHTML).toBe(size);
   });
 
-  it('should show the progressbar and close icon when the upload is in progress', async () => {
+  it('should show the progress bar and close icon when the upload is in progress', async () => {
     const name = 'Name';
     const size = '256 kB';
     const percentage = 20;
@@ -50,7 +50,7 @@ describe('FeedbackAttachmentFileComponent', () => {
     expect(find('p-progressbar')).toHaveFoundOne();
     expect((find('.close').nativeElement as HTMLElement).getAttribute('ng-reflect-icon')).toBe('close-circle');
   });
-  it('should show the progressbar and close icon when the upload is complete', async () => {
+  it('should hide the progress bar and show trash icon when the upload is complete', async () => {
     const name = 'Name';
     const size = '256 kB';
     const percentage = 100;
