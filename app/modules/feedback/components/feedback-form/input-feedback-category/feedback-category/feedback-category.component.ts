@@ -6,13 +6,13 @@ import { Component, HostListener, Input } from '@angular/core';
   styleUrls: ['./feedback-category.component.scss'],
 })
 export class FeedbackCategoryComponent {
-  @Input({ required: true }) public withColor: boolean | undefined;
-  @Input({ required: true }) public selected: boolean | undefined;
+  @Input({ required: true }) public withColor!: boolean;
+  @Input({ required: true }) public selected!: boolean;
   @Input() public index: number | undefined;
   @Input() public icon: string | undefined;
 
-  @HostListener('click', ['$event']) public inClick(e: MouseEvent): void {
-    e.stopPropagation();
+  @HostListener('click', ['$event']) public onClick(event: MouseEvent): void {
+    event.stopPropagation();
     this.selected = !this.selected;
   }
 

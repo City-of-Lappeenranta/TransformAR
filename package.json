@@ -77,7 +77,8 @@
     "moduleNameMapper": {
       "^@shared/(.*)$": "<rootDir>/app/shared/$1",
       "^@core/(.*)$": "<rootDir>/app/core/$1",
-      "^@environments/(.*)$": "<rootDir>/environments/$1"
+      "^@environments/(.*)$": "<rootDir>/environments/$1",
+      "^lodash-es$": "lodash"
     }
   }
 }
