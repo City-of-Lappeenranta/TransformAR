@@ -9,10 +9,7 @@ import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/auto
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
 
 interface LocationSuggestion {
-  name: {
-    primary: string;
-    secondary?: string;
-  };
+  address: string;
   latLong: LatLong;
   isCurrentLocation?: boolean;
   disabled?: boolean;
@@ -85,16 +82,11 @@ export class FeedbackLocationComponent implements OnInit, OnDestroy {
 
     const currentUserLocationOption: LocationSuggestion = {
       latLong: currentUserLocation.location ?? [0, 0],
-      name: { primary: currentUserLocationName },
+      address: currentUserLocationName,
       disabled: !currentUserLocation.available,
       isCurrentLocation: true,
     };
 
-    const resultsToLocationOptions: LocationSuggestion[] = results.map((result) => ({
-      latLong: result.latLong,
-      name: { primary: `${result.street} ${result.number}`, secondary: `${result.city}, ${result.country}` },
-    }));
-
-    return [currentUserLocationOption, ...resultsToLocationOptions];
+    return [currentUserLocationOption, ...results];
   }
 }

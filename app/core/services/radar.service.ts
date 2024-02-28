@@ -25,11 +25,8 @@ export class RadarService {
       });
       const result = (await response.json()) as RadarSearchReponse;
 
-      return result.addresses.map(({ latitude, longitude, street, number, city, country }) => ({
-        street,
-        number,
-        city,
-        country,
+      return result.addresses.map(({ latitude, longitude, formattedAddress }) => ({
+        address: formattedAddress,
         latLong: [latitude, longitude],
       }));
     } catch (error) {

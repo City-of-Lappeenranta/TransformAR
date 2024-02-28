@@ -12,13 +12,11 @@
     <ng-template let-location pTemplate="item">
       <div *ngIf="location.isCurrentLocation; else default" class="current-location-suggestion">
         <app-icon icon="target"></app-icon>
-        <p>{{ location.name.primary }}</p>
+        <p>{{ location.address }}</p>
       </div>
 
       <ng-template #default>
-        <p class="location-suggestion">
-          {{ location.name.primary }} <span>{{ location.name.secondary }}</span>
-        </p>
+        <p class="location-suggestion">{{ location.address }}</p>
       </ng-template>
     </ng-template>
   </p-autoComplete>

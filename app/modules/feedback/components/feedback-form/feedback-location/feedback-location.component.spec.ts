@@ -63,9 +63,7 @@ describe('FeedbackLocationComponent', () => {
       const { inject, find, instance, fixture } = await shallow
         .mock(LocationService, {
           searchLocationByQuery: jest.fn(() =>
-            Promise.resolve([
-              { street: 'Noordlaan', number: '18', city: 'Kuurne', country: 'Belgium', latLong: [3, 3] as LatLong },
-            ]),
+            Promise.resolve([{ address: 'Noordlaan 18, Kuurne, Belgium', latLong: [3, 3] as LatLong }]),
           ),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
@@ -80,8 +78,8 @@ describe('FeedbackLocationComponent', () => {
       await fixture.whenStable();
 
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        { disabled: false, latLong: [52, 52], isCurrentLocation: true, name: { primary: 'Your current location' } },
-        { latLong: [3, 3], name: { primary: 'Noordlaan 18', secondary: 'Kuurne, Belgium' } },
+        { disabled: false, latLong: [52, 52], isCurrentLocation: true, address: 'Your current location' },
+        { latLong: [3, 3], address: 'Noordlaan 18, Kuurne, Belgium' },
       ]);
     });
   });
@@ -99,7 +97,7 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [0, 0],
-          name: { primary: 'Fetching your location...' },
+          address: 'Fetching your location...',
           disabled: true,
           isCurrentLocation: true,
         },
@@ -118,7 +116,7 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [4, 4],
-          name: { primary: 'Your current location' },
+          address: 'Your current location',
           disabled: false,
           isCurrentLocation: true,
         },
@@ -137,7 +135,7 @@ describe('FeedbackLocationComponent', () => {
       expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
         {
           latLong: [0, 0],
-          name: { primary: 'We could not determine your location' },
+          address: 'We could not determine your location',
           disabled: true,
           isCurrentLocation: true,
         },
