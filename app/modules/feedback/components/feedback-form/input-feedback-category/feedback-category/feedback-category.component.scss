@@ -5,7 +5,7 @@
     min-height: 56px;
     padding: 8px;
     align-items: center;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid transparent;
     border-radius: var(--border-radius);
     background-color: #fff;
     box-shadow: var(--shadow-md);
@@ -21,10 +21,6 @@
 
     .icon {
       margin-right: 16px;
-    }
-
-    &.no-border {
-      border-left-color: transparent !important;
     }
 
     &:hover {
