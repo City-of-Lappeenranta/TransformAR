@@ -4,5 +4,5 @@ export enum FeedbackFormStep {
   MOTIVATION,
   MESSAGE_AND_ATTACHMENTS,
   LOCATION,
-  CONTACT
+  CONTACT,
 }

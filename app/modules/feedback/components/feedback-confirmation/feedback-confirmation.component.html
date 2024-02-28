@@ -1,0 +1,9 @@
+<main class="flex-column">
+  <section class="content flex-column">
+    <app-icon icon="check"></app-icon>
+    <p>Thanks for your feedback!</p>
+    <small *ngIf="email">A confirmation message about receiving the feedback has been sent to {{ email }}</small>
+  </section>
+  <app-icon class="wave" icon="header-wave"></app-icon>
+  <p-button routerLink="/feedback" class="button" label="I want to report other things"></p-button>
+</main>

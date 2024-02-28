@@ -18,6 +18,7 @@ import { FeedbackAttachmentFileComponent } from './components/feedback-form/feed
 import { FeedbackMessageAndAttachmentComponent } from './components/feedback-form/feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { FeedbackContactComponent } from './components/feedback-form/feedback-contact/feedback-contact.component';
+import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FeedbackContactComponent } from './components/feedback-form/feedback-co
     FeedbackAttachmentFileComponent,
     FeedbackLocationComponent,
     FeedbackContactComponent,
+    FeedbackConfirmationComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +46,7 @@ import { FeedbackContactComponent } from './components/feedback-form/feedback-co
     ProgressBarModule,
     InputTextModule,
     CheckboxModule,
+    InputTextModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
