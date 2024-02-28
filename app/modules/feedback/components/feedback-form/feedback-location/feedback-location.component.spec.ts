@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms';
 import { LocationService } from '@core/services/location.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
-import { EMPTY, first, firstValueFrom, of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
@@ -16,7 +16,7 @@ describe('FeedbackLocationComponent', () => {
       .mock(LocationService, {
         userLocation$: of({ loading: false, available: true, location: [52, 52] as LatLong }),
       })
-      .mock(NavigationHeaderService, { setAction: jest.fn() });
+      .mock(NavigationHeaderService, { setSkip: jest.fn() });
   });
 
   describe('mapCenter$', () => {
