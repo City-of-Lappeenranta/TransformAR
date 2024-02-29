@@ -1,0 +1,52 @@
+.display {
+  font-weight: 700;
+
+  .xl {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .lg {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .md {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .sm {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .xs {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.body {
+  font-weight: 400;
+
+  .lg {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .md {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .sm {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .xs {
+    font-size: 12px;
+    line-height: 20px;
+  }
+}
