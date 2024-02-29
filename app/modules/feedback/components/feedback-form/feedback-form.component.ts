@@ -48,8 +48,8 @@ export class FeedbackFormComponent {
     .getServices()
     .pipe(map(this.mapServiceDictionaryToMainCategories));
 
-  private subCategoriesSubject$: Subject<Category[]> = new ReplaySubject();
-  public subCategories$ = this.subCategoriesSubject$.asObservable();
+  private subCategoriesSubject: Subject<Category[]> = new ReplaySubject();
+  public subCategories$ = this.subCategoriesSubject.asObservable();
 
   public constructor(
     private readonly serviceApi: ServiceApi,
@@ -120,7 +120,7 @@ export class FeedbackFormComponent {
       .pipe(takeUntilDestroyed())
       .subscribe(([serviceList, mainCategory]) => {
         const subCategories = mainCategory ? Object.keys(serviceList[mainCategory]).map((key) => ({ value: key })) : [];
-        this.subCategoriesSubject$.next(subCategories);
+        this.subCategoriesSubject.next(subCategories);
       });
   }
 }
