@@ -4,11 +4,11 @@
   }
 
   &.p-divider-horizontal {
-    margin: $dividerHorizontalMargin;
-    padding: $dividerHorizontalPadding;
+    margin: 0;
+    padding: 0;
 
     &:before {
-      border-top: $dividerSize $dividerColor;
+      border-top: $dividerSize var(--surface-200);
     }
 
     .p-divider-content {

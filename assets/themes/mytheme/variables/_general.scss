@@ -16,7 +16,7 @@ $textColor: #495057;
 
 /// Secondary text color
 /// @group general
-$textSecondaryColor: #6c757d;
+$secondaryTextColor: var(--text-color-secondary);
 
 /// Background of a highlighted item
 /// @group general
@@ -122,7 +122,7 @@ $actionIconBorder: 0 none;
 
 /// Color of an action icon
 /// @group general
-$actionIconColor: $textSecondaryColor;
+$actionIconColor: $secondaryTextColor;
 
 /// Backgroun of an action icon in hover state
 /// @group general

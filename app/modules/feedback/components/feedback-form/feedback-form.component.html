@@ -41,15 +41,19 @@
       <h2 class="title">What's the feedback location?</h2>
       <app-feedback-location [locationFormControl]="feedbackForm.controls.location"></app-feedback-location>
     }
+    @case (feedbackFormStep.CONTACT) {
+      <h2 class="title">Get in touch</h2>
+      <app-feedback-contact [contactForm]="feedbackForm.controls.contact"></app-feedback-contact>
+    }
   }
 </main>
 <footer class="footer flex-column">
   <app-steps [amount]="6" [active]="activeStep"></app-steps>
   <div class="flex-row">
     @if (currentFeedbackFormStep > 0) {
-      <p-button label="Back" [outlined]="true" (onClick)="back()"></p-button>
+      <p-button label="Back" [outlined]="true" (click)="back()"></p-button>
     }
-    <p-button class="next-button" label="Next" [disabled]="!canClickNextButton()" (onClick)="next()"></p-button>
+    <p-button class="next-button" label="Next" [disabled]="!canClickNextButton()" (click)="next()"></p-button>
   </div>
 </footer>
 <div class="background-container">

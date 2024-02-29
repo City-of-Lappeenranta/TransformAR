@@ -1,14 +1,26 @@
 <article class="location-container flex-column">
   <p-autoComplete
-    optionLabel="name"
+    #autocomplete
+    optionLabel="address"
     optionDisabled="disabled"
-    [dropdown]="true"
     [style]="{ width: '100%' }"
     [inputStyle]="{ width: '100%' }"
     [suggestions]="(locationSuggestions$ | async) ?? []"
     (completeMethod)="onSearchLocation($event)"
     (onSelect)="onSelectLocation($event)"
-  ></p-autoComplete>
+    (onFocus)="autocomplete.show()"
+  >
+    <ng-template let-location pTemplate="item">
+      <div *ngIf="location.isCurrentLocation; else default" class="current-location-suggestion">
+        <app-icon icon="target"></app-icon>
+        <p>{{ location.address }}</p>
+      </div>
+
+      <ng-template #default>
+        <p class="location-suggestion">{{ location.address }}</p>
+      </ng-template>
+    </ng-template>
+  </p-autoComplete>
 
   <div *ngIf="this.mapCenter$ | async as center" class="map-container full-width full-height">
     <app-map

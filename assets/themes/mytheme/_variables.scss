@@ -3,6 +3,7 @@ $primaryColor: #275d38;
 $primaryDarkColor: #1f4a2d;
 $primaryDarkerColor: #173822;
 $primaryTextColor: #ffffff;
+$secondaryTextColor: #6c757d;
 
 $colors: (
   'blue': #2196f3,
@@ -41,7 +42,7 @@ $colors: (
   --surface-e: #ffffff;
   --surface-f: #ffffff;
   --text-color: #{$primaryTextColor};
-  --text-color-secondary: #6c757d;
+  --text-color-secondary: #{$secondaryTextColor};
   --primary-color: #{$primaryColor};
   --primary-color-dark: #{$primaryDarkColor};
   --primary-color-darker: #{$primaryDarkerColor};

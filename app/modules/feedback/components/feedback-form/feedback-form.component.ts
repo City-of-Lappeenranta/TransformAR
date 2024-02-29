@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ServiceDictionary } from '@core/models/service-api';
 import { ServiceApi } from '@core/services/service-api.service';
+import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { Observable, ReplaySubject, Subject, combineLatest, map, merge } from 'rxjs';
 import { LatLong } from '../../../../core/models/location';
 import { FeedbackFormStep } from './feedback-form-step.enum';
@@ -33,6 +34,14 @@ export class FeedbackFormComponent {
       publish: new FormControl<boolean | null>(null),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),
+    contact: new FormGroup({
+      email: new FormControl<string | null>(null, Validators.email),
+      firstName: new FormControl<string | null>(null),
+      lastName: new FormControl<string | null>(null),
+      phone: new FormControl<string | null>(null),
+      receiveResponseByMail: new FormControl<boolean | null>(null),
+      termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+    }),
   });
 
   public mainCategories$: Observable<Category[]> = this.serviceApi
@@ -42,9 +51,18 @@ export class FeedbackFormComponent {
   private subCategoriesSubject$: Subject<Category[]> = new ReplaySubject();
   public subCategories$ = this.subCategoriesSubject$.asObservable();
 
-  public constructor(private readonly serviceApi: ServiceApi) {
+  public constructor(
+    private readonly serviceApi: ServiceApi,
+    private readonly navigationHeaderService: NavigationHeaderService,
+  ) {
     this.handleFeedbackFormValueChanges();
     this.getSubCategoryOnMainCategoryChange();
+
+    this.navigationHeaderService.onActionClick$.pipe(takeUntilDestroyed()).subscribe((value) => {
+      if (value.toLowerCase() === 'skip') {
+        this.next();
+      }
+    });
   }
 
   public get activeStep(): number {
@@ -67,7 +85,10 @@ export class FeedbackFormComponent {
         return this.feedbackForm.controls.message.valid;
       }
       case FeedbackFormStep.LOCATION: {
-        return this.feedbackForm.controls.location.valid;
+        return true;
+      }
+      case FeedbackFormStep.CONTACT: {
+        return this.feedbackForm.controls.contact.valid;
       }
       default: {
         return false;

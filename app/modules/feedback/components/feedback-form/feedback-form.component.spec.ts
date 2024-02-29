@@ -16,61 +16,66 @@ describe('FeedbackFormComponent', () => {
     });
   });
 
-  it('should go to the sub categories when selecting the main category', async () => {
-    const { instance, findComponent, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+  it('feedback form flow', async () => {
+    const backButtonSelector = 'p-button[label="Back"]';
+
+    const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
+    expect(instance.activeStep).toEqual(0);
+    expect(instance.canClickNextButton()).toEqual(false);
+    expect(find(backButtonSelector)).not.toHaveFoundOne();
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
 
     instance.feedbackForm.controls.mainCategory.setValue('streets');
+    fixture.detectChanges();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
-    fixture.detectChanges();
+    expect(instance.activeStep).toEqual(0);
+    expect(instance.canClickNextButton()).toEqual(false);
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
-  });
 
-  describe('canClickNextButton', () => {
-    let instance: FeedbackFormComponent;
+    instance.feedbackForm.controls.subCategory.setValue('lamps');
+    fixture.detectChanges();
 
-    beforeEach(async () => {
-      instance = (await shallow.render(`<app-feedback-form></app-feedback-form>`)).instance;
-    });
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
+    expect(instance.activeStep).toEqual(1);
+    expect(instance.canClickNextButton()).toEqual(false);
+    expect(find(backButtonSelector)).toHaveFoundOne();
 
-    it('should return true if the user filled in the information needed for the step', () => {
-      instance.feedbackForm.controls.mainCategory.setValue('streets');
+    const motivation = instance.motivations[0].value;
+    instance.feedbackForm.controls.motivation.setValue(motivation);
 
-      instance.back();
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
 
-      expect(instance.canClickNextButton()).toBe(true);
-    });
+    instance.feedbackForm.controls.message.controls.message.setValue('message');
+    expect(instance.canClickNextButton()).toEqual(true);
 
-    it('should return true if the user didnt fill in the information needed for the step', () => {
-      expect(instance.canClickNextButton()).toBe(false);
-    });
-  });
+    find('p-button.next-button').triggerEventHandler('click', {});
 
-  describe('next', () => {
-    it('should go to the sub categories when selecting the main category', async () => {
-      const { instance } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
 
-      expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
+    instance.back();
 
-      instance.feedbackForm.controls.mainCategory.setValue('streets');
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+    expect(instance.canClickNextButton()).toEqual(true);
 
-      expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
-    });
-  });
+    instance.back();
 
-  describe('activeStep', () => {
-    it('should return 0 when the user is selecting the categories', async () => {
-      const { instance } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
+    expect(instance.canClickNextButton()).toEqual(true);
 
-      expect(instance.activeStep).toEqual(0);
+    instance.back();
 
-      instance.feedbackForm.controls.mainCategory.setValue('streets');
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
+    expect(instance.canClickNextButton()).toEqual(true);
 
-      expect(instance.activeStep).toEqual(0);
-    });
+    instance.back();
+    fixture.detectChanges();
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
+    expect(instance.canClickNextButton()).toEqual(true);
+    expect(find(backButtonSelector)).not.toHaveFoundOne();
   });
 });
 
