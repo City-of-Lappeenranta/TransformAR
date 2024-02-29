@@ -1,25 +1,22 @@
 // skip-icon.service.ts
 import { Injectable } from '@angular/core';
-import { ReplaySubject, Subject, take } from 'rxjs';
-import { NavigationHeaderAction } from './navigation-header-action.interface';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationHeaderService {
-  private actionSubject = new ReplaySubject<NavigationHeaderAction | null>();
-  public action$ = this.actionSubject.asObservable();
+  private skipSubject = new BehaviorSubject<boolean>(false);
+  public skip$ = this.skipSubject.asObservable();
 
-  private actionClickSubject = new Subject<string>();
-  public onActionClick$ = this.actionClickSubject.asObservable();
+  private onSkipSubject = new Subject<void>();
+  public onSkip$ = this.onSkipSubject.asObservable();
 
-  public setAction(value: NavigationHeaderAction | null): void {
-    this.actionSubject.next(value);
+  public setSkip(showSkip: boolean): void {
+    this.skipSubject.next(showSkip);
   }
 
-  public actionClick(): void {
-    this.action$.pipe(take(1)).subscribe((action) => {
-      action && this.actionClickSubject.next(action.value);
-    });
+  public onSkipClick(): void {
+    this.onSkipSubject.next();
   }
 }

@@ -1,10 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { environment } from '@environments/environment';
-import { NavigationHeaderAction } from '@shared/components/navigation/navigation-header/navigation-header-action.interface';
-import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
 
@@ -20,7 +18,7 @@ interface LocationSuggestion {
   templateUrl: './feedback-location.component.html',
   styleUrls: ['./feedback-location.component.scss'],
 })
-export class FeedbackLocationComponent implements OnInit, OnDestroy {
+export class FeedbackLocationComponent {
   @Input({ required: true }) public locationFormControl!: FormControl<LatLong | null>;
 
   private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
@@ -36,21 +34,7 @@ export class FeedbackLocationComponent implements OnInit, OnDestroy {
     ),
   );
 
-  public constructor(
-    private readonly navigationHeaderService: NavigationHeaderService,
-    private readonly locationService: LocationService,
-  ) {}
-
-  public ngOnInit(): void {
-    this.navigationHeaderService.setAction({
-      type: 'text',
-      value: 'Skip',
-    } as NavigationHeaderAction);
-  }
-
-  public ngOnDestroy(): void {
-    this.navigationHeaderService.setAction(null);
-  }
+  public constructor(private readonly locationService: LocationService) {}
 
   public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
     const { query } = event;
