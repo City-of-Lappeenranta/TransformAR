@@ -57,12 +57,6 @@ export class FeedbackFormComponent {
   ) {
     this.handleFeedbackFormValueChanges();
     this.getSubCategoryOnMainCategoryChange();
-
-    this.navigationHeaderService.onActionClick$.pipe(takeUntilDestroyed()).subscribe((value) => {
-      if (value.toLowerCase() === 'skip') {
-        this.next();
-      }
-    });
   }
 
   public get activeStep(): number {
@@ -98,10 +92,12 @@ export class FeedbackFormComponent {
 
   public back(): void {
     this.currentFeedbackFormStep -= 1;
+    this.navigationHeaderService.setSkip(this.currentFeedbackFormStep === FeedbackFormStep.LOCATION);
   }
 
   public next(): void {
     this.currentFeedbackFormStep += 1;
+    this.navigationHeaderService.setSkip(this.currentFeedbackFormStep === FeedbackFormStep.LOCATION);
   }
 
   private handleFeedbackFormValueChanges(): void {
@@ -109,6 +105,7 @@ export class FeedbackFormComponent {
       this.feedbackForm.controls.mainCategory.valueChanges,
       this.feedbackForm.controls.subCategory.valueChanges,
       this.feedbackForm.controls.motivation.valueChanges,
+      this.navigationHeaderService.onSkip$,
     )
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.next());

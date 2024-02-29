@@ -16,7 +16,7 @@ describe('FeedbackLocationComponent', () => {
       .mock(LocationService, {
         userLocation$: of({ loading: false, available: true, location: [52, 52] as LatLong }),
       })
-      .mock(NavigationHeaderService, { setAction: jest.fn() });
+      .mock(NavigationHeaderService, { setSkip: jest.fn() });
   });
 
   describe('mapCenter$', () => {
