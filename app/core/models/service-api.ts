@@ -11,7 +11,7 @@ export type ServiceListApiResponse = {
 }[];
 
 export interface Service {
-  id: string;
+  code: string;
   name: string;
 }
 

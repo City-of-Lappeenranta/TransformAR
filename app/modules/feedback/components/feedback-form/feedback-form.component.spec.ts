@@ -3,8 +3,8 @@ import { ServiceApi } from '@core/services/service-api.service';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../feedback.module';
-import { FeedbackFormStep } from './feedback-form-step.enum';
-import { FeedbackFormComponent } from './feedback-form.component';
+import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
+import { FeedbackFormChildComponent, FeedbackFormComponent } from './feedback-form.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
 
 describe('FeedbackFormComponent', () => {
@@ -21,7 +21,7 @@ describe('FeedbackFormComponent', () => {
 
     const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MAIN_CATEGORY);
     expect(instance.activeStep).toEqual(0);
     expect(instance.canClickNextButton()).toEqual(false);
     expect(find(backButtonSelector)).not.toHaveFoundOne();
@@ -30,7 +30,7 @@ describe('FeedbackFormComponent', () => {
     instance.feedbackForm.controls.mainCategory.setValue('streets');
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.SUB_CATEGORY);
     expect(instance.activeStep).toEqual(0);
     expect(instance.canClickNextButton()).toEqual(false);
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
@@ -38,7 +38,7 @@ describe('FeedbackFormComponent', () => {
     instance.feedbackForm.controls.subCategory.setValue('lamps');
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MOTIVATION);
     expect(instance.activeStep).toEqual(1);
     expect(instance.canClickNextButton()).toEqual(false);
     expect(find(backButtonSelector)).toHaveFoundOne();
@@ -46,34 +46,34 @@ describe('FeedbackFormComponent', () => {
     const motivation = instance.motivations[0].value;
     instance.feedbackForm.controls.motivation.setValue(motivation);
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS);
 
     instance.feedbackForm.controls.message.controls.message.setValue('message');
     expect(instance.canClickNextButton()).toEqual(true);
 
     find('p-button.next-button').triggerEventHandler('click', {});
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.LOCATION);
 
     instance.back();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS);
     expect(instance.canClickNextButton()).toEqual(true);
 
     instance.back();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MOTIVATION);
     expect(instance.canClickNextButton()).toEqual(true);
 
     instance.back();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.SUB_CATEGORY);
     expect(instance.canClickNextButton()).toEqual(true);
 
     instance.back();
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MAIN_CATEGORY);
     expect(instance.canClickNextButton()).toEqual(true);
     expect(find(backButtonSelector)).not.toHaveFoundOne();
   });
