@@ -8,7 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./navigation-header.component.scss'],
 })
 export class NavigationHeaderComponent {
-  @Input({ required: true }) public title: string | undefined;
+  @Input({ required: true }) public title!: string;
 
   public sidebarOpen = false;
   public showSkip = false;
