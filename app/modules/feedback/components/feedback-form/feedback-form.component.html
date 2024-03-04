@@ -4,14 +4,18 @@
       <h2 class="title">What would you like to report?</h2>
 
       @if (currentFeedbackFormStep === feedbackFormStep.MAIN_CATEGORY) {
-        <app-input-feedback-category class="content" [categories]="mainCategories" formControlName="mainCategory">
+        <app-input-feedback-category
+          class="content"
+          [categories]="(mainCategories$ | async) ?? []"
+          formControlName="mainCategory"
+        >
         </app-input-feedback-category>
       } @else {
         <p class="description">{{ feedbackForm.value.mainCategory }}</p>
         <app-input-feedback-category
           class="content"
           [withColor]="false"
-          [categories]="subCategories"
+          [categories]="(subCategories$ | async) ?? []"
           formControlName="subCategory"
         >
         </app-input-feedback-category>

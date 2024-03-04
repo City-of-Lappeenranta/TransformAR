@@ -1,34 +1,41 @@
+import { ServiceDictionary } from '@core/models/service-api';
+import { ServiceApi } from '@core/services/service-api.service';
+import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../feedback.module';
-import { FeedbackFormComponent } from './feedback-form.component';
 import { FeedbackFormStep } from './feedback-form-step.enum';
+import { FeedbackFormComponent } from './feedback-form.component';
+import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
 
 describe('FeedbackFormComponent', () => {
   let shallow: Shallow<FeedbackFormComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackFormComponent, FeedbackModule);
+    shallow = new Shallow(FeedbackFormComponent, FeedbackModule).mock(ServiceApi, {
+      getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
+    });
   });
 
   it('feedback form flow', async () => {
     const backButtonSelector = 'p-button[label="Back"]';
 
-    const { find, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+    const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MAIN_CATEGORY);
     expect(instance.activeStep).toEqual(0);
     expect(instance.canClickNextButton()).toEqual(false);
     expect(find(backButtonSelector)).not.toHaveFoundOne();
+    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
 
-    const mainCategory = instance.mainCategories[0].value;
-    instance.feedbackForm.controls.mainCategory.setValue(mainCategory);
+    instance.feedbackForm.controls.mainCategory.setValue('streets');
+    fixture.detectChanges();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.SUB_CATEGORY);
     expect(instance.activeStep).toEqual(0);
     expect(instance.canClickNextButton()).toEqual(false);
+    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
-    const subCategory = instance.subCategories[0].value;
-    instance.feedbackForm.controls.subCategory.setValue(subCategory);
+    instance.feedbackForm.controls.subCategory.setValue('lamps');
     fixture.detectChanges();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
@@ -71,3 +78,16 @@ describe('FeedbackFormComponent', () => {
     expect(find(backButtonSelector)).not.toHaveFoundOne();
   });
 });
+
+const SERVICE_DICTIONARY: ServiceDictionary = {
+  streets: {
+    lamps: [
+      { id: '1', name: 'missing lamp' },
+      { id: '2', name: 'broken lamp' },
+    ],
+  },
+  parcs: {
+    trees: [{ id: '3', name: 'dead tree' }],
+    benches: [{ id: '4', name: 'broken bench' }],
+  },
+};
