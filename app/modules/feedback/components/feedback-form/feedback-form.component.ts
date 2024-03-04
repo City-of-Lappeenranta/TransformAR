@@ -5,9 +5,9 @@ import { ServiceDictionary } from '@core/models/service-api';
 import { ServiceApi } from '@core/services/service-api.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { Observable, ReplaySubject, Subject, combineLatest, map, merge } from 'rxjs';
-import { LatLong } from '../../../../core/models/location';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { Category } from './input-feedback-category/input-feedback-category.component';
+import { LatLong } from '@core/models/location';
 
 @Component({
   selector: 'app-feedback-form',
