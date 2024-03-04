@@ -5,20 +5,21 @@
     gap: 16px;
   }
 
-  .current-location-suggestion {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
+  app-icon {
+    min-width: 20px;
+    color: var(--primary-color);
+  }
 
-    app-icon {
-      color: var(--primary-color);
-    }
+  ::ng-deep .p-autocomplete-item:not(.p-highlight) .checked {
+    display: none;
   }
 
   .current-location-suggestion,
   .location-suggestion {
+    height: 24px;
     max-width: 100vw;
     text-wrap: wrap;
+    align-items: center;
+    gap: 8px;
   }
 }
