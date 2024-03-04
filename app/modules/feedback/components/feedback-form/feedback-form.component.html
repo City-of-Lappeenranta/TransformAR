@@ -54,7 +54,7 @@
     @if (currentFeedbackFormStep > 0) {
       <p-button label="Back" [outlined]="true" (click)="back()"></p-button>
     }
-    <p-button class="next-button" label="Next" [disabled]="!canClickNextButton()" (click)="next()"></p-button>
+    <p-button class="next-button" [label]="nextButtonLabel" [disabled]="!canClickNextButton()" (click)="next()"></p-button>
   </div>
 </footer>
 <div class="background-container">

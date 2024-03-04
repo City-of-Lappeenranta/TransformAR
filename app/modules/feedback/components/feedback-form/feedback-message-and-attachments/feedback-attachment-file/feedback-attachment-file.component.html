@@ -1,11 +1,11 @@
-<div class="file-content flex-row">
-  <div class="file-details flex-row">
+<div class="file-content flex-row full-width">
+  <div class="file-details flex-row full-width">
     <h5>{{ name }}</h5>
     <p>{{ size }}</p>
   </div>
   @if (percentage && percentage < 100) {
     <p-progressBar class="full-width" [style]="{ height: '4px' }" [value]="percentage"></p-progressBar>
   }
-  <app-icon class="close" [icon]="getIcon()" (click)="onDelete.emit()"></app-icon>
+  <app-icon class="close" [icon]="getIcon()" (click)="onRemove.emit()"></app-icon>
 </div>
 <p-divider></p-divider>

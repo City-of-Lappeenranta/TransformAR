@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ServiceDictionary } from '@core/models/service-api';
 import { ServiceApi } from '@core/services/service-api.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
@@ -8,6 +8,26 @@ import { Observable, ReplaySubject, Subject, combineLatest, map, merge } from 'r
 import { LatLong } from '../../../../core/models/location';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { Category } from './input-feedback-category/input-feedback-category.component';
+
+type FeedbackForm = FormGroup<{
+  mainCategory: FormControl<string>;
+  subCategory: FormControl<string | null>;
+  motivation: FormControl<string>;
+  message: FormGroup<{
+    message: FormControl<string | null>;
+    publish: FormControl<boolean | null>;
+    files: FormArray<FormControl<File>>;
+  }>;
+  location: FormControl<LatLong | null>;
+  contact: FormGroup<{
+    email: FormControl<string | null>;
+    firstName: FormControl<string | null>;
+    lastName: FormControl<string | null>;
+    phone: FormControl<string | null>;
+    receiveResponseByMail: FormControl<boolean | null>;
+    termsOfUseAccepted: FormControl<boolean>;
+  }>;
+}>;
 
 @Component({
   selector: 'app-feedback-form',
@@ -25,24 +45,7 @@ export class FeedbackFormComponent {
     { value: 'Action proposal', icon: 'call-to-action' },
   ];
 
-  public feedbackForm = new FormGroup({
-    mainCategory: new FormControl<string | null>(null, Validators.required),
-    subCategory: new FormControl<string | null>(null, Validators.required),
-    motivation: new FormControl<string | null>(null, Validators.required),
-    message: new FormGroup({
-      message: new FormControl<string | null>(null, Validators.required),
-      publish: new FormControl<boolean | null>(null),
-    }),
-    location: new FormControl<LatLong | null>(null, Validators.required),
-    contact: new FormGroup({
-      email: new FormControl<string | null>(null, Validators.email),
-      firstName: new FormControl<string | null>(null),
-      lastName: new FormControl<string | null>(null),
-      phone: new FormControl<string | null>(null),
-      receiveResponseByMail: new FormControl<boolean | null>(null),
-      termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
-    }),
-  });
+  public feedbackForm: FeedbackForm;
 
   public mainCategories$: Observable<Category[]> = this.serviceApi
     .getServices()
@@ -54,9 +57,34 @@ export class FeedbackFormComponent {
   public constructor(
     private readonly serviceApi: ServiceApi,
     private readonly navigationHeaderService: NavigationHeaderService,
+    private readonly formBuilder: FormBuilder,
   ) {
+    this.feedbackForm = this.formBuilder.group({
+      mainCategory: this.formBuilder.nonNullable.control<string>('', Validators.required),
+      subCategory: this.formBuilder.control<string | null>(null, Validators.required),
+      motivation: this.formBuilder.nonNullable.control<string>('', Validators.required),
+      message: this.formBuilder.group({
+        message: this.formBuilder.control<string | null>(null, Validators.required),
+        publish: this.formBuilder.control<boolean | null>(null),
+        files: this.formBuilder.array<FormControl<File>>([]),
+      }),
+      location: this.formBuilder.control<LatLong | null>(null),
+      contact: this.formBuilder.group({
+        email: this.formBuilder.control<string | null>(null, Validators.email),
+        firstName: this.formBuilder.control<string | null>(null),
+        lastName: this.formBuilder.control<string | null>(null),
+        phone: this.formBuilder.control<string | null>(null),
+        receiveResponseByMail: this.formBuilder.control<boolean | null>(null),
+        termsOfUseAccepted: this.formBuilder.nonNullable.control<boolean>(false, Validators.requiredTrue),
+      }),
+    });
+
     this.handleFeedbackFormValueChanges();
     this.getSubCategoryOnMainCategoryChange();
+  }
+
+  public get nextButtonLabel(): string {
+    return this.currentFeedbackFormStep === FeedbackFormStep.CONTACT ? 'Send feedback' : 'Next';
   }
 
   public get activeStep(): number {
