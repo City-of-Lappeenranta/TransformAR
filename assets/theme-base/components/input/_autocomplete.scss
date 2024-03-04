@@ -66,7 +66,7 @@
   background: $inputOverlayBg;
   color: $inputListTextColor;
   border: $inputOverlayBorder;
-  border-radius: $borderRadius;
+  border-radius: $inputBorderRadius;
   box-shadow: $inputOverlayShadow;
 
   .p-autocomplete-items {
@@ -82,23 +82,19 @@
       border-radius: $inputListItemBorderRadius;
 
       &.p-highlight {
-        color: $highlightTextColor;
-        background: $highlightBg;
+        color: #101828;
+        background: #f9fafb;
 
         &.p-focus {
-          background: $highlightFocusBg;
+          color: #344054;
         }
       }
 
       &:not(.p-highlight):not(.p-disabled) {
-        &.p-focus {
-          color: $inputListItemTextFocusColor;
-          background: $inputListItemFocusBg;
-        }
-
+        &.p-focus,
         &:hover {
-          color: $inputListItemTextHoverColor;
-          background: $inputListItemHoverBg;
+          color: #344054;
+          background: #f9fafb;
         }
       }
     }

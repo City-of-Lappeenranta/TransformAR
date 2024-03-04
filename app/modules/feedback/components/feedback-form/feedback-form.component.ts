@@ -16,7 +16,7 @@ import { Category } from './input-feedback-category/input-feedback-category.comp
 })
 export class FeedbackFormComponent {
   public feedbackFormStep = FeedbackFormStep;
-  public currentFeedbackFormStep = FeedbackFormStep.MAIN_CATEGORY;
+  public currentFeedbackFormStep = FeedbackFormStep.LOCATION;
 
   public motivations = [
     { value: 'Thank you', icon: 'thumbs-up' },
