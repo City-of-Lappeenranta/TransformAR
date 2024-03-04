@@ -5,3 +5,8 @@ pipelines:
           name: Build for feature branch pull request
           script:
             - echo "Hello, feature branch PR!"
+  default:
+    - step:
+        name: All other builds
+        script:
+          - echo "Hello, World!"
