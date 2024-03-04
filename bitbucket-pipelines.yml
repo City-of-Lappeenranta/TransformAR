@@ -1,7 +1,7 @@
 pipelines:
-  branches:
-    feature/TRAN-*:
+  pull-requests:
+    feature/*:
       - step:
-          name: Build feature branch
+          name: Build for feature branch pull request
           script:
-            - echo "Hello, feature!"
+            - echo "Hello, feature branch PR!"
