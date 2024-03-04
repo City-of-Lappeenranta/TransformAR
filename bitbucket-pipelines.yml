@@ -2,6 +2,6 @@ pipelines:
   branches:
     feature/TRAN-*:
       - step:
-          name: Build hotfix branch
+          name: Build feature branch
           script:
-            - echo "Hello, hotfix!"
+            - echo "Hello, feature!"
