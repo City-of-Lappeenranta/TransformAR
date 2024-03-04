@@ -1,0 +1,7 @@
+pipelines:
+  branches:
+    feature/TRAN-*:
+      - step:
+          name: Build hotfix branch
+          script:
+            - echo "Hello, hotfix!"
