@@ -72,7 +72,7 @@ describe('FeedbackAttachmentFileComponent', () => {
     expect((find('.close').nativeElement as HTMLElement).getAttribute('ng-reflect-icon')).toBe('trash');
   });
 
-  it('should emit onDelete when clicking the icon', async () => {
+  it('should emit onRemove when clicking the icon', async () => {
     const name = 'Name';
     const size = '256 kB';
 
@@ -90,6 +90,6 @@ describe('FeedbackAttachmentFileComponent', () => {
     );
 
     find('.close').triggerEventHandler('click', {});
-    expect(instance.onDelete.emit).toHaveBeenCalled();
+    expect(instance.onRemove.emit).toHaveBeenCalled();
   });
 });

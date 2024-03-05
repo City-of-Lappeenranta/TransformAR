@@ -4,7 +4,7 @@ import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-at
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feedback-attachment-file.component';
 
-fdescribe('FeedbackMessageAndAttachmentComponent', () => {
+describe('FeedbackMessageAndAttachmentComponent', () => {
   let shallow: Shallow<FeedbackMessageAndAttachmentComponent>;
 
   const reasonForm = new FormGroup({
