@@ -1,0 +1,7 @@
+<div *ngIf="dataPoint">
+  @switch (dataPoint.type) {
+    @case (DATA_POINT_TYPE.WEATHER) {
+      <p>{{ dataPoint.location }}</p>
+    }
+  }
+</div>

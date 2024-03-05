@@ -1,3 +1,8 @@
-<p>Hello Dashboard Map</p>
+<app-dashboard-data-point-detail
+  *ngIf="selectedWeatherDataPoint$ | async as selectedWeatherDataPoint"
+  [dataPoint]="selectedWeatherDataPoint"
+  (markerClick)="onMarkerClick($event)"
+  class="data-point-detail"
+></app-dashboard-data-point-detail>
 
-<p-button label="PrimeNG themed button"></p-button>
+<app-map [markers]="weatherDataPointMarkers"></app-map>
