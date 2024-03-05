@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
@@ -8,10 +8,29 @@ import { Observable, ReplaySubject, Subject, combineLatest, map, merge, take } f
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { Category } from './input-feedback-category/input-feedback-category.component';
 
+type FeedbackFormType = FormGroup<{
+  description: FormControl<string | null>;
+  group: FormControl<string | null>;
+  serviceCode: FormControl<string | null>;
+  message: FormGroup<{
+    message: FormControl<string | null>;
+    publish: FormControl<boolean | null>;
+  }>;
+  location: FormControl<LatLong | null>;
+  contact: FormGroup<{
+    email: FormControl<string | null>;
+    firstName: FormControl<string | null>;
+    lastName: FormControl<string | null>;
+    phone: FormControl<string | null>;
+    receiveResponseByMail: FormControl<boolean | null>;
+    termsOfUseAccepted: FormControl<boolean>;
+  }>;
+}>;
+
 @Injectable({ providedIn: 'root' })
 export class FeedbackFormService {
   private CATEGORY_START_INDEX = 0;
-  private CATEGORY_STEPS = ['description', 'group', 'serviceCode'];
+  private CATEGORY_STEPS = ['description', 'group', 'serviceCode'] as const;
   private STEPS = [
     ...this.CATEGORY_STEPS.map(() => FeedbackFormChildComponent.CATEGORY),
     FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS,
@@ -21,10 +40,7 @@ export class FeedbackFormService {
 
   public serviceDictionary = this.serviceApi.getServices();
 
-  public feedbackForm = new FormGroup({
-    description: new FormControl<string | null>(null, Validators.required),
-    group: new FormControl<string | null>(null, Validators.required),
-    serviceCode: new FormControl<string | null>(null, Validators.required),
+  public feedbackForm: FeedbackFormType = new UntypedFormGroup({
     message: new FormGroup({
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
@@ -57,13 +73,14 @@ export class FeedbackFormService {
 
   public categorySteps = this.CATEGORY_STEPS.map((step) => ({
     formControlName: step,
-    index: this.getCategoryLevelIndex(step),
+    index: this.getIndexForCategoryStep(step),
   }));
 
   public constructor(
     private readonly serviceApi: ServiceApi,
     private readonly navigationHeaderService: NavigationHeaderService,
   ) {
+    this.addCategoryStepsToForm();
     this.setCategoriesByFormValues();
     this.handleFeedbackFormValueChanges();
     this.handleStepChange();
@@ -73,18 +90,6 @@ export class FeedbackFormService {
 
   private isNextEnabled(currentStep: number): boolean {
     const component = this.STEPS[currentStep];
-
-    if (component === FeedbackFormChildComponent.CATEGORY) {
-      if (currentStep === this.getCategoryLevelIndex('description')) {
-        return this.feedbackForm.controls.description.valid;
-      }
-      if (currentStep === this.getCategoryLevelIndex('group')) {
-        return this.feedbackForm.controls.group.valid;
-      }
-      if (currentStep === this.getCategoryLevelIndex('serviceCode')) {
-        return this.feedbackForm.controls.serviceCode.valid;
-      }
-    }
 
     if (component === FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS) {
       return this.feedbackForm.controls.message.valid;
@@ -105,15 +110,15 @@ export class FeedbackFormService {
     this.currentStep$.pipe(take(1)).subscribe((currentStep) => {
       const newIndex = (currentStep -= 1);
 
-      if (newIndex === this.getCategoryLevelIndex('description')) {
+      if (newIndex === this.getIndexForCategoryStep(this.CATEGORY_STEPS[0])) {
         this.feedbackForm.controls.description.setValue(null);
       }
 
-      if (newIndex === this.getCategoryLevelIndex('group')) {
+      if (newIndex === this.getIndexForCategoryStep(this.CATEGORY_STEPS[1])) {
         this.feedbackForm.controls.group.setValue(null);
       }
 
-      if (newIndex === this.getCategoryLevelIndex('serviceCode')) {
+      if (newIndex === this.getIndexForCategoryStep(this.CATEGORY_STEPS[2])) {
         this.feedbackForm.controls.serviceCode.setValue(null);
       }
 
@@ -125,6 +130,10 @@ export class FeedbackFormService {
     this.currentStep$.pipe(take(1)).subscribe((currentStep) => {
       this._currentStepSubject$.next((currentStep += 1));
     });
+  }
+
+  private addCategoryStepsToForm(): void {
+    this.CATEGORY_STEPS.forEach((step) => this.feedbackForm.addControl(step, new FormControl(null, Validators.required)));
   }
 
   private handleFeedbackFormValueChanges(): void {
@@ -171,7 +180,7 @@ export class FeedbackFormService {
     });
   }
 
-  private getCategoryLevelIndex(level: string): number {
+  private getIndexForCategoryStep(level: string): number {
     const index = this.CATEGORY_STEPS.findIndex((name) => name === level);
 
     if (index === -1) {

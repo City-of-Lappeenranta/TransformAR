@@ -3,8 +3,10 @@ import { ServiceApi } from '@core/services/service-api.service';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../feedback.module';
-import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
-import { FeedbackFormChildComponent, FeedbackFormComponent } from './feedback-form.component';
+import { FeedbackContactComponent } from './feedback-contact/feedback-contact.component';
+import { FeedbackFormComponent } from './feedback-form.component';
+import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
+import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
 
 describe('FeedbackFormComponent', () => {
@@ -21,73 +23,79 @@ describe('FeedbackFormComponent', () => {
 
     const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MAIN_CATEGORY);
-    expect(instance.activeStep).toEqual(0);
-    expect(instance.canClickNextButton()).toEqual(false);
-    expect(find(backButtonSelector)).not.toHaveFoundOne();
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
 
-    instance.feedbackForm.controls.mainCategory.setValue('streets');
+    instance.feedbackForm.controls.description.setValue('streets');
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.SUB_CATEGORY);
-    expect(instance.activeStep).toEqual(0);
-    expect(instance.canClickNextButton()).toEqual(false);
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(find('.description').nativeElement.innerHTML).toBe('streets');
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
-    instance.feedbackForm.controls.subCategory.setValue('lamps');
+    instance.feedbackForm.controls.group.setValue('lamps');
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MOTIVATION);
-    expect(instance.activeStep).toEqual(1);
-    expect(instance.canClickNextButton()).toEqual(false);
-    expect(find(backButtonSelector)).toHaveFoundOne();
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(find('.description').nativeElement.innerHTML).toBe('lamps');
+    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([
+      { value: 'missing lamp' },
+      { value: 'broken lamp' },
+    ]);
 
-    const motivation = instance.motivations[0].value;
-    instance.feedbackForm.controls.motivation.setValue(motivation);
+    instance.feedbackForm.controls.serviceCode.setValue('1');
+    fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS);
-
+    expect(findComponent(FeedbackMessageAndAttachmentComponent)).toHaveFound(1);
     instance.feedbackForm.controls.message.controls.message.setValue('message');
-    expect(instance.canClickNextButton()).toEqual(true);
-
     find('p-button.next-button').triggerEventHandler('click', {});
-
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.LOCATION);
-
-    instance.back();
-
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS);
-    expect(instance.canClickNextButton()).toEqual(true);
-
-    instance.back();
-
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MOTIVATION);
-    expect(instance.canClickNextButton()).toEqual(true);
-
-    instance.back();
-
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.SUB_CATEGORY);
-    expect(instance.canClickNextButton()).toEqual(true);
-
-    instance.back();
     fixture.detectChanges();
 
-    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormChildComponent.MAIN_CATEGORY);
-    expect(instance.canClickNextButton()).toEqual(true);
-    expect(find(backButtonSelector)).not.toHaveFoundOne();
+    expect(findComponent(FeedbackLocationComponent)).toHaveFound(1);
+    find('p-button.next-button').triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(FeedbackContactComponent)).toHaveFound(1);
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(FeedbackLocationComponent)).toHaveFound(1);
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(FeedbackMessageAndAttachmentComponent)).toHaveFound(1);
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(instance.feedbackForm.controls.serviceCode.value).toBeNull();
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(instance.feedbackForm.controls.group.value).toBeNull();
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(instance.feedbackForm.controls.description.value).toBeNull();
   });
 });
 
 const SERVICE_DICTIONARY: ServiceDictionary = {
   streets: {
     lamps: [
-      { id: '1', name: 'missing lamp' },
-      { id: '2', name: 'broken lamp' },
+      { code: '1', name: 'missing lamp' },
+      { code: '2', name: 'broken lamp' },
     ],
   },
   parcs: {
-    trees: [{ id: '3', name: 'dead tree' }],
-    benches: [{ id: '4', name: 'broken bench' }],
+    trees: [{ code: '3', name: 'dead tree' }],
+    benches: [{ code: '4', name: 'broken bench' }],
   },
 };

@@ -33,9 +33,12 @@
 <footer class="footer flex-column">
   <app-steps [amount]="amountOfSteps" [active]="(currentStep$ | async) ?? 0"></app-steps>
   <div class="flex-row">
-    @if (((currentStep$ | async) ?? 0) > 0) {
-      <p-button label="Back" [outlined]="true" (click)="onClickBack()"></p-button>
-    }
+    <p-button
+      label="Back"
+      [disabled]="((currentStep$ | async) ?? 0) === 0"
+      [outlined]="true"
+      (click)="onClickBack()"
+    ></p-button>
     <p-button
       *ngIf="(currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY"
       class="next-button"
