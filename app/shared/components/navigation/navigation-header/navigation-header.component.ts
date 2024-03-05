@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationHeaderAction } from './navigation-header-action.interface';
 import { NavigationHeaderService } from './navigation-header.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navigation-header',
@@ -9,18 +8,12 @@ import { NavigationHeaderService } from './navigation-header.service';
   styleUrls: ['./navigation-header.component.scss'],
 })
 export class NavigationHeaderComponent {
-  @Input({ required: true }) public title: string | undefined;
+  @Input({ required: true }) public title!: string;
 
   public sidebarOpen = false;
-  public action: NavigationHeaderAction | null | undefined;
+  public showSkip = false;
 
-  public constructor(private readonly navigationHeaderService: NavigationHeaderService) {
-    this.navigationHeaderService.action$.pipe(takeUntilDestroyed()).subscribe((action: NavigationHeaderAction | null) => {
-      this.action = action;
-    });
-  }
-
-  public onActionClick(): void {
-    this.navigationHeaderService.actionClick();
+  public constructor(public readonly navigationHeaderService: NavigationHeaderService) {
+    this.navigationHeaderService.skip$.pipe(takeUntilDestroyed()).subscribe((showSkip) => (this.showSkip = showSkip));
   }
 }

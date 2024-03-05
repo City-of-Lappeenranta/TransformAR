@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component, Injector, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {
   FormControl,
   FormControlDirective,
@@ -8,6 +8,15 @@ import {
   NgControl,
 } from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+
+export interface Category {
+  value: string;
+  icon?: string;
+}
+
+type CategoryToShow = Category & {
+  selected: boolean;
+};
 
 @Component({
   selector: 'app-input-feedback-category',
@@ -21,38 +30,21 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
     },
   ],
 })
-export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnInit {
-  @Input({ required: true }) public categories!: {
-    value: string;
-    icon?: string;
-  }[];
+export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnChanges {
+  @Input({ required: true }) public categories!: Category[];
   @Input() public withColor = true;
 
-  public categoriesToShow: {
-    value: string;
-    selected: boolean;
-    icon?: string;
-  }[] = [];
-
+  public categoriesToShow: CategoryToShow[] = [];
   public hasIcons = false;
 
   public constructor(private readonly injector: Injector) {
     super();
   }
 
-  public ngOnInit(): void {
-    this.categoriesToShow = this.categories.map((category) => {
-      const value = category.value;
-      if (!this.hasIcons) {
-        this.hasIcons = !!category?.icon;
-      }
-
-      return {
-        value,
-        selected: value === this.getFormValue(),
-        icon: category.icon,
-      };
-    });
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['categories']) {
+      this.setCategoriesToShow();
+    }
   }
 
   public toggleCategory(indexToToggle: number): void {
@@ -64,6 +56,21 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
       return {
         ...category,
         selected: index === indexToToggle,
+      };
+    });
+  }
+
+  private setCategoriesToShow(): void {
+    this.categoriesToShow = this.categories.map((category) => {
+      const value = category.value;
+      if (!this.hasIcons) {
+        this.hasIcons = !!category?.icon;
+      }
+
+      return {
+        value,
+        selected: value === this.getFormValue(),
+        icon: category.icon,
       };
     });
   }

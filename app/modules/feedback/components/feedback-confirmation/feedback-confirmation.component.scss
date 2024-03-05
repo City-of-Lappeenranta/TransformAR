@@ -1,6 +1,5 @@
 :host {
   z-index: 999;
-  margin-top: -1px; //TODO: find what is causing this
   height: 100%;
 
   main {
@@ -27,13 +26,13 @@
     p {
       margin-top: 16px;
       font-weight: 500;
-      font-size: 28px;
+      font-size: 18px;
     }
 
     small {
       margin-top: 32px;
       font-weight: 400;
-      font-size: 22px;
+      font-size: 14px;
     }
   }
 

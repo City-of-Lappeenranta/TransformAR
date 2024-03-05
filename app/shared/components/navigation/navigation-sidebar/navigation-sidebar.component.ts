@@ -24,20 +24,20 @@ export class NavigationSidebarComponent {
       icon: 'feedback',
       route: 'feedback',
     },
-    {
-      name: 'Climate change',
-      icon: 'climate-change',
-      route: '',
-    },
-    {
-      name: 'Citizen measurements',
-      icon: 'bell',
-      route: '',
-    },
-    {
-      name: 'Notifications',
-      icon: 'bell',
-      route: '',
-    },
+    // {
+    //   name: 'Climate change',
+    //   icon: 'climate-change',
+    //   route: '',
+    // },
+    // {
+    //   name: 'Citizen measurements',
+    //   icon: 'bell',
+    //   route: '',
+    // },
+    // {
+    //   name: 'Notifications',
+    //   icon: 'bell',
+    //   route: '',
+    // },
   ];
 }
