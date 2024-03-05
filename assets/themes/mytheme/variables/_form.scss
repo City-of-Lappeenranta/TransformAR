@@ -76,11 +76,11 @@ $inputListBorder: $inputBorder;
 
 /// Padding of an input list
 /// @group form
-$inputListPadding: 0.5rem 0;
+$inputListPadding: 0.25rem 0;
 
 /// Padding for an individual itrem of an input list
 /// @group form
-$inputListItemPadding: 0.5rem 1rem;
+$inputListItemPadding: 0.625rem 0.875rem;
 
 /// Background for an individual itrem of an input list
 /// @group form
@@ -150,9 +150,13 @@ $inputOverlayBg: $inputListBg;
 /// @group form
 $inputOverlayHeaderBg: $inputListHeaderBg;
 
+/// Radius of the input corners
+/// @group form
+$inputBorderRadius: 8px;
+
 /// Border for an overlay of an input such as autocomplete or dropdown
 /// @group form
-$inputOverlayBorder: 0 none;
+$inputOverlayBorder: 1px solid #f2f4f7;
 
 /// Shadow for an overlay of an input such as autocomplete or dropdown
 /// @group form
