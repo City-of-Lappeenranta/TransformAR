@@ -19,7 +19,7 @@
       <app-icon class="icon" icon="add-image"></app-icon>
       <p class="description">You can upload one or more images to your feedback. JPG, PNG, maximum size of files is 8MB</p>
       <p-button class="button" [outlined]="true" label="Upload or take image" (click)="fileInput.click()">
-        <input #fileInput type="file" accept="image/*" (change)="onFileInput($event)" style="display: none" />
+        <input #fileInput type="file" accept="image/png, image/jpeg" (change)="onFileInput($event)" style="display: none" />
       </p-button>
     </div>
     <div class="files-container">

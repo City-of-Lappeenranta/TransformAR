@@ -18,6 +18,10 @@ export class FeedbackMessageAndAttachmentComponent {
     files: FormArray<FormControl<File>>;
   }>;
 
+  private readonly IMAGE_JPEG = 'image/jpeg';
+  private readonly IMAGE_PNG = 'image/png';
+  private readonly MAX_FILE_SIZE = 8388608;
+
   public files: FormFile[] = [];
 
   public constructor(private readonly formBuilder: FormBuilder) {}
@@ -28,8 +32,10 @@ export class FeedbackMessageAndAttachmentComponent {
     if (files && files.length > 0) {
       const file: File = files[0];
 
-      this.files.push({ name: file.name, size: `${Math.round(file.size / 1000)} KB` });
-      this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(file));
+      if ((file.type === this.IMAGE_JPEG || file.type === this.IMAGE_PNG) && file.size < this.MAX_FILE_SIZE) {
+        this.files.push({ name: file.name, size: `${Math.round(file.size / 1024)} KB` });
+        this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(file));
+      }
     }
   }
 
