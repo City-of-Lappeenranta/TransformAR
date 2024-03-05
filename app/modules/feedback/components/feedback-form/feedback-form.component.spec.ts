@@ -6,6 +6,8 @@ import { FeedbackModule } from '../../feedback.module';
 import { FeedbackFormStep } from './feedback-form-step.enum';
 import { FeedbackFormComponent } from './feedback-form.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
+import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
+import { FeedbackContactComponent } from './feedback-contact/feedback-contact.component';
 
 describe('FeedbackFormComponent', () => {
   let shallow: Shallow<FeedbackFormComponent>;
@@ -36,7 +38,6 @@ describe('FeedbackFormComponent', () => {
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
     instance.feedbackForm.controls.subCategory.setValue('lamps');
-    fixture.detectChanges();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MOTIVATION);
     expect(instance.activeStep).toEqual(1);
@@ -48,10 +49,26 @@ describe('FeedbackFormComponent', () => {
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.MESSAGE_AND_ATTACHMENTS);
 
-    instance.feedbackForm.controls.message.controls.message.setValue('message');
+    fixture.detectChanges();
+    findComponent(FeedbackMessageAndAttachmentComponent).reasonForm.controls.message.setValue('message');
     expect(instance.canClickNextButton()).toEqual(true);
 
     find('p-button.next-button').triggerEventHandler('click', {});
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
+    expect(instance.canClickNextButton()).toEqual(true);
+
+    find('p-button.next-button').triggerEventHandler('click', {});
+
+    expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.CONTACT);
+    expect(instance.canClickNextButton()).toEqual(false);
+
+    fixture.detectChanges();
+    findComponent(FeedbackContactComponent).contactForm.controls.termsOfUseAccepted.setValue(true);
+
+    expect(instance.canClickNextButton()).toEqual(true);
+
+    instance.back();
 
     expect(instance.currentFeedbackFormStep).toEqual(FeedbackFormStep.LOCATION);
 
