@@ -1,60 +1,51 @@
 <main class="feedback-form" [formGroup]="feedbackForm">
-  @switch (currentFeedbackFormStep) {
-    @default {
+  @switch (currentChildComponent$ | async) {
+    @case (FEEDBACK_FORM_COMPONENT.CATEGORY) {
       <h2 class="title">What would you like to report?</h2>
-
-      @if (currentFeedbackFormStep === feedbackFormStep.MAIN_CATEGORY) {
+      <p *ngIf="parentCategory$ | async as parentCategory" class="description">{{ parentCategory }}</p>
+      <ng-container *ngFor="let categoryStep of categorySteps">
         <app-input-feedback-category
+          *ngIf="(currentStep$ | async) === categoryStep.index"
           class="content"
-          [categories]="(mainCategories$ | async) ?? []"
-          formControlName="mainCategory"
+          [categories]="(categories$ | async) ?? []"
+          [formControlName]="categoryStep.formControlName"
         >
-        </app-input-feedback-category>
-      } @else {
-        <p class="description">{{ feedbackForm.value.mainCategory }}</p>
-        <app-input-feedback-category
-          class="content"
-          [withColor]="false"
-          [categories]="(subCategories$ | async) ?? []"
-          formControlName="subCategory"
-        >
-        </app-input-feedback-category>
-      }
+        </app-input-feedback-category
+      ></ng-container>
     }
-    @case (feedbackFormStep.MOTIVATION) {
-      <h2 class="title">What's the reason of your feedback?</h2>
-      <app-input-feedback-category
-        class="content"
-        [withColor]="false"
-        [categories]="motivations"
-        formControlName="motivation"
-      >
-      </app-input-feedback-category>
-    }
-    @case (feedbackFormStep.MESSAGE_AND_ATTACHMENTS) {
+    @case (FEEDBACK_FORM_COMPONENT.MESSAGE_AND_ATTACHMENTS) {
       <h2 class="title">What's your feedback?</h2>
       <app-feedback-message-and-attachments
         class="content"
         [reasonForm]="feedbackForm.controls.message"
       ></app-feedback-message-and-attachments>
     }
-    @case (feedbackFormStep.LOCATION) {
+    @case (FEEDBACK_FORM_COMPONENT.LOCATION) {
       <h2 class="title">What's the feedback location?</h2>
       <app-feedback-location [locationFormControl]="feedbackForm.controls.location"></app-feedback-location>
     }
-    @case (feedbackFormStep.CONTACT) {
+    @case (FEEDBACK_FORM_COMPONENT.CONTACT) {
       <h2 class="title">Get in touch</h2>
       <app-feedback-contact [contactForm]="feedbackForm.controls.contact"></app-feedback-contact>
     }
   }
 </main>
 <footer class="footer flex-column">
-  <app-steps [amount]="6" [active]="activeStep"></app-steps>
+  <app-steps [amount]="amountOfSteps" [active]="(currentStep$ | async) ?? 0"></app-steps>
   <div class="flex-row">
-    @if (currentFeedbackFormStep > 0) {
-      <p-button label="Back" [outlined]="true" (click)="back()"></p-button>
-    }
-    <p-button class="next-button" label="Next" [disabled]="!canClickNextButton()" (click)="next()"></p-button>
+    <p-button
+      label="Back"
+      [disabled]="((currentStep$ | async) ?? 0) === 0"
+      [outlined]="true"
+      (click)="onClickBack()"
+    ></p-button>
+    <p-button
+      *ngIf="(currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY"
+      class="next-button"
+      label="Next"
+      [disabled]="!(isNextEnabled$ | async)"
+      (click)="onClickNext()"
+    ></p-button>
   </div>
 </footer>
 <div class="background-container">
