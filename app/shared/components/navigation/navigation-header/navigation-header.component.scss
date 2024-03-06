@@ -48,9 +48,14 @@
     }
 
     .background-container {
+      $background-width: 100%;
       $background-height: 35px;
 
       position: absolute;
+      background-image: url('../../../../../assets/icons/navigation-header-wave.svg');
+      background-repeat: no-repeat;
+      background-size: $background-width $background-height;
+      width: $background-width;
       height: $background-height;
       top: $navigation-header-height;
       right: 0;
@@ -58,11 +63,13 @@
       overflow: hidden !important;
       z-index: $z-index - 2;
 
-      .background {
-        position: absolute;
-        color: var(--primary-color);
-        overflow: hidden;
-      }
+      // .background {
+      //   position: absolute;
+      //   color: var(--primary-color);
+      //   overflow: hidden;
+      //   width: 100%;
+      //   height: calc(100vw * (35px / 393px));
+      // }
     }
   }
 }
