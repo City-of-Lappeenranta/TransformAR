@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPoint, WeatherDataPoint } from '@core/models/data-points-api';
 import { LatLong } from '@core/models/location';
-import { DataPointsApi } from '@core/services/data-points-api.service';
+import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { Marker } from '@shared/components/map/map.component';
 import { Observable, Subject, take } from 'rxjs';
 
@@ -12,13 +12,13 @@ import { Observable, Subject, take } from 'rxjs';
   styleUrls: ['./dashboard-map.component.scss'],
 })
 export class DashboardMapComponent {
-  public weatherDataPoints: WeatherDataPoint[] = [];
+  private dataPoints: DataPoint[] = [];
+
   public weatherDataPointMarkers: Marker[] = [];
   public weatherDataPointMarkersLoading: boolean = true;
 
-  private _selectedWeatherDataPointSubject$: Subject<WeatherDataPoint | null> = new Subject<WeatherDataPoint | null>();
-  public selectedWeatherDataPoint$: Observable<WeatherDataPoint | null> =
-    this._selectedWeatherDataPointSubject$.asObservable();
+  private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
+  public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
   public constructor(private readonly dataPointsApi: DataPointsApi) {
     this.dataPointsApi
@@ -28,12 +28,23 @@ export class DashboardMapComponent {
   }
 
   public onMarkerClick(latLong: LatLong): void {
-    this._selectedWeatherDataPointSubject$.next(this.weatherDataPoints.find((point) => point.location === latLong) ?? null);
+    this._selectedDataPointSubject$.next(
+      this.dataPoints.find((point) => this.isSameLocation([point.location, latLong])) ?? null,
+    );
+  }
+
+  public onDataPointClose(): void {
+    this._selectedDataPointSubject$.next(null);
   }
 
   private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {
-    this.weatherDataPoints = weatherDataPoints;
+    this.dataPoints = this.dataPoints.concat(weatherDataPoints);
+
     this.weatherDataPointMarkers = weatherDataPoints.map((point) => ({ location: point.location }));
     this.weatherDataPointMarkersLoading = false;
+  }
+
+  private isSameLocation(locations: [LatLong, LatLong]): boolean {
+    return locations[0].toString() === locations[1].toString();
   }
 }

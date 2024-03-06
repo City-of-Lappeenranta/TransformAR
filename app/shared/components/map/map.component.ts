@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as leaflet from 'leaflet';
 import { LatLong } from '@core/models/location';
 import { HttpClient } from '@angular/common/http';
@@ -16,7 +16,7 @@ export interface Marker {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public center: LatLong = environment.defaultLocation as LatLong;
   @Input() public zoom = 13;
   @Input() public markers: Marker[] = [];
@@ -29,6 +29,10 @@ export class MapComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     this.initialiseMap();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyMap();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -76,9 +80,13 @@ export class MapComponent implements OnInit, OnChanges {
       .addTo(this.map);
   }
 
+  private destroyMap(): void {
+    this.map?.off();
+    this.map?.remove();
+  }
+
   private onClickMarker(e: leaflet.LeafletMouseEvent): void {
     const { lat, lng } = e.latlng;
-    console.log('yo');
     this.markerClick.emit([lat, lng]);
   }
 }

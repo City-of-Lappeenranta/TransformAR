@@ -1,8 +1,7 @@
+<app-map [markers]="weatherDataPointMarkers" (markerClick)="onMarkerClick($event)"></app-map>
 <app-dashboard-data-point-detail
-  *ngIf="selectedWeatherDataPoint$ | async as selectedWeatherDataPoint"
-  [dataPoint]="selectedWeatherDataPoint"
-  (markerClick)="onMarkerClick($event)"
+  *ngIf="selectedDataPoint$ | async as selectedDataPoint"
+  [dataPoint]="selectedDataPoint"
   class="data-point-detail"
+  (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
-
-<app-map [markers]="weatherDataPointMarkers"></app-map>

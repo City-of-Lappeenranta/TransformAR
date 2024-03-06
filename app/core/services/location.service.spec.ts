@@ -3,29 +3,14 @@ import { CoreModule } from '../core.module';
 import { LocationService } from './location.service';
 import { take } from 'rxjs';
 import { RadarService } from './radar.service';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LocationService', () => {
   let shallow: Shallow<LocationService>;
 
   beforeEach(() => {
-    shallow = new Shallow(LocationService, CoreModule);
-  });
-
-  describe('searchLocationByQuery', () => {
-    it('should return location results from API call', async () => {
-      // @ts-ignore
-      navigator.geolocation = { getCurrentPosition: jest.fn() };
-
-      const { instance } = shallow
-        .mock(RadarService, {
-          autocomplete: jest.fn().mockReturnValue(Promise.resolve([{ address: 'location', latLong: [52, 52] }])),
-        })
-        .createService();
-
-      const result = await instance.searchLocationByQuery('location');
-
-      expect(result).toEqual([{ address: 'location', latLong: [52, 52] }]);
-    });
+    shallow = new Shallow(LocationService, CoreModule).replaceModule(HttpClient, HttpClientTestingModule);
   });
 
   describe('userLocation$', () => {

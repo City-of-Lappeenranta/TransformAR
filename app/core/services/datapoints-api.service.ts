@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DataPointType, OpenWeatherDataResponse, WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPointType, WeatherDataPoint } from '@core/models/data-points-api';
+import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import { Observable, map } from 'rxjs';
 
@@ -21,10 +22,11 @@ export class DataPointsApi {
       const { coordinates, sensors } = data;
       const { latitudeValue, longitudeValue } = coordinates;
       const { tdew, ta, wspd, water, ice, rh } = sensors[0];
+      const location = [latitudeValue, longitudeValue] as LatLong;
 
       return {
         type: DataPointType.WEATHER,
-        location: [latitudeValue, longitudeValue],
+        location,
         airTemperature: ta,
         dewPoint: tdew,
         wind: wspd,
@@ -34,4 +36,37 @@ export class DataPointsApi {
       };
     });
   }
+}
+
+export interface OpenWeatherDataResponse {
+  message: string;
+  responseCode: number;
+  result: {
+    id: string;
+    dataSourceId: string;
+    coordinates: {
+      latitudeValue: number;
+      longitudeValue: number;
+    };
+    sensors: [
+      {
+        version: number;
+        id: string;
+        timestampUTC: number;
+        friction: number;
+        state: string;
+        ta: number;
+        tsurf: number;
+        tdew: number;
+        rh: number;
+        water: number;
+        tground: number;
+        ice: number;
+        pressure: number;
+        wspd: number;
+      },
+    ];
+  }[];
+  success: boolean;
+  totalSize: number;
 }
