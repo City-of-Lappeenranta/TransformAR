@@ -2,7 +2,7 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardMapComponent } from './dashboard-map.component';
-import { DataPointType, WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';

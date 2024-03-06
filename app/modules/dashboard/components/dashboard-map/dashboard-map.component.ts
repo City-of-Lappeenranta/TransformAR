@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DataPoint, WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { Marker } from '@shared/components/map/map.component';

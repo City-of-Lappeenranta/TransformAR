@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { DataPointsApi, OpenWeatherDataResponse } from './datapoints-api.service';
-import { DataPointType } from '@core/models/data-points-api';
+import { DataPointType } from '@core/models/data-point';
 
 describe('DataPointsApi', () => {
   let shallow: Shallow<DataPointsApi>;

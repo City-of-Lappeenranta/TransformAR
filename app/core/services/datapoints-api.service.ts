@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DataPointType, WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import { Observable, map } from 'rxjs';

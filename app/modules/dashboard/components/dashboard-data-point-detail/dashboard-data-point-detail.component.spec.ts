@@ -1,4 +1,4 @@
-import { DataPoint, DataPointType, WeatherDataPoint } from '@core/models/data-points-api';
+import { DataPoint, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { DataPoint, DataPointType } from '@core/models/data-points-api';
+import { DataPoint, DataPointType } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Observable, Subject } from 'rxjs';
 
