@@ -24,8 +24,13 @@ export class FeedbackFormComponent {
   public categorySteps = this.feedbackFormService.categorySteps;
 
   public isNextInProgress$: Observable<boolean> = this.feedbackFormService.isNextInProgress$;
+  public nextButtonLabel = 'Next';
 
-  public constructor(private readonly feedbackFormService: FeedbackFormService) {}
+  public constructor(private readonly feedbackFormService: FeedbackFormService) {
+    this.currentStep$.subscribe(
+      (currentStep) => (this.nextButtonLabel = currentStep === this.amountOfSteps - 1 ? 'Send feedback' : 'Next'),
+    );
+  }
 
   public onClickBack(): void {
     this.feedbackFormService.back();

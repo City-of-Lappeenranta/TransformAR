@@ -4,11 +4,12 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
-import { BehaviorSubject, Observable, ReplaySubject, Subject, combineLatest, finalize, map, merge, take } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, combineLatest, finalize, map, merge, take } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { Category } from './input-feedback-category/input-feedback-category.component';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
+import { ServiceDictionary } from '@core/models/service-api';
 
 type FeedbackFormType = FormGroup<
   {
@@ -41,7 +42,7 @@ export class FeedbackFormService {
     FeedbackFormChildComponent.CONTACT,
   ];
 
-  public serviceDictionary$ = this.serviceApi.getServices();
+  public serviceDictionary$: Observable<ServiceDictionary> = this.serviceApi.getServices();
 
   public feedbackForm: FeedbackFormType = new FormGroup({
     message: new FormGroup({
@@ -66,14 +67,14 @@ export class FeedbackFormService {
   });
 
   public amountOfSteps = this.STEPS.length;
-  private _currentStepSubject$: Subject<FeedbackFormChildComponent> = new ReplaySubject<FeedbackFormChildComponent>(1);
+  private _currentStepSubject$ = new ReplaySubject<FeedbackFormChildComponent>(1);
   public currentStep$ = this._currentStepSubject$.asObservable();
-  public currentChildComponent$: Observable<FeedbackFormChildComponent> = this.currentStep$.pipe(map((i) => this.STEPS[i]));
+  public currentChildComponent$ = this.currentStep$.pipe(map((i) => this.STEPS[i]));
 
-  private _categorySubject$: Subject<Category[]> = new ReplaySubject<Category[]>(1);
+  private _categorySubject$ = new ReplaySubject<Category[]>(1);
   public categories$ = this._categorySubject$.asObservable();
 
-  private _parentCategorySubject$: Subject<string | null> = new ReplaySubject<string | null>(1);
+  private _parentCategorySubject$ = new ReplaySubject<string | null>(1);
   public parentCategory$ = this._parentCategorySubject$.asObservable();
 
   private _isNextInProgressSubject$ = new BehaviorSubject<boolean>(false);
@@ -137,25 +138,7 @@ export class FeedbackFormService {
       const nextStep = currentStep + 1;
 
       if (nextStep === this.amountOfSteps) {
-        const { serviceCode, description, message, contact, location } = this.feedbackForm.value;
-
-        this._isNextInProgressSubject$.next(true);
-
-        this.serviceApi
-          .postService({
-            serviceCode,
-            description,
-            files: message?.files,
-            location,
-            email: contact?.email,
-            firstName: contact?.firstName,
-            lastName: contact?.lastName,
-            phone: contact?.phone,
-          })
-          .pipe(finalize(() => this._isNextInProgressSubject$.next(false)))
-          .subscribe((email: string | undefined) => {
-            this.router.navigateByUrl(email ? `feedback/confirmed?email=${email}` : 'feedback/confirmed');
-          });
+        this.postServiceRequest();
       } else {
         this._currentStepSubject$.next(nextStep);
       }
@@ -211,5 +194,27 @@ export class FeedbackFormService {
     }
 
     return index + this.CATEGORY_START_INDEX;
+  }
+
+  private postServiceRequest(): void {
+    const { serviceCode, description, message, location, contact } = this.feedbackForm.controls;
+
+    this._isNextInProgressSubject$.next(true);
+
+    this.serviceApi
+      .postServiceRequest({
+        serviceCode: serviceCode.value,
+        description: description.value,
+        files: message.controls.files.value,
+        location: location.value,
+        email: contact.controls.email.value,
+        firstName: contact.controls.firstName.value,
+        lastName: contact.controls.lastName.value,
+        phone: contact.controls.phone.value,
+      })
+      .pipe(finalize(() => this._isNextInProgressSubject$.next(false)))
+      .subscribe((email?: string) => {
+        this.router.navigateByUrl(email ? `feedback/confirmed?email=${email}` : 'feedback/confirmed');
+      });
   }
 }

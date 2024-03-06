@@ -24,7 +24,7 @@ describe('FeedbackFormComponent', () => {
       .replaceModule(RouterModule, RouterTestingModule)
       .mock(ServiceApi, {
         getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
-        postService: jest.fn().mockReturnValue(of(email)),
+        postServiceRequest: jest.fn().mockReturnValue(of(email)),
       })
       .dontMock(FeedbackFormService);
   });
@@ -71,7 +71,7 @@ describe('FeedbackFormComponent', () => {
 
     find(nextButtonSelector).triggerEventHandler('click', {});
 
-    expect(inject(ServiceApi).postService).toHaveBeenCalledWith({
+    expect(inject(ServiceApi).postServiceRequest).toHaveBeenCalledWith({
       description,
       serviceCode,
       files,

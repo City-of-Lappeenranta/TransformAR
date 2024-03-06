@@ -2,21 +2,9 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LatLong } from '@core/models/location';
-import { Service, ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
+import { PostServiceRequestProperties, Service, ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
 import { environment } from '@environments/environment';
 import { Observable, map, of, timeout } from 'rxjs';
-
-export interface PostServiceProperties {
-  serviceCode: string | null | undefined;
-  description: string | null | undefined;
-  files: File[] | null | undefined;
-  location: LatLong | null | undefined;
-  email: string | null | undefined;
-  firstName: string | null | undefined;
-  lastName: string | null | undefined;
-  phone: string | null | undefined;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +22,7 @@ export class ServiceApi {
       .pipe(map(this.mapServiceListApiResponseToServiceDictionary));
   }
 
-  public postService({
+  public postServiceRequest({
     serviceCode,
     description,
     files,
@@ -43,11 +31,11 @@ export class ServiceApi {
     firstName,
     lastName,
     phone,
-  }: PostServiceProperties): Observable<string | undefined> {
+  }: PostServiceRequestProperties): Observable<string | undefined> {
     const formData = new FormData();
 
     if (!serviceCode || !description) {
-      throw new Error('service_code and description are missing');
+      throw new Error('service_code or description are missing');
     }
 
     formData.append('service_code', serviceCode);

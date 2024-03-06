@@ -42,7 +42,7 @@
     <p-button
       *ngIf="(currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY"
       class="next-button"
-      [label]="(currentChildComponent$ | async) === FEEDBACK_FORM_COMPONENT.CONTACT ? 'Send feedback' : 'Next'"
+      [label]="nextButtonLabel"
       [disabled]="!(isNextEnabled$ | async)"
       [loading]="(isNextInProgress$ | async) ?? false"
       (click)="onClickNext()"
