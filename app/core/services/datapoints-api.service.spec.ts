@@ -1,11 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ServiceDictionary } from '@core/models/service-api';
+import { DataPointQuality, DataPointType } from '@core/models/data-point';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { DataPointsApi, OpenWeatherDataResponse } from './datapoints-api.service';
-import { DataPointType } from '@core/models/data-point';
 
 describe('DataPointsApi', () => {
   let shallow: Shallow<DataPointsApi>;
@@ -64,6 +63,7 @@ const MOCK_GET_WEATHER_DATA_RESPONSE: OpenWeatherDataResponse = {
 const WEATHER_DATA_POINTS = [
   {
     type: DataPointType.WEATHER,
+    quality: DataPointQuality.GOOD,
     airMoisture: 70.2,
     airTemperature: 2.8,
     dewPoint: -2.1,

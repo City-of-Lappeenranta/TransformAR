@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DataPointType, WeatherDataPoint } from '@core/models/data-point';
+import { DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import { Observable, map } from 'rxjs';
@@ -26,6 +26,7 @@ export class DataPointsApi {
 
       return {
         type: DataPointType.WEATHER,
+        quality: DataPointQuality.GOOD,
         location,
         airTemperature: ta,
         dewPoint: tdew,
