@@ -20,7 +20,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
   it('should not render any files if the files form value is empty', async () => {
     const { find, fixture } = await shallow.render(
       `
-        <app-feedback-message-and-attachments 
+        <app-feedback-message-and-attachments
           [reasonForm]="reasonForm"
         ></app-feedback-message-and-attachments>
       `,
@@ -37,7 +37,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
 
     const { find, instance, fixture, findComponent } = await shallow.render(
       `
-        <app-feedback-message-and-attachments 
+        <app-feedback-message-and-attachments
           [reasonForm]="reasonForm"
         ></app-feedback-message-and-attachments>
       `,
@@ -58,7 +58,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     expect(findComponent(FeedbackAttachmentFileComponent).name).toBe(fileName);
     expect(instance.reasonForm.value.files?.length).toBeGreaterThan(0);
 
-    findComponent(FeedbackAttachmentFileComponent).onRemove.emit();
+    findComponent(FeedbackAttachmentFileComponent).remove.emit();
 
     fixture.detectChanges();
 

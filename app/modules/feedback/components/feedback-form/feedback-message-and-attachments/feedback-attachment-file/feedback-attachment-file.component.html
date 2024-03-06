@@ -6,6 +6,6 @@
   @if (percentage && percentage < 100) {
     <p-progressBar class="full-width" [style]="{ height: '4px' }" [value]="percentage"></p-progressBar>
   }
-  <app-icon class="close" [icon]="getIcon()" (click)="onRemove.emit()"></app-icon>
+  <app-icon class="close" [icon]="getIcon()" (click)="remove.emit()"></app-icon>
 </div>
 <p-divider></p-divider>

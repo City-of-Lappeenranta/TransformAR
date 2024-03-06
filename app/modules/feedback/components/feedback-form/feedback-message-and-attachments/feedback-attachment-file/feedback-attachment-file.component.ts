@@ -9,7 +9,7 @@ export class FeedbackAttachmentFileComponent {
   @Input({ required: true }) public name!: string;
   @Input({ required: true }) public size!: string;
   @Input() public percentage: number | undefined;
-  @Output() public onRemove = new EventEmitter<void>();
+  @Output() public remove = new EventEmitter<void>();
 
   public getIcon(): string {
     return this.percentage && this.percentage < 100 ? 'close-circle' : 'trash';
