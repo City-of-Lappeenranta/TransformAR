@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
@@ -14,6 +14,7 @@ type FeedbackFormType = FormGroup<
     message: FormGroup<{
       message: FormControl<string | null>;
       publish: FormControl<boolean | null>;
+      files: FormArray<FormControl<File>>;
     }>;
     location: FormControl<LatLong | null>;
     contact: FormGroup<{
@@ -45,6 +46,7 @@ export class FeedbackFormService {
     message: new FormGroup({
       message: new FormControl<string | null>(null, Validators.required),
       publish: new FormControl<boolean | null>(null),
+      files: new FormArray<FormControl<File>>([]),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),
     contact: new FormGroup({

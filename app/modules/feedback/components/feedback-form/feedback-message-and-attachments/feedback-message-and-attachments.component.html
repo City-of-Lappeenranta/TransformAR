@@ -18,20 +18,21 @@
     <div class="attachments flex-column">
       <app-icon class="icon" icon="add-image"></app-icon>
       <p class="description">You can upload one or more images to your feedback. JPG, PNG, maximum size of files is 8MB</p>
-      <p-fileUpload
-        class="button"
-        name="myfile[]"
-        accept="image/*"
-        mode="basic"
-        chooseLabel="Upload or take image"
-        [disabled]="true"
-        [maxFileSize]="10000000"
-      ></p-fileUpload>
+      <p-button class="button" [outlined]="true" label="Upload or take image" (click)="fileInput.click()">
+        <input #fileInput type="file" accept="image/png, image/jpeg" (change)="onFileInput($event)" style="display: none" />
+      </p-button>
     </div>
     <div class="files-container">
-      <h4>1 File</h4>
-      <app-feedback-attachment-file name="Map.pdf" size="15 KB" [percentage]="40"></app-feedback-attachment-file>
-      <app-feedback-attachment-file name="Image.png" size="150 KB" [percentage]="100"></app-feedback-attachment-file>
+      @if (files.length > 0) {
+        <h4>{{ files.length }} File{{ files.length > 1 ? 's' : '' }}</h4>
+      }
+      @for (file of files; track file; let index = $index) {
+        <app-feedback-attachment-file
+          [name]="file.name"
+          [size]="file.size"
+          (remove)="onFileRemove(index)"
+        ></app-feedback-attachment-file>
+      }
     </div>
   </section>
 </article>

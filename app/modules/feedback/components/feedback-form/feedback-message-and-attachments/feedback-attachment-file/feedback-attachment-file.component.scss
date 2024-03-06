@@ -5,8 +5,8 @@
     gap: 32px;
 
     .file-details {
+      min-width: 0;
       gap: 16px;
-      padding-right: 28px;
 
       h5,
       p {
@@ -20,6 +20,8 @@
 
       h5 {
         color: #121212;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       p {
