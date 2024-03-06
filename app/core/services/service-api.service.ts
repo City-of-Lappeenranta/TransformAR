@@ -27,7 +27,7 @@ export class ServiceApi {
 
     response.forEach(({ service_code, service_name, description, group }) => {
       const service: Service = {
-        id: service_code,
+        code: service_code,
         name: service_name,
       };
 

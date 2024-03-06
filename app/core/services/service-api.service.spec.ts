@@ -67,12 +67,12 @@ const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
 const SERVICE_DICTIONARY: ServiceDictionary = {
   streets: {
     lamps: [
-      { id: '1', name: 'missing lamp' },
-      { id: '2', name: 'broken lamp' },
+      { code: '1', name: 'missing lamp' },
+      { code: '2', name: 'broken lamp' },
     ],
   },
   parcs: {
-    trees: [{ id: '3', name: 'dead tree' }],
-    benches: [{ id: '4', name: 'broken bench' }],
+    trees: [{ code: '3', name: 'dead tree' }],
+    benches: [{ code: '4', name: 'broken bench' }],
   },
 };
