@@ -8,18 +8,85 @@ import { FeedbackFormComponent } from './feedback-form.component';
 import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
+import { Router, RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FeedbackFormService } from './feedback-form.service';
+import { FormControl } from '@angular/forms';
+import { LatLong } from '@core/models/location';
 
 describe('FeedbackFormComponent', () => {
+  const email = 'john.doe@verhaert.digital';
+
   let shallow: Shallow<FeedbackFormComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackFormComponent, FeedbackModule).mock(ServiceApi, {
-      getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
+    shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
+      .replaceModule(RouterModule, RouterTestingModule)
+      .mock(ServiceApi, {
+        getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
+        postService: jest.fn().mockReturnValue(of(email)),
+      })
+      .dontMock(FeedbackFormService);
+  });
+
+  it('should submit the post request', async () => {
+    const nextButtonSelector = 'p-button.next-button';
+
+    const description = 'streets';
+    const group = 'lamps';
+    const serviceCode = '1';
+    const message = 'message';
+    const files = [new File([''], 'fileName', { type: 'image/jpeg' })];
+    const location = [0, 0] as LatLong;
+    const firstName = 'John';
+    const lastName = 'Doe';
+    const phone = '+32412345678';
+
+    const { find, fixture, inject, findComponent, instance } = await shallow
+      .mock(Router, {
+        navigateByUrl: jest.fn(),
+      })
+      .render(`<app-feedback-form></app-feedback-form>`);
+
+    instance.feedbackForm.controls.description.setValue(description);
+    instance.feedbackForm.controls.group.setValue(group);
+    instance.feedbackForm.controls.serviceCode.setValue(serviceCode);
+
+    fixture.detectChanges();
+    instance.feedbackForm.controls.message.controls.message.setValue(message);
+    files.forEach((file) =>
+      instance.feedbackForm.controls.message.controls.files.push(new FormControl<File>(file, { nonNullable: true })),
+    );
+    find(nextButtonSelector).triggerEventHandler('click', {});
+
+    fixture.detectChanges();
+    instance.feedbackForm.controls.location.setValue(location);
+    find(nextButtonSelector).triggerEventHandler('click', {});
+
+    fixture.detectChanges();
+    instance.feedbackForm.controls.contact.controls.email.setValue(email);
+    instance.feedbackForm.controls.contact.controls.firstName.setValue(firstName);
+    instance.feedbackForm.controls.contact.controls.lastName.setValue(lastName);
+    instance.feedbackForm.controls.contact.controls.phone.setValue(phone);
+
+    find(nextButtonSelector).triggerEventHandler('click', {});
+
+    expect(inject(ServiceApi).postService).toHaveBeenCalledWith({
+      description,
+      serviceCode,
+      files,
+      location,
+      email,
+      firstName,
+      lastName,
+      phone,
     });
+    expect(inject(Router).navigateByUrl).toHaveBeenCalledWith(`feedback/confirmed?email=${email}`);
   });
 
   it('feedback form flow', async () => {
     const backButtonSelector = 'p-button[label="Back"]';
+    const nextButtonSelector = 'p-button.next-button';
 
     const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
 
@@ -48,11 +115,11 @@ describe('FeedbackFormComponent', () => {
 
     expect(findComponent(FeedbackMessageAndAttachmentComponent)).toHaveFound(1);
     instance.feedbackForm.controls.message.controls.message.setValue('message');
-    find('p-button.next-button').triggerEventHandler('click', {});
+    find(nextButtonSelector).triggerEventHandler('click', {});
     fixture.detectChanges();
 
     expect(findComponent(FeedbackLocationComponent)).toHaveFound(1);
-    find('p-button.next-button').triggerEventHandler('click', {});
+    find(nextButtonSelector).triggerEventHandler('click', {});
     fixture.detectChanges();
 
     expect(findComponent(FeedbackContactComponent)).toHaveFound(1);

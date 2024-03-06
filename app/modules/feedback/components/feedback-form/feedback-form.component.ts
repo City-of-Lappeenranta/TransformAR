@@ -8,6 +8,7 @@ import { Category } from './input-feedback-category/input-feedback-category.comp
   selector: 'app-feedback-form',
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
+  providers: [FeedbackFormService],
 })
 export class FeedbackFormComponent {
   public FEEDBACK_FORM_COMPONENT = FeedbackFormChildComponent;
@@ -21,6 +22,8 @@ export class FeedbackFormComponent {
   public parentCategory$: Observable<string | null> = this.feedbackFormService.parentCategory$;
   public categories$: Observable<Category[]> = this.feedbackFormService.categories$;
   public categorySteps = this.feedbackFormService.categorySteps;
+
+  public isNextInProgress$: Observable<boolean> = this.feedbackFormService.isNextInProgress$;
 
   public constructor(private readonly feedbackFormService: FeedbackFormService) {}
 
