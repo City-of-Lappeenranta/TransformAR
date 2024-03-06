@@ -1,9 +1,11 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as leaflet from 'leaflet';
 import { LatLong } from '@core/models/location';
+import { HttpClient } from '@angular/common/http';
 
 export interface Marker {
   location: LatLong;
+  color?: string;
   // icon, pop up...
 }
 
@@ -19,6 +21,8 @@ export class MapComponent implements OnInit, OnChanges {
   @Input() public markers: Marker[] = [];
 
   public map: leaflet.Map | undefined;
+
+  public constructor(private http: HttpClient) {}
 
   public ngOnInit(): void {
     this.initialiseMap();
@@ -36,19 +40,19 @@ export class MapComponent implements OnInit, OnChanges {
         }
       });
 
-      this.markers.forEach(
-        ({ location }) =>
-          this.map &&
-          leaflet
-            .marker(new leaflet.LatLng(...location), {
-              icon: new leaflet.Icon({
-                iconUrl: '/assets/icons/marker.svg',
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-              }),
-            })
-            .addTo(this.map),
-      );
+      this.http.get('/assets/icons/marker.svg', { responseType: 'text' }).subscribe((svg) => {
+        this.markers.forEach(
+          ({ location, color }) =>
+            this.map &&
+            leaflet
+              .marker(new leaflet.LatLng(...location), {
+                icon: leaflet.divIcon({
+                  html: svg.replace('currentColor', color ?? '#275D38'),
+                }),
+              })
+              .addTo(this.map),
+        );
+      });
     }
   }
 
