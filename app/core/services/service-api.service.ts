@@ -34,8 +34,12 @@ export class ServiceApi {
   }: PostServiceRequestProperties): Observable<string | undefined> {
     const formData = new FormData();
 
-    if (!serviceCode || !description) {
-      throw new Error('service_code or description are missing');
+    if (!serviceCode) {
+      throw new Error('service_code is missing');
+    } else if (!description) {
+      throw new Error('description is missing');
+    } else if (!location) {
+      throw new Error('location is missing');
     }
 
     formData.append('service_code', serviceCode);
@@ -43,10 +47,8 @@ export class ServiceApi {
 
     files?.forEach((file) => formData.append('media[]', file));
 
-    if (location) {
-      formData.append('lat', location[0].toString());
-      formData.append('lon', location[1].toString());
-    }
+    formData.append('lat', location[0].toString());
+    formData.append('lon', location[1].toString());
 
     if (email) {
       formData.append('email', email);
