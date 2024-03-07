@@ -8,6 +8,7 @@ import { FeedbackFormComponent } from './feedback-form.component';
 import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
+import { SharedModule } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FeedbackFormService } from './feedback-form.service';
@@ -21,6 +22,7 @@ describe('FeedbackFormComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
+      .provideMock(SharedModule)
       .replaceModule(RouterModule, RouterTestingModule)
       .mock(ServiceApi, {
         getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
@@ -42,7 +44,7 @@ describe('FeedbackFormComponent', () => {
     const lastName = 'Doe';
     const phone = '+32412345678';
 
-    const { find, fixture, inject, findComponent, instance } = await shallow
+    const { find, fixture, inject, instance } = await shallow
       .mock(Router, {
         navigateByUrl: jest.fn(),
       })

@@ -3,6 +3,7 @@ import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments.component';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feedback-attachment-file.component';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackMessageAndAttachmentComponent', () => {
   let shallow: Shallow<FeedbackMessageAndAttachmentComponent>;
@@ -14,7 +15,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
   });
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule);
+    shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule).provideMock(SharedModule);
   });
 
   it('should not render any files if the files form value is empty', async () => {

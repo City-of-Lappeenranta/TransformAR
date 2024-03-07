@@ -1,12 +1,13 @@
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../../feedback.module';
 import { FeedbackAttachmentFileComponent } from './feedback-attachment-file.component';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackAttachmentFileComponent', () => {
   let shallow: Shallow<FeedbackAttachmentFileComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackAttachmentFileComponent, FeedbackModule);
+    shallow = new Shallow(FeedbackAttachmentFileComponent, FeedbackModule).provideMock(SharedModule);
   });
 
   it('should render the title and description', async () => {
