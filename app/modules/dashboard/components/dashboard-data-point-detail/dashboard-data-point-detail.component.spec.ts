@@ -1,4 +1,4 @@
-import { DataPoint, DataPointType, WeatherDataPoint } from '@core/models/data-point';
+import { DataPoint, DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
@@ -20,6 +20,7 @@ describe('DashboardDataPointDetailComponent', () => {
       const dataPoint: DataPoint = {
         type: DataPointType.WEATHER,
         location: [123, 456],
+        quality: DataPointQuality.GOOD,
       } as DataPoint;
 
       const { inject, fixture, find } = await shallow.render(
@@ -39,6 +40,7 @@ describe('DashboardDataPointDetailComponent', () => {
         const dataPoint: WeatherDataPoint = {
           location: [123, 456],
           type: DataPointType.WEATHER,
+          quality: DataPointQuality.GOOD,
           airTemperature: 0,
           airMoisture: 0,
           dewPoint: 0,
