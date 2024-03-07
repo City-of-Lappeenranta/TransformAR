@@ -8,6 +8,7 @@ import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { RadarService } from '@core/services/radar.service';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
@@ -17,7 +18,8 @@ describe('FeedbackLocationComponent', () => {
       .mock(LocationService, {
         userLocation$: of({ loading: false, available: true, location: [52, 52] as LatLong }),
       })
-      .mock(NavigationHeaderService, { setSkip: jest.fn() });
+      .mock(NavigationHeaderService, { setSkip: jest.fn() })
+      .provideMock(SharedModule);
   });
 
   describe('mapCenter$', () => {
