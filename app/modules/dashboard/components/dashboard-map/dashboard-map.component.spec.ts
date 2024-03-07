@@ -6,14 +6,17 @@ import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality, DataPointType, Weathe
 import { of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
+import { SharedModule } from 'primeng/api';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(DashboardMapComponent, DashboardModule).mock(DataPointsApi, {
-      getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
-    });
+    shallow = new Shallow(DashboardMapComponent, DashboardModule)
+      .mock(DataPointsApi, {
+        getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
+      })
+      .provideMock(SharedModule);
   });
 
   describe('markers', () => {

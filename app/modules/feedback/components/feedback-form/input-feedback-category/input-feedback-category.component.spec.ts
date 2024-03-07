@@ -2,12 +2,13 @@ import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { InputFeedbackCategoryComponent } from './input-feedback-category.component';
 import { NgControl } from '@angular/forms';
+import { SharedModule } from 'primeng/api';
 
 describe('InputFeedbackCategoryComponent', () => {
   let shallow: Shallow<InputFeedbackCategoryComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(InputFeedbackCategoryComponent, FeedbackModule).provide([NgControl]);
+    shallow = new Shallow(InputFeedbackCategoryComponent, FeedbackModule).provide([NgControl]).provideMock(SharedModule);
   });
 
   it('should initialize categoriesToShow', async () => {
@@ -18,7 +19,7 @@ describe('InputFeedbackCategoryComponent', () => {
 
     const { instance } = await shallow.render(
       `
-        <app-input-feedback-category 
+        <app-input-feedback-category
           [categories]="categories"
         ></app-input-feedback-category>
       `,
@@ -36,7 +37,7 @@ describe('InputFeedbackCategoryComponent', () => {
 
     const { find, instance } = await shallow.render(
       `
-        <app-input-feedback-category 
+        <app-input-feedback-category
           [categories]="categories"
         ></app-input-feedback-category>
       `,

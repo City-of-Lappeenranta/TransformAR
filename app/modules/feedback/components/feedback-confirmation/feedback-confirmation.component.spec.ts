@@ -2,14 +2,17 @@ import { Shallow } from 'shallow-render';
 import { FeedbackConfirmationComponent } from './feedback-confirmation.component';
 import { FeedbackModule } from '../../feedback.module';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackConfirmationComponent', () => {
   let shallow: Shallow<FeedbackConfirmationComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackConfirmationComponent, FeedbackModule).mock(ActivatedRoute, {
-      snapshot: { queryParamMap: convertToParamMap({}) },
-    });
+    shallow = new Shallow(FeedbackConfirmationComponent, FeedbackModule)
+      .mock(ActivatedRoute, {
+        snapshot: { queryParamMap: convertToParamMap({}) },
+      })
+      .provideMock(SharedModule);
   });
 
   describe('query parameters', () => {
