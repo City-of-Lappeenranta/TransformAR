@@ -3,12 +3,13 @@ import { AppComponent } from './app.component';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NavigationHeaderComponent } from '@shared/components/navigation/navigation-header/navigation-header.component';
+import { SharedModule } from 'primeng/api';
 
 describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent);
+    shallow = new Shallow(AppComponent).provideMock(SharedModule);
   });
 
   it('should render', async () => {
