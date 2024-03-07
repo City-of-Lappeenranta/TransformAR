@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
-import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest, finalize, map, merge, take } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { Category } from './input-feedback-category/input-feedback-category.component';
@@ -91,12 +90,10 @@ export class FeedbackFormService {
 
   public constructor(
     private readonly serviceApi: ServiceApi,
-    private readonly navigationHeaderService: NavigationHeaderService,
     private readonly router: Router,
   ) {
     this.setCategoriesByFormValues();
     this.handleFeedbackFormValueChanges();
-    this.handleStepChange();
 
     this._currentStepSubject$.next(0);
   }
@@ -109,7 +106,7 @@ export class FeedbackFormService {
     }
 
     if (component === FeedbackFormChildComponent.LOCATION) {
-      return true;
+      return this.feedbackForm.controls.location.valid;
     }
 
     if (component === FeedbackFormChildComponent.CONTACT) {
@@ -121,7 +118,7 @@ export class FeedbackFormService {
 
   public back(): void {
     this.currentStep$.pipe(take(1)).subscribe((currentStep) => {
-      const newIndex = (currentStep -= 1);
+      const newIndex = currentStep - 1;
 
       environment.feedbackCategorySteps.forEach((step) => {
         if (newIndex === this.getIndexForCategoryStep(step)) {
@@ -146,21 +143,12 @@ export class FeedbackFormService {
   }
 
   private handleFeedbackFormValueChanges(): void {
-    merge(
-      ...environment.feedbackCategorySteps.map((step) => this.feedbackForm.controls[step].valueChanges),
-      this.navigationHeaderService.onSkip$,
-    )
+    merge(...environment.feedbackCategorySteps.map((step) => this.feedbackForm.controls[step].valueChanges))
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
         this.setCategoriesByFormValues();
         this.next();
       });
-  }
-
-  private handleStepChange(): void {
-    this.currentChildComponent$.pipe(takeUntilDestroyed()).subscribe((currentChildComponent) => {
-      this.navigationHeaderService.setSkip(currentChildComponent === FeedbackFormChildComponent.LOCATION);
-    });
   }
 
   private setCategoriesByFormValues(): void {
