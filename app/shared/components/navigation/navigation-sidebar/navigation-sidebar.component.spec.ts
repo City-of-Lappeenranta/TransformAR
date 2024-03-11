@@ -1,12 +1,13 @@
 import { Shallow } from 'shallow-render';
 import { NavigationSidebarComponent } from './navigation-sidebar.component';
 import { NavigationModule } from '../navigation.module';
+import { SharedModule } from 'primeng/api';
 
 describe('NavigationSidebarComponent', () => {
   let shallow: Shallow<NavigationSidebarComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(NavigationSidebarComponent, NavigationModule);
+    shallow = new Shallow(NavigationSidebarComponent, NavigationModule).provideMock(SharedModule);
   });
 
   it('should not render the navigation sidebar when the sidebar is closed', async () => {

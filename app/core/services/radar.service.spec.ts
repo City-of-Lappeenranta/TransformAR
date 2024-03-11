@@ -36,7 +36,7 @@ describe('RadarService', () => {
     it('should return the address label', async () => {
       const { instance } = shallow.mock(HttpClient, { get: () => of(MOCK_SEARCH_RESPONSE) }).createService();
 
-      expect(await instance.reverseGeocodeLocationToAddressLabel([61.060861, 28.181929])).toEqual('Taipalsaarentie');
+      expect(await instance.reverseGeocode([61.060861, 28.181929])).toEqual('Taipalsaarentie');
     });
   });
 });

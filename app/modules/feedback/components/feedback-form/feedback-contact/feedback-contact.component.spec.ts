@@ -2,13 +2,14 @@ import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackContactComponent } from './feedback-contact.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackContactComponent', () => {
   let shallow: Shallow<FeedbackContactComponent>;
   let contactForm: FormGroup;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackContactComponent, FeedbackModule);
+    shallow = new Shallow(FeedbackContactComponent, FeedbackModule).provideMock(SharedModule);
 
     contactForm = new FormGroup({
       email: new FormControl<string | null>(null, Validators.email),

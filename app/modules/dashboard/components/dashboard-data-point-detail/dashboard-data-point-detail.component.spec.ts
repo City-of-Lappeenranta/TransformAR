@@ -1,8 +1,9 @@
-import { DataPoint, DataPointType, WeatherDataPoint } from '@core/models/data-point';
+import { DataPoint, DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from './dashboard-data-point-detail.component';
+import { SharedModule } from 'primeng/api';
 
 jest.useFakeTimers();
 
@@ -10,9 +11,11 @@ describe('DashboardDataPointDetailComponent', () => {
   let shallow: Shallow<DashboardDataPointDetailComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(DashboardDataPointDetailComponent, DashboardModule).mock(RadarService, {
-      reverseGeocodeLocationToAddressLabel: jest.fn().mockReturnValue('Lappeenranta'),
-    });
+    shallow = new Shallow(DashboardDataPointDetailComponent, DashboardModule)
+      .mock(RadarService, {
+        reverseGeocode: jest.fn().mockReturnValue('Lappeenranta'),
+      })
+      .provideMock(SharedModule);
   });
 
   describe('data point input', () => {
@@ -20,6 +23,7 @@ describe('DashboardDataPointDetailComponent', () => {
       const dataPoint: DataPoint = {
         type: DataPointType.WEATHER,
         location: [123, 456],
+        quality: DataPointQuality.GOOD,
       } as DataPoint;
 
       const { inject, fixture, find } = await shallow.render(
@@ -30,7 +34,7 @@ describe('DashboardDataPointDetailComponent', () => {
 
       fixture.detectChanges();
 
-      expect(radarService.reverseGeocodeLocationToAddressLabel).toHaveBeenCalledWith([123, 456]);
+      expect(radarService.reverseGeocode).toHaveBeenCalledWith([123, 456]);
       expect(find('h1').nativeElement.innerHTML).toBe('Lappeenranta');
     });
 
@@ -39,6 +43,7 @@ describe('DashboardDataPointDetailComponent', () => {
         const dataPoint: WeatherDataPoint = {
           location: [123, 456],
           type: DataPointType.WEATHER,
+          quality: DataPointQuality.GOOD,
           airTemperature: 0,
           airMoisture: 0,
           dewPoint: 0,

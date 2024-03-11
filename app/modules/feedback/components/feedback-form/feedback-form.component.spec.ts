@@ -8,14 +8,17 @@ import { FeedbackFormComponent } from './feedback-form.component';
 import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackFormComponent', () => {
   let shallow: Shallow<FeedbackFormComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackFormComponent, FeedbackModule).mock(ServiceApi, {
-      getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
-    });
+    shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
+      .mock(ServiceApi, {
+        getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
+      })
+      .provideMock(SharedModule);
   });
 
   it('feedback form flow', async () => {

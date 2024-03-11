@@ -2,14 +2,14 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardMapComponent } from './dashboard-map.component';
-import { DataPointType, WeatherDataPoint } from '@core/models/data-point';
+import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
+import { SharedModule } from 'primeng/api';
 import { LocationService } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
 import { MapService } from '@shared/components/map/map.service';
-import { SharedModule } from 'primeng/api';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -30,10 +30,12 @@ describe('DashboardMapComponent', () => {
       findComponent(MapComponent).markerClick.emit([1, 1]);
       fixture.detectChanges();
 
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([true, false]);
       expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_DATA_POINTS[0]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
       fixture.detectChanges();
 
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
   });
@@ -41,7 +43,10 @@ describe('DashboardMapComponent', () => {
   describe('weather data points', () => {
     it('should create markers for every point', async () => {
       const { findComponent } = await shallow.render();
-      expect(findComponent(MapComponent).markers).toEqual([{ location: [1, 1] }, { location: [2, 2] }]);
+      expect(findComponent(MapComponent).markers).toEqual([
+        { location: [1, 1], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
+        { location: [2, 2], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR] },
+      ]);
     });
   });
 
@@ -98,6 +103,7 @@ const WEATHER_DATA_POINTS: WeatherDataPoint[] = [
   {
     location: [1, 1],
     type: DataPointType.WEATHER,
+    quality: DataPointQuality.GOOD,
     airTemperature: 0,
     airMoisture: 0,
     dewPoint: 0,
@@ -108,6 +114,7 @@ const WEATHER_DATA_POINTS: WeatherDataPoint[] = [
   {
     location: [2, 2],
     type: DataPointType.WEATHER,
+    quality: DataPointQuality.FAIR,
     airTemperature: 0,
     airMoisture: 0,
     dewPoint: 0,

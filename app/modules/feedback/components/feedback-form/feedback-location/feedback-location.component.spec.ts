@@ -8,8 +8,8 @@ import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { RadarService } from '@core/services/radar.service';
-import { MapService } from '@shared/components/map/map.service';
 import { SharedModule } from 'primeng/api';
+import { MapService } from '@shared/components/map/map.service';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
