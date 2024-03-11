@@ -4,6 +4,7 @@ import { LatLong } from '@core/models/location';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 
 export interface Marker {
   location: LatLong;
@@ -78,8 +79,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
 
     this.markers.forEach(({ location, color, active }) => {
-      const fillColor = color ?? '#275D38';
-      const strokeColor = active ? '#275D38' : fillColor;
+      const fillColor = color ?? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT];
+      const strokeColor = active ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT] : fillColor;
       const svg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
       const size = (active ? [44, 53] : [33, 40]) as leaflet.PointExpression;
       const anchor = (active ? [22, 53] : [16.5, 40]) as leaflet.PointExpression;
