@@ -1,11 +1,15 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
-import { LatLong } from '@core/models/location';
-import { environment } from '@environments/environment';
-import { Observable, map } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import {
+  DataPointQuality,
+  DataPointType,
+  WeatherDataPoint,
+} from "@core/models/data-point";
+import { LatLong } from "@core/models/location";
+import { environment } from "@environments/environment";
+import { Observable, map } from "rxjs";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DataPointsApi {
   private baseUrl = environment.weatherApiUrl;
 
@@ -17,23 +21,25 @@ export class DataPointsApi {
       .pipe(map(this.mapOpenWeatherDataResponseToWeatherDataPoints));
   }
 
-  private mapOpenWeatherDataResponseToWeatherDataPoints(response: OpenWeatherDataResponse): WeatherDataPoint[] {
-    return response.result.map((data) => {
-      const { coordinates, sensors } = data;
+  private mapOpenWeatherDataResponseToWeatherDataPoints(
+    response: OpenWeatherDataResponse,
+  ): WeatherDataPoint[] {
+    return response.result.map((result) => {
+      const { coordinates, sensors } = result;
       const { latitudeValue, longitudeValue } = coordinates;
-      const { tdew, ta, wspd, water, ice, rh } = sensors[0];
       const location = [latitudeValue, longitudeValue] as LatLong;
+
+      let data: Record<string, string | number> = {};
+      sensors.forEach((sensor) => {
+        const { version, id, timestampUTC, ...rest } = sensor;
+        data = { ...data, ...rest };
+      });
 
       return {
         type: DataPointType.WEATHER,
         quality: DataPointQuality.GOOD,
         location,
-        airTemperature: ta,
-        dewPoint: tdew,
-        wind: wspd,
-        rainFall: water,
-        snowDepth: ice,
-        airMoisture: rh,
+        data,
       };
     });
   }
@@ -54,18 +60,7 @@ export interface OpenWeatherDataResponse {
         version: number;
         id: string;
         timestampUTC: number;
-        friction: number;
-        state: string;
-        ta: number;
-        tsurf: number;
-        tdew: number;
-        rh: number;
-        water: number;
-        tground: number;
-        ice: number;
-        pressure: number;
-        wspd: number;
-      },
+      } & Record<string, string | number>,
     ];
   }[];
   success: boolean;

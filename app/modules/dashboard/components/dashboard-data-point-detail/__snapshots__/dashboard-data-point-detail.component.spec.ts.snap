@@ -34,72 +34,72 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            Air temperature
+            airMoisture
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Wind
+            airTemperature
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Air moisture
+            dewPoint
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Rainfall
+            rainFall
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Dew point
+            snowDepth
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Snow depth
+            wind
           </label>
           <p
             class="body-sm"
           >
-            No data
+            0
           </p>
         </li>
       </ul>
