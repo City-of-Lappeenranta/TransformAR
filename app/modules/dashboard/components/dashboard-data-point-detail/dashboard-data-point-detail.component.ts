@@ -31,7 +31,7 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   }
 
   private async reverseGeocodeDataPointLocation(dataPoint: DataPoint): Promise<void> {
-    const address = await this.radarService.reverseGeocodeLocationToAddressLabel(dataPoint.location);
+    const address = await this.radarService.reverseGeocode(dataPoint.location);
     this._addressSubject$.next(address);
   }
 }
