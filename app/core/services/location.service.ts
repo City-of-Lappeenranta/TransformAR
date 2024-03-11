@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { LatLong, LocationSearchResult } from '@core/models/location';
+import { LatLong } from '@core/models/location';
 import { BehaviorSubject } from 'rxjs';
-import { RadarService } from './radar.service';
 
 export interface UserLocation {
   loading: boolean;
@@ -20,12 +19,8 @@ export class LocationService {
 
   public userLocation$ = this._userLocation$.asObservable();
 
-  public constructor(private readonly radarService: RadarService) {
+  public constructor() {
     this.getCurrentUserLocation();
-  }
-
-  public async searchLocationByQuery(query: string): Promise<LocationSearchResult[]> {
-    return this.radarService.autocomplete(query);
   }
 
   private getCurrentUserLocation(): void {

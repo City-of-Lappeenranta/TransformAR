@@ -2,7 +2,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Service, ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
+import { Service, ServiceDictionary } from '@core/models/service-api';
 import { environment } from '@environments/environment';
 import { Observable, map } from 'rxjs';
 
@@ -45,3 +45,13 @@ export class ServiceApi {
     return serviceDictionary;
   }
 }
+
+export type ServiceListApiResponse = {
+  service_code: string;
+  service_name: string;
+  description: string;
+  metadata: boolean;
+  type: string;
+  keywords: string;
+  group: string;
+}[];

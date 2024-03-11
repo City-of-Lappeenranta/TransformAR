@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
+import { RadarService } from '@core/services/radar.service';
 import { environment } from '@environments/environment';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
@@ -34,12 +35,15 @@ export class FeedbackLocationComponent {
     ),
   );
 
-  public constructor(private readonly locationService: LocationService) {}
+  public constructor(
+    private readonly locationService: LocationService,
+    private readonly radarService: RadarService,
+  ) {}
 
   public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
     const { query } = event;
 
-    const results = await this.locationService.searchLocationByQuery(query);
+    const results = await this.radarService.autocomplete(query);
     this._locationSearchResults$.next(results);
   }
 

@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardDataPointDetailComponent data point input it should show the correct information by type when type is weather data point 1`] = `
+<ng-component>
+  <app-dashboard-data-point-detail>
+    <div
+      class="container flex-column"
+    >
+      <div
+        class="location-information-container shadow-sm flex-row"
+      >
+        <div
+          class="full-width flex-column"
+        >
+          <h1
+            class="display-xs"
+          >
+            Lappeenranta
+          </h1>
+          <p
+            class="body-xs"
+          >
+            123,456
+          </p>
+        </div>
+        <app-icon
+          icon="close"
+        />
+      </div>
+      <ul
+        class="weather-data-container"
+      >
+        <li>
+          <label
+            class="button-sm"
+          >
+            Air temperature
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Wind
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Air moisture
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Rainfall
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Dew point
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Snow depth
+          </label>
+          <p
+            class="body-sm"
+          >
+            No data
+          </p>
+        </li>
+      </ul>
+    </div>
+  </app-dashboard-data-point-detail>
+</ng-component>
+`;

@@ -1,0 +1,51 @@
+<div class="container flex-column">
+  <div class="location-information-container shadow-sm flex-row">
+    <div class="full-width flex-column">
+      <ng-container *ngIf="address$ | async as address; else addressLoader">
+        <h1 class="display-xs">{{ address }}</h1>
+      </ng-container>
+      <ng-template #addressLoader>
+        <p-skeleton class="full-width address-loader"></p-skeleton>
+      </ng-template>
+      <p class="body-xs">{{ dataPoint.location }}</p>
+    </div>
+    <app-icon icon="close" (click)="close.emit()"></app-icon>
+  </div>
+
+  @switch (dataPoint.type) {
+    @case (DATA_POINT_TYPE.WEATHER) {
+      <ul class="weather-data-container">
+        <li>
+          <label class="button-sm">Air temperature</label>
+          <p *ngIf="dataPoint.airTemperature" class="body-sm">{{ dataPoint.airTemperature }} °C</p>
+          <p *ngIf="!dataPoint.airTemperature" class="body-sm">No data</p>
+        </li>
+        <li>
+          <label class="button-sm">Wind</label>
+          <p *ngIf="dataPoint.wind" class="body-sm">{{ dataPoint.wind }}</p>
+          <p *ngIf="!dataPoint.wind" class="body-sm">No data</p>
+        </li>
+        <li>
+          <label class="button-sm">Air moisture</label>
+          <p *ngIf="dataPoint.airMoisture" class="body-sm">{{ dataPoint.airMoisture }}%</p>
+          <p *ngIf="!dataPoint.airMoisture" class="body-sm">No data</p>
+        </li>
+        <li>
+          <label class="button-sm">Rainfall</label>
+          <p *ngIf="dataPoint.rainFall" class="body-sm">{{ dataPoint.rainFall }} mm</p>
+          <p *ngIf="!dataPoint.rainFall" class="body-sm">No data</p>
+        </li>
+        <li>
+          <label class="button-sm">Dew point</label>
+          <p *ngIf="dataPoint.dewPoint" class="body-sm">{{ dataPoint.dewPoint }} °C</p>
+          <p *ngIf="!dataPoint.dewPoint" class="body-sm">No data</p>
+        </li>
+        <li>
+          <label class="button-sm">Snow depth</label>
+          <p *ngIf="dataPoint.snowDepth" class="body-sm">{{ dataPoint.snowDepth }} inch</p>
+          <p *ngIf="!dataPoint.snowDepth" class="body-sm">No data</p>
+        </li>
+      </ul>
+    }
+  }
+</div>
