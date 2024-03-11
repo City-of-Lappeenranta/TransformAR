@@ -40,15 +40,10 @@ export class DashboardMapComponent {
   }
 
   private setActiveMarker(latLong?: LatLong): void {
-    this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => {
-      if (latLong && this.isSameLocation([marker.location, latLong])) {
-        marker.active = true;
-      } else {
-        marker.active = false;
-      }
-
-      return marker;
-    });
+    this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => ({
+      ...marker,
+      active: latLong ? this.isSameLocation([marker.location, latLong]) : false,
+    }));
   }
 
   private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {

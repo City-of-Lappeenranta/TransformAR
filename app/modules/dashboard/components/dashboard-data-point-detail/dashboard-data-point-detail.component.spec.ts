@@ -13,7 +13,7 @@ describe('DashboardDataPointDetailComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(DashboardDataPointDetailComponent, DashboardModule)
       .mock(RadarService, {
-        reverseGeocodeLocationToAddressLabel: jest.fn().mockReturnValue('Lappeenranta'),
+        reverseGeocode: jest.fn().mockReturnValue('Lappeenranta'),
       })
       .provideMock(SharedModule);
   });
@@ -34,7 +34,7 @@ describe('DashboardDataPointDetailComponent', () => {
 
       fixture.detectChanges();
 
-      expect(radarService.reverseGeocodeLocationToAddressLabel).toHaveBeenCalledWith([123, 456]);
+      expect(radarService.reverseGeocode).toHaveBeenCalledWith([123, 456]);
       expect(find('h1').nativeElement.innerHTML).toBe('Lappeenranta');
     });
 

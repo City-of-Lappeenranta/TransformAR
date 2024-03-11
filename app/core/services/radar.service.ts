@@ -10,11 +10,9 @@ import { firstValueFrom, map } from 'rxjs';
 export class RadarService {
   private baseUrl = 'https://api.radar.io/v1';
 
-  public constructor(private readonly httpClient: HttpClient) {
-    setTimeout(() => {});
-  }
+  public constructor(private readonly httpClient: HttpClient) {}
 
-  public async reverseGeocodeLocationToAddressLabel(latLong: LatLong): Promise<string> {
+  public async reverseGeocode(latLong: LatLong): Promise<string> {
     if (!environment.radarApiKey) {
       throw Error('Invalid or missing Radar API key');
     }
