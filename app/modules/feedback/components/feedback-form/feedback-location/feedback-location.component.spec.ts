@@ -8,6 +8,8 @@ import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { RadarService } from '@core/services/radar.service';
+import { MapService } from '@shared/components/map/map.service';
+import { SharedModule } from 'primeng/api';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
@@ -15,44 +17,36 @@ describe('FeedbackLocationComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(FeedbackLocationComponent, FeedbackModule)
       .mock(LocationService, {
-        userLocation$: of({ loading: false, available: true, location: [52, 52] as LatLong }),
+        userLocation$: of({
+          loading: false,
+          available: true,
+          permission: 'granted' as PermissionState,
+          location: [52, 52] as LatLong,
+        }),
       })
+      .provideMock(SharedModule)
       .mock(NavigationHeaderService, { setSkip: jest.fn() });
-  });
-
-  describe('mapCenter$', () => {
-    it('should initiate with the default location from the environment', async () => {
-      environment.defaultLocation = [1, 1];
-
-      const { instance } = await shallow.render(
-        `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
-        {
-          bind: { locationFormControl: new FormControl(null) },
-        },
-      );
-
-      expect(await firstValueFrom(instance.mapCenter$)).toEqual([1, 1]);
-    });
-
-    it('should update when location gets selected', async () => {});
   });
 
   describe('select location', () => {
     it('should update the center of the map and form control value', async () => {
       const locationFormControl = new FormControl();
 
-      const { instance, find, fixture } = await shallow.render(
+      const { instance, find, fixture, inject } = await shallow.render(
         `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
         {
           bind: { locationFormControl },
         },
       );
 
+      const mapService = inject(MapService);
+      jest.spyOn(mapService, 'setCenter');
+
       find('p-autocomplete').componentInstance.onSelect.emit({ value: { latLong: [2, 2] } });
 
       fixture.detectChanges();
 
-      expect(await firstValueFrom(instance.mapCenter$)).toEqual([2, 2]);
+      expect(mapService.setCenter).toHaveBeenCalledWith([2, 2]);
       expect(locationFormControl.value).toEqual([2, 2]);
     });
   });
@@ -89,7 +83,7 @@ describe('FeedbackLocationComponent', () => {
     it('should initially fetch location', async () => {
       const { instance } = await shallow
         .mock(LocationService, {
-          userLocation$: of({ loading: true, available: false }),
+          userLocation$: of({ loading: true, available: false, permission: 'prompt' as PermissionState }),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },
@@ -108,7 +102,12 @@ describe('FeedbackLocationComponent', () => {
     it('should handle user location', async () => {
       const { instance } = await shallow
         .mock(LocationService, {
-          userLocation$: of({ loading: false, available: true, location: [4, 4] as LatLong }),
+          userLocation$: of({
+            loading: false,
+            available: true,
+            permission: 'granted' as PermissionState,
+            location: [4, 4] as LatLong,
+          }),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },
@@ -127,7 +126,7 @@ describe('FeedbackLocationComponent', () => {
     it('should handle unavailable user location', async () => {
       const { instance } = await shallow
         .mock(LocationService, {
-          userLocation$: of({ loading: false, available: false }),
+          userLocation$: of({ loading: false, available: false, permission: 'denied' as PermissionState }),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },

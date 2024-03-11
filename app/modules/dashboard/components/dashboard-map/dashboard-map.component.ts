@@ -3,7 +3,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { LocationService } from '@core/services/location.service';
 import { Marker } from '@shared/components/map/map.component';
+import { MapService } from '@shared/components/map/map.service';
 import { Observable, Subject, take } from 'rxjs';
 
 @Component({
@@ -20,11 +22,22 @@ export class DashboardMapComponent {
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
-  public constructor(private readonly dataPointsApi: DataPointsApi) {
+  public locationLoading = false;
+  public permissionState: PermissionState = 'prompt';
+
+  public constructor(
+    private readonly locationService: LocationService,
+    private readonly dataPointsApi: DataPointsApi,
+    private readonly mapService: MapService,
+  ) {
     this.dataPointsApi
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherDataPoints.bind(this));
+
+    this.locationService.initialLocationPermissionState$.subscribe((permissionState) => {
+      this.permissionState = permissionState;
+    });
   }
 
   public onMarkerClick(latLong: LatLong): void {
@@ -35,6 +48,21 @@ export class DashboardMapComponent {
 
   public onDataPointClose(): void {
     this._selectedDataPointSubject$.next(null);
+  }
+
+  public focusLocation(): void {
+    this.locationService.userLocation$.subscribe((currentUserLocation) => {
+      this.locationLoading = currentUserLocation.loading;
+      this.permissionState = currentUserLocation.permission;
+
+      if (currentUserLocation && currentUserLocation.available && currentUserLocation.location) {
+        this.mapService.setCenter(currentUserLocation.location as LatLong);
+      }
+
+      if (this.permissionState === 'denied') {
+        alert('Allow the app to determine your location. You can do this in your device settings');
+      }
+    });
   }
 
   private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {

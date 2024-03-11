@@ -1,10 +1,9 @@
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
-import { LocationService } from './location.service';
-import { take } from 'rxjs';
-import { RadarService } from './radar.service';
+import { of, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LocationService } from './location.service';
 
 describe('LocationService', () => {
   let shallow: Shallow<LocationService>;
@@ -24,6 +23,9 @@ describe('LocationService', () => {
             }, 500);
           },
         };
+        (navigator as any)['permissions'] = {
+          query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
+        };
 
         const { instance } = shallow.createService();
 
@@ -31,10 +33,12 @@ describe('LocationService', () => {
           {
             available: false,
             loading: true,
+            permission: 'prompt' as PermissionState,
           },
           {
             available: true,
             loading: false,
+            permission: 'granted' as PermissionState,
             location: [10, 10],
           },
         ];
@@ -62,6 +66,9 @@ describe('LocationService', () => {
             }, 500);
           },
         };
+        (navigator as any)['permissions'] = {
+          query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
+        };
 
         const { instance } = shallow.createService();
 
@@ -69,10 +76,12 @@ describe('LocationService', () => {
           {
             available: false,
             loading: true,
+            permission: 'prompt' as PermissionState,
           },
           {
             available: false,
             loading: false,
+            permission: 'denied' as PermissionState,
           },
         ];
 

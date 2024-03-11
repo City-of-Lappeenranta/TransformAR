@@ -5,3 +5,12 @@
   class="data-point-detail"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
+<div class="actions">
+  <app-icon
+    class="focus-location"
+    [class.loading]="locationLoading"
+    [class.has-permission]="permissionState === 'granted'"
+    [icon]="locationLoading ? 'spinner' : 'target'"
+    (click)="focusLocation()"
+  ></app-icon>
+</div>

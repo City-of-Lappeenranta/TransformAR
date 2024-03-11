@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
-import { environment } from '@environments/environment';
+import { MapService } from '@shared/components/map/map.service';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
 
@@ -25,7 +25,6 @@ export class FeedbackLocationComponent {
   private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
   private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
 
-  public mapCenter$: Subject<LatLong> = new BehaviorSubject(environment.defaultLocation as [number, number]);
   public locationSuggestions$: Observable<LocationSuggestion[]> = combineLatest([
     this._currentUserLocation$,
     this._locationSearchResults$,
@@ -38,6 +37,7 @@ export class FeedbackLocationComponent {
   public constructor(
     private readonly locationService: LocationService,
     private readonly radarService: RadarService,
+    private readonly mapService: MapService,
   ) {}
 
   public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
@@ -50,7 +50,7 @@ export class FeedbackLocationComponent {
   public onSelectLocation(event: AutoCompleteSelectEvent): void {
     const latLong = (event.value as LocationSuggestion).latLong;
 
-    this.mapCenter$.next(latLong);
+    this.mapService.setCenter(latLong);
     this.locationFormControl.setValue(latLong);
   }
 

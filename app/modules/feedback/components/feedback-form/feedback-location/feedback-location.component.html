@@ -26,10 +26,7 @@
     </ng-template>
   </p-autoComplete>
 
-  <div *ngIf="this.mapCenter$ | async as center" class="map-container full-width full-height">
-    <app-map
-      [center]="center"
-      [markers]="this.locationFormControl.value ? [{ location: this.locationFormControl.value }] : []"
-    ></app-map>
+  <div class="map-container full-width full-height">
+    <app-map [markers]="this.locationFormControl.value ? [{ location: this.locationFormControl.value }] : []"></app-map>
   </div>
 </article>
