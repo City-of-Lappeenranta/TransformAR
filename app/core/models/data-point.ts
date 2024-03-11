@@ -28,6 +28,7 @@ export type WeatherDataPoint = BaseDataPoint & {
 export type DataPoint = WeatherDataPoint; // | AirQualityDataPoint...
 
 export enum DataPointQuality {
+  DEFAULT,
   GOOD,
   SATISFACTORY,
   FAIR,
@@ -37,6 +38,7 @@ export enum DataPointQuality {
 }
 
 export const DATA_POINT_QUALITY_COLOR_CHART: Record<DataPointQuality, string> = {
+  [DataPointQuality.DEFAULT]: '#275D38',
   [DataPointQuality.GOOD]: '#7AC143',
   [DataPointQuality.SATISFACTORY]: '#A5D580',
   [DataPointQuality.FAIR]: '#FEDF89',
