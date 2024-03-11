@@ -1,10 +1,6 @@
 {
   "root": true,
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:storybook/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:storybook/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": ["./tsconfig.json"]
@@ -123,16 +119,7 @@
       }
     ],
     "no-shadow": "off",
-    "prefer-arrow/prefer-arrow-functions": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "ignorePattern": "_" }]
+    "prefer-arrow/prefer-arrow-functions": "off"
   },
-  "ignorePatterns": [
-    "*.spec.ts",
-    "*.conf.js",
-    "main.ts",
-    "environment.ts",
-    "test.ts",
-    "polyfills.ts",
-    "/dist/*"
-  ]
+  "ignorePatterns": ["*.spec.ts", "*.conf.js", "main.ts", "environment.ts", "test.ts", "polyfills.ts", "/dist/*"]
 }

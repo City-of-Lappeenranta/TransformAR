@@ -1,15 +1,11 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import {
-  DataPointQuality,
-  DataPointType,
-  WeatherDataPoint,
-} from "@core/models/data-point";
-import { LatLong } from "@core/models/location";
-import { environment } from "@environments/environment";
-import { Observable, map } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
+import { LatLong } from '@core/models/location';
+import { environment } from '@environments/environment';
+import { Observable, map } from 'rxjs';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class DataPointsApi {
   private baseUrl = environment.weatherApiUrl;
 
@@ -21,9 +17,7 @@ export class DataPointsApi {
       .pipe(map(this.mapOpenWeatherDataResponseToWeatherDataPoints));
   }
 
-  private mapOpenWeatherDataResponseToWeatherDataPoints(
-    response: OpenWeatherDataResponse,
-  ): WeatherDataPoint[] {
+  private mapOpenWeatherDataResponseToWeatherDataPoints(response: OpenWeatherDataResponse): WeatherDataPoint[] {
     return response.result.map((result) => {
       const { coordinates, sensors } = result;
       const { latitudeValue, longitudeValue } = coordinates;
