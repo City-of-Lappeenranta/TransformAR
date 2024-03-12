@@ -4,6 +4,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
 import * as leaflet from 'leaflet';
+import { SimpleChange } from '@angular/core';
+import { environment } from '@environments/environment';
+import { LatLong } from '@core/models/location';
 
 describe('MapComponent', () => {
   let shallow: Shallow<MapComponent>;
@@ -11,22 +14,73 @@ describe('MapComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(MapComponent)
       .mock(HttpClient, {
-        get: () =>
-          of(
-            '<svg width="100%" height="100%" viewBox="0 0 47 56" fill="none"xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.66663 23.1515C1.66663 11.1017 11.435 1.33334 23.4848 1.33334C35.5347 1.33334 45.303 11.1017 45.303 23.1515C45.303 30.713 41.0754 36.1587 36.7487 40.6653C35.7046 41.7527 34.6279 42.8116 33.5869 43.8354L33.4518 43.9683C32.3594 45.0427 31.3088 46.0789 30.3191 47.1219C28.3296 49.2185 26.7052 51.2224 25.6531 53.3266C25.2425 54.1479 24.403 54.6667 23.4848 54.6667C22.5666 54.6667 21.7271 54.1479 21.3165 53.3266C20.2644 51.2224 18.64 49.2185 16.6505 47.1219C15.6608 46.0789 14.6102 45.0427 13.5178 43.9683L13.3826 43.8353C12.3417 42.8116 11.265 41.7527 10.2209 40.6653C5.89418 36.1587 1.66663 30.713 1.66663 23.1515Z" fill="currentColor" stroke="strokeColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><svg>',
-          ),
+        get: () => of('<svg></svg>'),
       })
       .replaceModule(HttpClientModule, HttpClientTestingModule);
+  });
+
+  describe('center and zoom', () => {
+    it('should set default center and zoom when input is not defined', async () => {
+      const { instance, fixture } = await shallow.render();
+      const defaultLocation = environment.defaultLocation;
+
+      expect(instance.map?.getCenter()).toEqual({ lat: defaultLocation[0], lng: defaultLocation[1] });
+      expect(instance.map?.getZoom()).toEqual(13);
+
+      const newLocation = [1, 2] as LatLong;
+      instance.center = newLocation;
+      instance.ngOnChanges({
+        center: new SimpleChange(environment.defaultLocation, instance.center, false),
+      });
+
+      await fixture.whenStable();
+
+      expect(instance.map?.getCenter()).toEqual({ lat: newLocation[0], lng: newLocation[1] });
+    });
+
+    it('should set center and zoom from input', async () => {
+      const location = [1, 1] as LatLong;
+      const zoom = 2;
+
+      const { instance } = await shallow.render({ bind: { center: location, zoom } });
+
+      expect(instance.map?.getCenter()).toEqual({ lat: location[0], lng: location[1] });
+      expect(instance.map?.getZoom()).toEqual(zoom);
+    });
   });
 
   describe('should render markers', () => {
     it('when marker only has the location property', async () => {
       const markers: Marker[] = [{ location: [0, 0] }, { location: [1, 1] }];
 
-      const { fixture, find } = await shallow.render({ bind: { markers, center: [0, 0] } });
+      const { fixture, instance } = await shallow.render({ bind: { markers, center: [0, 0] } });
       await fixture.whenStable();
 
-      expect(leaflet.marker.length).toEqual(markers.length);
+      expect(instance.markers.length).toEqual(markers.length);
+    });
+
+    it('when the marker input is updated it should shown the correct updated markers', async () => {
+      const markers: Marker[] = [
+        { location: [0, 0], active: false },
+        { location: [1, 1], active: false },
+      ];
+
+      const { fixture, instance } = await shallow.render({ bind: { markers, center: [0, 0] } });
+
+      await fixture.whenStable();
+
+      expect(instance.markers.length).toEqual(markers.length);
+
+      const newMarkers: Marker[] = [{ location: [0, 0], active: true }];
+      instance.markers = newMarkers;
+      instance.ngOnChanges({
+        markers: new SimpleChange(markers, newMarkers, false),
+      });
+
+      await fixture.whenStable();
+
+      expect(instance.markers.length).not.toEqual(markers.length);
+      expect(instance.markers.length).toEqual(newMarkers.length);
     });
   });
 
