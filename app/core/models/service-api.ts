@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { LatLong } from './location';
 
 export interface Service {
   code: string;
@@ -6,3 +7,14 @@ export interface Service {
 }
 
 export type ServiceDictionary = Record<string, Record<string, Service[]>>;
+
+export interface PostServiceRequestProperties {
+  serviceCode: string | null;
+  description: string | null;
+  files: File[];
+  location: LatLong | null;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  phone: string | null;
+}
