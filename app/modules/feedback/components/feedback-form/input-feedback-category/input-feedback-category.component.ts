@@ -11,6 +11,7 @@ import { ControlValueAccessorHelper } from '@shared/abstract-control-value-acces
 
 export interface Category {
   value: string;
+  label?: string;
   icon?: string;
 }
 
@@ -68,9 +69,8 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
       }
 
       return {
-        value,
+        ...category,
         selected: value === this.getFormValue(),
-        icon: category.icon,
       };
     });
   }
