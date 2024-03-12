@@ -73,21 +73,24 @@ export class ServiceApi {
   private mapServiceListApiResponseToServiceDictionary(response: ServiceListApiResponse): ServiceDictionary {
     const serviceDictionary: ServiceDictionary = {};
 
-    response.forEach(({ service_code, service_name, description, group }) => {
+    response.forEach((serviceDTO) => {
+      const { service_code, service_name } = serviceDTO;
+      const keys = environment.feedbackCategorySteps;
+
       const service: Service = {
         code: service_code,
         name: service_name,
       };
 
-      if (!serviceDictionary[description]) {
-        serviceDictionary[description] = {};
+      if (!serviceDictionary[serviceDTO[keys[0]]]) {
+        serviceDictionary[serviceDTO[keys[0]]] = {};
       }
 
-      if (!serviceDictionary[description][group]) {
-        serviceDictionary[description][group] = [];
+      if (!serviceDictionary[serviceDTO[keys[0]]][serviceDTO[keys[1]]]) {
+        serviceDictionary[serviceDTO[keys[0]]][serviceDTO[keys[1]]] = [];
       }
 
-      serviceDictionary[description][group].push(service);
+      serviceDictionary[serviceDTO[keys[0]]][serviceDTO[keys[1]]].push(service);
     });
 
     return serviceDictionary;

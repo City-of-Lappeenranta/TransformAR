@@ -166,7 +166,7 @@ export class FeedbackFormService {
         categories = Object.keys(serviceDictionary[firstLevel]).map((key) => ({ value: key }));
       } else {
         parent = secondLevel;
-        categories = serviceDictionary[firstLevel][secondLevel].map(({ name }) => ({ value: name }));
+        categories = serviceDictionary[firstLevel][secondLevel].map(({ code }) => ({ value: code }));
       }
 
       this._parentCategorySubject$.next(parent);
@@ -185,13 +185,13 @@ export class FeedbackFormService {
   }
 
   private postServiceRequest(): void {
-    const { serviceCode, description, message, location, contact } = this.feedbackForm.controls;
+    const { service_code, description, message, location, contact } = this.feedbackForm.controls;
 
     this._isNextInProgressSubject$.next(true);
 
     this.serviceApi
       .postServiceRequest({
-        serviceCode: serviceCode.value,
+        serviceCode: service_code.value,
         description: description.value,
         files: message.controls.files.value,
         location: location.value,
