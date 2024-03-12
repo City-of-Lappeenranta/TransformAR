@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LatLong } from '@core/models/location';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 
 export interface UserLocation {
   loading: boolean;
-  available: boolean;
   location?: LatLong;
 }
 
@@ -14,35 +14,41 @@ export interface UserLocation {
 export class LocationService {
   private _userLocation$ = new BehaviorSubject<UserLocation>({
     loading: true,
-    available: false,
   });
 
-  public userLocation$ = this._userLocation$.asObservable();
+  private _locationPermissionStateSubject$ = new BehaviorSubject<PermissionState>('prompt');
+  public locationPermissionState$ = this._locationPermissionStateSubject$.asObservable();
 
   public constructor() {
-    this.getCurrentUserLocation();
+    if (navigator.permissions) {
+      from(navigator.permissions.query({ name: 'geolocation' }))
+        .pipe(takeUntilDestroyed())
+        .subscribe((permissionStatus) => this._locationPermissionStateSubject$.next(permissionStatus.state));
+    }
   }
 
-  private getCurrentUserLocation(): void {
+  public get userLocation$(): Observable<UserLocation> {
     navigator.geolocation.getCurrentPosition(
       this.onGetCurrentPositionSuccess.bind(this),
       this.onGetCurrentPositionError.bind(this),
     );
+
+    return this._userLocation$;
   }
 
   private onGetCurrentPositionSuccess(position: GeolocationPosition): void {
+    this._locationPermissionStateSubject$.next('granted');
     const { latitude, longitude } = position.coords;
     this._userLocation$.next({
       loading: false,
-      available: true,
       location: [latitude, longitude],
     });
   }
 
   private onGetCurrentPositionError(): void {
+    this._locationPermissionStateSubject$.next('denied');
     this._userLocation$.next({
       loading: false,
-      available: false,
       location: undefined,
     });
   }

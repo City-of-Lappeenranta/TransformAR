@@ -4,9 +4,10 @@ import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.
 import { DashboardRoutingModule } from './dashboard.routing';
 import { DashboardDataPointDetailComponent } from './components/dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @NgModule({
   declarations: [DashboardMapComponent, DashboardDataPointDetailComponent],
-  imports: [SharedModule, SkeletonModule, DashboardRoutingModule],
+  imports: [SharedModule, SkeletonModule, DashboardRoutingModule, IconComponent],
 })
 export class DashboardModule {}

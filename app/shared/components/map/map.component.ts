@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MapService } from './map.service';
 
 export interface Marker {
   location: LatLong;
@@ -20,7 +22,6 @@ export interface Marker {
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() public center: LatLong = environment.defaultLocation as LatLong;
   @Input() public zoom = 13;
   @Input() public markers: Marker[] = [];
 
@@ -28,7 +29,14 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   public map: leaflet.Map | undefined;
 
-  public constructor(private http: HttpClient) {}
+  public constructor(
+    private readonly http: HttpClient,
+    private readonly mapService: MapService,
+  ) {
+    this.mapService.center$
+      .pipe(takeUntilDestroyed())
+      .subscribe((center: LatLong) => this.map?.setView(new leaflet.LatLng(...center), 15));
+  }
 
   public ngOnInit(): void {
     this.initialiseMap();
@@ -39,10 +47,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['center']) {
-      this.map?.setView(this.center);
-    }
-
     if (changes['markers']) {
       this.renderMarkers();
     }
@@ -54,7 +58,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         zoomControl: false,
         attributionControl: false,
       })
-      .setView(new leaflet.LatLng(...this.center), this.zoom);
+      .setView(new leaflet.LatLng(...(environment.defaultLocation as LatLong)), this.zoom);
 
     leaflet
       .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

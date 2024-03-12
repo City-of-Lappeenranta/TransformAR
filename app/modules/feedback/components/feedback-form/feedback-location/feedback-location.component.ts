@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
-import { environment } from '@environments/environment';
+import { MapService } from '@shared/components/map/map.service';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
 
@@ -22,22 +22,14 @@ interface LocationSuggestion {
 export class FeedbackLocationComponent {
   @Input({ required: true }) public locationFormControl!: FormControl<LatLong | null>;
 
-  private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
   private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
 
-  public mapCenter$: Subject<LatLong> = new BehaviorSubject(environment.defaultLocation as [number, number]);
-  public locationSuggestions$: Observable<LocationSuggestion[]> = combineLatest([
-    this._currentUserLocation$,
-    this._locationSearchResults$,
-  ]).pipe(
-    map(([currentUserLocation, locationSearchResults]) =>
-      this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(currentUserLocation, locationSearchResults),
-    ),
-  );
+  public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
 
   public constructor(
     private readonly locationService: LocationService,
     private readonly radarService: RadarService,
+    private readonly mapService: MapService,
   ) {}
 
   public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
@@ -50,18 +42,35 @@ export class FeedbackLocationComponent {
   public onSelectLocation(event: AutoCompleteSelectEvent): void {
     const latLong = (event.value as LocationSuggestion).latLong;
 
-    this.mapCenter$.next(latLong);
+    this.mapService.setCenter(latLong);
     this.locationFormControl.setValue(latLong);
+  }
+
+  public onAutocompleteFocus(): void {
+    this.locationSuggestions$ = combineLatest([
+      this.locationService.userLocation$,
+      this.locationService.locationPermissionState$,
+      this._locationSearchResults$,
+    ]).pipe(
+      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
+          currentUserLocation,
+          locationPermissionState,
+          locationSearchResults,
+        ),
+      ),
+    );
   }
 
   private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
     currentUserLocation: UserLocation,
+    locationPermissionState: PermissionState,
     results: LocationSearchResult[],
   ): LocationSuggestion[] {
     let currentUserLocationName = 'Fetching your location...';
 
     if (!currentUserLocation.loading) {
-      if (currentUserLocation.available) {
+      if (locationPermissionState === 'granted') {
         currentUserLocationName = 'Your current location';
       } else {
         currentUserLocationName = 'We could not determine your location';
@@ -71,7 +80,6 @@ export class FeedbackLocationComponent {
     const currentUserLocationOption: LocationSuggestion = {
       latLong: currentUserLocation.location ?? [0, 0],
       address: currentUserLocationName,
-      disabled: !currentUserLocation.available,
       isCurrentLocation: true,
     };
 

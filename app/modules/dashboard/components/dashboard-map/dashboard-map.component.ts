@@ -3,8 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DataPoint, WeatherDataPoint, DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { LocationService } from '@core/services/location.service';
 import { Marker } from '@shared/components/map/map.component';
-import { Observable, Subject, take } from 'rxjs';
+import { MapService } from '@shared/components/map/map.service';
+import { Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -20,7 +22,14 @@ export class DashboardMapComponent {
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
-  public constructor(private readonly dataPointsApi: DataPointsApi) {
+  public locationLoading$: Observable<boolean> | undefined;
+  public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
+
+  public constructor(
+    private readonly locationService: LocationService,
+    private readonly dataPointsApi: DataPointsApi,
+    private readonly mapService: MapService,
+  ) {
     this.dataPointsApi
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
@@ -44,6 +53,31 @@ export class DashboardMapComponent {
       ...marker,
       active: latLong ? this.isSameLocation([marker.location, latLong]) : false,
     }));
+  }
+
+  public focusLocation(): void {
+    const userLocation$ = this.locationService.userLocation$;
+    this.locationLoading$ = userLocation$.pipe(map((userLocation) => userLocation.loading));
+
+    combineLatest([userLocation$, this.locationPermissionState$])
+      .pipe(
+        map(([currentUserLocation, permissionState]) => ({ currentUserLocation, permissionState })),
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.currentUserLocation.loading === curr.currentUserLocation.loading &&
+            prev.currentUserLocation.location === curr.currentUserLocation.location
+          );
+        }),
+      )
+      .subscribe(({ currentUserLocation, permissionState }) => {
+        if (currentUserLocation?.location && permissionState === 'granted') {
+          this.mapService.setCenter(currentUserLocation.location as LatLong);
+        }
+
+        if (!currentUserLocation.loading && permissionState === 'denied') {
+          alert('Allow the app to determine your location. You can do this in your device settings');
+        }
+      });
   }
 
   private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {
