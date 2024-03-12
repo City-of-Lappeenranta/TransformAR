@@ -2,12 +2,15 @@
   #autocomplete
   optionLabel="address"
   optionDisabled="disabled"
+  placeholder="Search location"
+  emptyMessage="No results"
+  [showEmptyMessage]="true"
   [style]="{ width: '100%' }"
   [inputStyle]="{ width: '100%' }"
   [suggestions]="(locationSuggestions$ | async) ?? []"
   (completeMethod)="onSearchLocation($event)"
   (onSelect)="onSelectLocation($event)"
-  (onFocus)="onAutocompleteFocus(); autocomplete.show()"
+  (onFocus)="onAutocompleteFocus()"
 >
   <ng-template let-location pTemplate="item">
     <div

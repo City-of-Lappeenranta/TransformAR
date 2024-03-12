@@ -16,6 +16,7 @@ import { SharedModule } from 'primeng/api';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
 import { MapService } from '@shared/components/map/map.service';
+import { SearchLocationInputComponent } from '@shared/components/search-location-input/search-location-input.component';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -66,6 +67,27 @@ describe('DashboardMapComponent', () => {
   });
 
   describe('focus location', () => {
+    it('should set center off map to search bar address', async () => {
+      const location = [4, 4] as LatLong;
+
+      const { instance, inject, findComponent } = await shallow
+        .mock(LocationService, {
+          locationPermissionState$: of('granted' as PermissionState),
+          userLocation$: of({
+            loading: false,
+            location: [0, 0],
+          } as UserLocation),
+        })
+        .render();
+
+      const mapService = inject(MapService);
+      jest.spyOn(mapService, 'setCenter');
+
+      instance.locationFormControl.setValue(location);
+
+      expect(mapService.setCenter).toHaveBeenCalledWith(location);
+    });
+
     it('should set center on map when user location is available', async () => {
       const currentLocation = [4, 4] as LatLong;
 

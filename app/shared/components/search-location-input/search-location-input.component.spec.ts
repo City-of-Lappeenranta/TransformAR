@@ -8,6 +8,7 @@ import { SharedModule } from 'primeng/api';
 import { SearchLocationInputComponent } from './search-location-input.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 describe('SearchLocationInputComponent', () => {
   let shallow: Shallow<SearchLocationInputComponent>;
@@ -22,6 +23,7 @@ describe('SearchLocationInputComponent', () => {
         } as UserLocation),
       })
       .provideMock(SharedModule)
+      .provideMock(AutoCompleteModule)
       .mock(NavigationHeaderService, { setSkip: jest.fn() })
       .mock(RadarService, {
         autocomplete: jest.fn(() =>
@@ -82,6 +84,17 @@ describe('SearchLocationInputComponent', () => {
             isCurrentLocation: true,
           },
         ]);
+      }
+    });
+    it('should initially fetch location without current user location if withCurrentLocation is false', async () => {
+      const { instance } = await shallow.render({
+        bind: { withCurrentLocation: false },
+      });
+
+      instance.autoComplete?.inputEL?.nativeElement?.focus();
+
+      if (instance.locationSuggestions$) {
+        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([]);
       }
     });
 

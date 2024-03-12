@@ -11,6 +11,15 @@
     left: 0;
   }
 
+  .search {
+    z-index: 998;
+    position: absolute;
+    top: calc(35px + 16px);
+    right: 0;
+    left: 0;
+    padding: 0 32px;
+  }
+
   .actions {
     z-index: 998;
     position: absolute;

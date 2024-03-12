@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl } from '@angular/forms';
 import { DataPoint, WeatherDataPoint, DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
@@ -14,8 +15,6 @@ import { Observable, Subject, combineLatest, distinctUntilChanged, map, take } f
   styleUrls: ['./dashboard-map.component.scss'],
 })
 export class DashboardMapComponent {
-  private dataPoints: DataPoint[] = [];
-
   public weatherDataPointMarkers: Marker[] = [];
   public weatherDataPointMarkersLoading: boolean = true;
 
@@ -24,6 +23,10 @@ export class DashboardMapComponent {
 
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
+
+  public locationFormControl = new FormControl<LatLong | null>(null);
+
+  private dataPoints: DataPoint[] = [];
 
   public constructor(
     private readonly locationService: LocationService,
@@ -34,6 +37,12 @@ export class DashboardMapComponent {
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherDataPoints.bind(this));
+
+    this.locationFormControl.valueChanges.pipe(takeUntilDestroyed()).subscribe((latLong) => {
+      if (latLong) {
+        this.mapService.setCenter(latLong);
+      }
+    });
   }
 
   public onMarkerClick(latLong: LatLong): void {
