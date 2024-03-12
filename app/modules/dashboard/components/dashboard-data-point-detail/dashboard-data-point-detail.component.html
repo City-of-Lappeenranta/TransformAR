@@ -15,10 +15,12 @@
   @switch (dataPoint.type) {
     @case (DATA_POINT_TYPE.WEATHER) {
       <ul class="weather-data-container">
-        <li *ngFor="let metric of dataPoint.data | keyvalue">
-          <label class="button-sm">{{ metric.key }}</label>
-          <p class="body-sm">{{ metric.value }}</p>
-        </li>
+        @for (metric of dataPoint.data | keyvalue; track metric.key) {
+          <li>
+            <label class="button-sm">{{ metric.key }}</label>
+            <p class="body-sm">{{ metric.value }}</p>
+          </li>
+        }
       </ul>
     }
   }
