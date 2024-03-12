@@ -85,11 +85,11 @@ export const WEATHER_DATA_POINT_METRIC_UNIT = {
   tsurf: '°C',
   tdew: '°C',
   rh: '%',
-  water: 'mm',
+  water: ' mm',
   tground: '°C',
-  ice: 'mm',
-  pressure: 'hPa',
-  wspd: 'm/s',
+  ice: ' mm',
+  pressure: ' hPa',
+  wspd: ' m/s',
 
   // MarjetaSensor
   temperature0: '°C',
