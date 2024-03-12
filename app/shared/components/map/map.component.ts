@@ -82,12 +82,32 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
     const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
 
-    this.markers.forEach(({ location, color, active }) => {
+    this.markers.forEach(async ({ location, color, active, icon }) => {
       const fillColor = color ?? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT];
       const strokeColor = active ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT] : fillColor;
-      const svg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
+      const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
       const size = (active ? [44, 53] : [33, 40]) as leaflet.PointExpression;
       const anchor = (active ? [22, 53] : [16.5, 40]) as leaflet.PointExpression;
+
+      let iconSvg = '';
+
+      if (icon) {
+        iconSvg = (await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' })))
+          .replaceAll('currentColor', 'white')
+          .replace(
+            '<svg ',
+            `<svg style="position: absolute; top: ${active ? '7' : '8'}px; left: 50%; transform: translateX(-50%); width: 100%;"`,
+          )
+          .replace(/width="(\d+)"/, `width="${active ? '28' : '18'}"`)
+          .replace(/height="(\d+)"/, `height="${active ? '28' : '18'}"`);
+      }
+
+      const svg = `
+        <div style="position: relative;">
+          ${styledMarkerSvg}
+          ${iconSvg}
+        </div>
+      `;
 
       this.map &&
         leaflet
