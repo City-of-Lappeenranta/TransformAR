@@ -1,15 +1,20 @@
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
-import { of, take } from 'rxjs';
+import { take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { LocationService } from './location.service';
+import { LocationService, UserLocation } from './location.service';
 
 describe('LocationService', () => {
   let shallow: Shallow<LocationService>;
 
   beforeEach(() => {
     shallow = new Shallow(LocationService, CoreModule).replaceModule(HttpClient, HttpClientTestingModule);
+
+    // @ts-ignore
+    navigator.permissions = {
+      query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
+    };
   });
 
   describe('userLocation$', () => {
@@ -23,33 +28,37 @@ describe('LocationService', () => {
             }, 500);
           },
         };
-        (navigator as any)['permissions'] = {
-          query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
-        };
-
         const { instance } = shallow.createService();
 
-        const expectation = [
+        const userLocationExpectation: UserLocation[] = [
           {
             available: false,
             loading: true,
-            permission: 'prompt' as PermissionState,
           },
           {
             available: true,
             loading: false,
-            permission: 'granted' as PermissionState,
             location: [10, 10],
           },
         ];
 
-        const result: unknown[] = [];
-
+        let result: unknown[] = [];
         instance.userLocation$.pipe(take(2)).subscribe((emission) => {
           result.push(emission);
 
           if (result.length === 2) {
-            expect(result).toEqual(expectation);
+            expect(result).toEqual(userLocationExpectation);
+            done();
+          }
+        });
+
+        const permissionExpectation: PermissionState[] = ['prompt', 'prompt', 'granted'];
+
+        result = [];
+        instance.locationPermissionState$.pipe(take(3)).subscribe((permission) => {
+          result.push(permission);
+          if (result.length === 3) {
+            expect(result).toEqual(permissionExpectation);
             done();
           }
         });
@@ -66,32 +75,37 @@ describe('LocationService', () => {
             }, 500);
           },
         };
-        (navigator as any)['permissions'] = {
-          query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
-        };
-
         const { instance } = shallow.createService();
 
-        const expectation = [
+        const userLocationExpectation: UserLocation[] = [
           {
             available: false,
             loading: true,
-            permission: 'prompt' as PermissionState,
           },
           {
             available: false,
             loading: false,
-            permission: 'denied' as PermissionState,
           },
         ];
 
-        const result: unknown[] = [];
+        let result: unknown[] = [];
 
         instance.userLocation$.pipe(take(2)).subscribe((emission) => {
           result.push(emission);
 
           if (result.length === 2) {
-            expect(result).toEqual(expectation);
+            expect(result).toEqual(userLocationExpectation);
+            done();
+          }
+        });
+
+        const permissionExpectation: PermissionState[] = ['prompt', 'prompt', 'denied'];
+
+        result = [];
+        instance.locationPermissionState$.pipe(take(3)).subscribe((permission) => {
+          result.push(permission);
+          if (result.length === 3) {
+            expect(result).toEqual(permissionExpectation);
             done();
           }
         });

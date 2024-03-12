@@ -6,7 +6,6 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 export interface UserLocation {
   loading: boolean;
   available: boolean;
-  permission: PermissionState;
   location?: LatLong;
 }
 
@@ -17,17 +16,16 @@ export class LocationService {
   private _userLocation$ = new BehaviorSubject<UserLocation>({
     loading: true,
     available: false,
-    permission: 'prompt',
   });
 
-  private _initialLocationPermissionStateSubject$ = new BehaviorSubject<PermissionState>('prompt');
-  public initialLocationPermissionState$ = this._initialLocationPermissionStateSubject$.asObservable();
+  private _locationPermissionStateSubject$ = new BehaviorSubject<PermissionState>('prompt');
+  public locationPermissionState$ = this._locationPermissionStateSubject$.asObservable();
 
   public constructor() {
     if (navigator.permissions) {
       from(navigator.permissions.query({ name: 'geolocation' }))
         .pipe(takeUntilDestroyed())
-        .subscribe((permissionStatus) => this._initialLocationPermissionStateSubject$.next(permissionStatus.state));
+        .subscribe((permissionStatus) => this._locationPermissionStateSubject$.next(permissionStatus.state));
     }
   }
 
@@ -41,20 +39,20 @@ export class LocationService {
   }
 
   private onGetCurrentPositionSuccess(position: GeolocationPosition): void {
+    this._locationPermissionStateSubject$.next('granted');
     const { latitude, longitude } = position.coords;
     this._userLocation$.next({
       loading: false,
       available: true,
-      permission: 'granted',
       location: [latitude, longitude],
     });
   }
 
   private onGetCurrentPositionError(): void {
+    this._locationPermissionStateSubject$.next('denied');
     this._userLocation$.next({
       loading: false,
       available: false,
-      permission: 'denied',
       location: undefined,
     });
   }

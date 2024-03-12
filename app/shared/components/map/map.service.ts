@@ -6,10 +6,10 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class MapService {
-  private centerSubject = new Subject<LatLong>();
-  public center$ = this.centerSubject.asObservable();
+  private _centerSubject$ = new Subject<LatLong>();
+  public center$ = this._centerSubject$.asObservable();
 
   public setCenter(center: LatLong): void {
-    this.centerSubject.next(center);
+    this._centerSubject$.next(center);
   }
 }

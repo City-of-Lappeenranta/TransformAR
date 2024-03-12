@@ -6,7 +6,7 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { Marker } from '@shared/components/map/map.component';
 import { MapService } from '@shared/components/map/map.service';
-import { Observable, Subject, take } from 'rxjs';
+import { Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -22,8 +22,8 @@ export class DashboardMapComponent {
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
-  public locationLoading = false;
-  public permissionState: PermissionState = 'prompt';
+  public locationLoading$: Observable<boolean> | undefined;
+  public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
 
   public constructor(
     private readonly locationService: LocationService,
@@ -34,10 +34,6 @@ export class DashboardMapComponent {
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherDataPoints.bind(this));
-
-    this.locationService.initialLocationPermissionState$.subscribe((permissionState) => {
-      this.permissionState = permissionState;
-    });
   }
 
   public onMarkerClick(latLong: LatLong): void {
@@ -60,18 +56,29 @@ export class DashboardMapComponent {
   }
 
   public focusLocation(): void {
-    this.locationService.userLocation$.subscribe((currentUserLocation) => {
-      this.locationLoading = currentUserLocation.loading;
-      this.permissionState = currentUserLocation.permission;
+    const userLocation$ = this.locationService.userLocation$;
+    this.locationLoading$ = userLocation$.pipe(map((userLocation) => userLocation.loading));
 
-      if (currentUserLocation && currentUserLocation.available && currentUserLocation.location) {
-        this.mapService.setCenter(currentUserLocation.location as LatLong);
-      }
+    combineLatest([userLocation$, this.locationPermissionState$])
+      .pipe(
+        map(([currentUserLocation, permissionState]) => ({ currentUserLocation, permissionState })),
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.currentUserLocation.available === curr.currentUserLocation.available &&
+            prev.currentUserLocation.loading === curr.currentUserLocation.loading &&
+            prev.currentUserLocation.location === curr.currentUserLocation.location
+          );
+        }),
+      )
+      .subscribe(({ currentUserLocation, permissionState }) => {
+        if (currentUserLocation && currentUserLocation.available && currentUserLocation.location) {
+          this.mapService.setCenter(currentUserLocation.location as LatLong);
+        }
 
-      if (this.permissionState === 'denied') {
-        alert('Allow the app to determine your location. You can do this in your device settings');
-      }
-    });
+        if (!currentUserLocation.loading && permissionState === 'denied') {
+          alert('Allow the app to determine your location. You can do this in your device settings');
+        }
+      });
   }
 
   private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {

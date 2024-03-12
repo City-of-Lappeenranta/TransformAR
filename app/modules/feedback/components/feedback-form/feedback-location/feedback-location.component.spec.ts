@@ -1,7 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { LatLong } from '@core/models/location';
-import { LocationService } from '@core/services/location.service';
-import { environment } from '@environments/environment';
+import { LocationService, UserLocation } from '@core/services/location.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { firstValueFrom, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
@@ -20,9 +19,8 @@ describe('FeedbackLocationComponent', () => {
         userLocation$: of({
           loading: false,
           available: true,
-          permission: 'granted' as PermissionState,
-          location: [52, 52] as LatLong,
-        }),
+          location: [52, 52],
+        } as UserLocation),
       })
       .provideMock(SharedModule)
       .mock(NavigationHeaderService, { setSkip: jest.fn() });
@@ -32,7 +30,7 @@ describe('FeedbackLocationComponent', () => {
     it('should update the center of the map and form control value', async () => {
       const locationFormControl = new FormControl();
 
-      const { instance, find, fixture, inject } = await shallow.render(
+      const { find, fixture, inject } = await shallow.render(
         `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
         {
           bind: { locationFormControl },
@@ -83,7 +81,7 @@ describe('FeedbackLocationComponent', () => {
     it('should initially fetch location', async () => {
       const { instance } = await shallow
         .mock(LocationService, {
-          userLocation$: of({ loading: true, available: false, permission: 'prompt' as PermissionState }),
+          userLocation$: of({ loading: true, available: false }),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },
@@ -105,9 +103,8 @@ describe('FeedbackLocationComponent', () => {
           userLocation$: of({
             loading: false,
             available: true,
-            permission: 'granted' as PermissionState,
-            location: [4, 4] as LatLong,
-          }),
+            location: [4, 4],
+          } as UserLocation),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },
@@ -126,7 +123,7 @@ describe('FeedbackLocationComponent', () => {
     it('should handle unavailable user location', async () => {
       const { instance } = await shallow
         .mock(LocationService, {
-          userLocation$: of({ loading: false, available: false, permission: 'denied' as PermissionState }),
+          userLocation$: of({ loading: false, available: false }),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl: new FormControl(null) },

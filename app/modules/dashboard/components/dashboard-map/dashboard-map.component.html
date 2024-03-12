@@ -1,4 +1,4 @@
-<app-map [markers]="weatherDataPointMarkers" (markerClick)="onMarkerClick($event)"></app-map>
+{{ locationLoading$ | async }}<app-map [markers]="weatherDataPointMarkers" (markerClick)="onMarkerClick($event)"></app-map>
 <app-dashboard-data-point-detail
   *ngIf="selectedDataPoint$ | async as selectedDataPoint"
   [dataPoint]="selectedDataPoint"
@@ -8,9 +8,9 @@
 <div class="actions">
   <app-icon
     class="focus-location"
-    [class.loading]="locationLoading"
-    [class.has-permission]="permissionState === 'granted'"
-    [icon]="locationLoading ? 'spinner' : 'target'"
+    [class.loading]="locationLoading$ | async"
+    [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
+    [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"
     (click)="focusLocation()"
   ></app-icon>
 </div>

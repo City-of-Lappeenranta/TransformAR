@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { SharedModule } from 'primeng/api';
-import { LocationService } from '@core/services/location.service';
+import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
 import { MapService } from '@shared/components/map/map.service';
 
@@ -43,6 +43,7 @@ describe('DashboardMapComponent', () => {
   describe('weather data points', () => {
     it('should create markers for every point', async () => {
       const { findComponent } = await shallow.render();
+
       expect(findComponent(MapComponent).markers).toEqual([
         { location: [1, 1], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
         { location: [2, 2], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR] },
@@ -56,13 +57,12 @@ describe('DashboardMapComponent', () => {
 
       const { find, inject } = await shallow
         .mock(LocationService, {
-          initialLocationPermissionState$: of('prompt' as PermissionState),
+          locationPermissionState$: of('prompt' as PermissionState),
           userLocation$: of({
             loading: false,
             available: true,
-            permission: 'granted' as PermissionState,
             location: currentLocation,
-          }),
+          } as UserLocation),
         })
         .render();
 
@@ -77,11 +77,10 @@ describe('DashboardMapComponent', () => {
     it('should show alert when permission state is "denied"', async () => {
       const { find, fixture } = await shallow
         .mock(LocationService, {
-          initialLocationPermissionState$: of('prompt' as PermissionState),
+          locationPermissionState$: of('denied' as PermissionState),
           userLocation$: of({
             loading: false,
             available: false,
-            permission: 'denied' as PermissionState,
             location: undefined,
           }),
         })

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SVG_ICONS as svgIcons } from './svg-icons.generated';
 
 @Component({
@@ -8,9 +8,10 @@ import { SVG_ICONS as svgIcons } from './svg-icons.generated';
   styleUrls: ['./icon.component.scss'],
 })
 export class IconComponent implements OnChanges {
-  @Input({ required: true }) public icon: string | undefined;
+  @Input({ required: true }) public icon!: string;
 
   public constructor(private readonly elementRef: ElementRef) {}
+
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['icon'] && this.icon) {
       this.setIcon(this.icon);
