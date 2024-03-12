@@ -8,6 +8,7 @@ import { Category } from './input-feedback-category/input-feedback-category.comp
   selector: 'app-feedback-form',
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
+  providers: [FeedbackFormService],
 })
 export class FeedbackFormComponent {
   public FEEDBACK_FORM_COMPONENT = FeedbackFormChildComponent;
@@ -22,7 +23,14 @@ export class FeedbackFormComponent {
   public categories$: Observable<Category[]> = this.feedbackFormService.categories$;
   public categorySteps = this.feedbackFormService.categorySteps;
 
-  public constructor(private readonly feedbackFormService: FeedbackFormService) {}
+  public isNextInProgress$: Observable<boolean> = this.feedbackFormService.isNextInProgress$;
+  public nextButtonLabel = 'Next';
+
+  public constructor(private readonly feedbackFormService: FeedbackFormService) {
+    this.currentStep$.subscribe(
+      (currentStep) => (this.nextButtonLabel = currentStep === this.amountOfSteps - 1 ? 'Send feedback' : 'Next'),
+    );
+  }
 
   public onClickBack(): void {
     this.feedbackFormService.back();

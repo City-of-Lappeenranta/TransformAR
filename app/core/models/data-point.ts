@@ -41,3 +41,12 @@ export const DATA_POINT_QUALITY_COLOR_CHART: Record<DataPointQuality, string> = 
   [DataPointQuality.VERY_POOR]: '#F04438',
   [DataPointQuality.NO_DATA_AVAILABLE]: '#D0D5DD',
 };
+
+export const DATA_POINT_TYPE_ICON: Record<DataPointType, string> = {
+  [DataPointType.WEATHER]: 'weather-icon.svg',
+  [DataPointType.AIR_QUALITY]: 'air-quality-icon.svg',
+  [DataPointType.PARKING]: 'parking-icon.svg',
+  [DataPointType.ROAD_WORKS]: 'road-works-icon.svg',
+  [DataPointType.FLOOD_WATER_LEVEL]: 'flood-water-level-icon.svg',
+  [DataPointType.FLOOD_WATER_QUALITY]: 'flood-water-quality-icon.svg',
+};
