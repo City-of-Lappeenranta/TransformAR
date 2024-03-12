@@ -1,12 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import * as leaflet from 'leaflet';
-import { LatLong } from '@core/models/location';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@environments/environment';
-import { firstValueFrom } from 'rxjs';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MapService } from './map.service';
+import { LatLong } from '@core/models/location';
+import { environment } from '@environments/environment';
+import * as leaflet from 'leaflet';
+import { firstValueFrom } from 'rxjs';
 
 export interface Marker {
   location: LatLong;
@@ -22,6 +20,7 @@ export interface Marker {
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() public center: LatLong = environment.defaultLocation as LatLong;
   @Input() public zoom = 13;
   @Input() public markers: Marker[] = [];
 
@@ -29,27 +28,24 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   public map: leaflet.Map | undefined;
 
-  public constructor(
-    private readonly http: HttpClient,
-    private readonly mapService: MapService,
-  ) {
-    this.mapService.center$
-      .pipe(takeUntilDestroyed())
-      .subscribe((center: LatLong) => this.map?.setView(new leaflet.LatLng(...center), 15));
-  }
+  public constructor(private readonly http: HttpClient) {}
 
   public ngOnInit(): void {
     this.initialiseMap();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroyMap();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['markers']) {
       this.renderMarkers();
     }
+
+    if (changes['center']) {
+      this.map?.setView(new leaflet.LatLng(...(changes['center'].currentValue as LatLong)), 15);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyMap();
   }
 
   private initialiseMap(): void {
