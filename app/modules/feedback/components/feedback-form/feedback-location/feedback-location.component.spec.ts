@@ -7,6 +7,7 @@ import { firstValueFrom, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
+import { RadarService } from '@core/services/radar.service';
 import { SharedModule } from 'primeng/api';
 
 describe('FeedbackLocationComponent', () => {
@@ -63,19 +64,19 @@ describe('FeedbackLocationComponent', () => {
       const locationFormControl = new FormControl();
 
       const { inject, find, instance, fixture } = await shallow
-        .mock(LocationService, {
-          searchLocationByQuery: jest.fn(() =>
+        .mock(RadarService, {
+          autocomplete: jest.fn(() =>
             Promise.resolve([{ address: 'Noordlaan 18, Kuurne, Belgium', latLong: [3, 3] as LatLong }]),
           ),
         })
         .render(`<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`, {
           bind: { locationFormControl },
         });
-      const locationService = inject(LocationService);
+      const radarService = inject(RadarService);
 
       find('p-autocomplete').componentInstance.completeMethod.emit({ query: 'location-query' });
 
-      expect(locationService.searchLocationByQuery).toHaveBeenCalledWith('location-query');
+      expect(radarService.autocomplete).toHaveBeenCalledWith('location-query');
 
       await fixture.whenStable();
 

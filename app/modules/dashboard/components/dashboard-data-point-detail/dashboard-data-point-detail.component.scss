@@ -1,0 +1,39 @@
+:host {
+  width: 100%;
+  background-color: white;
+
+  .location-information-container,
+  .weather-data-container {
+    max-width: 100%;
+    padding: 16px 32px;
+  }
+
+  .location-information-container {
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    & > div {
+      gap: 4px;
+    }
+  }
+
+  .weather-data-container {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  .address-loader {
+    height: 20px;
+    width: 50%;
+  }
+
+  app-icon {
+    cursor: pointer;
+  }
+}

@@ -1,10 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ServiceDictionary } from '@core/models/service-api';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
-import { ServiceApi } from './service-api.service';
-import { ServiceDictionary, ServiceListApiResponse } from '@core/models/service-api';
+import { ServiceApi, ServiceListApiResponse } from './service-api.service';
 import { LatLong } from '@core/models/location';
 
 describe('ServiceApi', () => {
