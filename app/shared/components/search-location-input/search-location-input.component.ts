@@ -1,0 +1,107 @@
+import { Component, ViewChild } from '@angular/core';
+import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
+import { IconComponent } from '../icon/icon.component';
+import { LatLong, LocationSearchResult } from '@core/models/location';
+import { CommonModule } from '@angular/common';
+import { LocationService, UserLocation } from '@core/services/location.service';
+import { RadarService } from '@core/services/radar.service';
+import { Subject, BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+
+export interface LocationSuggestion {
+  address: string;
+  latLong: LatLong;
+  isCurrentLocation?: boolean;
+  disabled?: boolean;
+}
+
+@Component({
+  standalone: true,
+  selector: 'app-search-location-input',
+  templateUrl: './search-location-input.component.html',
+  styleUrls: ['./search-location-input.component.scss'],
+  imports: [CommonModule, AutoCompleteModule, IconComponent],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: SearchLocationInputComponent,
+      multi: true,
+    },
+  ],
+})
+export class SearchLocationInputComponent extends ControlValueAccessorHelper<LatLong> {
+  @ViewChild(AutoComplete) public autoComplete: AutoComplete | undefined;
+
+  public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
+  public loadedLocation$: Observable<boolean> | undefined;
+
+  private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
+
+  public constructor(
+    private readonly locationService: LocationService,
+    private readonly radarService: RadarService,
+  ) {
+    super();
+  }
+
+  public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
+    const { query } = event;
+
+    const results = await this.radarService.autocomplete(query);
+    this._locationSearchResults$.next(results);
+  }
+
+  public onSelectLocation(event: AutoCompleteSelectEvent): void {
+    const locationSuggestion = event.value as LocationSuggestion;
+    const latLong = locationSuggestion?.latLong;
+
+    this.writeValue(latLong);
+  }
+
+  public onAutocompleteFocus(): void {
+    const userLocation$ = this.locationService.userLocation$;
+    const locationPermissionState$ = this.locationService.locationPermissionState$;
+
+    this.loadedLocation$ = combineLatest([userLocation$, locationPermissionState$]).pipe(
+      map(
+        ([currentUserLocation, locationPermissionState]) =>
+          currentUserLocation.loading === false && locationPermissionState === 'granted',
+      ),
+    );
+
+    this.locationSuggestions$ = combineLatest([userLocation$, locationPermissionState$, this._locationSearchResults$]).pipe(
+      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
+          currentUserLocation,
+          locationPermissionState,
+          locationSearchResults,
+        ),
+      ),
+    );
+  }
+
+  private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
+    currentUserLocation: UserLocation,
+    locationPermissionState: PermissionState,
+    results: LocationSearchResult[],
+  ): LocationSuggestion[] {
+    let currentUserLocationName = 'Fetching your location...';
+
+    if (!currentUserLocation.loading) {
+      if (locationPermissionState === 'granted') {
+        currentUserLocationName = 'Your current location';
+      } else {
+        currentUserLocationName = 'We could not determine your location';
+      }
+    }
+
+    const currentUserLocationOption: LocationSuggestion = {
+      latLong: currentUserLocation.location ?? [0, 0],
+      address: currentUserLocationName,
+      isCurrentLocation: true,
+    };
+
+    return [currentUserLocationOption, ...results];
+  }
+}
