@@ -22,17 +22,9 @@ interface LocationSuggestion {
 export class FeedbackLocationComponent {
   @Input({ required: true }) public locationFormControl!: FormControl<LatLong | null>;
 
-  private _currentUserLocation$: Observable<UserLocation> = this.locationService.userLocation$;
   private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
 
-  public locationSuggestions$: Observable<LocationSuggestion[]> = combineLatest([
-    this._currentUserLocation$,
-    this._locationSearchResults$,
-  ]).pipe(
-    map(([currentUserLocation, locationSearchResults]) =>
-      this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(currentUserLocation, locationSearchResults),
-    ),
-  );
+  public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
 
   public constructor(
     private readonly locationService: LocationService,
@@ -54,14 +46,31 @@ export class FeedbackLocationComponent {
     this.locationFormControl.setValue(latLong);
   }
 
+  public onAutocompleteFocus(): void {
+    this.locationSuggestions$ = combineLatest([
+      this.locationService.userLocation$,
+      this.locationService.locationPermissionState$,
+      this._locationSearchResults$,
+    ]).pipe(
+      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
+          currentUserLocation,
+          locationPermissionState,
+          locationSearchResults,
+        ),
+      ),
+    );
+  }
+
   private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
     currentUserLocation: UserLocation,
+    locationPermissionState: PermissionState,
     results: LocationSearchResult[],
   ): LocationSuggestion[] {
     let currentUserLocationName = 'Fetching your location...';
 
     if (!currentUserLocation.loading) {
-      if (currentUserLocation.available) {
+      if (locationPermissionState === 'granted') {
         currentUserLocationName = 'Your current location';
       } else {
         currentUserLocationName = 'We could not determine your location';
@@ -71,7 +80,6 @@ export class FeedbackLocationComponent {
     const currentUserLocationOption: LocationSuggestion = {
       latLong: currentUserLocation.location ?? [0, 0],
       address: currentUserLocationName,
-      disabled: !currentUserLocation.available,
       isCurrentLocation: true,
     };
 

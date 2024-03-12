@@ -64,14 +64,13 @@ export class DashboardMapComponent {
         map(([currentUserLocation, permissionState]) => ({ currentUserLocation, permissionState })),
         distinctUntilChanged((prev, curr) => {
           return (
-            prev.currentUserLocation.available === curr.currentUserLocation.available &&
             prev.currentUserLocation.loading === curr.currentUserLocation.loading &&
             prev.currentUserLocation.location === curr.currentUserLocation.location
           );
         }),
       )
       .subscribe(({ currentUserLocation, permissionState }) => {
-        if (currentUserLocation && currentUserLocation.available && currentUserLocation.location) {
+        if (currentUserLocation?.location && permissionState === 'granted') {
           this.mapService.setCenter(currentUserLocation.location as LatLong);
         }
 

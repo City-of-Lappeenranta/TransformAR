@@ -32,11 +32,9 @@ describe('LocationService', () => {
 
         const userLocationExpectation: UserLocation[] = [
           {
-            available: false,
             loading: true,
           },
           {
-            available: true,
             loading: false,
             location: [10, 10],
           },
@@ -79,11 +77,9 @@ describe('LocationService', () => {
 
         const userLocationExpectation: UserLocation[] = [
           {
-            available: false,
             loading: true,
           },
           {
-            available: false,
             loading: false,
           },
         ];

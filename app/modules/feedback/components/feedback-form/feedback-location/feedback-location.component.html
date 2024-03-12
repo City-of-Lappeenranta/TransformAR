@@ -8,7 +8,7 @@
     [suggestions]="(locationSuggestions$ | async) ?? []"
     (completeMethod)="onSearchLocation($event)"
     (onSelect)="onSelectLocation($event)"
-    (onFocus)="autocomplete.show()"
+    (onFocus)="autocomplete.show(); onAutocompleteFocus()"
   >
     <ng-template let-location pTemplate="item">
       <div *ngIf="location.isCurrentLocation; else default" class="current-location-suggestion flex-row">

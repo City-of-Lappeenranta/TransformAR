@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 
 export interface UserLocation {
   loading: boolean;
-  available: boolean;
   location?: LatLong;
 }
 
@@ -15,7 +14,6 @@ export interface UserLocation {
 export class LocationService {
   private _userLocation$ = new BehaviorSubject<UserLocation>({
     loading: true,
-    available: false,
   });
 
   private _locationPermissionStateSubject$ = new BehaviorSubject<PermissionState>('prompt');
@@ -43,7 +41,6 @@ export class LocationService {
     const { latitude, longitude } = position.coords;
     this._userLocation$.next({
       loading: false,
-      available: true,
       location: [latitude, longitude],
     });
   }
@@ -52,7 +49,6 @@ export class LocationService {
     this._locationPermissionStateSubject$.next('denied');
     this._userLocation$.next({
       loading: false,
-      available: false,
       location: undefined,
     });
   }

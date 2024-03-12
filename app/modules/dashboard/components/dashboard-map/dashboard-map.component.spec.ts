@@ -71,10 +71,9 @@ describe('DashboardMapComponent', () => {
 
       const { find, inject } = await shallow
         .mock(LocationService, {
-          locationPermissionState$: of('prompt' as PermissionState),
+          locationPermissionState$: of('granted' as PermissionState),
           userLocation$: of({
             loading: false,
-            available: true,
             location: currentLocation,
           } as UserLocation),
         })
@@ -94,7 +93,6 @@ describe('DashboardMapComponent', () => {
           locationPermissionState$: of('denied' as PermissionState),
           userLocation$: of({
             loading: false,
-            available: false,
             location: undefined,
           }),
         })

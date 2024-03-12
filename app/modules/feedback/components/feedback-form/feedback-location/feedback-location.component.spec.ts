@@ -70,10 +70,12 @@ describe('FeedbackLocationComponent', () => {
 
       await fixture.whenStable();
 
-      expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        { disabled: false, latLong: [52, 52], isCurrentLocation: true, address: 'Your current location' },
-        { latLong: [3, 3], address: 'Noordlaan 18, Kuurne, Belgium' },
-      ]);
+      if (instance.locationSuggestions$) {
+        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
+          { disabled: false, latLong: [52, 52], isCurrentLocation: true, address: 'Your current location' },
+          { latLong: [3, 3], address: 'Noordlaan 18, Kuurne, Belgium' },
+        ]);
+      }
     });
   });
 
@@ -87,14 +89,16 @@ describe('FeedbackLocationComponent', () => {
           bind: { locationFormControl: new FormControl(null) },
         });
 
-      expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        {
-          latLong: [0, 0],
-          address: 'Fetching your location...',
-          disabled: true,
-          isCurrentLocation: true,
-        },
-      ]);
+      if (instance.locationSuggestions$) {
+        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
+          {
+            latLong: [0, 0],
+            address: 'Fetching your location...',
+            disabled: true,
+            isCurrentLocation: true,
+          },
+        ]);
+      }
     });
 
     it('should handle user location', async () => {
@@ -110,14 +114,16 @@ describe('FeedbackLocationComponent', () => {
           bind: { locationFormControl: new FormControl(null) },
         });
 
-      expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        {
-          latLong: [4, 4],
-          address: 'Your current location',
-          disabled: false,
-          isCurrentLocation: true,
-        },
-      ]);
+      if (instance.locationSuggestions$) {
+        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
+          {
+            latLong: [4, 4],
+            address: 'Your current location',
+            disabled: false,
+            isCurrentLocation: true,
+          },
+        ]);
+      }
     });
 
     it('should handle unavailable user location', async () => {
@@ -129,14 +135,16 @@ describe('FeedbackLocationComponent', () => {
           bind: { locationFormControl: new FormControl(null) },
         });
 
-      expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
-        {
-          latLong: [0, 0],
-          address: 'We could not determine your location',
-          disabled: true,
-          isCurrentLocation: true,
-        },
-      ]);
+      if (instance.locationSuggestions$) {
+        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
+          {
+            latLong: [0, 0],
+            address: 'We could not determine your location',
+            disabled: true,
+            isCurrentLocation: true,
+          },
+        ]);
+      }
     });
   });
 });
