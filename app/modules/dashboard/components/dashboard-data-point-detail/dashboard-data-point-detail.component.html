@@ -17,8 +17,8 @@
       <ul class="weather-data-container">
         @for (metric of dataPoint.data | keyvalue; track metric.key) {
           <li>
-            <label class="button-sm">{{ metric.key }}</label>
-            <p class="body-sm">{{ metric.value }}</p>
+            <label class="button-sm">{{ getMetricLabel(dataPoint.type, metric.key) }}</label>
+            <p class="body-sm">{{ metric.value }}{{ getMetricUnit(dataPoint.type, metric.key) }}</p>
           </li>
         }
       </ul>
