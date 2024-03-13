@@ -1,7 +1,3 @@
-import { DataPointsApi } from '@core/services/datapoints-api.service';
-import { Shallow } from 'shallow-render';
-import { DashboardModule } from '../../dashboard.module';
-import { DashboardMapComponent } from './dashboard-map.component';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
@@ -9,13 +5,16 @@ import {
   DataPointType,
   WeatherDataPoint,
 } from '@core/models/data-point';
-import { delay, of } from 'rxjs';
-import { MapComponent } from '@shared/components/map/map.component';
-import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
-import { MessageService, SharedModule } from 'primeng/api';
-import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
-import { MapService } from '@shared/components/map/map.service';
+import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { LocationService, UserLocation } from '@core/services/location.service';
+import { MapComponent } from '@shared/components/map/map.component';
+import { MessageService, SharedModule } from 'primeng/api';
+import { delay, firstValueFrom, of } from 'rxjs';
+import { Shallow } from 'shallow-render';
+import { DashboardModule } from '../../dashboard.module';
+import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
+import { DashboardMapComponent } from './dashboard-map.component';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -88,7 +87,7 @@ describe('DashboardMapComponent', () => {
     it('should set center on map when user location is available', async () => {
       const currentLocation = [4, 4] as LatLong;
 
-      const { find, inject } = await shallow
+      const { find, instance } = await shallow
         .mock(LocationService, {
           locationPermissionState$: of('granted' as PermissionState),
           userLocation$: of({
@@ -98,12 +97,9 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      const mapService = inject(MapService);
-      jest.spyOn(mapService, 'setCenter');
-
       find('.focus-location').triggerEventHandler('click');
 
-      expect(mapService.setCenter).toHaveBeenCalledWith(currentLocation);
+      expect(await firstValueFrom(instance.mapCenter$)).toEqual(currentLocation);
     });
 
     it('should show alert when permission state is "denied"', async () => {
@@ -117,7 +113,7 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      jest.spyOn(window, 'alert');
+      jest.spyOn(window, 'alert').mockImplementation(jest.fn);
 
       find('.focus-location').triggerEventHandler('click');
       await fixture.whenStable();

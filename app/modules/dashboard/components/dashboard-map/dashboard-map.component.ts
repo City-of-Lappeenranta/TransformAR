@@ -4,8 +4,8 @@ import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, Weathe
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
+import { environment } from '@environments/environment';
 import { Marker } from '@shared/components/map/map.component';
-import { MapService } from '@shared/components/map/map.service';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
@@ -27,11 +27,12 @@ export class DashboardMapComponent implements AfterViewInit {
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
 
   public readonly TOAST_KEY = 'loading';
+  private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
+  public mapCenter$ = this._mapCenterSubject$.asObservable();
 
   public constructor(
     private readonly locationService: LocationService,
     private readonly dataPointsApi: DataPointsApi,
-    private readonly mapService: MapService,
     private readonly messageService: MessageService,
   ) {
     this.dataPointsApi
@@ -91,7 +92,7 @@ export class DashboardMapComponent implements AfterViewInit {
       )
       .subscribe(({ currentUserLocation, permissionState }) => {
         if (currentUserLocation?.location && permissionState === 'granted') {
-          this.mapService.setCenter(currentUserLocation.location as LatLong);
+          this._mapCenterSubject$.next(currentUserLocation.location as LatLong);
         }
 
         if (!currentUserLocation.loading && permissionState === 'denied') {

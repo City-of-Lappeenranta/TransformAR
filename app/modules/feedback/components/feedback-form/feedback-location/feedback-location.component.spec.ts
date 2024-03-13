@@ -8,7 +8,6 @@ import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { RadarService } from '@core/services/radar.service';
 import { SharedModule } from 'primeng/api';
-import { MapService } from '@shared/components/map/map.service';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
@@ -30,21 +29,18 @@ describe('FeedbackLocationComponent', () => {
     it('should update the center of the map and form control value', async () => {
       const locationFormControl = new FormControl();
 
-      const { find, fixture, inject } = await shallow.render(
+      const { find, fixture, instance } = await shallow.render(
         `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
         {
           bind: { locationFormControl },
         },
       );
 
-      const mapService = inject(MapService);
-      jest.spyOn(mapService, 'setCenter');
-
       find('p-autocomplete').componentInstance.onSelect.emit({ value: { latLong: [2, 2] } });
 
       fixture.detectChanges();
 
-      expect(mapService.setCenter).toHaveBeenCalledWith([2, 2]);
+      expect(await firstValueFrom(instance.mapCenter$)).toEqual([2, 2]);
       expect(locationFormControl.value).toEqual([2, 2]);
     });
   });
