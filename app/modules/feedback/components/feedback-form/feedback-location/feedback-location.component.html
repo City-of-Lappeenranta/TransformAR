@@ -28,8 +28,7 @@
 
   <div class="map-container full-width full-height">
     <app-map
-      *ngIf="mapCenter$ | async as mapCenter"
-      [center]="mapCenter"
+      [center$]="mapCenter$"
       [markers]="this.locationFormControl.value ? [{ location: this.locationFormControl.value }] : []"
     ></app-map>
   </div>

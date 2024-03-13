@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import * as leaflet from 'leaflet';
-import { firstValueFrom } from 'rxjs';
+import { Observable, Subscription, firstValueFrom } from 'rxjs';
 
 export interface Marker {
   location: LatLong;
@@ -20,13 +21,15 @@ export interface Marker {
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() public center: LatLong = environment.defaultLocation as LatLong;
+  @Input() public center$: Observable<LatLong> | null = null;
   @Input() public zoom = 13;
   @Input() public markers: Marker[] = [];
 
   @Output() public markerClick = new EventEmitter<LatLong>();
 
   public map: leaflet.Map | undefined;
+
+  private centerSubscription: Subscription | null = null;
 
   public constructor(private readonly http: HttpClient) {}
 
@@ -39,12 +42,13 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       this.renderMarkers();
     }
 
-    if (changes['center']) {
-      this.map?.setView(new leaflet.LatLng(...(changes['center'].currentValue as LatLong)), 15);
+    if (changes['center$']) {
+      this.subscribeToCenterObservable(changes['center$'].currentValue);
     }
   }
 
   public ngOnDestroy(): void {
+    this.centerSubscription?.unsubscribe();
     this.destroyMap();
   }
 
@@ -67,6 +71,15 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   private destroyMap(): void {
     this.map?.off();
     this.map?.remove();
+  }
+
+  private subscribeToCenterObservable(center$: Observable<LatLong>): void {
+    this.centerSubscription?.unsubscribe();
+    // centerSubscription gets unsubscribed in ngOnDestroy
+    this.centerSubscription =
+      center$.subscribe((center) => {
+        this.map?.setView(new leaflet.LatLng(...(center as LatLong)), 15);
+      }) ?? null;
   }
 
   private async renderMarkers(): Promise<void> {
