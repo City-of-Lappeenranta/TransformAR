@@ -9,10 +9,10 @@ import {
   DataPointType,
   WeatherDataPoint,
 } from '@core/models/data-point';
-import { of } from 'rxjs';
+import { delay, of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
-import { SharedModule } from 'primeng/api';
+import { MessageService, SharedModule } from 'primeng/api';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
 import { MapService } from '@shared/components/map/map.service';
@@ -22,10 +22,29 @@ describe('DashboardMapComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(DashboardMapComponent, DashboardModule)
+      .mock(MessageService, { add: jest.fn(), clear: jest.fn() })
       .mock(DataPointsApi, {
         getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
       })
       .provideMock(SharedModule);
+  });
+
+  describe('data fetching', () => {
+    it('should show a loader when fetching data and clear when all data has been loaded', async () => {
+      jest.useFakeTimers();
+      const { inject, fixture } = await shallow
+        .mock(DataPointsApi, {
+          getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS).pipe(delay(2000))),
+        })
+        .render();
+
+      const messageService = inject(MessageService);
+      expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
+
+      jest.advanceTimersByTime(2000);
+
+      expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
+    });
   });
 
   describe('markers', () => {

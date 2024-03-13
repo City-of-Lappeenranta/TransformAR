@@ -14,3 +14,11 @@
     (click)="focusLocation()"
   ></app-icon>
 </div>
+<p-toast position="bottom-center" [key]="TOAST_KEY" styleClass="toast">
+  <ng-template let-message pTemplate="headless">
+    <section class="toast-content flex-row">
+      <p class="body-xs">{{ message.detail }}</p>
+      <app-icon icon="spinner"></app-icon>
+    </section>
+  </ng-template>
+</p-toast>
