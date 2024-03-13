@@ -2,11 +2,10 @@ import { Shallow } from 'shallow-render';
 import { MapComponent, Marker } from './map.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import * as leaflet from 'leaflet';
 import { SimpleChange } from '@angular/core';
 import { environment } from '@environments/environment';
-import { MapService } from './map.service';
 import { LatLong } from '@core/models/location';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 
@@ -48,13 +47,11 @@ describe('MapComponent', () => {
     });
 
     it('should update the center when a new point is set in the map service', async () => {
-      const { instance, inject } = await shallow.render();
-      const mapService = inject(MapService);
+      const center$ = new Subject<LatLong>();
+      const { instance, inject } = await shallow.render({ bind: { center$ } });
 
-      const newCenter = [0, 2] as LatLong;
-      mapService.setCenter(newCenter);
-
-      expect(instance.map?.getCenter()).toEqual({ lat: newCenter[0], lng: newCenter[1] });
+      center$.next([0, 2]);
+      expect(instance.map?.getCenter()).toEqual({ lat: 0, lng: 2 });
     });
   });
 

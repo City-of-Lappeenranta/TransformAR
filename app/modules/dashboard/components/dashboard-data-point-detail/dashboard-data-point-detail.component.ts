@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { DataPoint, DataPointType } from '@core/models/data-point';
+import {
+  DataPoint,
+  DataPointType,
+  WEATHER_DATA_POINT_METRIC_LABEL,
+  WEATHER_DATA_POINT_METRIC_UNIT,
+} from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Observable, Subject } from 'rxjs';
 
@@ -28,6 +33,22 @@ export class DashboardDataPointDetailComponent implements OnChanges {
         this.reverseGeocodeDataPointLocation(changes['dataPoint'].currentValue);
       }
     }
+  }
+
+  public getMetricLabel(type: DataPointType, key: string): string {
+    if (type === DataPointType.WEATHER) {
+      return WEATHER_DATA_POINT_METRIC_LABEL[key as keyof typeof WEATHER_DATA_POINT_METRIC_LABEL];
+    }
+
+    return key;
+  }
+
+  public getMetricUnit(type: DataPointType, key: string): string {
+    if (type === DataPointType.WEATHER) {
+      return WEATHER_DATA_POINT_METRIC_UNIT[key as keyof typeof WEATHER_DATA_POINT_METRIC_UNIT];
+    }
+
+    return key;
   }
 
   private async reverseGeocodeDataPointLocation(dataPoint: DataPoint): Promise<void> {

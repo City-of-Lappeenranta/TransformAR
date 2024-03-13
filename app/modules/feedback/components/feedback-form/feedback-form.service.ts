@@ -27,7 +27,7 @@ type FeedbackFormType = FormGroup<
       termsOfUseAccepted: FormControl<boolean>;
     }>;
   } & {
-    [key in (typeof environment.feedbackCategorySteps)[number]]: FormControl<string | null>;
+    [key in (typeof environment.feedbackCategoryLevels)[number]]: FormControl<string | null>;
   }
 >;
 
@@ -35,7 +35,7 @@ type FeedbackFormType = FormGroup<
 export class FeedbackFormService {
   private CATEGORY_START_INDEX = 0;
   private STEPS = [
-    ...environment.feedbackCategorySteps.map(() => FeedbackFormChildComponent.CATEGORY),
+    ...environment.feedbackCategoryLevels.map(() => FeedbackFormChildComponent.CATEGORY),
     FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS,
     FeedbackFormChildComponent.LOCATION,
     FeedbackFormChildComponent.CONTACT,
@@ -59,9 +59,9 @@ export class FeedbackFormService {
       termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
     }),
     ...(Object.fromEntries(
-      environment.feedbackCategorySteps.map((step) => [step, new FormControl<string | null>(null, Validators.required)]),
+      environment.feedbackCategoryLevels.map((step) => [step, new FormControl<string | null>(null, Validators.required)]),
     ) as {
-      [key in (typeof environment.feedbackCategorySteps)[number]]: FormControl<string | null>;
+      [key in (typeof environment.feedbackCategoryLevels)[number]]: FormControl<string | null>;
     }),
   });
 
@@ -83,7 +83,7 @@ export class FeedbackFormService {
     map(([currentStep]) => this.isNextEnabled(currentStep)),
   );
 
-  public categorySteps = environment.feedbackCategorySteps.map((step) => ({
+  public categorySteps = environment.feedbackCategoryLevels.map((step) => ({
     formControlName: step,
     index: this.getIndexForCategoryStep(step),
   }));
@@ -120,7 +120,7 @@ export class FeedbackFormService {
     this.currentStep$.pipe(take(1)).subscribe((currentStep) => {
       const newIndex = currentStep - 1;
 
-      environment.feedbackCategorySteps.forEach((step) => {
+      environment.feedbackCategoryLevels.forEach((step) => {
         if (newIndex === this.getIndexForCategoryStep(step)) {
           this.feedbackForm.controls[step].setValue(null);
         }
@@ -143,7 +143,7 @@ export class FeedbackFormService {
   }
 
   private handleFeedbackFormValueChanges(): void {
-    merge(...environment.feedbackCategorySteps.map((step) => this.feedbackForm.controls[step].valueChanges))
+    merge(...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges))
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
         this.setCategoriesByFormValues();
@@ -153,20 +153,21 @@ export class FeedbackFormService {
 
   private setCategoriesByFormValues(): void {
     this.serviceDictionary$.pipe(take(1)).subscribe((serviceDictionary) => {
-      const firstLevel = this.feedbackForm.controls[environment.feedbackCategorySteps[0]].value;
-      const secondLevel = this.feedbackForm.controls[environment.feedbackCategorySteps[1]].value;
+      const categoryKeys = environment.feedbackCategoryLevels;
+      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
+      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
 
       let categories: Category[] = [];
       let parent: string | null = null;
 
-      if (!firstLevel) {
+      if (!mainCategory) {
         categories = Object.keys(serviceDictionary).map((key) => ({ value: key }));
-      } else if (!secondLevel) {
-        parent = firstLevel;
-        categories = Object.keys(serviceDictionary[firstLevel]).map((key) => ({ value: key }));
+      } else if (!subCategory) {
+        parent = mainCategory;
+        categories = Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
       } else {
-        parent = secondLevel;
-        categories = serviceDictionary[firstLevel][secondLevel].map(({ name }) => ({ value: name }));
+        parent = subCategory;
+        categories = serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({ label: name, value: code }));
       }
 
       this._parentCategorySubject$.next(parent);
@@ -175,7 +176,7 @@ export class FeedbackFormService {
   }
 
   private getIndexForCategoryStep(level: string): number {
-    const index = environment.feedbackCategorySteps.findIndex((name) => name === level);
+    const index = environment.feedbackCategoryLevels.findIndex((name) => name === level);
 
     if (index === -1) {
       return index;
@@ -185,13 +186,14 @@ export class FeedbackFormService {
   }
 
   private postServiceRequest(): void {
-    const { serviceCode, description, message, location, contact } = this.feedbackForm.controls;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { service_code, description, message, location, contact } = this.feedbackForm.controls;
 
     this._isNextInProgressSubject$.next(true);
 
     this.serviceApi
       .postServiceRequest({
-        serviceCode: serviceCode.value,
+        serviceCode: service_code.value,
         description: description.value,
         files: message.controls.files.value,
         location: location.value,

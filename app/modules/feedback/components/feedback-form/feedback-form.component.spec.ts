@@ -52,7 +52,7 @@ describe('FeedbackFormComponent', () => {
 
     instance.feedbackForm.controls.description.setValue(description);
     instance.feedbackForm.controls.group.setValue(group);
-    instance.feedbackForm.controls.serviceCode.setValue(serviceCode);
+    instance.feedbackForm.controls.service_code.setValue(serviceCode);
 
     fixture.detectChanges();
     instance.feedbackForm.controls.message.controls.message.setValue(message);
@@ -95,24 +95,24 @@ describe('FeedbackFormComponent', () => {
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
 
-    instance.feedbackForm.controls.description.setValue('streets');
+    instance.feedbackForm.controls.group.setValue('streets');
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(find('.description').nativeElement.innerHTML).toBe('streets');
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
-    instance.feedbackForm.controls.group.setValue('lamps');
+    instance.feedbackForm.controls.description.setValue('lamps');
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(find('.description').nativeElement.innerHTML).toBe('lamps');
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([
-      { value: 'missing lamp' },
-      { value: 'broken lamp' },
+      { label: 'missing lamp', value: '1' },
+      { label: 'broken lamp', value: '2' },
     ]);
 
-    instance.feedbackForm.controls.serviceCode.setValue('1');
+    instance.feedbackForm.controls.service_code.setValue('1');
     fixture.detectChanges();
 
     expect(findComponent(FeedbackMessageAndAttachmentComponent)).toHaveFound(1);
@@ -140,19 +140,19 @@ describe('FeedbackFormComponent', () => {
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
-    expect(instance.feedbackForm.controls.serviceCode.value).toBeNull();
-
-    find(backButtonSelector).triggerEventHandler('click', {});
-    fixture.detectChanges();
-
-    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
-    expect(instance.feedbackForm.controls.group.value).toBeNull();
+    expect(instance.feedbackForm.controls.service_code.value).toBeNull();
 
     find(backButtonSelector).triggerEventHandler('click', {});
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(instance.feedbackForm.controls.description.value).toBeNull();
+
+    find(backButtonSelector).triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
+    expect(instance.feedbackForm.controls.group.value).toBeNull();
   });
 });
 

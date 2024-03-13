@@ -7,7 +7,7 @@
       [icon]="category?.icon"
       (click)="toggleCategory(index)"
     >
-      {{ category.value }}
+      {{ category.label ?? category.value }}
     </app-feedback-category>
   }
 </div>
