@@ -109,11 +109,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     this.getMarkersToChange(previousMarkers, newMarkers).forEach(this.updateMarker.bind(this));
   }
 
-  private onClickMarker(e: leaflet.LeafletMouseEvent): void {
-    const { lat, lng } = e.latlng;
-    this.markerClick.emit([lat, lng]);
-  }
-
   private removeMarker(marker: Marker): void {
     this.map?.eachLayer((layer) => {
       if (layer instanceof leaflet.Marker) {
@@ -188,5 +183,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     const className = active ? 'active' : '';
 
     return { iconAnchor: anchor, iconSize: size, className };
+  }
+
+  private onClickMarker(e: leaflet.LeafletMouseEvent): void {
+    const { lat, lng } = e.latlng;
+    this.markerClick.emit([lat, lng]);
   }
 }
