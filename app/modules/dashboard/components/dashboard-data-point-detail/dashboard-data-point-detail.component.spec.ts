@@ -44,12 +44,14 @@ describe('DashboardDataPointDetailComponent', () => {
           location: [123, 456],
           type: DataPointType.WEATHER,
           quality: DataPointQuality.GOOD,
-          airTemperature: 0,
-          airMoisture: 0,
-          dewPoint: 0,
-          wind: 0,
-          rainFall: 0,
-          snowDepth: 0,
+          data: {
+            airTemperature: 0,
+            airMoisture: 0,
+            dewPoint: 0,
+            wind: 0,
+            rainFall: 0,
+            snowDepth: 0,
+          },
         };
 
         const { fixture, find } = await shallow.render(
