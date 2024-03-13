@@ -25,6 +25,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public markers: Marker[] = [];
 
   @Output() public markerClick = new EventEmitter<LatLong>();
+  @Output() public mapClick = new EventEmitter<LatLong>();
 
   public map: leaflet.Map | undefined;
 
@@ -57,6 +58,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         zoomControl: false,
         attributionControl: false,
       })
+      .on('click', this.onClickMap.bind(this))
       .setView(new leaflet.LatLng(...(environment.defaultLocation as LatLong)), this.zoom);
 
     leaflet
@@ -77,7 +79,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     // centerSubscription gets unsubscribed in ngOnDestroy
     this.centerSubscription =
       center$.subscribe((center) => {
-        this.map?.setView(new leaflet.LatLng(...(center as LatLong)), 15);
+        this.map?.setView(new leaflet.LatLng(...(center as LatLong)));
       }) ?? null;
   }
 
@@ -134,5 +136,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   private onClickMarker(e: leaflet.LeafletMouseEvent): void {
     const { lat, lng } = e.latlng;
     this.markerClick.emit([lat, lng]);
+  }
+
+  private onClickMap(e: leaflet.LeafletMouseEvent): void {
+    const { lat, lng } = e.latlng;
+    this.mapClick.emit([lat, lng]);
   }
 }
