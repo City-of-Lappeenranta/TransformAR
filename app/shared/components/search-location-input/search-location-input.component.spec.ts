@@ -92,7 +92,7 @@ describe('SearchLocationInputComponent', () => {
         bind: { withCurrentLocation: false },
       });
 
-      instance.autoComplete?.inputEL?.nativeElement?.focus();
+      instance.onAutocompleteFocus();
 
       if (instance.locationSuggestions$) {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([]);

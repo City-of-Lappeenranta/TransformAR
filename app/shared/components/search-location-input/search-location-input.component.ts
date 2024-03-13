@@ -5,7 +5,7 @@ import { LatLong, LocationSearchResult } from '@core/models/location';
 import { CommonModule } from '@angular/common';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
-import { Subject, BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import { Subject, BehaviorSubject, Observable, combineLatest, map, of } from 'rxjs';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 
@@ -61,38 +61,34 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   }
 
   public onAutocompleteFocus(): void {
-    const locationSuggestionsObservables$: (
-      | Observable<LocationSearchResult[]>
-      | Observable<UserLocation>
-      | Observable<PermissionState>
-    )[] = [this._locationSearchResults$.asObservable()];
+    let userLocation$: Observable<UserLocation | null> = of(null);
+    let locationPermissionState$: Observable<PermissionState | null> = of(null);
+    const locationSearchResults$: Observable<LocationSearchResult[]> = this._locationSearchResults$.asObservable();
 
     if (this.withCurrentLocation) {
       this.autoComplete?.show();
 
-      locationSuggestionsObservables$.push(
-        this.locationService.userLocation$,
-        this.locationService.locationPermissionState$,
-      );
+      userLocation$ = this.locationService.userLocation$;
+      locationPermissionState$ = this.locationService.locationPermissionState$;
     }
 
-    this.locationSuggestions$ = combineLatest(locationSuggestionsObservables$).pipe(
-      map(([locationSearchResults, currentUserLocation, locationPermissionState]) =>
+    this.locationSuggestions$ = combineLatest([userLocation$, locationPermissionState$, locationSearchResults$]).pipe(
+      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
         this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
-          currentUserLocation as UserLocation,
-          locationPermissionState as PermissionState,
-          locationSearchResults as LocationSearchResult[],
+          locationSearchResults,
+          currentUserLocation,
+          locationPermissionState,
         ),
       ),
     );
   }
 
   private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
-    currentUserLocation: UserLocation,
-    locationPermissionState: PermissionState,
     results: LocationSearchResult[],
+    currentUserLocation: UserLocation | null,
+    locationPermissionState: PermissionState | null,
   ): LocationSuggestion[] {
-    if (!this.withCurrentLocation) {
+    if (!currentUserLocation) {
       return results;
     }
 

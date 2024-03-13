@@ -15,6 +15,8 @@ import { Observable, Subject, combineLatest, distinctUntilChanged, map, take } f
   styleUrls: ['./dashboard-map.component.scss'],
 })
 export class DashboardMapComponent {
+  private dataPoints: DataPoint[] = [];
+
   public weatherDataPointMarkers: Marker[] = [];
   public weatherDataPointMarkersLoading: boolean = true;
 
@@ -25,8 +27,6 @@ export class DashboardMapComponent {
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
 
   public locationFormControl = new FormControl<LatLong | null>(null);
-
-  private dataPoints: DataPoint[] = [];
 
   public constructor(
     private readonly locationService: LocationService,
