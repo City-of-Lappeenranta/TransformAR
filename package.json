@@ -16,7 +16,8 @@
     "generate-icons": "node generate-svg-icons.ts",
     "prestorybook": "npm run theme; npm run generate-icons",
     "storybook": "ng run citizen-webapp:storybook",
-    "build-storybook": "ng run citizen-webapp:build-storybook"
+    "build-storybook": "ng run citizen-webapp:build-storybook",
+    "sonar-scanner": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
@@ -29,9 +30,11 @@
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
     "@angular/service-worker": "^17.1.0",
+    "jest-sonar-reporter": "^2.0.0",
     "leaflet": "^1.9.4",
     "primeng": "^17.5.0",
     "rxjs": "~7.8.0",
+    "sonarqube-scanner": "^3.3.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
@@ -80,6 +83,7 @@
       "^@core/(.*)$": "<rootDir>/app/core/$1",
       "^@environments/(.*)$": "<rootDir>/environments/$1",
       "^lodash-es$": "lodash"
-    }
+    },
+    "testResultsProcessor": "jest-sonar-reporter"
   }
 }
