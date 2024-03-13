@@ -3,9 +3,9 @@ import { FormControl } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
-import { MapService } from '@shared/components/map/map.service';
+import { environment } from '@environments/environment';
 import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
-import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
 
 interface LocationSuggestion {
   address: string;
@@ -22,14 +22,16 @@ interface LocationSuggestion {
 export class FeedbackLocationComponent {
   @Input({ required: true }) public locationFormControl!: FormControl<LatLong | null>;
 
-  private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
+  private _locationSearchResults$ = new BehaviorSubject([] as LocationSearchResult[]);
 
   public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
+
+  private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
+  public mapCenter$ = this._mapCenterSubject$.asObservable();
 
   public constructor(
     private readonly locationService: LocationService,
     private readonly radarService: RadarService,
-    private readonly mapService: MapService,
   ) {}
 
   public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
@@ -41,8 +43,7 @@ export class FeedbackLocationComponent {
 
   public onSelectLocation(event: AutoCompleteSelectEvent): void {
     const latLong = (event.value as LocationSuggestion).latLong;
-
-    this.mapService.setCenter(latLong);
+    this._mapCenterSubject$.next(latLong);
     this.locationFormControl.setValue(latLong);
   }
 

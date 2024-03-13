@@ -27,6 +27,9 @@
   </p-autoComplete>
 
   <div class="map-container full-width full-height">
-    <app-map [markers]="this.locationFormControl.value ? [{ location: this.locationFormControl.value }] : []"></app-map>
+    <app-map
+      [center$]="mapCenter$"
+      [markers]="this.locationFormControl.value ? [{ location: this.locationFormControl.value }] : []"
+    ></app-map>
   </div>
 </article>
