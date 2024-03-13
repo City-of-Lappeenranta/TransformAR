@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DataPoint, WeatherDataPoint, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
+import { DataPoint, WeatherDataPoint, DATA_POINT_TYPE_ICON, DATA_POINT_QUALITY_COLOR_CHART } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
@@ -85,7 +85,7 @@ export class DashboardMapComponent {
     this.weatherDataPointMarkers = weatherDataPoints.map((point) => ({
       location: point.location,
       icon: DATA_POINT_TYPE_ICON[point.type],
-      quality: point.quality,
+      color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
     }));
     this.weatherDataPointMarkersLoading = false;
   }

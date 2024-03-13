@@ -16,81 +16,27 @@
   background: unset !important;
   border: unset !important;
 
-  margin-left: -16.5px !important;
-  margin-top: -40px !important;
-  width: 33px !important;
-  height: 40px !important;
+  div svg + svg {
+    position: absolute;
+    height: 18px;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
 
-  div {
+    path {
+      fill: white;
+    }
+  }
+
+  &.active div {
     svg:first-child path {
-      stroke: var(--primary-color) !important;
-      fill: var(--primary-color);
+      stroke: #275d38 !important;
     }
 
     svg + svg {
-      position: absolute;
-      height: 18px;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-
-      path {
-        fill: white;
-      }
-    }
-  }
-
-  &.default div svg:first-child path {
-    fill: #275d38 !important;
-    stroke: #275d38 !important;
-  }
-
-  &.good div svg:first-child path {
-    fill: #7ac143 !important;
-    stroke: #7ac143 !important;
-  }
-
-  &.satisfactory div svg:first-child path {
-    fill: #a5d580 !important;
-    stroke: #a5d580 !important;
-  }
-
-  &.fair div svg:first-child path {
-    fill: #fedf89 !important;
-    stroke: #fedf89 !important;
-  }
-
-  &.poor div svg:first-child path {
-    fill: #fda29b !important;
-    stroke: #fda29b !important;
-  }
-
-  &.very-poor div svg:first-child path {
-    fill: #f04438 !important;
-    stroke: #f04438 !important;
-  }
-
-  &.no-data-available div svg:first-child path {
-    fill: #d0d5dd !important;
-    stroke: #d0d5dd !important;
-  }
-
-  &.active {
-    margin-left: -22px !important;
-    margin-top: -53px !important;
-    width: 44px !important;
-    height: 53px !important;
-
-    div {
-      svg:first-child path {
-        stroke: #275d38 !important;
-      }
-
-      svg + svg {
-        height: 28px;
-        top: 7px;
-      }
+      height: 28px;
+      top: 7px;
     }
   }
 }

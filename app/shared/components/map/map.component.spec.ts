@@ -8,7 +8,7 @@ import { SimpleChange } from '@angular/core';
 import { environment } from '@environments/environment';
 import { MapService } from './map.service';
 import { LatLong } from '@core/models/location';
-import { DataPointQuality } from '@core/models/data-point';
+import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 
 describe('MapComponent', () => {
   let shallow: Shallow<MapComponent>;
@@ -70,32 +70,43 @@ describe('MapComponent', () => {
 
     it('when the marker input is updated it should shown the correct updated markers', async () => {
       const markers: Marker[] = [
-        { location: [0, 0], active: false, quality: DataPointQuality.GOOD },
+        { location: [0, 0], active: false, color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
         { location: [1, 1], active: false },
       ];
       const { find, fixture, instance } = await shallow.render({ bind: { markers } });
       await fixture.whenStable();
 
-      const firstMarkerClassList = (find('.leaflet-marker-icon')[0].nativeElement as HTMLElement).classList;
-      const secondMarkerClassList = (find('.leaflet-marker-icon')[1].nativeElement as HTMLElement).classList;
-
       expect(find('.leaflet-marker-icon').length).toBe(markers.length);
-      expect(firstMarkerClassList.contains('good')).toBe(true);
+
+      const firstMarkerElement = find('.leaflet-marker-icon')[0].nativeElement as HTMLElement;
+      const firstMarkerHTML = firstMarkerElement.innerHTML;
+      const firstMarkerClassList = firstMarkerElement.classList;
+      expect(getFillHexCode(firstMarkerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD]);
       expect(firstMarkerClassList.contains('active')).not.toBe(true);
-      expect(secondMarkerClassList.contains('default')).toBe(true);
+
+      const secondMarkerElement = find('.leaflet-marker-icon')[1].nativeElement as HTMLElement;
+      const secondMarkerHTML = secondMarkerElement.innerHTML;
+      const secondMarkerClassList = secondMarkerElement.classList;
+      expect(getFillHexCode(secondMarkerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT]);
       expect(secondMarkerClassList.contains('active')).not.toBe(true);
 
-      const newMarkers: Marker[] = [{ location: [0, 0], quality: DataPointQuality.POOR, active: true }];
+      const newMarkers: Marker[] = [
+        { location: [0, 0], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR], active: true },
+      ];
       instance.markers = newMarkers;
       instance.ngOnChanges({
         markers: new SimpleChange(markers, newMarkers, false),
       });
+
+      await fixture.whenStable();
       await fixture.whenStable();
 
-      const markerClassList = (find('.leaflet-marker-icon').nativeElement as HTMLElement).classList;
-
       expect(find('.leaflet-marker-icon').length).toBe(newMarkers.length);
-      expect(markerClassList.contains('poor')).toBe(true);
+
+      const markerElement = find('.leaflet-marker-icon').nativeElement as HTMLElement;
+      const markerHTML = markerElement.innerHTML;
+      const markerClassList = markerElement.classList;
+      expect(getFillHexCode(markerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR]);
       expect(markerClassList.contains('active')).toBe(true);
     });
   });
@@ -118,3 +129,8 @@ describe('MapComponent', () => {
     expect(instance.markerClick.emit).toHaveBeenCalledWith(location);
   });
 });
+
+function getFillHexCode(svgString: string): string | null {
+  const fillMatch = svgString.match(/fill="#([A-Fa-f0-9]{6})"/);
+  return fillMatch ? `#${fillMatch[1]}` : null;
+}
