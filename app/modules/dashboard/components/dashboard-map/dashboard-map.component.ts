@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DataPoint, WeatherDataPoint, DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
+import { DataPoint, WeatherDataPoint, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
@@ -39,7 +39,7 @@ export class DashboardMapComponent {
 
   public onMarkerClick(latLong: LatLong): void {
     this.setActiveMarker(latLong);
-    this._selectedDataPointSubject$.next(this.dataPoints.find((point) => isSameLocation([point.location, latLong])) ?? null);
+    this._selectedDataPointSubject$.next(this.dataPoints.find((point) => isSameLocation(point.location, latLong)) ?? null);
   }
 
   public onDataPointClose(): void {
@@ -50,7 +50,7 @@ export class DashboardMapComponent {
   private setActiveMarker(latLong?: LatLong): void {
     this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => ({
       ...marker,
-      active: latLong ? isSameLocation([marker.location, latLong]) : false,
+      active: latLong ? isSameLocation(marker.location, latLong) : false,
     }));
   }
 
@@ -85,7 +85,7 @@ export class DashboardMapComponent {
     this.weatherDataPointMarkers = weatherDataPoints.map((point) => ({
       location: point.location,
       icon: DATA_POINT_TYPE_ICON[point.type],
-      color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      quality: point.quality,
     }));
     this.weatherDataPointMarkersLoading = false;
   }

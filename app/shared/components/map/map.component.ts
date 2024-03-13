@@ -4,15 +4,15 @@ import { LatLong } from '@core/models/location';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { firstValueFrom } from 'rxjs';
-import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
+import { DataPointQuality } from '@core/models/data-point';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from './map.service';
 import { isSameLocation } from '@shared/utils/location-utils';
-import { differenceWith, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 
 export interface Marker {
   location: LatLong;
-  color?: string;
+  quality?: DataPointQuality;
   icon?: string;
   active?: boolean;
 }
@@ -51,7 +51,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['markers']) {
       const { previousValue, currentValue } = changes['markers'];
-      this.renderMarkers(previousValue, currentValue);
+      this.renderMarkers(previousValue ?? [], currentValue);
     }
   }
 
@@ -76,12 +76,37 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     this.map?.remove();
   }
 
-  private async renderMarkers(previousMarkers: Marker[], newMarkers: Marker[]): Promise<void> {
-    const markersToRemove: LatLong[] = differenceWith(previousMarkers, newMarkers, isEqual).map(({ location }) => location);
-    markersToRemove.forEach(this.removeMarkersByLocation.bind(this));
+  private getMarkersToAdd(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return newMarkers.filter(
+      (marker) =>
+        !previousMarkers.some(
+          (prevMarker) => isSameLocation(marker.location, prevMarker.location) && marker.icon === prevMarker.icon,
+        ),
+    );
+  }
 
-    const markersToRender: Marker[] = differenceWith(newMarkers, previousMarkers, isEqual);
-    markersToRender.forEach(this.renderMarker.bind(this));
+  private getMarkersToRemove(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return previousMarkers.filter(
+      (prevMarker) =>
+        !newMarkers.some(
+          (marker) => isSameLocation(marker.location, prevMarker.location) && marker.icon === prevMarker.icon,
+        ),
+    );
+  }
+
+  private getMarkersToChange(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return newMarkers.filter((prevMarker) => {
+      const correspondingMarker = previousMarkers.find(
+        (marker) => isSameLocation(marker.location, prevMarker.location) && marker.icon === prevMarker.icon,
+      );
+      return correspondingMarker && !isEqual(prevMarker, correspondingMarker);
+    });
+  }
+
+  private renderMarkers(previousMarkers: Marker[], newMarkers: Marker[]): void {
+    this.getMarkersToAdd(previousMarkers, newMarkers).forEach(this.renderMarker.bind(this));
+    this.getMarkersToRemove(previousMarkers, newMarkers).forEach(this.removeMarkers.bind(this));
+    this.getMarkersToChange(previousMarkers, newMarkers).forEach(this.updateMarkers.bind(this));
   }
 
   private onClickMarker(e: leaflet.LeafletMouseEvent): void {
@@ -89,57 +114,90 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     this.markerClick.emit([lat, lng]);
   }
 
-  private removeMarkersByLocation(location: LatLong): void {
+  private removeMarkers(marker: Marker): void {
     this.map?.eachLayer((layer) => {
       if (layer instanceof leaflet.Marker) {
         const { lat, lng } = layer.getLatLng();
-        if (isSameLocation([location, [lat, lng]])) {
+
+        const isMarkerToRemove = marker.icon
+          ? layer.getElement()?.classList.contains(marker.icon?.replace('.svg', '')) &&
+            isSameLocation(marker.location, [lat, lng])
+          : isSameLocation(marker.location, [lat, lng]);
+
+        if (isMarkerToRemove) {
           layer.remove();
         }
       }
     });
   }
 
+  private updateMarkers(marker: Marker): void {
+    this.map?.eachLayer((layer) => {
+      if (layer instanceof leaflet.Marker) {
+        const { lat, lng } = layer.getLatLng();
+        const layerElement = layer.getElement();
+
+        const isMarkerToUpdate = marker.icon
+          ? layerElement?.classList.contains(marker.icon?.replace('.svg', '')) && isSameLocation(marker.location, [lat, lng])
+          : isSameLocation(marker.location, [lat, lng]);
+
+        if (isMarkerToUpdate) {
+          const layerClassList = layerElement?.classList;
+          layerClassList?.remove(...Object.values(DATA_POINT_QUALITY_CLASS_NAME), 'active');
+          layerClassList?.add(marker.quality ? DATA_POINT_QUALITY_CLASS_NAME[marker.quality] : '');
+          if (marker.active) {
+            layerClassList?.add('active');
+          }
+        }
+      }
+    });
+  }
+
   private async renderMarker(marker: Marker): Promise<void> {
-    const { location, color, active, icon } = marker;
+    const { location, quality, active, icon } = marker;
     const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
 
-    const fillColor = color ?? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT];
-    const strokeColor = active ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT] : fillColor;
-    const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
-    const size = (active ? [44, 53] : [33, 40]) as leaflet.PointExpression;
-    const anchor = (active ? [22, 53] : [16.5, 40]) as leaflet.PointExpression;
-
     let iconSvg = '';
-
     if (icon) {
-      iconSvg = (await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' })))
-        .replaceAll('currentColor', 'white')
-        .replace(
-          '<svg ',
-          `<svg style="position: absolute; top: ${active ? '7' : '8'}px; left: 50%; transform: translateX(-50%); width: 100%;"`,
-        )
-        .replace(/width="(\d+)"/, `width="${active ? '28' : '18'}"`)
-        .replace(/height="(\d+)"/, `height="${active ? '28' : '18'}"`);
+      iconSvg = await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' }));
     }
 
-    const svg = `
+    const svg = `   
         <div style="position: relative;">
-          ${styledMarkerSvg}
+          ${markerSvg}
           ${iconSvg}
         </div>
       `;
+
+    let className = '';
+    if (icon) {
+      className += `${icon?.replace('.svg', '')} `;
+    }
+    className += quality ? `${DATA_POINT_QUALITY_CLASS_NAME[quality]} ` : 'default';
+
+    if (active) {
+      className += 'active';
+    }
 
     this.map &&
       leaflet
         .marker(new leaflet.LatLng(...location), {
           icon: leaflet.divIcon({
-            iconAnchor: anchor,
-            iconSize: size,
             html: svg,
+            className,
           }),
         })
         .on('click', this.onClickMarker.bind(this))
         .addTo(this.map);
   }
 }
+
+const DATA_POINT_QUALITY_CLASS_NAME: Record<DataPointQuality, string> = {
+  [DataPointQuality.DEFAULT]: 'default',
+  [DataPointQuality.GOOD]: 'good',
+  [DataPointQuality.SATISFACTORY]: 'satisfactory',
+  [DataPointQuality.FAIR]: 'fair',
+  [DataPointQuality.POOR]: 'poor',
+  [DataPointQuality.VERY_POOR]: 'very-poor',
+  [DataPointQuality.NO_DATA_AVAILABLE]: 'no-data-available',
+};

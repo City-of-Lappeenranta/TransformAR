@@ -2,13 +2,7 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardMapComponent } from './dashboard-map.component';
-import {
-  DATA_POINT_QUALITY_COLOR_CHART,
-  DATA_POINT_TYPE_ICON,
-  DataPointQuality,
-  DataPointType,
-  WeatherDataPoint,
-} from '@core/models/data-point';
+import { DATA_POINT_TYPE_ICON, DataPointQuality, DataPointType, WeatherDataPoint } from '@core/models/data-point';
 import { of } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
@@ -54,12 +48,12 @@ describe('DashboardMapComponent', () => {
         {
           location: [1, 1],
           icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          quality: DataPointQuality.GOOD,
         },
         {
           location: [2, 2],
           icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          quality: DataPointQuality.FAIR,
         },
       ]);
     });
@@ -98,7 +92,7 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      jest.spyOn(window, 'alert');
+      window.alert = jest.fn();
 
       find('.focus-location').triggerEventHandler('click');
       await fixture.whenStable();

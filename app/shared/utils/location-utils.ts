@@ -5,6 +5,6 @@ import { LatLong } from '@core/models/location';
  * @param locations an array of two locations
  * @returns boolean
  */
-export const isSameLocation = (locations: [LatLong, LatLong]): boolean => {
-  return locations[0].toString() === locations[1].toString();
+export const isSameLocation = (locationA: LatLong, locationB: LatLong): boolean => {
+  return locationA.toString() === locationB.toString();
 };
