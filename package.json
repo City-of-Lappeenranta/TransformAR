@@ -85,5 +85,10 @@
       "^lodash-es$": "lodash"
     },
     "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "reports",
+    "reportFile": "sonar-report.xml",
+    "indent": 2
   }
 }
