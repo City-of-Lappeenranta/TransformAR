@@ -1,7 +1,5 @@
 <article class="location-container flex-column">
   <app-search-location-input [formControl]="locationFormControl"></app-search-location-input>
-  {{ locationFormControl.value }}
-
   <div class="map-container full-width full-height">
     <app-map
       [center$]="mapCenter$"
