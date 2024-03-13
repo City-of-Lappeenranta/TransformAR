@@ -36,7 +36,6 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   @Input() public withCurrentLocation = true;
 
   public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
-  public loadedLocation$: Observable<boolean> | undefined;
 
   private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
 
@@ -71,17 +70,10 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
     if (this.withCurrentLocation) {
       this.autoComplete?.show();
 
-      const userLocation$ = this.locationService.userLocation$;
-      const locationPermissionState$ = this.locationService.locationPermissionState$;
-
-      this.loadedLocation$ = combineLatest([userLocation$, locationPermissionState$]).pipe(
-        map(
-          ([currentUserLocation, locationPermissionState]) =>
-            currentUserLocation.loading === false && locationPermissionState === 'granted',
-        ),
+      locationSuggestionsObservables$.push(
+        this.locationService.userLocation$,
+        this.locationService.locationPermissionState$,
       );
-
-      locationSuggestionsObservables$.push(userLocation$, locationPermissionState$);
     }
 
     this.locationSuggestions$ = combineLatest(locationSuggestionsObservables$).pipe(
@@ -107,7 +99,7 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
     let currentUserLocationName = 'Fetching your location...';
 
     if (!currentUserLocation.loading) {
-      if (locationPermissionState === 'granted') {
+      if (currentUserLocation.location) {
         currentUserLocationName = 'Your current location';
       } else {
         currentUserLocationName = 'We could not determine your location';
@@ -118,6 +110,7 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
       latLong: currentUserLocation.location ?? [0, 0],
       address: currentUserLocationName,
       isCurrentLocation: true,
+      disabled: currentUserLocation.loading || locationPermissionState !== 'granted',
     };
 
     return [currentUserLocationOption, ...results];

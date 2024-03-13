@@ -13,11 +13,7 @@
   (onFocus)="onAutocompleteFocus()"
 >
   <ng-template let-location pTemplate="item">
-    <div
-      *ngIf="location.isCurrentLocation; else default"
-      class="current-location-suggestion flex-row"
-      [class.clickable]="loadedLocation$ | async"
-    >
+    <div *ngIf="location.isCurrentLocation; else default" class="current-location-suggestion flex-row">
       <app-icon icon="target"></app-icon>
       <p class="full-width">{{ location.address }}</p>
       <app-icon class="checked" icon="check"></app-icon>
