@@ -72,7 +72,7 @@ describe('SearchLocationInputComponent', () => {
         })
         .render();
 
-      instance.autoComplete?.inputEL?.nativeElement?.focus();
+      instance.onAutocompleteFocus();
 
       if (instance.locationSuggestions$) {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
@@ -80,6 +80,7 @@ describe('SearchLocationInputComponent', () => {
             latLong: [0, 0],
             address: 'Fetching your location...',
             isCurrentLocation: true,
+            disabled: true,
           },
         ]);
       }
@@ -97,7 +98,7 @@ describe('SearchLocationInputComponent', () => {
         })
         .render();
 
-      instance.autoComplete?.inputEL?.nativeElement?.focus();
+      instance.onAutocompleteFocus();
 
       if (instance.locationSuggestions$) {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
@@ -105,6 +106,7 @@ describe('SearchLocationInputComponent', () => {
             latLong: [4, 4],
             address: 'Your current location',
             isCurrentLocation: true,
+            disabled: false,
           },
         ]);
       }
@@ -118,7 +120,7 @@ describe('SearchLocationInputComponent', () => {
         })
         .render();
 
-      instance.autoComplete?.inputEL?.nativeElement?.focus();
+      instance.onAutocompleteFocus();
 
       if (instance.locationSuggestions$) {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
@@ -126,6 +128,7 @@ describe('SearchLocationInputComponent', () => {
             latLong: [0, 0],
             address: 'We could not determine your location',
             isCurrentLocation: true,
+            disabled: true,
           },
         ]);
       }

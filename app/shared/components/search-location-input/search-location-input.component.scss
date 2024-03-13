@@ -13,17 +13,7 @@
     gap: 8px;
   }
 
-  ::ng-deep {
-    .p-autocomplete-item:not(.p-highlight) .checked {
-      display: none;
-    }
-
-    .p-autocomplete-item:has(.current-location-suggestion) {
-      pointer-events: none;
-    }
-
-    .p-autocomplete-item:has(.clickable) {
-      pointer-events: unset;
-    }
+  ::ng-deep .p-autocomplete-item:not(.p-highlight) .checked {
+    display: none;
   }
 }
