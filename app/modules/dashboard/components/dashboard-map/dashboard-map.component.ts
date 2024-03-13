@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import { DataPoint, WeatherDataPoint, DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON } from '@core/models/data-point';
+import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
+import { environment } from '@environments/environment';
 import { Marker } from '@shared/components/map/map.component';
-import { MapService } from '@shared/components/map/map.service';
-import { Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -28,10 +28,12 @@ export class DashboardMapComponent {
 
   public locationFormControl = new FormControl<LatLong | null>(null);
 
+  private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
+  public mapCenter$ = this._mapCenterSubject$.asObservable();
+
   public constructor(
     private readonly locationService: LocationService,
     private readonly dataPointsApi: DataPointsApi,
-    private readonly mapService: MapService,
   ) {
     this.dataPointsApi
       .getWeatherDataPoints()
@@ -40,7 +42,7 @@ export class DashboardMapComponent {
 
     this.locationFormControl.valueChanges.pipe(takeUntilDestroyed()).subscribe((latLong) => {
       if (latLong) {
-        this.mapService.setCenter(latLong);
+        this._mapCenterSubject$.next(latLong);
       }
     });
   }
@@ -80,7 +82,7 @@ export class DashboardMapComponent {
       )
       .subscribe(({ currentUserLocation, permissionState }) => {
         if (currentUserLocation?.location && permissionState === 'granted') {
-          this.mapService.setCenter(currentUserLocation.location as LatLong);
+          this._mapCenterSubject$.next(currentUserLocation.location as LatLong);
         }
 
         if (!currentUserLocation.loading && permissionState === 'denied') {

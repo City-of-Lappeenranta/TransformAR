@@ -2,12 +2,11 @@ import { FormControl } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
-import { of } from 'rxjs';
+import { of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { SharedModule } from 'primeng/api';
-import { MapService } from '@shared/components/map/map.service';
 
 describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
@@ -29,21 +28,18 @@ describe('FeedbackLocationComponent', () => {
     it('should update the center of the map and form control value', async () => {
       const locationFormControl = new FormControl();
 
-      const { inject } = await shallow.render(
+      const { instance } = await shallow.render(
         `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
         {
           bind: { locationFormControl },
         },
       );
 
-      const mapService = inject(MapService);
-      jest.spyOn(mapService, 'setCenter');
-
       const latLong: LatLong = [0, 2];
       locationFormControl.setValue(latLong);
 
       expect(locationFormControl.value).toEqual(latLong);
-      expect(mapService.setCenter).toHaveBeenCalledWith(latLong);
+      instance.mapCenter$.pipe(take(1)).subscribe((result) => expect(result === latLong));
     });
   });
 });

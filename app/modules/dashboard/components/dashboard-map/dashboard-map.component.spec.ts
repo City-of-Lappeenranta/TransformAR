@@ -9,14 +9,12 @@ import {
   DataPointType,
   WeatherDataPoint,
 } from '@core/models/data-point';
-import { of } from 'rxjs';
+import { firstValueFrom, of, take } from 'rxjs';
 import { MapComponent } from '@shared/components/map/map.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { SharedModule } from 'primeng/api';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
-import { MapService } from '@shared/components/map/map.service';
-import { SearchLocationInputComponent } from '@shared/components/search-location-input/search-location-input.component';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -70,7 +68,7 @@ describe('DashboardMapComponent', () => {
     it('should set center off map to search bar address', async () => {
       const location = [4, 4] as LatLong;
 
-      const { instance, inject, findComponent } = await shallow
+      const { instance } = await shallow
         .mock(LocationService, {
           locationPermissionState$: of('granted' as PermissionState),
           userLocation$: of({
@@ -80,18 +78,15 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      const mapService = inject(MapService);
-      jest.spyOn(mapService, 'setCenter');
-
       instance.locationFormControl.setValue(location);
 
-      expect(mapService.setCenter).toHaveBeenCalledWith(location);
+      instance.mapCenter$.pipe(take(1)).subscribe((center) => expect(center).toBe(location));
     });
 
     it('should set center on map when user location is available', async () => {
       const currentLocation = [4, 4] as LatLong;
 
-      const { find, inject } = await shallow
+      const { find, instance } = await shallow
         .mock(LocationService, {
           locationPermissionState$: of('granted' as PermissionState),
           userLocation$: of({
@@ -101,12 +96,9 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      const mapService = inject(MapService);
-      jest.spyOn(mapService, 'setCenter');
-
       find('.focus-location').triggerEventHandler('click');
 
-      expect(mapService.setCenter).toHaveBeenCalledWith(currentLocation);
+      expect(await firstValueFrom(instance.mapCenter$)).toEqual(currentLocation);
     });
 
     it('should show alert when permission state is "denied"', async () => {
@@ -120,7 +112,7 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      jest.spyOn(window, 'alert');
+      jest.spyOn(window, 'alert').mockImplementation(jest.fn);
 
       find('.focus-location').triggerEventHandler('click');
       await fixture.whenStable();
@@ -137,22 +129,26 @@ const WEATHER_DATA_POINTS: WeatherDataPoint[] = [
     location: [1, 1],
     type: DataPointType.WEATHER,
     quality: DataPointQuality.GOOD,
-    airTemperature: 0,
-    airMoisture: 0,
-    dewPoint: 0,
-    wind: 0,
-    rainFall: 0,
-    snowDepth: 0,
+    data: {
+      airTemperature: 0,
+      airMoisture: 0,
+      dewPoint: 0,
+      wind: 0,
+      rainFall: 0,
+      snowDepth: 0,
+    },
   },
   {
     location: [2, 2],
     type: DataPointType.WEATHER,
     quality: DataPointQuality.FAIR,
-    airTemperature: 0,
-    airMoisture: 0,
-    dewPoint: 0,
-    wind: 0,
-    rainFall: 0,
-    snowDepth: 0,
+    data: {
+      airTemperature: 0,
+      airMoisture: 0,
+      dewPoint: 0,
+      wind: 0,
+      rainFall: 0,
+      snowDepth: 0,
+    },
   },
 ];

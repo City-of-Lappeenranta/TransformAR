@@ -1,8 +1,9 @@
 <article class="location-container flex-column">
   <app-search-location-input [formControl]="locationFormControl"></app-search-location-input>
-  {{ locationFormControl.value }}
-
   <div class="map-container full-width full-height">
-    <app-map [markers]="locationFormControl.value ? [{ location: locationFormControl.value }] : []"></app-map>
+    <app-map
+      [center$]="mapCenter$"
+      [markers]="locationFormControl.value ? [{ location: locationFormControl.value }] : []"
+    ></app-map>
   </div>
 </article>

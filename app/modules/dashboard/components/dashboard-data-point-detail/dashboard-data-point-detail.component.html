@@ -15,36 +15,12 @@
   @switch (dataPoint.type) {
     @case (DATA_POINT_TYPE.WEATHER) {
       <ul class="weather-data-container">
-        <li>
-          <label class="button-sm">Air temperature</label>
-          <p *ngIf="dataPoint.airTemperature" class="body-sm">{{ dataPoint.airTemperature }} °C</p>
-          <p *ngIf="!dataPoint.airTemperature" class="body-sm">No data</p>
-        </li>
-        <li>
-          <label class="button-sm">Wind</label>
-          <p *ngIf="dataPoint.wind" class="body-sm">{{ dataPoint.wind }}</p>
-          <p *ngIf="!dataPoint.wind" class="body-sm">No data</p>
-        </li>
-        <li>
-          <label class="button-sm">Air moisture</label>
-          <p *ngIf="dataPoint.airMoisture" class="body-sm">{{ dataPoint.airMoisture }}%</p>
-          <p *ngIf="!dataPoint.airMoisture" class="body-sm">No data</p>
-        </li>
-        <li>
-          <label class="button-sm">Rainfall</label>
-          <p *ngIf="dataPoint.rainFall" class="body-sm">{{ dataPoint.rainFall }} mm</p>
-          <p *ngIf="!dataPoint.rainFall" class="body-sm">No data</p>
-        </li>
-        <li>
-          <label class="button-sm">Dew point</label>
-          <p *ngIf="dataPoint.dewPoint" class="body-sm">{{ dataPoint.dewPoint }} °C</p>
-          <p *ngIf="!dataPoint.dewPoint" class="body-sm">No data</p>
-        </li>
-        <li>
-          <label class="button-sm">Snow depth</label>
-          <p *ngIf="dataPoint.snowDepth" class="body-sm">{{ dataPoint.snowDepth }} inch</p>
-          <p *ngIf="!dataPoint.snowDepth" class="body-sm">No data</p>
-        </li>
+        @for (metric of dataPoint.data | keyvalue; track metric.key) {
+          <li>
+            <label class="button-sm">{{ getMetricLabel(dataPoint.type, metric.key) }}</label>
+            <p class="body-sm">{{ metric.value }}{{ getMetricUnit(dataPoint.type, metric.key) }}</p>
+          </li>
+        }
       </ul>
     }
   }
