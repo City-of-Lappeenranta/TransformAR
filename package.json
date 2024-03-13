@@ -30,6 +30,7 @@
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
     "@angular/service-worker": "^17.1.0",
+    "jest-junit": "^16.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "leaflet": "^1.9.4",
     "primeng": "^17.5.0",
@@ -84,6 +85,18 @@
       "^@environments/(.*)$": "<rootDir>/environments/$1",
       "^lodash-es$": "lodash"
     },
+    "modulePaths": [
+      "<rootDir>/src"
+    ],
+    "reporters": [
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "reports",
+          "outputName": "jest-report.xml"
+        }
+      ]
+    ],
     "testResultsProcessor": "jest-sonar-reporter"
   },
   "jestSonar": {
