@@ -31,6 +31,7 @@
     "@angular/router": "^17.1.0",
     "@angular/service-worker": "^17.1.0",
     "jest-junit": "^16.0.0",
+    "jest-mocha-spec-reporter": "^1.0.17",
     "leaflet": "^1.9.4",
     "primeng": "^17.5.0",
     "rxjs": "~7.8.0",
@@ -90,13 +91,13 @@
     ],
     "collectCoverage": true,
     "reporters": [
-      "default",
+      "jest-mocha-spec-reporter",
       [
         "jest-junit",
         {
           "allowEmptyResults": true,
           "outputDirectory": "reports",
-          "outputName": "test-report.xml"
+          "outputName": "jest-report.xml"
         }
       ]
     ],
@@ -104,7 +105,7 @@
   },
   "jestSonar": {
     "reportPath": "reports",
-    "reportFile": "test-report.xml",
+    "reportFile": "sonar-report.xml",
     "indent": 2
   }
 }
