@@ -93,6 +93,7 @@
       [
         "jest-junit",
         {
+          "allowEmptyResults": true,
           "outputDirectory": "reports",
           "outputName": "test-report.xml"
         }
