@@ -10,6 +10,16 @@ module.exports = {
     '^@environments/(.*)$': '<rootDir>/environments/$1',
     '^lodash-es$': 'lodash',
   },
+  coverageDirectory: '<rootDir>/reports',
+  coverageReporters: [
+    'html',
+    [
+      'lcovonly',
+      {
+        file: 'lcov-coverage-report.info',
+      },
+    ],
+  ],
   modulePaths: ['<rootDir>/src'],
   reporters: [
     'jest-mocha-spec-reporter',
