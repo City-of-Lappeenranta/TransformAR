@@ -20,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FeedbackContactComponent } from './components/feedback-form/feedback-contact/feedback-contact.component';
 import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
 import { DividerModule } from 'primeng/divider';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DividerModule } from 'primeng/divider';
     CheckboxModule,
     InputTextModule,
     DividerModule,
+    ToastModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
 })
