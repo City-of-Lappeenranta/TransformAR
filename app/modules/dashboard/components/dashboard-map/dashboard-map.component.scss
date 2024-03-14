@@ -41,11 +41,6 @@ $z-index: 999;
   }
 
   .toast-content {
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
-    background-color: white;
-
     p:after {
       overflow: hidden;
       display: inline-block;
@@ -56,10 +51,6 @@ $z-index: 999;
       width: 0px;
     }
   }
-}
-
-:host ::ng-deep .toast {
-  width: 275px;
 }
 
 @keyframes location-loading {

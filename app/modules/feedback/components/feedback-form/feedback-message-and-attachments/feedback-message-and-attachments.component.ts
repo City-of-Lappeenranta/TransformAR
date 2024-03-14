@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { convertBytesToMegabytes } from '@shared/utils/file-utils';
 import imageCompression, { Options } from 'browser-image-compression';
+import { MessageService } from 'primeng/api';
 
 interface FormFile {
   name: string;
@@ -22,12 +23,16 @@ export class FeedbackMessageAndAttachmentComponent {
 
   private readonly IMAGE_JPEG = 'image/jpeg';
   private readonly IMAGE_PNG = 'image/png';
-  private readonly MAX_COMPRESSED_FILE_SIZE_MB = 2;
-  public readonly MAX_UPLOAD_FILE_SIZE_MB = 8;
+  public readonly MAX_FILE_SIZE = 3;
 
   public files: FormFile[] = [];
 
-  public constructor(private readonly formBuilder: FormBuilder) {}
+  public readonly TOAST_KEY = 'error';
+
+  public constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly messageService: MessageService,
+  ) {}
 
   public async onFileInput(event: Event): Promise<void> {
     const files = (event.target as HTMLInputElement).files;
@@ -35,19 +40,20 @@ export class FeedbackMessageAndAttachmentComponent {
     if (files && files.length > 0) {
       const file: File = files[0];
 
-      if (this.isValidFileType(file) && this.isValidUploadedFileSize(file)) {
-        let compressedFile = file;
-
-        if (!this.isValidCompressedFileSize(compressedFile)) {
-          compressedFile = await this.compressFile(file);
-        }
+      if (this.isValidFileType(file) && this.isValidFileSize(file)) {
+        const compressedFile = await this.compressFile(file);
 
         this.files.push({
           name: compressedFile.name,
-          size: `${Math.round(convertBytesToMegabytes(compressedFile.size))} MB`,
+          size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
         });
 
         this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(compressedFile));
+      } else {
+        this.messageService.add({
+          key: this.TOAST_KEY,
+          detail: 'The uploaded file should be a JPEG or PNG and be smaller than 3MB',
+        });
       }
     }
   }
@@ -59,7 +65,7 @@ export class FeedbackMessageAndAttachmentComponent {
 
   private async compressFile(file: File): Promise<File> {
     const options: Options = {
-      maxSizeMB: this.MAX_COMPRESSED_FILE_SIZE_MB,
+      maxSizeMB: this.MAX_FILE_SIZE,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -70,11 +76,7 @@ export class FeedbackMessageAndAttachmentComponent {
     return file.type === this.IMAGE_JPEG || file.type === this.IMAGE_PNG;
   }
 
-  private isValidUploadedFileSize(file: File): boolean {
-    return convertBytesToMegabytes(file.size) < this.MAX_UPLOAD_FILE_SIZE_MB;
-  }
-
-  private isValidCompressedFileSize(file: File): boolean {
-    return convertBytesToMegabytes(file.size) < this.MAX_COMPRESSED_FILE_SIZE_MB;
+  private isValidFileSize(file: File): boolean {
+    return convertBytesToMegabytes(file.size) < this.MAX_FILE_SIZE;
   }
 }
