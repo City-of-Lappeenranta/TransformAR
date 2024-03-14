@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
