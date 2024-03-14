@@ -91,9 +91,10 @@
     "reporters": [
       "default",
       [
-        "jest-sonar-reporter",
+        "jest-junit",
         {
-          "outputName": "reports/test-report.xml"
+          "outputDirectory": "reports",
+          "outputName": "test-report.xml"
         }
       ]
     ],
@@ -101,7 +102,7 @@
   },
   "jestSonar": {
     "reportPath": "reports",
-    "reportFile": "sonar-report.xml",
+    "reportFile": "test-report.xml",
     "indent": 2
   }
 }
