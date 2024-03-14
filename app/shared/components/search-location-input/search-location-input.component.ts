@@ -1,13 +1,13 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
-import { IconComponent } from '../icon/icon.component';
-import { LatLong, LocationSearchResult } from '@core/models/location';
 import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
-import { Subject, BehaviorSubject, Observable, combineLatest, map, of } from 'rxjs';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
+import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
+import { IconComponent } from '../icon/icon.component';
 
 export interface LocationSuggestion {
   address: string;
@@ -32,8 +32,6 @@ export interface LocationSuggestion {
 })
 export class SearchLocationInputComponent extends ControlValueAccessorHelper<LatLong> {
   @ViewChild(AutoComplete) public autoComplete: AutoComplete | undefined;
-
-  @Input() public withCurrentLocation = true;
 
   public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
 
@@ -61,37 +59,20 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   }
 
   public onAutocompleteFocus(): void {
-    let userLocation$: Observable<UserLocation | null> = of(null);
-    let locationPermissionState$: Observable<PermissionState | null> = of(null);
+    const userLocation$: Observable<UserLocation> = this.locationService.userLocation$;
     const locationSearchResults$: Observable<LocationSearchResult[]> = this._locationSearchResults$.asObservable();
 
-    if (this.withCurrentLocation) {
-      this.autoComplete?.show();
-
-      userLocation$ = this.locationService.userLocation$;
-      locationPermissionState$ = this.locationService.locationPermissionState$;
-    }
-
-    this.locationSuggestions$ = combineLatest([userLocation$, locationPermissionState$, locationSearchResults$]).pipe(
-      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
-        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
-          locationSearchResults,
-          currentUserLocation,
-          locationPermissionState,
-        ),
+    this.locationSuggestions$ = combineLatest([userLocation$, locationSearchResults$]).pipe(
+      map(([currentUserLocation, locationSearchResults]) =>
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(locationSearchResults, currentUserLocation),
       ),
     );
   }
 
   private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
     results: LocationSearchResult[],
-    currentUserLocation: UserLocation | null,
-    locationPermissionState: PermissionState | null,
+    currentUserLocation: UserLocation,
   ): LocationSuggestion[] {
-    if (!currentUserLocation) {
-      return results;
-    }
-
     let currentUserLocationName = 'Fetching your location...';
 
     if (!currentUserLocation.loading) {
@@ -106,7 +87,7 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
       latLong: currentUserLocation.location ?? [0, 0],
       address: currentUserLocationName,
       isCurrentLocation: true,
-      disabled: currentUserLocation.loading || locationPermissionState !== 'granted',
+      disabled: currentUserLocation.loading || !currentUserLocation.location,
     };
 
     return [currentUserLocationOption, ...results];

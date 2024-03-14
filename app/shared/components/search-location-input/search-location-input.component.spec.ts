@@ -87,17 +87,6 @@ describe('SearchLocationInputComponent', () => {
         ]);
       }
     });
-    it('should initially fetch location without current user location if withCurrentLocation is false', async () => {
-      const { instance } = await shallow.render({
-        bind: { withCurrentLocation: false },
-      });
-
-      instance.onAutocompleteFocus();
-
-      if (instance.locationSuggestions$) {
-        expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([]);
-      }
-    });
 
     it('should handle user location', async () => {
       const { instance } = await shallow

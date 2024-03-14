@@ -1,9 +1,5 @@
 <app-map [center$]="mapCenter$" [markers]="weatherDataPointMarkers" (markerClick)="onMarkerClick($event)"></app-map>
-<app-search-location-input
-  class="search"
-  [formControl]="locationFormControl"
-  [withCurrentLocation]="false"
-></app-search-location-input>
+<app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
 <app-dashboard-data-point-detail
   *ngIf="selectedDataPoint$ | async as selectedDataPoint"
   class="data-point-detail"

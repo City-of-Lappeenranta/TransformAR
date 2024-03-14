@@ -8,6 +8,7 @@
   [style]="{ width: '100%' }"
   [inputStyle]="{ width: '100%' }"
   [suggestions]="(locationSuggestions$ | async) ?? []"
+  [completeOnFocus]="true"
   (completeMethod)="onSearchLocation($event)"
   (onSelect)="onSelectLocation($event)"
   (onFocus)="onAutocompleteFocus()"
