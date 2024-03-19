@@ -86,7 +86,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     expect(instance.reasonForm.value.files?.length).toBe(0);
   });
 
-  fit('should refuse files larger than 3MB', async () => {
+  it('should refuse files larger than 3MB', async () => {
     const fileName = 'image.jpg';
 
     const { instance, fixture, findComponent, inject } = await shallow.render(
