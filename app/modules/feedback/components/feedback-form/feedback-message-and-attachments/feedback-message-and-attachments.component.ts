@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { convertBytesToMegabytes } from '@shared/utils/file-utils';
 import imageCompression, { Options } from 'browser-image-compression';
@@ -23,9 +23,10 @@ export class FeedbackMessageAndAttachmentComponent {
 
   private readonly IMAGE_JPEG = 'image/jpeg';
   private readonly IMAGE_PNG = 'image/png';
-  public readonly MAX_FILE_SIZE = 3;
+  public readonly MAX_FILE_SIZE_MB = 3;
 
   public files: FormFile[] = [];
+  public amountOfFilesBeingCompressed = signal(0);
 
   public readonly TOAST_KEY = 'error';
 
@@ -40,20 +41,24 @@ export class FeedbackMessageAndAttachmentComponent {
     if (files && files.length > 0) {
       const file: File = files[0];
 
-      if (this.isValidFileType(file) && this.isValidFileSize(file)) {
+      if (this.isValidFileType(file)) {
+        this.updateAmountOfFilesBeingCompressed(1);
         const compressedFile = await this.compressFile(file);
+        this.updateAmountOfFilesBeingCompressed(-1);
 
-        this.files.push({
-          name: compressedFile.name,
-          size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
-        });
+        if (this.hasValidFileSize(compressedFile)) {
+          this.files.push({
+            name: compressedFile.name,
+            size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
+          });
 
-        this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(compressedFile));
-      } else {
-        this.messageService.add({
-          key: this.TOAST_KEY,
-          detail: 'The uploaded file should be a JPEG or PNG and be smaller than 3MB',
-        });
+          this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(compressedFile));
+        } else {
+          this.messageService.add({
+            key: this.TOAST_KEY,
+            detail: `Your file is too large and could not be compressed down to ${this.MAX_FILE_SIZE_MB}, please try again with a smaller file`,
+          });
+        }
       }
     }
   }
@@ -65,7 +70,7 @@ export class FeedbackMessageAndAttachmentComponent {
 
   private async compressFile(file: File): Promise<File> {
     const options: Options = {
-      maxSizeMB: this.MAX_FILE_SIZE,
+      maxSizeMB: this.MAX_FILE_SIZE_MB,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -76,7 +81,11 @@ export class FeedbackMessageAndAttachmentComponent {
     return file.type === this.IMAGE_JPEG || file.type === this.IMAGE_PNG;
   }
 
-  private isValidFileSize(file: File): boolean {
-    return convertBytesToMegabytes(file.size) < this.MAX_FILE_SIZE;
+  private hasValidFileSize(file: File): boolean {
+    return convertBytesToMegabytes(file.size) < this.MAX_FILE_SIZE_MB;
+  }
+
+  private updateAmountOfFilesBeingCompressed(amount: number): void {
+    this.amountOfFilesBeingCompressed.update((prev) => (prev += amount));
   }
 }

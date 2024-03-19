@@ -17,10 +17,7 @@
     </label>
     <div class="attachments flex-column">
       <app-icon class="icon" icon="add-image"></app-icon>
-      <p class="description">
-        You can upload one or more images to your feedback. JPG, PNG, maximum size of files is
-        {{ MAX_FILE_SIZE }}MB
-      </p>
+      <p class="description">You can upload one or more images (JPEG/PNG) to send along with your feedback</p>
       <p-button class="button" [outlined]="true" label="Upload or take image" (click)="fileInput.click()">
         <input #fileInput type="file" accept="image/png, image/jpeg" (change)="onFileInput($event)" style="display: none" />
       </p-button>
@@ -35,6 +32,9 @@
           [size]="file.size"
           (remove)="onFileRemove(index)"
         ></app-feedback-attachment-file>
+      }
+      @for (item of [].constructor(amountOfFilesBeingCompressed()); track item; let index = $index) {
+        <p-skeleton height="36px"></p-skeleton>
       }
     </div>
   </section>
