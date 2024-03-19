@@ -5,6 +5,8 @@ import { DashboardRoutingModule } from './dashboard.routing';
 import { DashboardDataPointDetailComponent } from './components/dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { SearchLocationInputComponent } from '@shared/components/search-location-input/search-location-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -13,10 +15,12 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     SharedModule,
     SkeletonModule,
+    ToastModule,
     DashboardRoutingModule,
     IconComponent,
     SearchLocationInputComponent,
     ReactiveFormsModule,
   ],
+  providers: [MessageService],
 })
 export class DashboardModule {}

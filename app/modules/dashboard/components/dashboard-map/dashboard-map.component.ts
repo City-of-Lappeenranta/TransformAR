@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
@@ -7,6 +7,7 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { environment } from '@environments/environment';
 import { Marker } from '@shared/components/map/map.component';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
@@ -14,11 +15,11 @@ import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChang
   templateUrl: './dashboard-map.component.html',
   styleUrls: ['./dashboard-map.component.scss'],
 })
-export class DashboardMapComponent {
+export class DashboardMapComponent implements AfterViewInit {
   private dataPoints: DataPoint[] = [];
 
+  private _weatherDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   public weatherDataPointMarkers: Marker[] = [];
-  public weatherDataPointMarkersLoading: boolean = true;
 
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
@@ -28,19 +29,31 @@ export class DashboardMapComponent {
 
   public locationFormControl = new FormControl<LatLong | null>(null);
 
+  public readonly TOAST_KEY = 'loading';
   private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
   public mapCenter$ = this._mapCenterSubject$.asObservable();
+
+  private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
     private readonly locationService: LocationService,
     private readonly dataPointsApi: DataPointsApi,
+    private readonly messageService: MessageService,
   ) {
     this.dataPointsApi
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherDataPoints.bind(this));
 
-    this.locationFormControl.valueChanges.pipe(takeUntilDestroyed()).subscribe((latLong) => {
+    combineLatest([this._weatherDataPointMarkersLoadingSubject$])
+      .pipe(takeUntilDestroyed())
+      .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
+  }
+
+  public ngAfterViewInit(): void {
+    this.showLoadingDataToast();
+
+    this.locationFormControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((latLong) => {
       if (latLong) {
         this._mapCenterSubject$.next(latLong);
       }
@@ -57,6 +70,14 @@ export class DashboardMapComponent {
   public onDataPointClose(): void {
     this.setActiveMarker();
     this._selectedDataPointSubject$.next(null);
+  }
+
+  private showLoadingDataToast(): void {
+    this.messageService.add({ key: this.TOAST_KEY, sticky: true, severity: 'custom', detail: 'Fetching data' });
+  }
+
+  private closeLoadingDataToast(): void {
+    this.messageService.clear(this.TOAST_KEY);
   }
 
   private setActiveMarker(latLong?: LatLong): void {
@@ -99,7 +120,7 @@ export class DashboardMapComponent {
       icon: DATA_POINT_TYPE_ICON[point.type],
       color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
     }));
-    this.weatherDataPointMarkersLoading = false;
+    this._weatherDataPointMarkersLoadingSubject$.next(false);
   }
 
   private isSameLocation(locations: [LatLong, LatLong]): boolean {

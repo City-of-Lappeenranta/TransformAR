@@ -1,7 +1,3 @@
-import { DataPointsApi } from '@core/services/datapoints-api.service';
-import { Shallow } from 'shallow-render';
-import { DashboardModule } from '../../dashboard.module';
-import { DashboardMapComponent } from './dashboard-map.component';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
@@ -9,22 +5,45 @@ import {
   DataPointType,
   WeatherDataPoint,
 } from '@core/models/data-point';
-import { firstValueFrom, of, take } from 'rxjs';
-import { MapComponent } from '@shared/components/map/map.component';
-import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
-import { SharedModule } from 'primeng/api';
-import { LocationService, UserLocation } from '@core/services/location.service';
 import { LatLong } from '@core/models/location';
+import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { LocationService, UserLocation } from '@core/services/location.service';
+import { MapComponent } from '@shared/components/map/map.component';
+import { MessageService, SharedModule } from 'primeng/api';
+import { delay, firstValueFrom, of, take } from 'rxjs';
+import { Shallow } from 'shallow-render';
+import { DashboardModule } from '../../dashboard.module';
+import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
+import { DashboardMapComponent } from './dashboard-map.component';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
 
   beforeEach(() => {
     shallow = new Shallow(DashboardMapComponent, DashboardModule)
+      .mock(MessageService, { add: jest.fn(), clear: jest.fn() })
       .mock(DataPointsApi, {
         getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
       })
       .provideMock(SharedModule);
+  });
+
+  describe('data fetching', () => {
+    it('should show a loader when fetching data and clear when all data has been loaded', async () => {
+      jest.useFakeTimers();
+      const { inject } = await shallow
+        .mock(DataPointsApi, {
+          getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS).pipe(delay(2000))),
+        })
+        .render();
+
+      const messageService = inject(MessageService);
+      expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
+
+      jest.advanceTimersByTime(2000);
+
+      expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
+    });
   });
 
   describe('markers', () => {
