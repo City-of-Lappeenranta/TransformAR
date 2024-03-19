@@ -1,12 +1,13 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
+import { DATA_POINT_TYPE_ICON, DATA_POINT_QUALITY_COLOR_CHART, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { environment } from '@environments/environment';
 import { Marker } from '@shared/components/map/map.component';
 import { MessageService } from 'primeng/api';
+import { isSameLocation } from '@shared/utils/location-utils';
 import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
@@ -51,9 +52,7 @@ export class DashboardMapComponent implements AfterViewInit {
 
   public onMarkerClick(latLong: LatLong): void {
     this.setActiveMarker(latLong);
-    this._selectedDataPointSubject$.next(
-      this.dataPoints.find((point) => this.isSameLocation([point.location, latLong])) ?? null,
-    );
+    this._selectedDataPointSubject$.next(this.dataPoints.find((point) => isSameLocation(point.location, latLong)) ?? null);
   }
 
   public onDataPointClose(): void {
@@ -72,7 +71,7 @@ export class DashboardMapComponent implements AfterViewInit {
   private setActiveMarker(latLong?: LatLong): void {
     this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => ({
       ...marker,
-      active: latLong ? this.isSameLocation([marker.location, latLong]) : false,
+      active: latLong ? isSameLocation(marker.location, latLong) : false,
     }));
   }
 
@@ -110,9 +109,5 @@ export class DashboardMapComponent implements AfterViewInit {
       color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
     }));
     this._weatherDataPointMarkersLoadingSubject$.next(false);
-  }
-
-  private isSameLocation(locations: [LatLong, LatLong]): boolean {
-    return locations[0].toString() === locations[1].toString();
   }
 }
