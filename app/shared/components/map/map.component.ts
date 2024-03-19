@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import * as leaflet from 'leaflet';
@@ -151,8 +150,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     const { color, active, icon } = marker;
     const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
 
-    const fillColor = color ?? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT];
-    const strokeColor = active ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT] : fillColor;
+    const fillColor = color ?? '#275D38';
+    const strokeColor = active ? '#275D38' : fillColor;
     const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
 
     let iconSvg = '';

@@ -48,7 +48,7 @@ describe('MapComponent', () => {
 
     it('should update the center when a new point is set in the map service', async () => {
       const center$ = new Subject<LatLong>();
-      const { instance, inject } = await shallow.render({ bind: { center$ } });
+      const { instance } = await shallow.render({ bind: { center$ } });
 
       center$.next([0, 2]);
       expect(instance.map?.getCenter()).toEqual({ lat: 0, lng: 2 });
@@ -128,6 +128,6 @@ describe('MapComponent', () => {
 });
 
 function getFillHexCode(svgString: string): string | null {
-  const fillMatch = svgString.match(/fill="#([A-Fa-f0-9]{6})"/);
+  const fillMatch = RegExp(/fill="#([A-Fa-f0-9]{6})"/).exec(svgString);
   return fillMatch ? `#${fillMatch[1]}` : null;
 }
