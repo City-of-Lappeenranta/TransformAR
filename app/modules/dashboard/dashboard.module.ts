@@ -7,10 +7,20 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { SearchLocationInputComponent } from '@shared/components/search-location-input/search-location-input.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [DashboardMapComponent, DashboardDataPointDetailComponent],
-  imports: [SharedModule, SkeletonModule, ToastModule, DashboardRoutingModule, IconComponent],
+  imports: [
+    SharedModule,
+    SkeletonModule,
+    ToastModule,
+    DashboardRoutingModule,
+    IconComponent,
+    SearchLocationInputComponent,
+    ReactiveFormsModule,
+  ],
   providers: [MessageService],
 })
 export class DashboardModule {}

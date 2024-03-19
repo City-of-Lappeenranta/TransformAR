@@ -1,5 +1,6 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl } from '@angular/forms';
 import { DATA_POINT_TYPE_ICON, DATA_POINT_QUALITY_COLOR_CHART, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
@@ -27,9 +28,13 @@ export class DashboardMapComponent implements AfterViewInit {
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
 
+  public locationFormControl = new FormControl<LatLong | null>(null);
+
   public readonly TOAST_KEY = 'loading';
   private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
   public mapCenter$ = this._mapCenterSubject$.asObservable();
+
+  private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
     private readonly locationService: LocationService,
@@ -48,6 +53,12 @@ export class DashboardMapComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.showLoadingDataToast();
+
+    this.locationFormControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((latLong) => {
+      if (latLong) {
+        this._mapCenterSubject$.next(latLong);
+      }
+    });
   }
 
   public onMarkerClick(latLong: LatLong): void {

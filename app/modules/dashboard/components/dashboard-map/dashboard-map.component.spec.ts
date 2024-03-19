@@ -10,7 +10,7 @@ import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';
-import { delay, firstValueFrom, of } from 'rxjs';
+import { delay, firstValueFrom, of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
@@ -31,7 +31,7 @@ describe('DashboardMapComponent', () => {
   describe('data fetching', () => {
     it('should show a loader when fetching data and clear when all data has been loaded', async () => {
       jest.useFakeTimers();
-      const { inject, fixture } = await shallow
+      const { inject } = await shallow
         .mock(DataPointsApi, {
           getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS).pipe(delay(2000))),
         })
@@ -84,6 +84,24 @@ describe('DashboardMapComponent', () => {
   });
 
   describe('focus location', () => {
+    it('should set center off map to search bar address', async () => {
+      const location = [4, 4] as LatLong;
+
+      const { instance } = await shallow
+        .mock(LocationService, {
+          locationPermissionState$: of('granted' as PermissionState),
+          userLocation$: of({
+            loading: false,
+            location: [0, 0],
+          } as UserLocation),
+        })
+        .render();
+
+      instance.locationFormControl.setValue(location);
+
+      instance.mapCenter$.pipe(take(1)).subscribe((center) => expect(center).toBe(location));
+    });
+
     it('should set center on map when user location is available', async () => {
       const currentLocation = [4, 4] as LatLong;
 
