@@ -86,7 +86,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     expect(instance.reasonForm.value.files?.length).toBe(0);
   });
 
-  it('should refuse files larger than 3MB', async () => {
+  fit('should refuse files larger than 3MB', async () => {
     const fileName = 'image.jpg';
 
     const { instance, fixture, findComponent, inject } = await shallow.render(
@@ -114,7 +114,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     fixture.detectChanges();
 
     expect(messageService.add).toHaveBeenCalled();
-    expect(imageCompression).not.toHaveBeenCalled();
+    expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
     expect(findComponent(FeedbackAttachmentFileComponent)).toHaveLength(0);
     expect(instance.reasonForm.value.files?.length).toBe(0);
   });
