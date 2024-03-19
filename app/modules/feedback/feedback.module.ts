@@ -22,7 +22,6 @@ import { FeedbackCategoryComponent } from './components/feedback-form/input-feed
 import { InputFeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/input-feedback-category.component';
 import { FeedbackRoutingModule } from './feedback.routing';
 import { MessageService } from 'primeng/api';
-import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -53,7 +52,6 @@ import { SkeletonModule } from 'primeng/skeleton';
     InputTextModule,
     DividerModule,
     ToastModule,
-    SkeletonModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
   providers: [MessageService],

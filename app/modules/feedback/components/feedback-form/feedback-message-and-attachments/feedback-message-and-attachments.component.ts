@@ -6,7 +6,8 @@ import { MessageService } from 'primeng/api';
 
 interface FormFile {
   name: string;
-  size: string;
+  size?: string;
+  loading?: boolean;
 }
 
 @Component({
@@ -42,18 +43,23 @@ export class FeedbackMessageAndAttachmentComponent {
       const file: File = files[0];
 
       if (this.isValidFileType(file)) {
-        this.updateAmountOfFilesBeingCompressed(1);
+        this.files.push({
+          name: file.name,
+          loading: true,
+        });
+
         const compressedFile = await this.compressFile(file);
-        this.updateAmountOfFilesBeingCompressed(-1);
 
         if (this.hasValidFileSize(compressedFile)) {
-          this.files.push({
-            name: compressedFile.name,
+          this.files = this.files.map((value) => ({
+            ...value,
             size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
-          });
+            loading: false,
+          }));
 
           this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(compressedFile));
         } else {
+          this.files = this.files.filter((value) => value.name !== file.name);
           this.messageService.add({
             key: this.TOAST_KEY,
             detail: `Your file is too large and could not be compressed down to ${this.MAX_FILE_SIZE_MB}, please try again with a smaller file`,

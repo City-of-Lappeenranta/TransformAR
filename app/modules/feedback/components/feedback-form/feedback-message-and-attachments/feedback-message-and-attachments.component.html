@@ -30,11 +30,9 @@
         <app-feedback-attachment-file
           [name]="file.name"
           [size]="file.size"
+          [loading]="file.loading"
           (remove)="onFileRemove(index)"
         ></app-feedback-attachment-file>
-      }
-      @for (item of [].constructor(amountOfFilesBeingCompressed()); track item; let index = $index) {
-        <p-skeleton height="36px"></p-skeleton>
       }
     </div>
   </section>
