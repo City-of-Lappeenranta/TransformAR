@@ -13,7 +13,6 @@ export class FeedbackContactComponent {
     firstName: FormControl<string | null>;
     lastName: FormControl<string | null>;
     phone: FormControl<string | null>;
-    receiveResponseByMail: FormControl<boolean | null>;
     termsOfUseAccepted: FormControl<boolean>;
   }>;
 

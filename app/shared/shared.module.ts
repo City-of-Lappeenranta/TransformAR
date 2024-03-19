@@ -6,9 +6,18 @@ import { IconComponent } from './components/icon/icon.component';
 import { NavigationModule } from './components/navigation/navigation.module';
 import { MapComponent } from './components/map/map.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchLocationInputComponent } from './components/search-location-input/search-location-input.component';
 
 @NgModule({
-  imports: [NavigationModule, IconComponent, MapComponent, HttpClientModule],
-  exports: [ButtonModule, AutoCompleteModule, CommonModule, NavigationModule, IconComponent, MapComponent],
+  imports: [NavigationModule, IconComponent, MapComponent, SearchLocationInputComponent, HttpClientModule],
+  exports: [
+    ButtonModule,
+    AutoCompleteModule,
+    CommonModule,
+    NavigationModule,
+    IconComponent,
+    MapComponent,
+    SearchLocationInputComponent,
+  ],
 })
 export class SharedModule {}

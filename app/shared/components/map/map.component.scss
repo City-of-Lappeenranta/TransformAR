@@ -12,7 +12,31 @@
   left: 0;
 }
 
-::ng-deep .leaflet-div-icon {
+::ng-deep .leaflet-marker-icon {
   background: unset !important;
   border: unset !important;
+
+  div svg + svg {
+    position: absolute;
+    height: 18px;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+
+    path {
+      fill: white;
+    }
+  }
+
+  &.active div {
+    svg:first-child path {
+      stroke: #275d38 !important;
+    }
+
+    svg + svg {
+      height: 28px;
+      top: 7px;
+    }
+  }
 }

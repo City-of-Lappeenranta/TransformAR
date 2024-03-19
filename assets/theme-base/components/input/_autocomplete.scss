@@ -72,7 +72,8 @@
   .p-autocomplete-items {
     padding: $inputListPadding;
 
-    .p-autocomplete-item {
+    .p-autocomplete-item,
+    .p-autocomplete-empty-message {
       margin: $inputListItemMargin;
       padding: $inputListItemPadding;
       border: $inputListItemBorder;
@@ -80,7 +81,9 @@
       background: $inputListItemBg;
       transition: $listItemTransition;
       border-radius: $inputListItemBorderRadius;
+    }
 
+    .p-autocomplete-item {
       &.p-highlight {
         color: #101828;
         background: #f9fafb;
