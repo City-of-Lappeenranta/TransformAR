@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import * as leaflet from 'leaflet';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
+import { isSameLocation } from '@shared/utils/location-utils';
+import { isEqual } from 'lodash';
 
 export interface Marker {
   location: LatLong;
@@ -38,7 +39,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['markers']) {
-      this.renderMarkers();
+      const { previousValue, currentValue } = changes['markers'];
+      this.renderMarkers(previousValue ?? [], currentValue);
     }
 
     if (changes['center$']) {
@@ -81,54 +83,105 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       }) ?? null;
   }
 
-  private async renderMarkers(): Promise<void> {
+  private getMarkersToAdd(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return newMarkers.filter(
+      (marker) => !previousMarkers.some((prevMarker) => isSameLocation(marker.location, prevMarker.location)),
+    );
+  }
+
+  private getMarkersToRemove(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return previousMarkers.filter(
+      (prevMarker) => !newMarkers.some((marker) => isSameLocation(marker.location, prevMarker.location)),
+    );
+  }
+
+  private getMarkersToChange(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+    return newMarkers.filter((newMarker) => {
+      const previousMarker = previousMarkers.find((marker) => isSameLocation(marker.location, newMarker.location));
+      return previousMarker && !isEqual(newMarker, previousMarker);
+    });
+  }
+
+  private renderMarkers(previousMarkers: Marker[], newMarkers: Marker[]): void {
+    this.getMarkersToAdd(previousMarkers, newMarkers).forEach(this.renderMarker.bind(this));
+    this.getMarkersToRemove(previousMarkers, newMarkers).forEach(this.removeMarker.bind(this));
+    this.getMarkersToChange(previousMarkers, newMarkers).forEach(this.updateMarker.bind(this));
+  }
+
+  private removeMarker(marker: Marker): void {
     this.map?.eachLayer((layer) => {
       if (layer instanceof leaflet.Marker) {
-        layer.remove();
+        const { lat, lng } = layer.getLatLng();
+
+        if (isSameLocation(marker.location, [lat, lng])) {
+          layer.remove();
+        }
       }
     });
+  }
 
+  private updateMarker(marker: Marker): void {
+    this.map?.eachLayer(async (layer) => {
+      if (layer instanceof leaflet.Marker) {
+        const { lat, lng } = layer.getLatLng();
+
+        if (isSameLocation(marker.location, [lat, lng])) {
+          const divIcon = await this.getMarkerDivIcon(marker);
+          layer.setIcon(divIcon);
+        }
+      }
+    });
+  }
+
+  private async renderMarker(marker: Marker): Promise<void> {
+    const { location } = marker;
+    const divIcon = await this.getMarkerDivIcon(marker);
+
+    this.map &&
+      leaflet
+        .marker(new leaflet.LatLng(...location), {
+          icon: divIcon,
+        })
+        .on('click', this.onClickMarker.bind(this))
+        .addTo(this.map);
+  }
+
+  private async getMarkerDivIcon(marker: Marker): Promise<leaflet.DivIcon> {
+    const { color, active, icon } = marker;
     const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
 
-    this.markers.forEach(async ({ location, color, active, icon }) => {
-      const fillColor = color ?? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT];
-      const strokeColor = active ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT] : fillColor;
-      const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
-      const size = (active ? [44, 53] : [33, 40]) as leaflet.PointExpression;
-      const anchor = (active ? [22, 53] : [16.5, 40]) as leaflet.PointExpression;
+    const fillColor = color ?? '#275D38';
+    const strokeColor = active ? '#275D38' : fillColor;
+    const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
 
-      let iconSvg = '';
+    let iconSvg = '';
+    if (icon) {
+      iconSvg = await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' }));
+    }
 
-      if (icon) {
-        iconSvg = (await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' })))
-          .replaceAll('currentColor', 'white')
-          .replace(
-            '<svg ',
-            `<svg style="position: absolute; top: ${active ? '7' : '8'}px; left: 50%; transform: translateX(-50%); width: 100%;"`,
-          )
-          .replace(/width="(\d+)"/, `width="${active ? '28' : '18'}"`)
-          .replace(/height="(\d+)"/, `height="${active ? '28' : '18'}"`);
-      }
-
-      const svg = `
+    const svg = `
         <div style="position: relative;">
           ${styledMarkerSvg}
           ${iconSvg}
         </div>
       `;
 
-      this.map &&
-        leaflet
-          .marker(new leaflet.LatLng(...location), {
-            icon: leaflet.divIcon({
-              iconAnchor: anchor,
-              iconSize: size,
-              html: svg,
-            }),
-          })
-          .on('click', this.onClickMarker.bind(this))
-          .addTo(this.map);
+    return leaflet.divIcon({
+      html: svg,
+      ...this.getMarkerIconProperties(active),
     });
+  }
+
+  private getMarkerIconProperties(active: boolean | undefined): {
+    iconAnchor: leaflet.PointExpression;
+    iconSize: leaflet.PointExpression;
+    className: string;
+  } {
+    const size = (active ? [44, 53] : [33, 40]) as leaflet.PointExpression;
+    const anchor = (active ? [22, 53] : [16.5, 40]) as leaflet.PointExpression;
+    const className = active ? 'active' : '';
+
+    return { iconAnchor: anchor, iconSize: size, className };
   }
 
   private onClickMarker(e: leaflet.LeafletMouseEvent): void {
