@@ -17,7 +17,7 @@
     "prelint:ci": "npm run mkdirp reports",
     "lint:ci": "npm run lint:ts:ci; npm run lint:styles:ci",
     "lint:ts:ci": "node prebuild/generate-eslint-reports",
-    "lint:styles:ci": "stylelint \"app/**/*.scss\" --formatter json > ./reports/stylelint-report.json",
+    "lint:styles:ci": "stylelint \"app/**/*.scss\" --formatter json --output-file reports/stylelint-report.json",
     "mkdirp": "mkdirp",
     "theme": "sass --update assets/themes/mytheme/theme.scss:assets/theme.css",
     "generate-icons": "node prebuild/generate-svg-icons.ts",
