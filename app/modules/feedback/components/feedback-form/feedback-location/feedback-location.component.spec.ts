@@ -29,7 +29,7 @@ describe('FeedbackLocationComponent', () => {
       const locationFormControl = new FormControl();
 
       const { instance } = await shallow.render(
-        `<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>`,
+        '<app-feedback-location [locationFormControl]="locationFormControl"></app-feedback-location>',
         {
           bind: { locationFormControl },
         },

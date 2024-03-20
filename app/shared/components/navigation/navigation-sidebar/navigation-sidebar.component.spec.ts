@@ -13,7 +13,7 @@ describe('NavigationSidebarComponent', () => {
   it('should not render the navigation sidebar when the sidebar is closed', async () => {
     const sidebarOpen = false;
 
-    const { find } = await shallow.render(`<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`, {
+    const { find } = await shallow.render('<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>', {
       bind: { sidebarOpen },
     });
 
@@ -23,7 +23,7 @@ describe('NavigationSidebarComponent', () => {
   it('should render the navigation sidebar with menu items if the sidebar is open', async () => {
     const sidebarOpen = true;
 
-    const { find } = await shallow.render(`<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>`, {
+    const { find } = await shallow.render('<app-navigation-sidebar [sidebarOpen]="sidebarOpen"></app-navigation-sidebar>', {
       bind: { sidebarOpen },
     });
 

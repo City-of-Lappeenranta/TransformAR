@@ -25,6 +25,7 @@ export class DataPointsApi {
 
       let data: Record<string, string | number> = {};
       sensors.forEach((sensor) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { version, id, timestampUTC, ...rest } = sensor;
         data = { ...data, ...rest };
       });

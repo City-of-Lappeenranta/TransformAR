@@ -19,7 +19,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
   });
 
   it('should not render any files if the files form value is empty', async () => {
-    const { find, fixture } = await shallow.render(
+    const { find } = await shallow.render(
       `
         <app-feedback-message-and-attachments
           [reasonForm]="reasonForm"

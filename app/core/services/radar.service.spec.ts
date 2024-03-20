@@ -1,6 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { environment } from '@environments/environment';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { RadarSearchReponse, RadarService } from './radar.service';

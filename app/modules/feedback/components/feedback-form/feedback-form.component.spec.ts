@@ -48,7 +48,7 @@ describe('FeedbackFormComponent', () => {
       .mock(Router, {
         navigateByUrl: jest.fn(),
       })
-      .render(`<app-feedback-form></app-feedback-form>`);
+      .render();
 
     instance.feedbackForm.controls.description.setValue(description);
     instance.feedbackForm.controls.group.setValue(group);
@@ -90,7 +90,7 @@ describe('FeedbackFormComponent', () => {
     const backButtonSelector = 'p-button[label="Back"]';
     const nextButtonSelector = 'p-button.next-button';
 
-    const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);
+    const { find, findComponent, instance, fixture } = await shallow.render();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);

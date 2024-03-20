@@ -55,14 +55,13 @@ $z-index: 999;
     padding: 8px 16px;
     background-color: white;
 
-    p:after {
+    p::after {
       overflow: hidden;
       display: inline-block;
       vertical-align: bottom;
-      -webkit-animation: ellipsis steps(4, end) 900ms infinite;
       animation: ellipsis steps(4, end) 900ms infinite;
-      content: '\2026';
-      width: 0px;
+      content: "\2026";
+      width: 0;
     }
   }
 }
@@ -73,13 +72,15 @@ $z-index: 999;
 
 @keyframes location-loading {
   0% {
-    opacity: 100%;
+    opacity: 1;
   }
+
   50% {
-    opacity: 40%;
+    opacity: 0.4;
   }
+
   100% {
-    opacity: 100%;
+    opacity: 1;
   }
 }
 
