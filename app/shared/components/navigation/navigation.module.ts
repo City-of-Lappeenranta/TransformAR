@@ -5,12 +5,11 @@ import { SidebarModule } from 'primeng/sidebar';
 import { IconComponent } from '../icon/icon.component';
 import { NavigationHeaderComponent } from './navigation-header/navigation-header.component';
 import { NavigationSidebarComponent } from './navigation-sidebar/navigation-sidebar.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [NavigationHeaderComponent, NavigationSidebarComponent],
-  imports: [CommonModule, IconComponent, SidebarModule, RouterModule],
+  imports: [CommonModule, IconComponent, SidebarModule, RouterModule, TranslateModule],
   exports: [NavigationHeaderComponent],
-  providers: [TranslatePipe],
 })
 export class NavigationModule {}
