@@ -4,12 +4,15 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NavigationHeaderComponent } from '@shared/components/navigation/navigation-header/navigation-header.component';
 import { SharedModule } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent).provideMock(SharedModule);
+    shallow = new Shallow(AppComponent)
+      .mock(TranslateService, { instant: jest.fn(), use: jest.fn() })
+      .provideMock(SharedModule);
   });
 
   it('should render', async () => {

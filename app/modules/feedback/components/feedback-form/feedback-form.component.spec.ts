@@ -14,6 +14,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FeedbackFormService } from './feedback-form.service';
 import { FormControl } from '@angular/forms';
 import { LatLong } from '@core/models/location';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('FeedbackFormComponent', () => {
   const email = 'john.doe@verhaert.digital';
@@ -24,6 +25,7 @@ describe('FeedbackFormComponent', () => {
     shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
       .provideMock(SharedModule)
       .replaceModule(RouterModule, RouterTestingModule)
+      .mock(TranslateService, { instant: jest.fn })
       .mock(ServiceApi, {
         getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
         postServiceRequest: jest.fn().mockReturnValue(of(email)),
@@ -87,7 +89,7 @@ describe('FeedbackFormComponent', () => {
   });
 
   it('feedback form flow', async () => {
-    const backButtonSelector = 'p-button[label="Back"]';
+    const backButtonSelector = 'p-button.back-button';
     const nextButtonSelector = 'p-button.next-button';
 
     const { find, findComponent, instance, fixture } = await shallow.render(`<app-feedback-form></app-feedback-form>`);

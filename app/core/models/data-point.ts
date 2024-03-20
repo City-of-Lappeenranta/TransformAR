@@ -51,34 +51,6 @@ export const DATA_POINT_TYPE_ICON: Record<DataPointType, string> = {
   [DataPointType.FLOOD_WATER_QUALITY]: 'flood-water-quality-icon.svg',
 };
 
-export const WEATHER_DATA_POINT_METRIC_LABEL = {
-  // TeconerSensor
-  friction: 'Friction',
-  state: 'State',
-  ta: 'Air temperature',
-  tsurf: 'Surface temperature',
-  tdew: 'Dew point',
-  rh: 'Relative humidity',
-  water: 'Water layer thickness',
-  tground: 'Ground temperature',
-  ice: 'Ice layer thickness',
-  pressure: 'Pressure',
-  wspd: 'Wind speed',
-
-  // MarjetaSensor
-  temperature0: 'Surface temperature',
-  temperature5: 'Temperature below 5cm',
-  temperature10: 'Temperature below 10cm',
-  temperature15: 'Temperature below 15cm',
-
-  // DraginoSensor
-  batV: 'Battery level',
-  tempCds: 'External sensor temperature',
-  tempCsht: 'Internal sensor temperature',
-  humSht: 'Humidity',
-  dewPoint: 'Dew point',
-};
-
 export const WEATHER_DATA_POINT_METRIC_UNIT = {
   // TeconerSensor
   ta: '°C',

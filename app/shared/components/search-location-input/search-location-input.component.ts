@@ -4,6 +4,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LatLong, LocationSearchResult } from '@core/models/location';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { RadarService } from '@core/services/radar.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { BehaviorSubject, Observable, Subject, combineLatest, map } from 'rxjs';
@@ -21,7 +22,7 @@ export interface LocationSuggestion {
   selector: 'app-search-location-input',
   templateUrl: './search-location-input.component.html',
   styleUrls: ['./search-location-input.component.scss'],
-  imports: [CommonModule, AutoCompleteModule, IconComponent],
+  imports: [CommonModule, AutoCompleteModule, IconComponent, TranslateModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -40,6 +41,7 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   public constructor(
     private readonly locationService: LocationService,
     private readonly radarService: RadarService,
+    private readonly translateService: TranslateService,
   ) {
     super();
   }
@@ -73,13 +75,13 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
     results: LocationSearchResult[],
     currentUserLocation: UserLocation,
   ): LocationSuggestion[] {
-    let currentUserLocationName = 'Fetching your location...';
+    let currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.FETCHING');
 
     if (!currentUserLocation.loading) {
       if (currentUserLocation.location) {
-        currentUserLocationName = 'Your current location';
+        currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.DETERMINED');
       } else {
-        currentUserLocationName = 'We could not determine your location';
+        currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.INDETERMINED');
       }
     }
 
