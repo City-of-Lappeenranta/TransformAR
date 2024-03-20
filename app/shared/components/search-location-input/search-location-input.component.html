@@ -3,13 +3,17 @@
     #autocomplete
     optionLabel="address"
     optionDisabled="disabled"
+    placeholder="Search location"
+    emptyMessage="No results"
     formControlName="suggestion"
     [style]="{ width: '100%' }"
+    [showEmptyMessage]="true"
     [inputStyle]="{ width: '100%' }"
     [suggestions]="(locationSuggestions$ | async) ?? []"
+    [completeOnFocus]="true"
     (completeMethod)="onSearchLocation($event)"
     (onSelect)="onSelectLocation($event)"
-    (onFocus)="onAutocompleteFocus(); autocomplete.show()"
+    (onFocus)="onAutocompleteFocus()"
   >
     <ng-template let-location pTemplate="item">
       <div *ngIf="location.isCurrentLocation; else default" class="current-location-suggestion flex-row">

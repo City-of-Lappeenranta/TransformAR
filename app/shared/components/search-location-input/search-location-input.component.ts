@@ -79,24 +79,19 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   }
 
   public onAutocompleteFocus(): void {
-    const userLocation$ = this.locationService.userLocation$;
-    const locationPermissionState$ = this.locationService.locationPermissionState$;
+    const userLocation$: Observable<UserLocation> = this.locationService.userLocation$;
+    const locationSearchResults$: Observable<LocationSearchResult[]> = this._locationSearchResults$.asObservable();
 
-    this.locationSuggestions$ = combineLatest([userLocation$, locationPermissionState$, this._locationSearchResults$]).pipe(
-      map(([currentUserLocation, locationPermissionState, locationSearchResults]) =>
-        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
-          currentUserLocation,
-          locationPermissionState,
-          locationSearchResults,
-        ),
+    this.locationSuggestions$ = combineLatest([userLocation$, locationSearchResults$]).pipe(
+      map(([currentUserLocation, locationSearchResults]) =>
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(locationSearchResults, currentUserLocation),
       ),
     );
   }
 
   private mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
-    currentUserLocation: UserLocation,
-    locationPermissionState: PermissionState,
     results: LocationSearchResult[],
+    currentUserLocation: UserLocation,
   ): LocationSuggestion[] {
     let currentUserLocationName = 'Fetching your location...';
 
@@ -112,7 +107,7 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
       latLong: currentUserLocation.location ?? [0, 0],
       address: currentUserLocationName,
       isCurrentLocation: true,
-      disabled: currentUserLocation.loading || locationPermissionState !== 'granted',
+      disabled: currentUserLocation.loading || !currentUserLocation.location,
     };
 
     return [currentUserLocationOption, ...results];
