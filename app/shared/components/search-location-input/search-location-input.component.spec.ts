@@ -30,6 +30,9 @@ describe('SearchLocationInputComponent', () => {
         autocomplete: jest.fn(() =>
           Promise.resolve([{ address: 'Noordlaan 18, Kuurne, Belgium', latLong: [3, 3] as LatLong }]),
         ),
+        reverseGeocode: jest.fn(() => {
+          Promise.resolve('Noordlaan 18, Kuurne, Belgium');
+        }),
       })
       .replaceModule(HttpClient, HttpClientTestingModule);
   });
