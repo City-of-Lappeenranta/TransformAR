@@ -12,7 +12,10 @@ export class RadarService {
 
   public constructor(private readonly httpClient: HttpClient) {}
 
-  public async reverseGeocode(latLong: LatLong): Promise<string> {
+  public async reverseGeocode(
+    latLong: LatLong,
+    returnValueKey: 'addressLabel' | 'formattedAddress' = 'addressLabel',
+  ): Promise<string> {
     if (!environment.radarApiKey) {
       throw Error('Invalid or missing Radar API key');
     }
@@ -22,7 +25,7 @@ export class RadarService {
         .get<RadarSearchReponse>(`${this.baseUrl}/geocode/reverse?coordinates=${latLong.join(',')}`, {
           headers: new HttpHeaders().set('Authorization', environment.radarApiKey),
         })
-        .pipe(map((response) => response.addresses[0]?.addressLabel ?? '')),
+        .pipe(map((response) => response.addresses[0]?.[returnValueKey] ?? '')),
     );
   }
 
