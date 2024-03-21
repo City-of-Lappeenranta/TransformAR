@@ -3,10 +3,6 @@
     <label class="p-label" for="email">Email <span class="p-optional">Optional</span></label>
     <input pInputText id="email" type="email" formControlName="email" />
   </div>
-  <div class="p-checkbox-container" *ngIf="contactForm.value.email">
-    <p-checkbox formControlName="receiveResponseByMail" inputId="receiveResponseByMail" [binary]="true"></p-checkbox>
-    <label class="p-checkbox-label" for="receiveResponseByMail">I want a response to the feedback via email.</label>
-  </div>
   <div class="flex-column">
     <label class="p-label" for="firstName">First name <span class="p-optional">Optional</span></label>
     <input pInputText id="firstName" type="firstName" formControlName="firstName" />

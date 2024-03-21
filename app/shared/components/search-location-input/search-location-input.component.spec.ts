@@ -8,6 +8,7 @@ import { SharedModule } from 'primeng/api';
 import { SearchLocationInputComponent } from './search-location-input.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 describe('SearchLocationInputComponent', () => {
   let shallow: Shallow<SearchLocationInputComponent>;
@@ -22,6 +23,7 @@ describe('SearchLocationInputComponent', () => {
         } as UserLocation),
       })
       .provideMock(SharedModule)
+      .provideMock(AutoCompleteModule)
       .mock(NavigationHeaderService, { setSkip: jest.fn() })
       .mock(RadarService, {
         autocomplete: jest.fn(() =>

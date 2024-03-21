@@ -1,8 +1,9 @@
 <app-map [center$]="mapCenter$" [markers]="weatherDataPointMarkers" (markerClick)="onMarkerClick($event)"></app-map>
+<app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
 <app-dashboard-data-point-detail
   *ngIf="selectedDataPoint$ | async as selectedDataPoint"
-  [dataPoint]="selectedDataPoint"
   class="data-point-detail"
+  [dataPoint]="selectedDataPoint"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
 <div class="actions">
@@ -14,3 +15,11 @@
     (click)="focusLocation()"
   ></app-icon>
 </div>
+<p-toast position="bottom-center" [key]="TOAST_KEY" styleClass="toast">
+  <ng-template let-message pTemplate="headless">
+    <section class="toast-content flex-row">
+      <p class="body-xs">{{ message.detail }}</p>
+      <app-icon icon="spinner"></app-icon>
+    </section>
+  </ng-template>
+</p-toast>

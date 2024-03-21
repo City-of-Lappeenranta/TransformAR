@@ -23,7 +23,6 @@ type FeedbackFormType = FormGroup<
       firstName: FormControl<string | null>;
       lastName: FormControl<string | null>;
       phone: FormControl<string | null>;
-      receiveResponseByMail: FormControl<boolean | null>;
       termsOfUseAccepted: FormControl<boolean>;
     }>;
   } & {
@@ -55,7 +54,6 @@ export class FeedbackFormService {
       firstName: new FormControl<string | null>(null),
       lastName: new FormControl<string | null>(null),
       phone: new FormControl<string | null>(null),
-      receiveResponseByMail: new FormControl<boolean | null>(null),
       termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
     }),
     ...(Object.fromEntries(

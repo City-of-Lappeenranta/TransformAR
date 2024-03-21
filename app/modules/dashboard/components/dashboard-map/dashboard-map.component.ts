@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
+import { FormControl } from '@angular/forms';
+import { DATA_POINT_TYPE_ICON, DATA_POINT_QUALITY_COLOR_CHART, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { environment } from '@environments/environment';
 import { Marker } from '@shared/components/map/map.component';
+import { MessageService } from 'primeng/api';
+import { isSameLocation } from '@shared/utils/location-utils';
 import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
@@ -13,11 +16,11 @@ import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChang
   templateUrl: './dashboard-map.component.html',
   styleUrls: ['./dashboard-map.component.scss'],
 })
-export class DashboardMapComponent {
+export class DashboardMapComponent implements AfterViewInit {
   private dataPoints: DataPoint[] = [];
 
+  private _weatherDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   public weatherDataPointMarkers: Marker[] = [];
-  public weatherDataPointMarkersLoading: boolean = true;
 
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
@@ -25,24 +28,42 @@ export class DashboardMapComponent {
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
 
+  public locationFormControl = new FormControl<LatLong | null>(null);
+
+  public readonly TOAST_KEY = 'loading';
   private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
   public mapCenter$ = this._mapCenterSubject$.asObservable();
+
+  private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
     private readonly locationService: LocationService,
     private readonly dataPointsApi: DataPointsApi,
+    private readonly messageService: MessageService,
   ) {
     this.dataPointsApi
       .getWeatherDataPoints()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherDataPoints.bind(this));
+
+    combineLatest([this._weatherDataPointMarkersLoadingSubject$])
+      .pipe(takeUntilDestroyed())
+      .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
+  }
+
+  public ngAfterViewInit(): void {
+    this.showLoadingDataToast();
+
+    this.locationFormControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((latLong) => {
+      if (latLong) {
+        this._mapCenterSubject$.next(latLong);
+      }
+    });
   }
 
   public onMarkerClick(latLong: LatLong): void {
     this.setActiveMarker(latLong);
-    this._selectedDataPointSubject$.next(
-      this.dataPoints.find((point) => this.isSameLocation([point.location, latLong])) ?? null,
-    );
+    this._selectedDataPointSubject$.next(this.dataPoints.find((point) => isSameLocation(point.location, latLong)) ?? null);
   }
 
   public onDataPointClose(): void {
@@ -50,10 +71,18 @@ export class DashboardMapComponent {
     this._selectedDataPointSubject$.next(null);
   }
 
+  private showLoadingDataToast(): void {
+    this.messageService.add({ key: this.TOAST_KEY, sticky: true, severity: 'custom', detail: 'Fetching data' });
+  }
+
+  private closeLoadingDataToast(): void {
+    this.messageService.clear(this.TOAST_KEY);
+  }
+
   private setActiveMarker(latLong?: LatLong): void {
     this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => ({
       ...marker,
-      active: latLong ? this.isSameLocation([marker.location, latLong]) : false,
+      active: latLong ? isSameLocation(marker.location, latLong) : false,
     }));
   }
 
@@ -90,10 +119,6 @@ export class DashboardMapComponent {
       icon: DATA_POINT_TYPE_ICON[point.type],
       color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
     }));
-    this.weatherDataPointMarkersLoading = false;
-  }
-
-  private isSameLocation(locations: [LatLong, LatLong]): boolean {
-    return locations[0].toString() === locations[1].toString();
+    this._weatherDataPointMarkersLoadingSubject$.next(false);
   }
 }
