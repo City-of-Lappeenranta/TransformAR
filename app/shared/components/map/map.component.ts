@@ -81,7 +81,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     // centerSubscription gets unsubscribed in ngOnDestroy
     this.centerSubscription =
       center$.subscribe((center) => {
-        this.map?.setView(new leaflet.LatLng(...(center as LatLong)));
+        this.map?.setView(new leaflet.LatLng(...(center as LatLong)), 15);
       }) ?? null;
   }
 
