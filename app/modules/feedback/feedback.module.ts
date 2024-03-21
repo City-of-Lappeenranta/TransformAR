@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { StepsComponent } from '@shared/components/steps/steps.component';
 import { SharedModule } from '@shared/shared.module';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
@@ -11,6 +12,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ToastModule } from 'primeng/toast';
 import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
 import { FeedbackContactComponent } from './components/feedback-form/feedback-contact/feedback-contact.component';
 import { FeedbackFormComponent } from './components/feedback-form/feedback-form.component';
@@ -49,7 +51,9 @@ import { FeedbackRoutingModule } from './feedback.routing';
     CheckboxModule,
     InputTextModule,
     DividerModule,
+    ToastModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
+  providers: [MessageService],
 })
 export class FeedbackModule {}

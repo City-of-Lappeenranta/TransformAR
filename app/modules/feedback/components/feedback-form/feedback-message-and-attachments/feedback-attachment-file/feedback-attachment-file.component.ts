@@ -7,11 +7,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class FeedbackAttachmentFileComponent {
   @Input({ required: true }) public name!: string;
-  @Input({ required: true }) public size!: string;
-  @Input() public percentage: number | undefined;
+  @Input() public size: string | undefined;
+  @Input() public loading: boolean | undefined;
   @Output() public remove = new EventEmitter<void>();
 
   public getIcon(): string {
-    return this.percentage && this.percentage < 100 ? 'close-circle' : 'trash';
+    return this.loading ? 'close-circle' : 'trash';
   }
 }

@@ -31,6 +31,7 @@
     "@angular/service-worker": "^17.1.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "browser-image-compression": "^2.0.2",
     "leaflet": "^1.9.4",
     "lodash-es": "^4.17.21",
     "primeng": "^17.5.0",
