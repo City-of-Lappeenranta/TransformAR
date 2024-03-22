@@ -24,4 +24,8 @@ export class FeedbackLocationComponent implements OnInit {
       }
     });
   }
+
+  public onClickMap(latLong: LatLong): void {
+    this.locationFormControl.setValue(latLong);
+  }
 }

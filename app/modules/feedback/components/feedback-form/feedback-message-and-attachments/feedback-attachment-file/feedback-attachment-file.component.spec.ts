@@ -30,21 +30,21 @@ describe('FeedbackAttachmentFileComponent', () => {
     expect(find('p').nativeElement.innerHTML).toBe(size);
   });
 
-  it('should show the progress bar and close icon when the upload is in progress', async () => {
+  it('should show the progress bar and close icon when the compression is in progress', async () => {
     const name = 'Name';
     const size = '256 kB';
-    const percentage = 20;
+    const loading = true;
 
     const { find } = await shallow.render(
       `
         <app-feedback-attachment-file
           [name]="name"
           [size]="size"
-          [percentage]="percentage"
+          [loading]="loading"
         ></app-feedback-attachment-file>
       `,
       {
-        bind: { name, size, percentage },
+        bind: { name, size, loading },
       },
     );
 
@@ -61,7 +61,6 @@ describe('FeedbackAttachmentFileComponent', () => {
         <app-feedback-attachment-file
           [name]="name"
           [size]="size"
-          [percentage]="percentage"
         ></app-feedback-attachment-file>
       `,
       {
@@ -82,7 +81,6 @@ describe('FeedbackAttachmentFileComponent', () => {
         <app-feedback-attachment-file
           [name]="name"
           [size]="size"
-          [percentage]="percentage"
         ></app-feedback-attachment-file>
       `,
       {

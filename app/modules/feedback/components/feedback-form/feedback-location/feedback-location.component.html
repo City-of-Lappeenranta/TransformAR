@@ -4,6 +4,7 @@
     <app-map
       [center$]="mapCenter$"
       [markers]="locationFormControl.value ? [{ location: locationFormControl.value }] : []"
+      (mapClick)="onClickMap($event)"
     ></app-map>
   </div>
 </article>

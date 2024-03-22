@@ -17,7 +17,7 @@
     </label>
     <div class="attachments flex-column">
       <app-icon class="icon" icon="add-image"></app-icon>
-      <p class="description">You can upload one or more images to your feedback. JPG, PNG, maximum size of files is 8MB</p>
+      <p class="description">You can upload one or more images (JPEG/PNG) to send along with your feedback</p>
       <p-button class="button" [outlined]="true" label="Upload or take image" (click)="fileInput.click()">
         <input #fileInput type="file" accept="image/png, image/jpeg" (change)="onFileInput($event)" style="display: none" />
       </p-button>
@@ -30,9 +30,21 @@
         <app-feedback-attachment-file
           [name]="file.name"
           [size]="file.size"
+          [loading]="file.loading"
           (remove)="onFileRemove(index)"
         ></app-feedback-attachment-file>
       }
     </div>
   </section>
 </article>
+
+<p-toast position="bottom-center" [key]="TOAST_KEY" styleClass="toast">
+  <ng-template let-message pTemplate="headless">
+    <section class="toast-content flex-row">
+      <div class="icon-container">
+        <app-icon icon="close"></app-icon>
+      </div>
+      <p class="body-xs">{{ message.detail }}</p>
+    </section>
+  </ng-template>
+</p-toast>
