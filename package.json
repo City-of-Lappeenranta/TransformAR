@@ -16,7 +16,7 @@
     "lint:ts": "ng lint",
     "lint:styles": "stylelint \"app/**/*.scss\"",
     "prelint:ci": "npm run mkdirp reports",
-    "lint:ci": "npm run lint:ts:ci; npm run lint:styles:ci",
+    "lint:ci": "npm run lint:ts:ci && npm run lint:styles:ci",
     "lint:ts:ci": "node prebuild/generate-eslint-reports",
     "lint:styles:ci": "stylelint \"app/**/*.scss\" --formatter json --output-file reports/stylelint-report.json",
     "mkdirp": "mkdirp",
