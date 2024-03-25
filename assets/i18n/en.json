@@ -40,6 +40,19 @@
       "PRIVACY_STATEMENT": "Privacy Statement",
       "TERMS_OF_USE": "Terms of Use"
     },
+    "MESSAGES_AND_ATTACHMENTS": {
+      "PUBLISH": {
+        "TITLE": "Your feedback may be published",
+        "DESCRIPTION": "The published feedback can be viewed on the search and browse feedback page and in RSS feeds."
+      },
+      "ATTACHMENTS": {
+        "TITLE": "Attachments",
+        "HINT": "You can upload one or more images (JPEG/PNG) to send along with your feedback",
+        "WARNING": "Your file is too large and could not be compressed down to {{maxSize}}, please try again with a smaller file",
+        "BUTTON": "Upload or take image"
+      },
+      "FILES": "File(s)"
+    },
     "FOOTER": {
       "BACK": "Back",
       "NEXT": "Next",

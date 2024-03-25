@@ -34,7 +34,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            AirMoisture
+            Airmoisture
           </label>
           <p
             class="body-sm"
@@ -46,7 +46,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            AirTemperature
+            Airtemperature
           </label>
           <p
             class="body-sm"
@@ -58,7 +58,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            DewPoint
+            Dewpoint
           </label>
           <p
             class="body-sm"
@@ -70,7 +70,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            RainFall
+            Rainfall
           </label>
           <p
             class="body-sm"
@@ -82,7 +82,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            SnowDepth
+            Snowdepth
           </label>
           <p
             class="body-sm"
