@@ -14,7 +14,6 @@ type FeedbackFormType = FormGroup<
   {
     message: FormGroup<{
       message: FormControl<string | null>;
-      publish: FormControl<boolean | null>;
       files: FormArray<FormControl<File>>;
     }>;
     location: FormControl<LatLong | null>;
@@ -45,7 +44,6 @@ export class FeedbackFormService {
   public feedbackForm: FeedbackFormType = new FormGroup({
     message: new FormGroup({
       message: new FormControl<string | null>(null, Validators.required),
-      publish: new FormControl<boolean | null>(null),
       files: new FormArray<FormControl<File>>([]),
     }),
     location: new FormControl<LatLong | null>(null, Validators.required),

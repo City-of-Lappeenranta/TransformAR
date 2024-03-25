@@ -6,6 +6,7 @@ import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feed
 import { MessageService, SharedModule } from 'primeng/api';
 import imageCompression from 'browser-image-compression';
 import { convertMegabytesToBytes } from '@shared/utils/file-utils';
+import { TranslateService } from '@ngx-translate/core';
 
 jest.mock('browser-image-compression', () => ({
   __esModule: true,
@@ -19,13 +20,13 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
 
   const reasonForm = new FormGroup({
     message: new FormControl<string | null>(null, Validators.required),
-    publish: new FormControl<boolean | null>(null),
     files: new FormArray<FormControl<File>>([]),
   });
 
   beforeEach(() => {
     shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule)
       .mock(MessageService, { add: jest.fn() })
+      .mock(TranslateService, { instant: jest.fn() })
       .provideMock(SharedModule);
   });
 
