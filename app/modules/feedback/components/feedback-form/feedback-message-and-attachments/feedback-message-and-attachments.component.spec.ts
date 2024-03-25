@@ -8,7 +8,7 @@ import imageCompression from 'browser-image-compression';
 import { convertMegabytesToBytes } from '@shared/utils/file-utils';
 
 jest.mock('browser-image-compression', () => ({
-  __esModule: true,
+  __esModueeeele: true,
   default: jest.fn((file) => file),
 }));
 
