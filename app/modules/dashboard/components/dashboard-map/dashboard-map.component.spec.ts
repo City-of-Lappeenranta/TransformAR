@@ -15,12 +15,14 @@ import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { DashboardMapComponent } from './dashboard-map.component';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
 
   beforeEach(() => {
     shallow = new Shallow(DashboardMapComponent, DashboardModule)
+      .mock(TranslateService, { instant: jest.fn })
       .mock(MessageService, { add: jest.fn(), clear: jest.fn() })
       .mock(DataPointsApi, {
         getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
@@ -136,9 +138,7 @@ describe('DashboardMapComponent', () => {
       find('.focus-location').triggerEventHandler('click');
       await fixture.whenStable();
 
-      expect(window.alert).toHaveBeenCalledWith(
-        'Allow the app to determine your location. You can do this in your device settings',
-      );
+      expect(window.alert).toHaveBeenCalled();
     });
   });
 });

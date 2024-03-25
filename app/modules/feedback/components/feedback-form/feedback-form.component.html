@@ -1,7 +1,7 @@
 <main class="feedback-form" [formGroup]="feedbackForm">
   @switch (currentChildComponent$ | async) {
     @case (FEEDBACK_FORM_COMPONENT.CATEGORY) {
-      <h2 class="title">What would you like to report?</h2>
+      <h2 class="title">{{ 'FEEDBACK.HEADER.CATEGORY_TITLE' | translate }}</h2>
       <p *ngIf="parentCategory$ | async as parentCategory" class="description">{{ parentCategory }}</p>
       <ng-container *ngFor="let categoryStep of categorySteps">
         <app-input-feedback-category
@@ -14,18 +14,18 @@
       ></ng-container>
     }
     @case (FEEDBACK_FORM_COMPONENT.MESSAGE_AND_ATTACHMENTS) {
-      <h2 class="title">What's your feedback?</h2>
+      <h2 class="title">{{ 'FEEDBACK.HEADER.MESSAGES_AND_ATTACHMENTS_TITLE' | translate }}</h2>
       <app-feedback-message-and-attachments
         class="content"
         [reasonForm]="feedbackForm.controls.message"
       ></app-feedback-message-and-attachments>
     }
     @case (FEEDBACK_FORM_COMPONENT.LOCATION) {
-      <h2 class="title">What's the feedback location?</h2>
+      <h2 class="title">{{ 'FEEDBACK.HEADER.LOCATION_TITLE' | translate }}</h2>
       <app-feedback-location [locationFormControl]="feedbackForm.controls.location"></app-feedback-location>
     }
     @case (FEEDBACK_FORM_COMPONENT.CONTACT) {
-      <h2 class="title">Get in touch</h2>
+      <h2 class="title">{{ 'FEEDBACK.HEADER.CONTACT_TITLE' | translate }}</h2>
       <app-feedback-contact [contactForm]="feedbackForm.controls.contact"></app-feedback-contact>
     }
   }
@@ -34,7 +34,8 @@
   <app-steps [amount]="amountOfSteps" [active]="(currentStep$ | async) ?? 0"></app-steps>
   <div class="flex-row">
     <p-button
-      label="Back"
+      class="back-button"
+      [label]="'FEEDBACK.FOOTER.BACK' | translate"
       [disabled]="((currentStep$ | async) ?? 0) === 0"
       [outlined]="true"
       (click)="onClickBack()"
@@ -42,7 +43,7 @@
     <p-button
       *ngIf="(currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY"
       class="next-button"
-      [label]="nextButtonLabel"
+      [label]="nextButtonLabel | translate"
       [disabled]="!(isNextEnabled$ | async)"
       [loading]="(isNextInProgress$ | async) ?? false"
       (click)="onClickNext()"

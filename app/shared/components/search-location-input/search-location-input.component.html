@@ -3,9 +3,9 @@
     #autocomplete
     optionLabel="address"
     optionDisabled="disabled"
-    placeholder="Search location"
-    emptyMessage="No results"
     formControlName="suggestion"
+    [placeholder]="'SEARCH_LOCATION_INPUT.PLACEHOLDER' | translate"
+    [emptyMessage]="'SEARCH_LOCATION_INPUT.NO_RESULTS' | translate"
     [showEmptyMessage]="true"
     [style]="{ width: '100%' }"
     [showEmptyMessage]="true"

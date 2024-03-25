@@ -9,6 +9,7 @@ import { SearchLocationInputComponent } from './search-location-input.component'
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('SearchLocationInputComponent', () => {
   let shallow: Shallow<SearchLocationInputComponent>;
@@ -23,7 +24,7 @@ describe('SearchLocationInputComponent', () => {
         } as UserLocation),
       })
       .provideMock(SharedModule)
-      .provideMock(AutoCompleteModule)
+      .mock(TranslateService, { instant: jest.fn((key) => key) })
       .mock(NavigationHeaderService, { setSkip: jest.fn() })
       .mock(RadarService, {
         autocomplete: jest.fn(() =>
@@ -83,7 +84,7 @@ describe('SearchLocationInputComponent', () => {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
           {
             latLong: [0, 0],
-            address: 'Fetching your location...',
+            address: 'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.FETCHING',
             isCurrentLocation: true,
             disabled: true,
           },
@@ -109,7 +110,7 @@ describe('SearchLocationInputComponent', () => {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
           {
             latLong: [4, 4],
-            address: 'Your current location',
+            address: 'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.DETERMINED',
             isCurrentLocation: true,
             disabled: false,
           },
@@ -131,7 +132,7 @@ describe('SearchLocationInputComponent', () => {
         expect(await firstValueFrom(instance.locationSuggestions$)).toEqual([
           {
             latLong: [0, 0],
-            address: 'We could not determine your location',
+            address: 'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.INDETERMINED',
             isCurrentLocation: true,
             disabled: true,
           },

@@ -1,0 +1,88 @@
+{
+  "DASHBOARD": {
+    "DATA_POINTS": {
+      "WEATHER": {
+        "BATV": "Battery level",
+        "DEWPOINT": "Dew point",
+        "FRICTION": "Friction",
+        "HUMSHT": "Humidity",
+        "ICE": "Ice layer thickness",
+        "PRESSURE": "Pressure",
+        "RH": "Relative humidity",
+        "STATE": "State",
+        "TA": "Air temperature",
+        "TDEW": "Dew point",
+        "TEMPCDS": "External sensor temperature",
+        "TEMPCSHT": "Internal sensor temperature",
+        "TEMPERATURE0": "Surface temperature",
+        "TEMPERATURE10": "Temperature below 10cm",
+        "TEMPERATURE15": "Temperature below 15cm",
+        "TEMPERATURE5": "Temperature below 5cm",
+        "TGROUND": "Ground temperature",
+        "TSURF": "Surface temperature",
+        "WATER": "Water layer thickness",
+        "WSPD": "Wind speed"
+      }
+    }
+  },
+  "FEEDBACK": {
+    "CONFIRMATION": {
+      "DESCRIPTION": "A confirmation message about receiving the feedback has been sent to",
+      "RESTART": "I want to report other things",
+      "TITLE": "Thanks for your feedback!"
+    },
+    "CONTACT": {
+      "EMAIL": "Email",
+      "FIRST_NAME": "First name",
+      "I_ACCEPT_THE_SERVICES": "I accept the Service's",
+      "LAST_NAME": "Last name",
+      "PHONE": "Phone",
+      "PRIVACY_STATEMENT": "Privacy Statement",
+      "TERMS_OF_USE": "Terms of Use"
+    },
+    "FOOTER": {
+      "BACK": "Back",
+      "NEXT": "Next",
+      "SEND_FEEDBACK": "Send feedback"
+    },
+    "HEADER": {
+      "CATEGORY_TITLE": "What would you like to report?",
+      "CONTACT_TITLE": "How can we contact you?",
+      "LOCATION_TITLE": "What's the feedback location?",
+      "MESSAGES_AND_ATTACHMENTS_TITLE": "What's your feedback?"
+    }
+  },
+  "LOADING_STATES": {
+    "FETCHING_DATA": "Fetching data"
+  },
+  "MISC": {
+    "AND": "and",
+    "OPTIONAL": "Optional",
+    "SKIP": "Skip"
+  },
+  "NAVIGATION": {
+    "SIDEBAR": {
+      "FEEDBACK": "Give feedback",
+      "HOME": "Home"
+    },
+    "HEADER": {
+      "FEEDBACK": "Get in touch"
+    }
+  },
+  "PERMISSIONS": {
+    "LOCATION": {
+      "DENIED": {
+        "ALERT": "Allow the app to determine your location. You can change this in your device settings"
+      }
+    }
+  },
+  "SEARCH_LOCATION_INPUT": {
+    "CURRENT_LOCATION": {
+      "DETERMINED": "Your current location",
+      "FETCHING": "Fetching your location...",
+      "INDETERMINED": "We could not determine your location"
+    },
+    "EMPTY_MESSAGE": "No results",
+    "PLACEHOLDER": "Search location"
+  }
+}

@@ -1,12 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import {
-  DataPoint,
-  DataPointType,
-  WEATHER_DATA_POINT_METRIC_LABEL,
-  WEATHER_DATA_POINT_METRIC_UNIT,
-} from '@core/models/data-point';
+import { DataPoint, DataPointType, WEATHER_DATA_POINT_METRIC_UNIT } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Observable, Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { capitalize } from '@shared/utils/string-utils';
 
 @Component({
   selector: 'app-dashboard-data-point-detail',
@@ -23,7 +20,10 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   private _addressSubject$: Subject<string | null> = new Subject<string | null>();
   public address$: Observable<string | null> = this._addressSubject$.asObservable();
 
-  public constructor(private readonly radarService: RadarService) {}
+  public constructor(
+    private readonly radarService: RadarService,
+    private readonly translateService: TranslateService,
+  ) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataPoint']) {
@@ -37,7 +37,9 @@ export class DashboardDataPointDetailComponent implements OnChanges {
 
   public getMetricLabel(type: DataPointType, key: string): string {
     if (type === DataPointType.WEATHER) {
-      return WEATHER_DATA_POINT_METRIC_LABEL[key as keyof typeof WEATHER_DATA_POINT_METRIC_LABEL];
+      const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
+      const translation = this.translateService.instant(i18nKey);
+      return translation === i18nKey ? capitalize(key) : translation;
     }
 
     return key;

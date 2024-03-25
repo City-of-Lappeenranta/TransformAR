@@ -1,14 +1,15 @@
 import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import { DATA_POINT_TYPE_ICON, DATA_POINT_QUALITY_COLOR_CHART, DataPoint, WeatherDataPoint } from '@core/models/data-point';
+import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { environment } from '@environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
-import { MessageService } from 'primeng/api';
 import { isSameLocation } from '@shared/utils/location-utils';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
@@ -40,6 +41,7 @@ export class DashboardMapComponent implements AfterViewInit {
     private readonly locationService: LocationService,
     private readonly dataPointsApi: DataPointsApi,
     private readonly messageService: MessageService,
+    private readonly translateService: TranslateService,
   ) {
     this.dataPointsApi
       .getWeatherDataPoints()
@@ -71,8 +73,13 @@ export class DashboardMapComponent implements AfterViewInit {
     this._selectedDataPointSubject$.next(null);
   }
 
-  private showLoadingDataToast(): void {
-    this.messageService.add({ key: this.TOAST_KEY, sticky: true, severity: 'custom', detail: 'Fetching data' });
+  private async showLoadingDataToast(): Promise<void> {
+    this.messageService.add({
+      key: this.TOAST_KEY,
+      sticky: true,
+      severity: 'custom',
+      detail: this.translateService.instant('LOADING_STATES.FETCHING_DATA'),
+    });
   }
 
   private closeLoadingDataToast(): void {
@@ -106,7 +113,7 @@ export class DashboardMapComponent implements AfterViewInit {
         }
 
         if (!currentUserLocation.loading && permissionState === 'denied') {
-          alert('Allow the app to determine your location. You can do this in your device settings');
+          alert(this.translateService.instant('PERMISSIONS.LOCATION.DENIED.ALERT'));
         }
       });
   }

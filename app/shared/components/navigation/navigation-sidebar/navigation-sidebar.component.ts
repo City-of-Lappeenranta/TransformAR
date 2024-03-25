@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navigation-sidebar',
@@ -15,29 +16,16 @@ export class NavigationSidebarComponent {
     route: string;
   }[] = [
     {
-      name: 'Home',
+      name: 'NAVIGATION.SIDEBAR.HOME',
       icon: 'map',
       route: '',
     },
     {
-      name: 'Give feedback',
+      name: 'NAVIGATION.SIDEBAR.FEEDBACK',
       icon: 'feedback',
       route: 'feedback',
     },
-    // {
-    //   name: 'Climate change',
-    //   icon: 'climate-change',
-    //   route: '',
-    // },
-    // {
-    //   name: 'Citizen measurements',
-    //   icon: 'bell',
-    //   route: '',
-    // },
-    // {
-    //   name: 'Notifications',
-    //   icon: 'bell',
-    //   route: '',
-    // },
   ];
+
+  public constructor(private readonly translateService: TranslateService) {}
 }
