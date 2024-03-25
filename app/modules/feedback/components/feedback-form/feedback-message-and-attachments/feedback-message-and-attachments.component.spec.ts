@@ -1,110 +1,121 @@
+import { Shallow } from 'shallow-render';
+import { FeedbackModule } from '../../../feedback.module';
+import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments.component';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feedback-attachment-file.component';
+import { MessageService, SharedModule } from 'primeng/api';
+import imageCompression from 'browser-image-compression';
+import { convertMegabytesToBytes } from '@shared/utils/file-utils';
+
 jest.mock('browser-image-compression', () => ({
-  __esModueeeele: true,
+  __esModule: true,
   default: jest.fn((file) => file),
 }));
 
-// describe('FeedbackMessageAndAttachmentComponent', () => {
-//   let shallow: Shallow<FeedbackMessageAndAttachmentComponent>;
+jest.useFakeTimers();
 
-//   const reasonForm = new FormGroup({
-//     message: new FormControl<string | null>(null, Validators.required),
-//     publish: new FormControl<boolean | null>(null),
-//     files: new FormArray<FormControl<File>>([]),
-//   });
+describe('FeedbackMessageAndAttachmentComponent', () => {
+  let shallow: Shallow<FeedbackMessageAndAttachmentComponent>;
 
-//   beforeEach(() => {
-//     shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule)
-//       .mock(MessageService, { add: jest.fn() })
-//       .provideMock(SharedModule);
-//   });
+  const reasonForm = new FormGroup({
+    message: new FormControl<string | null>(null, Validators.required),
+    publish: new FormControl<boolean | null>(null),
+    files: new FormArray<FormControl<File>>([]),
+  });
 
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
+  beforeEach(() => {
+    shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule)
+      .mock(MessageService, { add: jest.fn() })
+      .provideMock(SharedModule);
+  });
 
-//   it('should not render any files if the files form value is empty', async () => {
-//     const { find } = await shallow.render(
-//       `
-//         <app-feedback-message-and-attachments
-//           [reasonForm]="reasonForm"
-//         ></app-feedback-message-and-attachments>
-//       `,
-//       {
-//         bind: { reasonForm },
-//       },
-//     );
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-//     expect(find('app-feedback-attachment-file')).not.toHaveFoundOne();
-//   });
+  it('should not render any files if the files form value is empty', async () => {
+    const { find } = await shallow.render(
+      `
+        <app-feedback-message-and-attachments
+          [reasonForm]="reasonForm"
+        ></app-feedback-message-and-attachments>
+      `,
+      {
+        bind: { reasonForm },
+      },
+    );
 
-//   it('should update files when a file is added and remove it when delete is pressed', async () => {
-//     const fileName = 'image.jpg';
+    expect(find('app-feedback-attachment-file')).not.toHaveFoundOne();
+  });
 
-//     const { find, instance, fixture, findComponent, inject } = await shallow.render(
-//       `
-//         <app-feedback-message-and-attachments
-//           [reasonForm]="reasonForm"
-//         ></app-feedback-message-and-attachments>
-//       `,
-//       {
-//         bind: { reasonForm },
-//       },
-//     );
-//     const messageService = inject(MessageService);
+  it('should update files when a file is added and remove it when delete is pressed', async () => {
+    const fileName = 'image.jpg';
 
-//     expect(instance.reasonForm.value.files?.length).toBe(0);
+    const { find, instance, fixture, findComponent, inject } = await shallow.render(
+      `
+        <app-feedback-message-and-attachments
+          [reasonForm]="reasonForm"
+        ></app-feedback-message-and-attachments>
+      `,
+      {
+        bind: { reasonForm },
+      },
+    );
+    const messageService = inject(MessageService);
 
-//     const file = new File([''], fileName, { type: 'image/jpeg' });
-//     instance.onFileInput({
-//       target: { files: [file] },
-//     } as any);
+    expect(instance.reasonForm.value.files?.length).toBe(0);
 
-//     await fixture.whenStable();
-//     fixture.detectChanges();
+    const file = new File([''], fileName, { type: 'image/jpeg' });
+    instance.onFileInput({
+      target: { files: [file] },
+    } as any);
 
-//     expect(messageService.add).not.toHaveBeenCalled();
-//     expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
-//     expect(findComponent(FeedbackAttachmentFileComponent).name).toBe(fileName);
-//     expect(instance.reasonForm.value.files?.length).toBeGreaterThan(0);
+    await fixture.whenStable();
+    fixture.detectChanges();
 
-//     findComponent(FeedbackAttachmentFileComponent).remove.emit();
+    expect(messageService.add).not.toHaveBeenCalled();
+    expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
+    expect(findComponent(FeedbackAttachmentFileComponent).name).toBe(fileName);
+    expect(instance.reasonForm.value.files?.length).toBeGreaterThan(0);
 
-//     fixture.detectChanges();
+    findComponent(FeedbackAttachmentFileComponent).remove.emit();
 
-//     expect(find('app-feedback-attachment-file')).not.toHaveFoundOne();
-//     expect(instance.reasonForm.value.files?.length).toBe(0);
-//   });
+    fixture.detectChanges();
 
-//   it('should refuse files larger than 3MB', async () => {
-//     const fileName = 'image.jpg';
+    expect(find('app-feedback-attachment-file')).not.toHaveFoundOne();
+    expect(instance.reasonForm.value.files?.length).toBe(0);
+  });
 
-//     const { instance, fixture, findComponent, inject } = await shallow.render(
-//       `
-//         <app-feedback-message-and-attachments
-//           [reasonForm]="reasonForm"
-//         ></app-feedback-message-and-attachments>
-//       `,
-//       {
-//         bind: { reasonForm },
-//       },
-//     );
-//     const messageService = inject(MessageService);
+  it('should refuse files larger than 3MB', async () => {
+    const fileName = 'image.jpg';
 
-//     expect(instance.reasonForm.value.files?.length).toBe(0);
+    const { instance, fixture, findComponent, inject } = await shallow.render(
+      `
+        <app-feedback-message-and-attachments
+          [reasonForm]="reasonForm"
+        ></app-feedback-message-and-attachments>
+      `,
+      {
+        bind: { reasonForm },
+      },
+    );
+    const messageService = inject(MessageService);
 
-//     const file = new File([''], fileName, { type: 'image/jpeg' });
-//     Object.defineProperty(file, 'size', { value: convertMegabytesToBytes(4) });
+    expect(instance.reasonForm.value.files?.length).toBe(0);
 
-//     instance.onFileInput({
-//       target: { files: [file] },
-//     } as any);
+    const file = new File([''], fileName, { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: convertMegabytesToBytes(4) });
 
-//     await fixture.whenStable();
-//     fixture.detectChanges();
+    instance.onFileInput({
+      target: { files: [file] },
+    } as any);
 
-//     expect(messageService.add).toHaveBeenCalled();
-//     expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
-//     expect(findComponent(FeedbackAttachmentFileComponent)).toHaveLength(0);
-//     expect(instance.reasonForm.value.files?.length).toBe(0);
-//   });
-// });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(messageService.add).toHaveBeenCalled();
+    expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
+    expect(findComponent(FeedbackAttachmentFileComponent)).toHaveLength(0);
+    expect(instance.reasonForm.value.files?.length).toBe(0);
+  });
+});
