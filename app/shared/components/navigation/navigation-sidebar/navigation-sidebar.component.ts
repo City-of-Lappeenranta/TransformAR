@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation-sidebar',
@@ -12,17 +11,17 @@ export class NavigationSidebarComponent {
   @Output() public onSidebarClose = new EventEmitter<void>();
 
   public menuItems: {
-    name$: Observable<string>;
+    name: string;
     icon: string;
     route: string;
   }[] = [
     {
-      name$: this.translateService.get('NAVIGATION.SIDEBAR.HOME'),
+      name: 'NAVIGATION.SIDEBAR.HOME',
       icon: 'map',
       route: '',
     },
     {
-      name$: this.translateService.get('NAVIGATION.SIDEBAR.FEEDBACK'),
+      name: 'NAVIGATION.SIDEBAR.FEEDBACK',
       icon: 'feedback',
       route: 'feedback',
     },

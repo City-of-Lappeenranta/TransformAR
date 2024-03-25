@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { FeedbackFormService } from './feedback-form.service';
 import { Category } from './input-feedback-category/input-feedback-category.component';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-feedback-form',
@@ -27,15 +26,11 @@ export class FeedbackFormComponent {
   public isNextInProgress$: Observable<boolean> = this.feedbackFormService.isNextInProgress$;
   public nextButtonLabel = '';
 
-  public constructor(
-    private readonly feedbackFormService: FeedbackFormService,
-    private readonly translateService: TranslateService,
-  ) {
-    const sendFeedbackLabel = this.translateService.instant('FEEDBACK.FOOTER.SEND_FEEDBACK');
-    const nextLabel = this.translateService.instant('FEEDBACK.FOOTER.NEXT');
-
+  public constructor(private readonly feedbackFormService: FeedbackFormService) {
     this.currentStep$.subscribe(
-      (currentStep) => (this.nextButtonLabel = currentStep === this.amountOfSteps - 1 ? sendFeedbackLabel : nextLabel),
+      (currentStep) =>
+        (this.nextButtonLabel =
+          currentStep === this.amountOfSteps - 1 ? 'FEEDBACK.FOOTER.SEND_FEEDBACK' : 'FEEDBACK.FOOTER.NEXT'),
     );
   }
 

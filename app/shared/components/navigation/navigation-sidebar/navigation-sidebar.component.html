@@ -11,7 +11,7 @@
         @for (item of menuItems; track item.route) {
           <div class="menu-item flex-row" [routerLink]="item.route" (click)="onSidebarClose.emit()">
             <app-icon class="icon" [icon]="item.icon"></app-icon>
-            <p>{{ item.name$ | async }}</p>
+            <p>{{ item.name | translate }}</p>
           </div>
         }
       </div>

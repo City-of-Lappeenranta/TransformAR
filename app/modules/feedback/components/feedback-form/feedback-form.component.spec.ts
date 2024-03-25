@@ -1,20 +1,19 @@
+import { FormControl } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { LatLong } from '@core/models/location';
 import { ServiceDictionary } from '@core/models/service-api';
 import { ServiceApi } from '@core/services/service-api.service';
+import { SharedModule } from 'primeng/api';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { FeedbackModule } from '../../feedback.module';
 import { FeedbackContactComponent } from './feedback-contact/feedback-contact.component';
 import { FeedbackFormComponent } from './feedback-form.component';
+import { FeedbackFormService } from './feedback-form.service';
 import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
-import { SharedModule } from 'primeng/api';
-import { Router, RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { FeedbackFormService } from './feedback-form.service';
-import { FormControl } from '@angular/forms';
-import { LatLong } from '@core/models/location';
-import { TranslateService } from '@ngx-translate/core';
 
 describe('FeedbackFormComponent', () => {
   const email = 'john.doe@verhaert.digital';
@@ -25,7 +24,6 @@ describe('FeedbackFormComponent', () => {
     shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
       .provideMock(SharedModule)
       .replaceModule(RouterModule, RouterTestingModule)
-      .mock(TranslateService, { instant: jest.fn })
       .mock(ServiceApi, {
         getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
         postServiceRequest: jest.fn().mockReturnValue(of(email)),
