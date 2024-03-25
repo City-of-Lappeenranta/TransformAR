@@ -23,6 +23,7 @@ const { writeJson } = require("fs-extra");
 
   if (filteredResults.filter((result) => result.errorCount > 0).length > 0) {
     process.exitCode = 1;
+    throw new Error();
   }
 })().catch((error) => {
   process.exitCode = 1;
