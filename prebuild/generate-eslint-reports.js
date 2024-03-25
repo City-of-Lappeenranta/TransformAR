@@ -20,6 +20,10 @@ const { writeJson } = require("fs-extra");
 
   const file = resolve(__dirname, "..", "reports", "eslint-report.json");
   await writeJson(file, JSON.parse(jsonFormatterResult), { encoding: "utf-8" });
+
+  if (filteredResults.filter((result) => result.errorCount > 0).length > 0) {
+    process.exitCode = 1;
+  }
 })().catch((error) => {
   process.exitCode = 1;
   console.error(error);

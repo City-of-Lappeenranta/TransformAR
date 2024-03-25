@@ -22,7 +22,7 @@ export class FeedbackMessageAndAttachmentComponent {
     files: FormArray<FormControl<File>>;
   }>;
 
-  private readonly __IMAGE_JPEG = 'image/jpeg';
+  private readonly IMAGE_JPEG = 'image/jpeg';
   private readonly IMAGE_PNG = 'image/png';
   public readonly MAX_FILE_SIZE_MB = 3;
 
@@ -84,7 +84,7 @@ export class FeedbackMessageAndAttachmentComponent {
   }
 
   private isValidFileType(file: File): boolean {
-    return file.type === this.__IMAGE_JPEG || file.type === this.IMAGE_PNG;
+    return file.type === this.IMAGE_JPEG || file.type === this.IMAGE_PNG;
   }
 
   private hasValidFileSize(file: File): boolean {
