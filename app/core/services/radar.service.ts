@@ -14,7 +14,7 @@ export class RadarService {
 
   public async reverseGeocode(
     latLong: LatLong,
-    returnValueKey: 'addressLabel' | 'formattedAddress' = 'addressLabel',
+    returnValueKey: keyof RadarSearchReponseAddressKeys = 'addressLabel',
   ): Promise<string> {
     if (!environment.radarApiKey) {
       throw Error('Invalid or missing Radar API key');
@@ -25,7 +25,7 @@ export class RadarService {
         .get<RadarSearchReponse>(`${this.baseUrl}/geocode/reverse?coordinates=${latLong.join(',')}`, {
           headers: new HttpHeaders().set('Authorization', environment.radarApiKey),
         })
-        .pipe(map((response) => response.addresses[0]?.[returnValueKey] ?? '')),
+        .pipe(map((response) => response.addresses[0]?.[returnValueKey] ?? response.addresses[0]?.formattedAddress)),
     );
   }
 
@@ -82,7 +82,26 @@ export interface RadarSearchReponse {
       street: string;
       layer: string;
       formattedAddress: string;
-      addressLabel: string;
+      addressLabel?: string;
     },
   ];
 }
+
+type RadarSearchReponseAddressKeys = Pick<
+  RadarSearchReponse['addresses'][0],
+  | 'country'
+  | 'countryCode'
+  | 'countryFlag'
+  | 'county'
+  | 'borough'
+  | 'city'
+  | 'number'
+  | 'neighborhood'
+  | 'postalCode'
+  | 'stateCode'
+  | 'state'
+  | 'street'
+  | 'layer'
+  | 'formattedAddress'
+  | 'addressLabel'
+>;
