@@ -40,7 +40,8 @@
       "PRIVACY_STATEMENT": "Privacy Statement",
       "TERMS_OF_USE": "Terms of Use",
       "ERROR": {
-        "INVALID_EMAIL": "Invalid email format"
+        "INVALID_EMAIL": "Invalid email format",
+        "INVALID_PHONE_NUMBER": "Invalid phone number format"
       }
     },
     "MESSAGES_AND_ATTACHMENTS": {

@@ -9,6 +9,7 @@ import { Category } from './input-feedback-category/input-feedback-category.comp
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { ServiceDictionary } from '@core/models/service-api';
+import { phoneNumberValidator } from '@shared/validators/phone-number.validator';
 
 type FeedbackFormType = FormGroup<
   {
@@ -51,7 +52,7 @@ export class FeedbackFormService {
       email: new FormControl<string | null>(null, Validators.email),
       firstName: new FormControl<string | null>(null),
       lastName: new FormControl<string | null>(null),
-      phone: new FormControl<string | null>(null),
+      phone: new FormControl<string | null>(null, phoneNumberValidator),
       termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
     }),
     ...(Object.fromEntries(
@@ -163,7 +164,7 @@ export class FeedbackFormService {
         categories = Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
       } else {
         parent = subCategory;
-        categories = serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({ label: name, value: code }));
+        categories = serviceDictionary[mainCategory][subCategory]?.map(({ name, code }) => ({ label: name, value: code }));
       }
 
       this._parentCategorySubject$.next(parent);

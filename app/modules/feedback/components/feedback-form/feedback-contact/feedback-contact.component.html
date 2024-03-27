@@ -41,6 +41,11 @@
       <span class="p-optional">{{ "MISC.OPTIONAL" | translate }}</span>
     </label>
     <input pInputText id="phone" type="phone" formControlName="phone" />
+    @if (contactForm.controls.phone.hasError("invalidPhoneNumber")) {
+      <small class="p-error">
+        {{ "FEEDBACK.CONTACT.ERROR.INVALID_PHONE_NUMBER" | translate }}
+      </small>
+    }
   </div>
   <div class="p-checkbox-container">
     <p-checkbox
