@@ -1,17 +1,17 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import {
   DataPointQuality,
   DataPointType,
   MarjetaSensorData,
   TeconerSensorData,
   WeatherDataPoint,
-} from '@core/models/data-point';
-import { LatLong } from '@core/models/location';
-import { environment } from '@environments/environment';
-import { Observable, map } from 'rxjs';
+} from "@core/models/data-point";
+import { LatLong } from "@core/models/location";
+import { environment } from "@environments/environment";
+import { Observable, map } from "rxjs";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DataPointsApi {
   private baseUrl = environment.weatherApiUrl;
 
@@ -23,18 +23,20 @@ export class DataPointsApi {
       .pipe(map(this.mapOpenWeatherDataResponseToWeatherDataPoints.bind(this)));
   }
 
-  private mapOpenWeatherDataResponseToWeatherDataPoints(response: OpenWeatherDataResponse): WeatherDataPoint[] {
+  private mapOpenWeatherDataResponseToWeatherDataPoints(
+    response: OpenWeatherDataResponse,
+  ): WeatherDataPoint[] {
     return response.result.map((result) => {
       const { coordinates, sensors, dataSourceId } = result;
       const { latitudeValue, longitudeValue } = coordinates;
       const location = [latitudeValue, longitudeValue] as LatLong;
 
-      const base: Pick<WeatherDataPoint, 'type' | 'location'> = {
+      const base: Pick<WeatherDataPoint, "type" | "location"> = {
         type: DataPointType.WEATHER,
         location,
       };
 
-      return dataSourceId === 'TECONER'
+      return dataSourceId === "TECONER"
         ? {
             ...base,
             dataSourceId,
@@ -104,12 +106,12 @@ interface BaseResult {
 }
 
 type TeconerSensorResult = BaseResult & {
-  dataSourceId: 'TECONER';
+  dataSourceId: "TECONER";
   sensors: [TeconerSensorResultData];
 };
 
 type MarjetaSensorResult = BaseResult & {
-  dataSourceId: 'MARJETAS_SENSOR';
+  dataSourceId: "MARJETAS_SENSOR";
   sensors: [MarjetaSensorResultData, DraginoSensorResultData];
 };
 

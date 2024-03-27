@@ -29,7 +29,7 @@ describe('DashboardDataPointDetailComponent', () => {
       } as DataPoint;
 
       const { inject, fixture, find } = await shallow.render(
-        `<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>`,
+        '<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>',
         { bind: { dataPoint } },
       );
       const radarService = inject(RadarService);
@@ -59,7 +59,7 @@ describe('DashboardDataPointDetailComponent', () => {
         };
 
         const { fixture, find } = await shallow.render(
-          `<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>`,
+          '<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>',
           { bind: { dataPoint } },
         );
 

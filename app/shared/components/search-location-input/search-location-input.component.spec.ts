@@ -8,7 +8,6 @@ import { SharedModule } from 'primeng/api';
 import { SearchLocationInputComponent } from './search-location-input.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TranslateService } from '@ngx-translate/core';
 
 describe('SearchLocationInputComponent', () => {

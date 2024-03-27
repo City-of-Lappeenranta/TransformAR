@@ -11,7 +11,8 @@ describe('LocationService', () => {
   beforeEach(() => {
     shallow = new Shallow(LocationService, CoreModule).replaceModule(HttpClient, HttpClientTestingModule);
 
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     navigator.permissions = {
       query: jest.fn().mockReturnValue(Promise.resolve({ state: 'prompt' })),
     };
@@ -20,9 +21,10 @@ describe('LocationService', () => {
   describe('userLocation$', () => {
     describe('on success', () => {
       it('should emit user location ', (done) => {
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         navigator.geolocation = {
-          getCurrentPosition: (success: Function) => {
+          getCurrentPosition: (success: any): void => {
             setTimeout(() => {
               success({ coords: { latitude: 10, longitude: 10 } });
             }, 500);
@@ -65,9 +67,10 @@ describe('LocationService', () => {
 
     describe('on error', () => {
       it('should emit user location ', (done) => {
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         navigator.geolocation = {
-          getCurrentPosition: (_: Function, error: Function) => {
+          getCurrentPosition: (_: any, error: any): void => {
             setTimeout(() => {
               error();
             }, 500);

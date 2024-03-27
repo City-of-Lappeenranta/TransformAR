@@ -23,7 +23,7 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
-            "assets": ["favicon.ico", "assets", "manifest.webmanifest", "manifest.webmanifest"],
+            "assets": ["favicon.ico", "assets", "manifest.webmanifest"],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
@@ -36,7 +36,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
+                  "maximumWarning": "1.5mb",
                   "maximumError": "2mb"
                 },
                 {
@@ -97,8 +97,19 @@
             "compodoc": false,
             "outputDir": "storybook-static"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "eslintConfig": ".eslintrc.json",
+            "ignorePath": ".eslintignore",
+            "lintFilePatterns": ["app/**/*.ts", "app/**/*.html"]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }
