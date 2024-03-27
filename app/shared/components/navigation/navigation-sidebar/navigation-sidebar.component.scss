@@ -23,11 +23,10 @@
     z-index: 2;
     justify-content: center;
     height: 100%;
-    max-height: 492px;
-    padding: 32px 0 64px 0;
 
     .menu-items {
       width: fit-content;
+      justify-content: center;
       gap: 64px;
 
       .menu-item {
