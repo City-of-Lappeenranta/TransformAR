@@ -87,7 +87,7 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <p
             class="body-sm"
           >
-            state
+            State
           </p>
         </li>
         <li>

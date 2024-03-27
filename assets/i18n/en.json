@@ -10,7 +10,10 @@
         "AIRTEMPERATURE": "Air temperature",
         "EXTERNALSENSORTEMPERATURE": "External sensor temperature",
         "WATERLAYERTHICKNESS": "Water layer thickness",
-        "WINDSPEED": "Wind speed"
+        "WINDSPEED": "Wind speed",
+        "MOIST": "Moist",
+        "DRY": "Dry",
+        "SNOW": "Snow"
       }
     }
   },

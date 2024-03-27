@@ -20,7 +20,7 @@
             @for (metric of dataPoint.data | keyvalue; track metric.key) {
               <li>
                 <label class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</label>
-                <p class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</p>
+                <p class="body-sm">{{ getWeatherMetricValue(metric.value) }}{{ getWeatherMetricUnit(metric.key) }}</p>
               </li>
             }
           </ul>
@@ -30,7 +30,7 @@
             @for (metric of dataPoint.data | keyvalue; track metric.key) {
               <li>
                 <label class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</label>
-                <p class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</p>
+                <p class="body-sm">{{ getWeatherMetricValue(metric.value) }}{{ getWeatherMetricUnit(metric.key) }}</p>
               </li>
             }
           </ul>

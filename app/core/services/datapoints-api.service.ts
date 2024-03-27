@@ -121,7 +121,7 @@ interface BaseSensorResultData {
 
 type TeconerSensorResultData = BaseSensorResultData & {
   friction: number;
-  state: string;
+  state: 'moist' | 'dry' | 'snow' | string;
   ta: number;
   tsurf: number;
   tdew: number;
