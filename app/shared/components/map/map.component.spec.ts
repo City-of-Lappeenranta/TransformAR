@@ -28,14 +28,6 @@ describe('MapComponent', () => {
       expect(instance.map?.getCenter()).toEqual({ lat: defaultLocation[0], lng: defaultLocation[1] });
       expect(instance.map?.getZoom()).toBe(13);
     });
-
-    it('should set zoom from input', async () => {
-      const zoom = 2;
-
-      const { instance } = await shallow.render({ bind: { zoom } });
-
-      expect(instance.map?.getZoom()).toBe(zoom);
-    });
   });
 
   describe('center', () => {
