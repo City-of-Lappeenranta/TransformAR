@@ -1,49 +1,37 @@
 <article class="flex-column form" [formGroup]="contactForm">
   <div class="flex-column">
     <label class="p-label" for="email">
-      {{ "FEEDBACK.CONTACT.EMAIL" | translate }}
-      <span class="p-optional">{{ "MISC.OPTIONAL" | translate }}</span>
+      {{ 'FEEDBACK.CONTACT.EMAIL' | translate }}
+      <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span>
     </label>
     <input pInputText id="email" type="email" formControlName="email" />
-    @if (contactForm.controls.email.hasError("email")) {
-      <small class="p-error">
-        {{ "FEEDBACK.CONTACT.ERROR.INVALID_EMAIL" | translate }}
-      </small>
+    @if (contactForm.controls.email.hasError('email')) {
+      <small class="p-error"> {{ 'FEEDBACK.CONTACT.ERROR.INVALID_EMAIL' | translate }} </small>
     }
   </div>
   <div class="flex-column">
     <label class="p-label" for="firstName">
-      {{ "FEEDBACK.CONTACT.FIRST_NAME" | translate }}
-      <span class="p-optional">{{ "MISC.OPTIONAL" | translate }}</span>
+      {{ 'FEEDBACK.CONTACT.FIRST_NAME' | translate }}
+      <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span>
     </label>
-    <input
-      pInputText
-      id="firstName"
-      type="firstName"
-      formControlName="firstName"
-    />
+    <input pInputText id="firstName" type="firstName" formControlName="firstName" />
   </div>
   <div class="flex-column">
     <label class="p-label" for="lastName">
-      {{ "FEEDBACK.CONTACT.LAST_NAME" | translate }}
-      <span class="p-optional">{{ "MISC.OPTIONAL" | translate }}</span>
+      {{ 'FEEDBACK.CONTACT.LAST_NAME' | translate }}
+      <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span>
     </label>
-    <input
-      pInputText
-      id="lastName"
-      type="lastName"
-      formControlName="lastName"
-    />
+    <input pInputText id="lastName" type="lastName" formControlName="lastName" />
   </div>
   <div class="flex-column">
     <label class="p-label" for="phone">
-      {{ "FEEDBACK.CONTACT.PHONE" | translate }}
-      <span class="p-optional">{{ "MISC.OPTIONAL" | translate }}</span>
+      {{ 'FEEDBACK.CONTACT.PHONE' | translate }}
+      <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span>
     </label>
     <input pInputText id="phone" type="phone" formControlName="phone" />
-    @if (contactForm.controls.phone.hasError("invalidPhoneNumber")) {
+    @if (contactForm.controls.phone.hasError('invalidPhoneNumber')) {
       <small class="p-error">
-        {{ "FEEDBACK.CONTACT.ERROR.INVALID_PHONE_NUMBER" | translate }}
+        {{ invalidPhoneNumberMessage }}
       </small>
     }
   </div>
@@ -55,13 +43,13 @@
       [required]="true"
     ></p-checkbox>
     <label class="p-checkbox-label" for="termsOfUseAccepted">
-      {{ "FEEDBACK.CONTACT.I_ACCEPT_THE_SERVICES" | translate }}
+      {{ 'FEEDBACK.CONTACT.I_ACCEPT_THE_SERVICES' | translate }}
       <a [href]="termsOfUseUrl" target="_blank">
-        {{ "FEEDBACK.CONTACT.TERMS_OF_USE" | translate }}
+        {{ 'FEEDBACK.CONTACT.TERMS_OF_USE' | translate }}
       </a>
-      {{ "MISC.AND" | translate }}
+      {{ 'MISC.AND' | translate }}
       <a [href]="privacyPolicyUrl" target="_blank">
-        {{ "FEEDBACK.CONTACT.PRIVACY_STATEMENT" | translate }}
+        {{ 'FEEDBACK.CONTACT.PRIVACY_STATEMENT' | translate }}
       </a>
     </label>
   </div>

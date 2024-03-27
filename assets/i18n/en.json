@@ -41,7 +41,7 @@
       "TERMS_OF_USE": "Terms of Use",
       "ERROR": {
         "INVALID_EMAIL": "Invalid email format",
-        "INVALID_PHONE_NUMBER": "Invalid phone number format"
+        "INVALID_PHONE_NUMBER": "Invalid phone number format (eg. {{phoneNumberFormat}})"
       }
     },
     "MESSAGES_AND_ATTACHMENTS": {
