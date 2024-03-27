@@ -34,24 +34,12 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <label
             class="button-sm"
           >
-            Airmoisture
-          </label>
-          <p
-            class="body-sm"
-          >
-            0
-          </p>
-        </li>
-        <li>
-          <label
-            class="button-sm"
-          >
             Airtemperature
           </label>
           <p
             class="body-sm"
           >
-            0
+            0°C
           </p>
         </li>
         <li>
@@ -63,43 +51,67 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
           <p
             class="body-sm"
           >
-            0
+            0°C
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Rainfall
+            Icelayerthickness
           </label>
           <p
             class="body-sm"
           >
-            0
+            0 mm
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Snowdepth
+            Relativehumidity
           </label>
           <p
             class="body-sm"
           >
-            0
+            0%
           </p>
         </li>
         <li>
           <label
             class="button-sm"
           >
-            Wind
+            State
           </label>
           <p
             class="body-sm"
           >
-            0
+            state
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Waterlayerthickness
+          </label>
+          <p
+            class="body-sm"
+          >
+            0 mm
+          </p>
+        </li>
+        <li>
+          <label
+            class="button-sm"
+          >
+            Windspeed
+          </label>
+          <p
+            class="body-sm"
+          >
+            0 m/s
           </p>
         </li>
       </ul>
