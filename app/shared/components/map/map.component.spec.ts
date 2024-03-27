@@ -71,6 +71,7 @@ describe('MapComponent', () => {
         { location: [1, 1], active: false },
       ];
       const { find, fixture, instance } = await shallow.render({ bind: { markers } });
+
       await fixture.whenStable();
 
       expect(find('.leaflet-marker-icon').length).toBe(markers.length);
