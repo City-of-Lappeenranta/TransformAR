@@ -99,14 +99,14 @@ describe('FeedbackFormComponent', () => {
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
-    expect(find('.description').nativeElement.innerHTML).toBe('streets');
+    expect(find('.description').nativeElement.innerHTML.trim()).toBe('streets');
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
     instance.feedbackForm.controls.description.setValue('lamps');
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
-    expect(find('.description').nativeElement.innerHTML).toBe('lamps');
+    expect(find('.description').nativeElement.innerHTML.trim()).toBe('lamps');
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([
       { label: 'missing lamp', value: '1' },
       { label: 'broken lamp', value: '2' },
