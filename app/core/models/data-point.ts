@@ -9,16 +9,39 @@ export enum DataPointType {
   FLOOD_WATER_QUALITY,
 }
 
-interface BaseDataPoint {
-  type: DataPointType;
+interface BaseDataPoint<T extends DataPointType> {
+  type: T;
   location: LatLong;
   quality: DataPointQuality;
 }
 
-export type WeatherDataPoint = BaseDataPoint & {
-  type: DataPointType.WEATHER;
-  data: Record<string, string | number>;
-};
+export type WeatherDataPoint = BaseDataPoint<DataPointType.WEATHER> &
+  (
+    | {
+        dataSourceId: 'TECONER';
+        data: TeconerSensorData;
+      }
+    | {
+        dataSourceId: 'MARJETAS_SENSOR';
+        data: MarjetaSensorData;
+      }
+  );
+
+export interface TeconerSensorData {
+  state: string;
+  dewPoint: number;
+  windSpeed: number;
+  relativeHumidity: number;
+  airTemperature: number;
+  iceLayerThickness: number;
+  waterLayerThickness: number;
+}
+
+export interface MarjetaSensorData {
+  dewPoint: number;
+  humidity: number;
+  externalSensorTemperature: number;
+}
 
 export type DataPoint = WeatherDataPoint; // | AirQualityDataPoint...
 
@@ -52,26 +75,12 @@ export const DATA_POINT_TYPE_ICON: Record<DataPointType, string> = {
 };
 
 export const WEATHER_DATA_POINT_METRIC_UNIT = {
-  // TeconerSensor
-  ta: '°C',
-  tsurf: '°C',
-  tdew: '°C',
-  rh: '%',
-  water: ' mm',
-  tground: '°C',
-  ice: ' mm',
-  pressure: ' hPa',
-  wspd: ' m/s',
-
-  // MarjetaSensor
-  temperature0: '°C',
-  temperature5: '°C',
-  temperature10: '°C',
-  temperature15: '°C',
-
-  // DraginoSensor
-  batV: '/4',
-  tempCds: '°C',
-  tempCsht: '°C',
-  humSht: '%',
+  airTemperature: '°C',
+  dewPoint: '°C',
+  relativeHumidity: '%',
+  humidity: '%',
+  waterLayerThickness: ' mm',
+  iceLayerThickness: ' mm',
+  windSpeed: ' m/s',
+  externalSensorTemperature: '°C',
 };

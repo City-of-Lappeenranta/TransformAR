@@ -1,5 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { DataPoint, DataPointType, WEATHER_DATA_POINT_METRIC_UNIT } from '@core/models/data-point';
+import {
+  DataPoint,
+  DataPointType,
+  MarjetaSensorData,
+  TeconerSensorData,
+  WEATHER_DATA_POINT_METRIC_UNIT,
+} from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { Observable, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,22 +41,18 @@ export class DashboardDataPointDetailComponent implements OnChanges {
     }
   }
 
-  public getMetricLabel(type: DataPointType, key: string): string {
-    if (type === DataPointType.WEATHER) {
-      const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
-      const translation = this.translateService.instant(i18nKey);
-      return translation === i18nKey ? capitalize(key) : translation;
-    }
-
-    return key;
+  public getWeatherMetricLabel(key: keyof TeconerSensorData | keyof MarjetaSensorData): string {
+    const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
+    const translation = this.translateService.instant(i18nKey);
+    return translation === i18nKey ? capitalize(key) : translation;
   }
 
-  public getMetricUnit(type: DataPointType, key: string): string {
-    if (type === DataPointType.WEATHER) {
+  public getWeatherMetricUnit(key: keyof TeconerSensorData | keyof MarjetaSensorData): string | undefined {
+    if (Object.hasOwn(WEATHER_DATA_POINT_METRIC_UNIT, key)) {
       return WEATHER_DATA_POINT_METRIC_UNIT[key as keyof typeof WEATHER_DATA_POINT_METRIC_UNIT];
     }
 
-    return key;
+    return undefined;
   }
 
   private async reverseGeocodeDataPointLocation(dataPoint: DataPoint): Promise<void> {
