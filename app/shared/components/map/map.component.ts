@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import * as leaflet from 'leaflet';
-import { Observable, Subscription, firstValueFrom, max } from 'rxjs';
+import { Observable, Subscription, firstValueFrom } from 'rxjs';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { isEqual } from 'lodash';
 
