@@ -4,6 +4,7 @@ import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from './dashboard-data-point-detail.component';
 import { SharedModule } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 jest.useFakeTimers();
 
@@ -12,6 +13,7 @@ describe('DashboardDataPointDetailComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(DashboardDataPointDetailComponent, DashboardModule)
+      .mock(TranslateService, { instant: jest.fn((key) => key) })
       .mock(RadarService, {
         reverseGeocode: jest.fn().mockReturnValue('Lappeenranta'),
       })

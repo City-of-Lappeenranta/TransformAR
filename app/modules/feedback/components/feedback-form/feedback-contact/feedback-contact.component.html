@@ -1,18 +1,27 @@
 <article class="flex-column form" [formGroup]="contactForm">
   <div class="flex-column">
-    <label class="p-label" for="email">Email <span class="p-optional">Optional</span></label>
+    <label class="p-label" for="email"
+      >{{ 'FEEDBACK.CONTACT.EMAIL' | translate }} <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span></label
+    >
     <input pInputText id="email" type="email" formControlName="email" />
   </div>
   <div class="flex-column">
-    <label class="p-label" for="firstName">First name <span class="p-optional">Optional</span></label>
+    <label class="p-label" for="firstName"
+      >{{ 'FEEDBACK.CONTACT.FIRST_NAME' | translate }}
+      <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span></label
+    >
     <input pInputText id="firstName" type="firstName" formControlName="firstName" />
   </div>
   <div class="flex-column">
-    <label class="p-label" for="lastName"> Last name <span class="p-optional">Optional</span></label>
+    <label class="p-label" for="lastName">
+      {{ 'FEEDBACK.CONTACT.LAST_NAME' | translate }} <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span></label
+    >
     <input pInputText id="lastName" type="lastName" formControlName="lastName" />
   </div>
   <div class="flex-column">
-    <label class="p-label" for="phone">Phone <span class="p-optional">Optional</span></label>
+    <label class="p-label" for="phone"
+      >{{ 'FEEDBACK.CONTACT.PHONE' | translate }} <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span></label
+    >
     <input pInputText id="phone" type="phone" formControlName="phone" />
   </div>
   <div class="p-checkbox-container">
@@ -23,8 +32,10 @@
       [required]="true"
     ></p-checkbox>
     <label class="p-checkbox-label" for="termsOfUseAccepted">
-      I accept the Service's <a [href]="termsOfUseUrl" target="_blank">Terms of Use</a> and
-      <a [href]="privacyPolicyUrl" target="_blank">Privacy Statement</a>
+      {{ 'FEEDBACK.CONTACT.I_ACCEPT_THE_SERVICES' | translate }}
+      <a [href]="termsOfUseUrl" target="_blank">{{ 'FEEDBACK.CONTACT.TERMS_OF_USE' | translate }}</a>
+      {{ 'MISC.AND' | translate }}
+      <a [href]="privacyPolicyUrl" target="_blank">{{ 'FEEDBACK.CONTACT.PRIVACY_STATEMENT' | translate }}</a>
     </label>
   </div>
 </article>

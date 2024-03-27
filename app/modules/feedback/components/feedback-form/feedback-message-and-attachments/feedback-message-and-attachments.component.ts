@@ -1,5 +1,6 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { convertBytesToMegabytes } from '@shared/utils/file-utils';
 import imageCompression, { Options } from 'browser-image-compression';
 import { MessageService } from 'primeng/api';
@@ -18,7 +19,6 @@ interface FormFile {
 export class FeedbackMessageAndAttachmentComponent {
   @Input({ required: true }) public reasonForm!: FormGroup<{
     message: FormControl<string | null>;
-    publish: FormControl<boolean | null>;
     files: FormArray<FormControl<File>>;
   }>;
 
@@ -27,13 +27,13 @@ export class FeedbackMessageAndAttachmentComponent {
   public readonly MAX_FILE_SIZE_MB = 3;
 
   public files: FormFile[] = [];
-  public amountOfFilesBeingCompressed = signal(0);
 
   public readonly TOAST_KEY = 'error';
 
   public constructor(
     private readonly formBuilder: FormBuilder,
     private readonly messageService: MessageService,
+    private readonly translateService: TranslateService,
   ) {}
 
   public async onFileInput(event: Event): Promise<void> {
@@ -62,7 +62,9 @@ export class FeedbackMessageAndAttachmentComponent {
           this.files = this.files.filter((value) => value.name !== file.name);
           this.messageService.add({
             key: this.TOAST_KEY,
-            detail: `Your file is too large and could not be compressed down to ${this.MAX_FILE_SIZE_MB}, please try again with a smaller file`,
+            detail: this.translateService.instant('FEEDBACK.MESSAGES_AND_ATTACHMENTS.ATTACHMENTS.WARNING', {
+              maxSize: this.MAX_FILE_SIZE_MB,
+            }),
           });
         }
       }
@@ -89,9 +91,5 @@ export class FeedbackMessageAndAttachmentComponent {
 
   private hasValidFileSize(file: File): boolean {
     return convertBytesToMegabytes(file.size) < this.MAX_FILE_SIZE_MB;
-  }
-
-  private updateAmountOfFilesBeingCompressed(amount: number): void {
-    this.amountOfFilesBeingCompressed.update((prev) => (prev += amount));
   }
 }

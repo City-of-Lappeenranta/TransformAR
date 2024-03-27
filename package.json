@@ -38,6 +38,8 @@
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
     "@angular/service-worker": "^17.1.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "browser-image-compression": "^2.0.2",
     "concurrently": "^8.2.2",
     "eslint-plugin-html": "^8.0.0",

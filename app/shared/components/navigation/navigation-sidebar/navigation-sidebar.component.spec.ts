@@ -2,12 +2,15 @@ import { Shallow } from 'shallow-render';
 import { NavigationSidebarComponent } from './navigation-sidebar.component';
 import { NavigationModule } from '../navigation.module';
 import { SharedModule } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('NavigationSidebarComponent', () => {
   let shallow: Shallow<NavigationSidebarComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(NavigationSidebarComponent, NavigationModule).provideMock(SharedModule);
+    shallow = new Shallow(NavigationSidebarComponent, NavigationModule)
+      .mock(TranslateService, { get: jest.fn })
+      .provideMock(SharedModule);
   });
 
   it('should not render the navigation sidebar when the sidebar is closed', async () => {

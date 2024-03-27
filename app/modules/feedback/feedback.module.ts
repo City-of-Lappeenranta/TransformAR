@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { StepsComponent } from '@shared/components/steps/steps.component';
 import { SharedModule } from '@shared/shared.module';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
@@ -21,7 +22,6 @@ import { FeedbackMessageAndAttachmentComponent } from './components/feedback-for
 import { FeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/feedback-category/feedback-category.component';
 import { InputFeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/input-feedback-category.component';
 import { FeedbackRoutingModule } from './feedback.routing';
-import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
