@@ -48,7 +48,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     setTimeout(() => {
       this.initialiseMap();
       this.initialiseMarkers();
-    }, 0);
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
