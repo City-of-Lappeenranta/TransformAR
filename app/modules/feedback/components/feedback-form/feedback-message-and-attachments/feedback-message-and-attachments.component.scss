@@ -9,33 +9,13 @@
         height: 105px;
         resize: none;
       }
-    }
 
-    .published-container {
-      align-items: start;
-      gap: 8px;
-
-      .checkbox {
-        padding-top: 4px;
-      }
-
-      .title-and-description {
-        h3,
-        p {
-          font-family: var(--font-family);
-          font-size: 14px;
-          line-height: 22px;
-        }
-
-        h3 {
-          color: #000;
-          font-weight: 500;
-        }
-
-        p {
-          color: #667085;
-          font-weight: 400;
-        }
+      small {
+        color: #667085;
+        font-weight: 400;
+        font-family: var(--font-family);
+        font-size: 14px;
+        line-height: 22px;
       }
     }
 

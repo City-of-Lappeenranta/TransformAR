@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import * as leaflet from 'leaflet';
-import { Observable, Subscription, firstValueFrom } from 'rxjs';
+import { Observable, Subscription, firstValueFrom, max } from 'rxjs';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { isEqual } from 'lodash';
 
@@ -22,7 +22,6 @@ export interface Marker {
 })
 export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public center$: Observable<LatLong> | null = null;
-  @Input() public zoom = 13;
   @Input() public markers: Marker[] = [];
 
   @Output() public markerClick = new EventEmitter<LatLong>();
@@ -30,6 +29,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   public map: leaflet.Map | undefined;
 
+  private readonly zoom = 13;
   private centerSubscription: Subscription | null = null;
 
   public constructor(private readonly http: HttpClient) {}
@@ -81,7 +81,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     // centerSubscription gets unsubscribed in ngOnDestroy
     this.centerSubscription =
       center$.subscribe((center) => {
-        this.map?.setView(new leaflet.LatLng(...(center as LatLong)), 15);
+        const currentZoom = this.map?.getZoom() ?? this.zoom;
+        const minimumZoom = 15;
+        const zoom = currentZoom < minimumZoom ? minimumZoom : currentZoom;
+
+        this.map?.setView(new leaflet.LatLng(...(center as LatLong)), zoom);
       }) ?? null;
   }
 
