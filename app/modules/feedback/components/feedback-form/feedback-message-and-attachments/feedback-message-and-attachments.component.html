@@ -1,19 +1,20 @@
 <article class="content" [formGroup]="reasonForm">
   <section class="message-container">
     <label class="p-label" for="message">Feedback message</label>
-    <textarea class="textarea full-width" id="message" formControlName="message" pInputTextarea></textarea>
-  </section>
-  <section class="published-container flex-row">
-    <div class="title-and-description flex-column">
-      <h3>{{ 'FEEDBACK.MESSAGES_AND_ATTACHMENTS.PUBLISH.TITLE' | translate }}</h3>
-      <p>{{ 'FEEDBACK.MESSAGES_AND_ATTACHMENTS.PUBLISH.DESCRIPTION' | translate }}</p>
-    </div>
+    <textarea
+      class="textarea full-width"
+      id="message"
+      formControlName="message"
+      aria-describedby="message-help"
+      pInputTextarea
+    ></textarea
+    ><small id="message-help">{{ 'FEEDBACK.MESSAGES_AND_ATTACHMENTS.PUBLISH.TITLE' | translate }}</small>
   </section>
   <section class="attachments-container flex-column">
-    <label class="p-label">
+    <p class="p-label">
       {{ 'FEEDBACK.MESSAGES_AND_ATTACHMENTS.ATTACHMENTS.TITLE' | translate }}
       <span class="p-optional">{{ 'MISC.OPTIONAL' | translate }}</span>
-    </label>
+    </p>
     <div class="attachments flex-column">
       <app-icon class="icon" icon="add-image"></app-icon>
       <p class="description">{{ 'FEEDBACK.MESSAGES_AND_ATTACHMENTS.ATTACHMENTS.HINT' | translate }}</p>
