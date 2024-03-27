@@ -13,7 +13,7 @@ describe('NavigationHeaderComponent', () => {
 
   it('should render the navigation header', async () => {
     const title = 'Title';
-    const { find } = await shallow.render(`<app-navigation-header [title]="title"></app-navigation-header>`, {
+    const { find } = await shallow.render('<app-navigation-header [title]="title"></app-navigation-header>', {
       bind: { title },
     });
 
@@ -24,7 +24,7 @@ describe('NavigationHeaderComponent', () => {
   it('should open and close the navigation sidebar', async () => {
     const title = 'Title';
     const { fixture, find, findComponent } = await shallow.render(
-      `<app-navigation-header [title]="title"></app-navigation-header>`,
+      '<app-navigation-header [title]="title"></app-navigation-header>',
       { bind: { title } },
     );
 

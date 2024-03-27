@@ -3,8 +3,9 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
+const { resolve } = require('path');
 
-const directoryPath = path.join(__dirname, './assets/');
+const directoryPath = path.join(resolve(__dirname, '..', 'assets'));
 
 function generateSvgIconNames(dirPath) {
   const svgIconNames = [];
@@ -53,7 +54,7 @@ function getSvgDimensions(svgContent) {
 }
 
 const svgIconNames = generateSvgIconNames(directoryPath);
-const outputFilePath = path.join(__dirname, './app/shared/components/icon/svg-icons.generated.ts');
+const outputFilePath = resolve(__dirname, '..', 'app', 'shared', 'components', 'icon', 'svg-icons.generated.ts');
 const exportContent = `export const SVG_ICONS = ${JSON.stringify(svgIconNames, null, 2)}`;
 
 fs.writeFileSync(outputFilePath, exportContent);

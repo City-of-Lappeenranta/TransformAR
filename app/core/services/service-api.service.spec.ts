@@ -128,7 +128,9 @@ describe('ServiceApi', () => {
 
 const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
   {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_code: '1',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_name: 'missing lamp',
     group: 'streets',
     metadata: false,
@@ -137,7 +139,9 @@ const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
     description: 'lamps',
   },
   {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_code: '2',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_name: 'broken lamp',
     group: 'streets',
     metadata: false,
@@ -146,7 +150,9 @@ const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
     description: 'lamps',
   },
   {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_code: '3',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_name: 'dead tree',
     group: 'parcs',
     metadata: false,
@@ -155,7 +161,9 @@ const SERVICE_LIST_API_RESPONSE: ServiceListApiResponse = [
     description: 'trees',
   },
   {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_code: '4',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_name: 'broken bench',
     group: 'parcs',
     metadata: false,
