@@ -12,7 +12,7 @@
     [class.loading]="locationLoading$ | async"
     [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
     [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"
-    (click)="focusLocation()"
+    (click)="onFocusLocationClick()"
   ></app-icon>
 </div>
 <p-toast position="bottom-center" [key]="TOAST_KEY" styleClass="toast">
