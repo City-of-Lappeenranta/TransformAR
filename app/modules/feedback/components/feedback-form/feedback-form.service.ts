@@ -164,7 +164,7 @@ export class FeedbackFormService {
         categories = Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
       } else {
         parent = subCategory;
-        categories = serviceDictionary[mainCategory][subCategory]?.map(({ name, code }) => ({ label: name, value: code }));
+        categories = serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({ label: name, value: code }));
       }
 
       this._parentCategorySubject$.next(parent);
