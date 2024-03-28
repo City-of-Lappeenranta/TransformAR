@@ -2,26 +2,15 @@
   "DASHBOARD": {
     "DATA_POINTS": {
       "WEATHER": {
-        "BATV": "Battery level",
         "DEWPOINT": "Dew point",
-        "FRICTION": "Friction",
-        "HUMSHT": "Humidity",
-        "ICE": "Ice layer thickness",
-        "PRESSURE": "Pressure",
-        "RH": "Relative humidity",
+        "HUMIDITY": "Humidity",
+        "ICELAYERTHICKNESS": "Ice layer thickness",
+        "RELATIVEHUMIDITY": "Relative humidity",
         "STATE": "State",
-        "TA": "Air temperature",
-        "TDEW": "Dew point",
-        "TEMPCDS": "External sensor temperature",
-        "TEMPCSHT": "Internal sensor temperature",
-        "TEMPERATURE0": "Surface temperature",
-        "TEMPERATURE10": "Temperature below 10cm",
-        "TEMPERATURE15": "Temperature below 15cm",
-        "TEMPERATURE5": "Temperature below 5cm",
-        "TGROUND": "Ground temperature",
-        "TSURF": "Surface temperature",
-        "WATER": "Water layer thickness",
-        "WSPD": "Wind speed"
+        "AIRTEMPERATURE": "Air temperature",
+        "EXTERNALSENSORTEMPERATURE": "External sensor temperature",
+        "WATERLAYERTHICKNESS": "Water layer thickness",
+        "WINDSPEED": "Wind speed"
       }
     }
   },

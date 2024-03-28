@@ -46,13 +46,15 @@ describe('DashboardDataPointDetailComponent', () => {
           location: [123, 456],
           type: DataPointType.WEATHER,
           quality: DataPointQuality.GOOD,
+          dataSourceId: 'TECONER',
           data: {
             airTemperature: 0,
-            airMoisture: 0,
             dewPoint: 0,
-            wind: 0,
-            rainFall: 0,
-            snowDepth: 0,
+            state: 'state',
+            windSpeed: 0,
+            relativeHumidity: 0,
+            iceLayerThickness: 0,
+            waterLayerThickness: 0,
           },
         };
 
