@@ -15,17 +15,15 @@ interface BaseDataPoint<T extends DataPointType> {
   quality: DataPointQuality;
 }
 
-export type WeatherDataPoint = BaseDataPoint<DataPointType.WEATHER> &
-  (
-    | {
-        dataSourceId: 'TECONER';
-        data: TeconerSensorData;
-      }
-    | {
-        dataSourceId: 'MARJETAS_SENSOR';
-        data: MarjetaSensorData;
-      }
-  );
+interface TeconerSensorDataPoint extends BaseDataPoint<DataPointType.WEATHER> {
+  dataSourceId: 'TECONER';
+  data: TeconerSensorData;
+}
+
+interface MarjetaSensorDataPoint extends BaseDataPoint<DataPointType.WEATHER> {
+  dataSourceId: 'MARJETAS_SENSOR';
+  data: MarjetaSensorData;
+}
 
 export interface TeconerSensorData {
   state: string;
@@ -42,6 +40,8 @@ export interface MarjetaSensorData {
   humidity: number;
   externalSensorTemperature: number;
 }
+
+export type WeatherDataPoint = TeconerSensorDataPoint | MarjetaSensorDataPoint;
 
 export type DataPoint = WeatherDataPoint; // | AirQualityDataPoint...
 

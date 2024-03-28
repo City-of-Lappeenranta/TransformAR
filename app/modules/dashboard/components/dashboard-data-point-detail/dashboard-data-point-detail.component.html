@@ -14,28 +14,14 @@
 
   @switch (dataPoint.type) {
     @case (DATA_POINT_TYPE.WEATHER) {
-      @switch (dataPoint.dataSourceId) {
-        @case ('TECONER') {
-          <ul class="weather-data-container">
-            @for (metric of dataPoint.data | keyvalue; track metric.key) {
-              <li>
-                <label class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</label>
-                <p class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</p>
-              </li>
-            }
-          </ul>
+      <ul class="weather-data-container">
+        @for (metric of castDataPointData(dataPoint.data) | keyvalue; track metric.key) {
+          <li>
+            <p class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</p>
+            <small class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</small>
+          </li>
         }
-        @case ('MARJETAS_SENSOR') {
-          <ul class="weather-data-container">
-            @for (metric of dataPoint.data | keyvalue; track metric.key) {
-              <li>
-                <label class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</label>
-                <p class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</p>
-              </li>
-            }
-          </ul>
-        }
-      }
+      </ul>
     }
   }
 </div>

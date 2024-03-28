@@ -31,88 +31,88 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
         class="weather-data-container"
       >
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Airtemperature
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0°C
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Dewpoint
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0°C
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Icelayerthickness
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0 mm
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Relativehumidity
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0%
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             State
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             state
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Waterlayerthickness
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0 mm
-          </p>
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Windspeed
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
             0 m/s
-          </p>
+          </small>
         </li>
       </ul>
     </div>
