@@ -6,7 +6,7 @@ import {
   WeatherDataPoint,
 } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
-import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService, UserLocation } from '@core/services/location.service';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';

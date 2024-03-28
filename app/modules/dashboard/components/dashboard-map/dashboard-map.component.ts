@@ -3,14 +3,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
-import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -43,11 +43,6 @@ export class DashboardMapComponent implements AfterViewInit {
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
   ) {
-    this.dataPointsApi
-      .getWeatherDataPoints()
-      .pipe(take(1), takeUntilDestroyed())
-      .subscribe(this.handleWeatherDataPoints.bind(this));
-
     combineLatest([this._weatherDataPointMarkersLoadingSubject$])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
