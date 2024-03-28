@@ -18,7 +18,7 @@
         @for (metric of castDataPointData(dataPoint.data) | keyvalue; track metric.key) {
           <li>
             <p class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</p>
-            <small class="body-sm">{{ metric.value }}{{ getWeatherMetricUnit(metric.key) }}</small>
+            <small class="body-sm">{{ getWeatherMetricValue(metric.value) }}{{ getWeatherMetricUnit(metric.key) }}</small>
           </li>
         }
       </ul>

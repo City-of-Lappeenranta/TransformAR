@@ -42,9 +42,7 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   }
 
   public getWeatherMetricLabel(key: string): string {
-    const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
-    const translation = this.translateService.instant(i18nKey);
-    return translation === i18nKey ? capitalize(key) : translation;
+    return this.getWeatherMetricTranslation(key);
   }
 
   public getWeatherMetricUnit(key: string): string | undefined {
@@ -55,9 +53,23 @@ export class DashboardDataPointDetailComponent implements OnChanges {
     return undefined;
   }
 
+  public getWeatherMetricValue(value: string | number): string | number {
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    return this.getWeatherMetricTranslation(value);
+  }
+
   // @for can't seem to handle Union types
-  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): Partial<TeconerSensorData & MarjetaSensorData> {
-    return data as Partial<TeconerSensorData & MarjetaSensorData>;
+  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): TeconerSensorData & MarjetaSensorData {
+    return data as TeconerSensorData & MarjetaSensorData;
+  }
+
+  private getWeatherMetricTranslation(key: string): string {
+    const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
+    const translation = this.translateService.instant(i18nKey);
+    return translation === i18nKey ? capitalize(key) : translation;
   }
 
   private async reverseGeocodeDataPointLocation(dataPoint: DataPoint): Promise<void> {
