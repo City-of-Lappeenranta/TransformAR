@@ -1,11 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChange,
+  SimpleChanges,
+} from '@angular/core';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
-import * as leaflet from 'leaflet';
-import { Observable, Subscription, firstValueFrom } from 'rxjs';
 import { isSameLocation } from '@shared/utils/location-utils';
+import * as leaflet from 'leaflet';
 import { isEqual } from 'lodash';
+import { Observable, Subscription, firstValueFrom } from 'rxjs';
 
 export interface Marker {
   location: LatLong;
@@ -20,7 +30,7 @@ export interface Marker {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnChanges, OnDestroy {
+export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() public center$: Observable<LatLong> | null = null;
   @Input() public markers: Marker[] = [];
 
@@ -34,8 +44,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   public constructor(private readonly http: HttpClient) {}
 
-  public ngOnInit(): void {
-    this.initialiseMap();
+  public ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.initialiseMap();
+      this.initialiseMarkers();
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -69,6 +82,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         maxZoom: 20,
       })
       .addTo(this.map);
+  }
+
+  private initialiseMarkers(): void {
+    this.ngOnChanges({ markers: new SimpleChange([], this.markers, true) });
   }
 
   private destroyMap(): void {
