@@ -41,11 +41,11 @@ export class DashboardDataPointDetailComponent implements OnChanges {
     }
   }
 
-  public getWeatherMetricLabel(key: keyof TeconerSensorData | keyof MarjetaSensorData): string {
+  public getWeatherMetricLabel(key: string): string {
     return this.getWeatherMetricTranslation(key);
   }
 
-  public getWeatherMetricUnit(key: keyof TeconerSensorData | keyof MarjetaSensorData): string | undefined {
+  public getWeatherMetricUnit(key: string): string | undefined {
     if (Object.hasOwn(WEATHER_DATA_POINT_METRIC_UNIT, key)) {
       return WEATHER_DATA_POINT_METRIC_UNIT[key as keyof typeof WEATHER_DATA_POINT_METRIC_UNIT];
     }
@@ -59,6 +59,11 @@ export class DashboardDataPointDetailComponent implements OnChanges {
     }
 
     return this.getWeatherMetricTranslation(value);
+  }
+
+  // @for can't seem to handle Union types
+  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): Partial<TeconerSensorData & MarjetaSensorData> {
+    return data as Partial<TeconerSensorData & MarjetaSensorData>;
   }
 
   private getWeatherMetricTranslation(key: string): string {
