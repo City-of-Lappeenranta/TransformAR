@@ -1,7 +1,12 @@
 import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, WeatherDataPoint } from '@core/models/data-point';
+import {
+  DATA_POINT_QUALITY_COLOR_CHART,
+  DATA_POINT_TYPE_ICON,
+  DataPoint,
+  WeatherConditionDataPoint,
+} from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
@@ -10,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -20,8 +25,8 @@ import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChang
 export class DashboardMapComponent implements AfterViewInit {
   private dataPoints: DataPoint[] = [];
 
-  private _weatherDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
-  public weatherDataPointMarkers: Marker[] = [];
+  private _weatherConditionDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  public weatherConditionDataPointMarkers: Marker[] = [];
 
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
@@ -43,9 +48,14 @@ export class DashboardMapComponent implements AfterViewInit {
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
   ) {
-    combineLatest([this._weatherDataPointMarkersLoadingSubject$])
+    combineLatest([this._weatherConditionDataPointMarkersLoadingSubject$])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
+
+    this.dataPointsApi
+      .getWeatherConditions()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe(this.handleWeatherConditionDataPoints.bind(this));
   }
 
   public ngAfterViewInit(): void {
@@ -82,7 +92,7 @@ export class DashboardMapComponent implements AfterViewInit {
   }
 
   private setActiveMarker(latLong?: LatLong): void {
-    this.weatherDataPointMarkers = this.weatherDataPointMarkers.map((marker) => ({
+    this.weatherConditionDataPointMarkers = this.weatherConditionDataPointMarkers.map((marker) => ({
       ...marker,
       active: latLong ? isSameLocation(marker.location, latLong) : false,
     }));
@@ -113,14 +123,14 @@ export class DashboardMapComponent implements AfterViewInit {
       });
   }
 
-  private handleWeatherDataPoints(weatherDataPoints: WeatherDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(weatherDataPoints);
+  private handleWeatherConditionDataPoints(weatherConditionDataPoints: WeatherConditionDataPoint[]): void {
+    this.dataPoints = this.dataPoints.concat(weatherConditionDataPoints);
 
-    this.weatherDataPointMarkers = weatherDataPoints.map((point) => ({
+    this.weatherConditionDataPointMarkers = weatherConditionDataPoints.map((point) => ({
       location: point.location,
       icon: DATA_POINT_TYPE_ICON[point.type],
       color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
     }));
-    this._weatherDataPointMarkersLoadingSubject$.next(false);
+    this._weatherConditionDataPointMarkersLoadingSubject$.next(false);
   }
 }

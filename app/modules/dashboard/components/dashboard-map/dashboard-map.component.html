@@ -1,7 +1,7 @@
 <app-map
   class="full-height"
   [center$]="mapCenter$"
-  [markers]="weatherDataPointMarkers"
+  [markers]="weatherConditionDataPointMarkers"
   (markerClick)="onMarkerClick($event)"
 ></app-map>
 <app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
