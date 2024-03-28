@@ -27,6 +27,13 @@ describe('DashboardMapComponent', () => {
       .mock(DataPointsApi, {
         getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
       })
+      .mock(LocationService, {
+        locationPermissionState$: of('granted' as PermissionState),
+        userLocation$: of({
+          loading: false,
+          location: [1, 1],
+        } as UserLocation),
+      })
       .provideMock(SharedModule);
   });
 
