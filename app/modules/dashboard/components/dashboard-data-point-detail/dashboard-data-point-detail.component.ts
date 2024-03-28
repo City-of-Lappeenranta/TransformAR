@@ -62,8 +62,8 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   }
 
   // @for can't seem to handle Union types
-  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): Partial<TeconerSensorData & MarjetaSensorData> {
-    return data as Partial<TeconerSensorData & MarjetaSensorData>;
+  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): TeconerSensorData & MarjetaSensorData {
+    return data as TeconerSensorData & MarjetaSensorData;
   }
 
   private getWeatherMetricTranslation(key: string): string {
