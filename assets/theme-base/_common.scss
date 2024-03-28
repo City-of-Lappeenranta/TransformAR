@@ -128,3 +128,16 @@ small {
   padding: 8px 16px;
   background-color: white;
 }
+
+.search-input input {
+  padding-left: calc(21px + 0.8em);
+  color: #667085;
+  background-image: url('/assets/icons/search.svg');
+  background-size: 0.8em;
+  background-position: 12px;
+  background-repeat: no-repeat;
+
+  &::placeholder {
+    color: #d0d5dd;
+  }
+}
