@@ -30,36 +30,30 @@ describe('DashboardMapComponent', () => {
 
   describe('data fetching', () => {
     // TODO: enable test after implementing mock endpoints
-    xit('should show a loader when fetching data and clear when all data has been loaded', async () => {
-      jest.useFakeTimers();
-      const { inject } = await shallow.mock(DataPointsApi, {}).render();
-
-      const messageService = inject(MessageService);
-      expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
-
-      jest.advanceTimersByTime(2000);
-
-      expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
-    });
+    // xit('should show a loader when fetching data and clear when all data has been loaded', async () => {
+    //   jest.useFakeTimers();
+    //   const { inject } = await shallow.mock(DataPointsApi, {}).render();
+    //   const messageService = inject(MessageService);
+    //   expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
+    //   jest.advanceTimersByTime(2000);
+    //   expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
+    // });
   });
 
   describe('markers', () => {
     // TODO: enable test after implementing mock endpoints
-    xit('should show marker detail on click and close on close', async () => {
-      const { findComponent, fixture } = await shallow.render();
-      expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
-
-      findComponent(MapComponent).markerClick.emit([1, 1]);
-      fixture.detectChanges();
-
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([true, false]);
-      expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_DATA_POINTS[0]);
-      findComponent(DashboardDataPointDetailComponent).close.emit();
-      fixture.detectChanges();
-
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false]);
-      expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
-    });
+    // xit('should show marker detail on click and close on close', async () => {
+    //   const { findComponent, fixture } = await shallow.render();
+    //   expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
+    //   findComponent(MapComponent).markerClick.emit([1, 1]);
+    //   fixture.detectChanges();
+    //   expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([true, false]);
+    //   expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_DATA_POINTS[0]);
+    //   findComponent(DashboardDataPointDetailComponent).close.emit();
+    //   fixture.detectChanges();
+    //   expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false]);
+    //   expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
+    // });
   });
 
   describe('weather data points', () => {
