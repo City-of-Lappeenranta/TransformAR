@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Observable, Subject, combineLatest, map, take, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, filter, map, take, withLatestFrom } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -26,8 +26,8 @@ export class DashboardMapComponent implements AfterViewInit {
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
-  public locationLoading$: Observable<boolean> = this.locationService.userLocation$.pipe(map(({ loading }) => loading));
-  public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
+  public locationLoading$: Observable<boolean> | undefined;
+  public locationPermissionState$: Observable<PermissionState> | undefined;
 
   public locationFormControl = new FormControl<LatLong | null>(null);
 
@@ -55,9 +55,7 @@ export class DashboardMapComponent implements AfterViewInit {
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
 
-    this._focusLocation$
-      .pipe(withLatestFrom(this.locationService.userLocation$, this.locationPermissionState$), takeUntilDestroyed())
-      .subscribe(([_, userLocation, permissionState]) => this.onFocusLocation(userLocation, permissionState));
+    this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
   }
 
   public ngAfterViewInit(): void {
@@ -102,6 +100,25 @@ export class DashboardMapComponent implements AfterViewInit {
       ...marker,
       active: latLong ? isSameLocation(marker.location, latLong) : false,
     }));
+  }
+
+  private onInitialFocusLocation(): void {
+    this.locationPermissionState$ = this.locationService.locationPermissionState$;
+    this.locationLoading$ = this.locationService.userLocation$.pipe(map(({ loading }) => loading));
+
+    this._focusLocation$
+      .pipe(
+        withLatestFrom(this.locationService.userLocation$, this.locationService.locationPermissionState$),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(([_, userLocation, permissionState]) => this.onFocusLocation(userLocation, permissionState));
+
+    this.locationLoading$
+      .pipe(
+        filter((loading) => !loading),
+        take(1),
+      )
+      .subscribe(() => this._focusLocation$.next());
   }
 
   private onFocusLocation(userLocation: UserLocation, permissionState: PermissionState): void {
