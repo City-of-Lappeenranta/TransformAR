@@ -19,7 +19,9 @@ export class MockHttpClient {
       throw Error(`${url} doesn't match an endpoint`);
     }
 
-    return of(mockResponses[match] as T).pipe(delay(Math.floor(Math.random() * (2000 - 500 + 1)) + 500));
+    return of(mockResponses[match] as T).pipe(
+      delay(Math.floor((crypto.getRandomValues(new Uint32Array(1))[0] / (0xffffffff + 1)) * (2000 - 500 + 1)) + 500),
+    );
   }
 }
 
