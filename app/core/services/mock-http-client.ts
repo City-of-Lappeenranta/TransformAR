@@ -19,7 +19,7 @@ export class MockHttpClient {
       throw Error(`${url} doesn't match an endpoint`);
     }
 
-    return of(mockResponses[match] as T).pipe(delay(1000));
+    return of(mockResponses[match] as T).pipe(delay(Math.floor(Math.random() * (2000 - 500 + 1)) + 500));
   }
 }
 
@@ -37,7 +37,20 @@ const WEATHER_CONDITIONS: WeatherConditionsResponse = [
 
 const WEATHER_AIR_QUALITY: WeatherAirQualityResponse = [];
 
-const WEATHER_STORM_WATER: WeatherStormWaterResponse = [];
+const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
+  {
+    name: 'Hurricane Delta',
+    latitude: 61.06343,
+    longitude: 28.18027,
+    dataRetrievedTimestamp: 1711635283,
+    waterLevel: 3.5,
+    waterTemperature: 28.6,
+    electricalConductivity: 210,
+    turbidity: 25,
+    flowRate: 1200,
+    fillLevel: 90,
+  },
+];
 
 const PARKING: ParkingResponse = [];
 

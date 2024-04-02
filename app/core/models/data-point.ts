@@ -20,7 +20,11 @@ export type WeatherConditionDataPoint = BaseDataPoint<DataPointType.WEATHER_COND
   data: Record<string, string | number>;
 };
 
-export type DataPoint = WeatherConditionDataPoint;
+export type WeatherStormWaterDataPoint = BaseDataPoint<DataPointType.STORM_WATER> & {
+  data: Record<string, string | number>;
+};
+
+export type DataPoint = WeatherConditionDataPoint | WeatherStormWaterDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,
@@ -62,4 +66,13 @@ export const WEATHER_CONDITIONS_METRIC_UNIT = {
   cloudCover: '%',
   snowDepth: ' cm',
   ice: ' mm',
+};
+
+export const WEATHER_STORM_WATER_METRIC_UNIT = {
+  waterLevel: ' mm',
+  waterTemperature: '°C',
+  electricalConductivity: ' µS/cm',
+  turbidity: ' NTU',
+  flowRate: ' l/s',
+  fillLevel: '%',
 };

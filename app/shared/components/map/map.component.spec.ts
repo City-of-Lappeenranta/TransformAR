@@ -62,7 +62,7 @@ describe('MapComponent', () => {
         { location: [0, 0], active: false, color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
         { location: [1, 1], active: false },
       ];
-      const { find, fixture, instance } = await shallow.render({ bind: { markers } });
+      const { find, fixture, instance, element } = await shallow.render({ bind: { markers } });
 
       await fixture.whenStable();
 
@@ -84,11 +84,9 @@ describe('MapComponent', () => {
         { location: [0, 0], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR], active: true },
       ];
       instance.markers = newMarkers;
-      instance.ngOnChanges({
-        markers: new SimpleChange(markers, newMarkers, false),
-      });
+      instance.ngDoCheck();
 
-      await fixture.whenStable();
+      fixture.detectChanges();
       await fixture.whenStable();
 
       expect(find('.leaflet-marker-icon').length).toBe(newMarkers.length);

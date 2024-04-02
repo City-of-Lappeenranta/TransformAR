@@ -2,19 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
+  DoCheck,
   EventEmitter,
   Input,
+  IterableDiffers,
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChange,
   SimpleChanges,
 } from '@angular/core';
 import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import { isSameLocation } from '@shared/utils/location-utils';
 import * as leaflet from 'leaflet';
-import { isEqual } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
 
 export interface Marker {
@@ -30,7 +31,7 @@ export interface Marker {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class MapComponent implements AfterViewInit, OnChanges, OnDestroy, DoCheck {
   @Input() public center$: Observable<LatLong> | null = null;
   @Input() public markers: Marker[] = [];
 
@@ -39,24 +40,37 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   public map: leaflet.Map | undefined;
 
+  private mapInitialised = false;
+
   private readonly zoom = 13;
   private centerSubscription: Subscription | null = null;
 
-  public constructor(private readonly http: HttpClient) {}
+  private differ: any;
+  private previousMarkers: Marker[] = [];
+
+  public constructor(
+    private readonly http: HttpClient,
+    private readonly differs: IterableDiffers,
+  ) {
+    this.differ = this.differs.find(this.markers).create(undefined);
+  }
 
   public ngAfterViewInit(): void {
     setTimeout(() => {
       this.initialiseMap();
-      this.initialiseMarkers();
+      this.renderMarkers();
     });
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['markers']) {
-      const { previousValue, currentValue } = changes['markers'];
-      this.renderMarkers(previousValue ?? [], currentValue);
-    }
+  public ngDoCheck(): void {
+    const changes = this.differ.diff(this.markers);
 
+    if (changes && this.mapInitialised) {
+      this.renderMarkers();
+    }
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
     if (changes['center$']) {
       this.subscribeToCenterObservable(changes['center$'].currentValue);
     }
@@ -82,10 +96,8 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         maxZoom: 20,
       })
       .addTo(this.map);
-  }
 
-  private initialiseMarkers(): void {
-    this.ngOnChanges({ markers: new SimpleChange([], this.markers, true) });
+    this.mapInitialised = true;
   }
 
   private destroyMap(): void {
@@ -125,10 +137,12 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-  private renderMarkers(previousMarkers: Marker[], newMarkers: Marker[]): void {
-    this.getMarkersToAdd(previousMarkers, newMarkers).forEach(this.renderMarker.bind(this));
-    this.getMarkersToRemove(previousMarkers, newMarkers).forEach(this.removeMarker.bind(this));
-    this.getMarkersToChange(previousMarkers, newMarkers).forEach(this.updateMarker.bind(this));
+  private renderMarkers(): void {
+    this.getMarkersToAdd(this.previousMarkers, this.markers).forEach(this.renderMarker.bind(this));
+    this.getMarkersToRemove(this.previousMarkers, this.markers).forEach(this.removeMarker.bind(this));
+    this.getMarkersToChange(this.previousMarkers, this.markers).forEach(this.updateMarker.bind(this));
+
+    this.previousMarkers = cloneDeep(this.markers);
   }
 
   private removeMarker(marker: Marker): void {

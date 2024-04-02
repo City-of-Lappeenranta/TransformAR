@@ -29,7 +29,18 @@ export type WeatherConditionsResponse = {
 }[];
 
 export type WeatherAirQualityResponse = unknown[];
-export type WeatherStormWaterResponse = unknown[];
+export type WeatherStormWaterResponse = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  dataRetrievedTimestamp: number;
+  waterLevel?: number | null;
+  waterTemperature?: number | null;
+  electricalConductivity?: number | null;
+  turbidity?: number | null;
+  flowRate?: number | null;
+  fillLevel?: number | null;
+}[];
 export type ParkingResponse = unknown[];
 export type RoadWorksResponse = unknown[];
 
