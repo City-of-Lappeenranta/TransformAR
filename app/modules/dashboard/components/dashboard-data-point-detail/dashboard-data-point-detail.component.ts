@@ -1,79 +1,51 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import {
-  DataPoint,
-  DataPointType,
-  MarjetaSensorData,
-  TeconerSensorData,
-  WEATHER_DATA_POINT_METRIC_UNIT,
-} from '@core/models/data-point';
-import { RadarService } from '@core/services/radar.service';
-import { Observable, Subject } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DataPoint, DataPointType, WEATHER_CONDITIONS_METRIC_UNIT } from '@core/models/data-point';
 import { TranslateService } from '@ngx-translate/core';
 import { capitalize } from '@shared/utils/string-utils';
+
+// TODO: get rid of magic strings
 
 @Component({
   selector: 'app-dashboard-data-point-detail',
   templateUrl: './dashboard-data-point-detail.component.html',
   styleUrls: ['./dashboard-data-point-detail.component.scss'],
 })
-export class DashboardDataPointDetailComponent implements OnChanges {
+export class DashboardDataPointDetailComponent {
   @Input({ required: true }) public dataPoint!: DataPoint;
 
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
   public DATA_POINT_TYPE = DataPointType;
 
-  private _addressSubject$: Subject<string | null> = new Subject<string | null>();
-  public address$: Observable<string | null> = this._addressSubject$.asObservable();
+  public constructor(private readonly translateService: TranslateService) {}
 
-  public constructor(
-    private readonly radarService: RadarService,
-    private readonly translateService: TranslateService,
-  ) {}
+  public getWeatherConditionMetricLabel(key: string): string {
+    return this.getDataPointTranslation('WEATHER_CONDITION', key);
+  }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dataPoint']) {
-      this._addressSubject$.next(null);
-
-      if (changes['dataPoint'].currentValue) {
-        this.reverseGeocodeDataPointLocation(changes['dataPoint'].currentValue);
-      }
+  public getWeatherConditionMetricValue(value: string | number): string | number {
+    if (typeof value === 'number') {
+      return value;
     }
+
+    return this.getDataPointTranslation('WEATHER_CONDITION', value);
   }
 
-  public getWeatherMetricLabel(key: string): string {
-    return this.getWeatherMetricTranslation(key);
+  public getWeatherConditionMetricUnit(key: string): string | undefined {
+    return this.getMetricUnit('WEATHER_CONDITION', key);
   }
 
-  public getWeatherMetricUnit(key: string): string | undefined {
-    if (Object.hasOwn(WEATHER_DATA_POINT_METRIC_UNIT, key)) {
-      return WEATHER_DATA_POINT_METRIC_UNIT[key as keyof typeof WEATHER_DATA_POINT_METRIC_UNIT];
+  private getMetricUnit(type: string, key: string): string | undefined {
+    if (type === 'WEATHER_CONDITION') {
+      return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT];
     }
 
     return undefined;
   }
 
-  public getWeatherMetricValue(value: string | number): string | number {
-    if (typeof value === 'number') {
-      return value;
-    }
-
-    return this.getWeatherMetricTranslation(value);
-  }
-
-  // @for can't seem to handle Union types
-  public castDataPointData(data: TeconerSensorData | MarjetaSensorData): TeconerSensorData & MarjetaSensorData {
-    return data as TeconerSensorData & MarjetaSensorData;
-  }
-
-  private getWeatherMetricTranslation(key: string): string {
-    const i18nKey = `DASHBOARD.DATA_POINTS.WEATHER.${key.toUpperCase()}`;
+  private getDataPointTranslation(type: string, key: string): string {
+    const i18nKey = `DASHBOARD.DATA_POINTS.${type}.${key.toUpperCase()}`;
     const translation = this.translateService.instant(i18nKey);
     return translation === i18nKey ? capitalize(key) : translation;
-  }
-
-  private async reverseGeocodeDataPointLocation(dataPoint: DataPoint): Promise<void> {
-    const address = await this.radarService.reverseGeocode(dataPoint.location);
-    this._addressSubject$.next(address);
   }
 }

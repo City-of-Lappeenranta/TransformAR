@@ -3,11 +3,12 @@ import {
   DATA_POINT_TYPE_ICON,
   DataPointQuality,
   DataPointType,
-  WeatherDataPoint,
+  WeatherConditionDataPoint,
 } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
-import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService, UserLocation } from '@core/services/location.service';
+import { TranslateService } from '@ngx-translate/core';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';
 import { delay, firstValueFrom, of, take } from 'rxjs';
@@ -15,7 +16,8 @@ import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { DashboardMapComponent } from './dashboard-map.component';
-import { TranslateService } from '@ngx-translate/core';
+
+const NETWORK_REQUEST_TIME = 50;
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -25,7 +27,7 @@ describe('DashboardMapComponent', () => {
       .mock(TranslateService, { instant: jest.fn })
       .mock(MessageService, { add: jest.fn(), clear: jest.fn() })
       .mock(DataPointsApi, {
-        getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
+        getWeatherConditions: jest.fn().mockReturnValue(of(WEATHER_CONDITION_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME))),
       })
       .provideMock(SharedModule);
   });
@@ -33,16 +35,12 @@ describe('DashboardMapComponent', () => {
   describe('data fetching', () => {
     it('should show a loader when fetching data and clear when all data has been loaded', async () => {
       jest.useFakeTimers();
-      const { inject } = await shallow
-        .mock(DataPointsApi, {
-          getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS).pipe(delay(2000))),
-        })
-        .render();
+      const { inject } = await shallow.render();
 
       const messageService = inject(MessageService);
       expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
 
-      jest.advanceTimersByTime(2000);
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
 
       expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
     });
@@ -51,13 +49,16 @@ describe('DashboardMapComponent', () => {
   describe('markers', () => {
     it('should show marker detail on click and close on close', async () => {
       const { findComponent, fixture } = await shallow.render();
+
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
+
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
 
       findComponent(MapComponent).markerClick.emit([1, 1]);
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([true, false]);
-      expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_DATA_POINTS[0]);
+      expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_CONDITION_DATA_POINTS[0]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
       fixture.detectChanges();
 
@@ -66,19 +67,22 @@ describe('DashboardMapComponent', () => {
     });
   });
 
-  describe('weather data points', () => {
+  describe('weather condition data points', () => {
     it('should create markers for every point', async () => {
-      const { findComponent } = await shallow.render();
+      const { findComponent, fixture } = await shallow.render();
+
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
+      fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers).toEqual([
         {
           location: [1, 1],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
+          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
           color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
         },
         {
           location: [2, 2],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
+          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
           color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
         },
       ]);
@@ -143,35 +147,19 @@ describe('DashboardMapComponent', () => {
   });
 });
 
-const WEATHER_DATA_POINTS: WeatherDataPoint[] = [
+const WEATHER_CONDITION_DATA_POINTS: WeatherConditionDataPoint[] = [
   {
     location: [1, 1],
-    type: DataPointType.WEATHER,
+    type: DataPointType.WEATHER_CONDITIONS,
     quality: DataPointQuality.GOOD,
-    dataSourceId: 'TECONER',
-    data: {
-      airTemperature: 0,
-      dewPoint: 0,
-      state: 'state',
-      windSpeed: 0,
-      relativeHumidity: 0,
-      iceLayerThickness: 0,
-      waterLayerThickness: 0,
-    },
+    name: 'Lappeenranta Weather Station',
+    data: {},
   },
   {
     location: [2, 2],
-    type: DataPointType.WEATHER,
+    type: DataPointType.WEATHER_CONDITIONS,
     quality: DataPointQuality.FAIR,
-    dataSourceId: 'TECONER',
-    data: {
-      airTemperature: 0,
-      dewPoint: 0,
-      state: 'state',
-      windSpeed: 0,
-      relativeHumidity: 0,
-      iceLayerThickness: 0,
-      waterLayerThickness: 0,
-    },
+    name: 'Lappeenranta Weather Hub',
+    data: {},
   },
 ];

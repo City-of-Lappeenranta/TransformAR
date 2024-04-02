@@ -1,24 +1,21 @@
 <div class="container flex-column">
   <div class="location-information-container shadow-sm flex-row">
     <div class="full-width flex-column">
-      <ng-container *ngIf="address$ | async as address; else addressLoader">
-        <h1 class="display-xs">{{ address }}</h1>
-      </ng-container>
-      <ng-template #addressLoader>
-        <p-skeleton class="address-loader"></p-skeleton>
-      </ng-template>
+      <h1 class="display-xs">{{ dataPoint.name }}</h1>
       <p class="body-xs">{{ dataPoint.location }}</p>
     </div>
     <app-icon icon="close" (click)="close.emit()"></app-icon>
   </div>
 
   @switch (dataPoint.type) {
-    @case (DATA_POINT_TYPE.WEATHER) {
+    @case (DATA_POINT_TYPE.WEATHER_CONDITIONS) {
       <ul class="weather-data-container">
-        @for (metric of castDataPointData(dataPoint.data) | keyvalue; track metric.key) {
+        @for (metric of dataPoint.data | keyvalue; track metric.key) {
           <li>
-            <p class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</p>
-            <small class="body-sm">{{ getWeatherMetricValue(metric.value) }}{{ getWeatherMetricUnit(metric.key) }}</small>
+            <p class="button-sm">{{ getWeatherConditionMetricLabel(metric.key) }}</p>
+            <small class="body-sm"
+              >{{ getWeatherConditionMetricValue(metric.value) }}{{ getWeatherConditionMetricUnit(metric.key) }}</small
+            >
           </li>
         }
       </ul>

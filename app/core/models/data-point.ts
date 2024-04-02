@@ -1,49 +1,26 @@
 import { LatLong } from './location';
 
 export enum DataPointType {
-  WEATHER,
+  WEATHER_CONDITIONS,
   AIR_QUALITY,
+  STORM_WATER,
   PARKING,
   ROAD_WORKS,
-  FLOOD_WATER_LEVEL,
-  FLOOD_WATER_QUALITY,
 }
 
 interface BaseDataPoint<T extends DataPointType> {
   type: T;
+  name: string;
   location: LatLong;
   quality: DataPointQuality;
+  lastUpdateOn?: number;
 }
 
-interface TeconerSensorDataPoint extends BaseDataPoint<DataPointType.WEATHER> {
-  dataSourceId: 'TECONER';
-  data: TeconerSensorData;
-}
+export type WeatherConditionDataPoint = BaseDataPoint<DataPointType.WEATHER_CONDITIONS> & {
+  data: Record<string, string | number>;
+};
 
-interface MarjetaSensorDataPoint extends BaseDataPoint<DataPointType.WEATHER> {
-  dataSourceId: 'MARJETAS_SENSOR';
-  data: MarjetaSensorData;
-}
-
-export interface TeconerSensorData {
-  state: string;
-  dewPoint: number;
-  windSpeed: number;
-  relativeHumidity: number;
-  airTemperature: number;
-  iceLayerThickness: number;
-  waterLayerThickness: number;
-}
-
-export interface MarjetaSensorData {
-  dewPoint: number;
-  humidity: number;
-  externalSensorTemperature: number;
-}
-
-export type WeatherDataPoint = TeconerSensorDataPoint | MarjetaSensorDataPoint;
-
-export type DataPoint = WeatherDataPoint; // | AirQualityDataPoint...
+export type DataPoint = WeatherConditionDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,
@@ -66,21 +43,23 @@ export const DATA_POINT_QUALITY_COLOR_CHART: Record<DataPointQuality, string> = 
 };
 
 export const DATA_POINT_TYPE_ICON: Record<DataPointType, string> = {
-  [DataPointType.WEATHER]: 'weather-icon.svg',
+  [DataPointType.WEATHER_CONDITIONS]: 'weather-icon.svg',
   [DataPointType.AIR_QUALITY]: 'air-quality-icon.svg',
   [DataPointType.PARKING]: 'parking-icon.svg',
   [DataPointType.ROAD_WORKS]: 'road-works-icon.svg',
-  [DataPointType.FLOOD_WATER_LEVEL]: 'flood-water-level-icon.svg',
-  [DataPointType.FLOOD_WATER_QUALITY]: 'flood-water-quality-icon.svg',
+  [DataPointType.STORM_WATER]: 'flood-water-level-icon.svg',
 };
 
-export const WEATHER_DATA_POINT_METRIC_UNIT = {
-  airTemperature: '°C',
-  dewPoint: '°C',
-  relativeHumidity: '%',
+export const WEATHER_CONDITIONS_METRIC_UNIT = {
+  temperature: '°C',
   humidity: '%',
-  waterLayerThickness: ' mm',
-  iceLayerThickness: ' mm',
+  visibility: ' km',
+  pressure: ' hPa',
+  dewPoint: '°C',
+  windDirection: '°',
   windSpeed: ' m/s',
-  externalSensorTemperature: '°C',
+  windGust: ' m/s',
+  cloudCover: '%',
+  snowDepth: ' cm',
+  ice: ' mm',
 };
