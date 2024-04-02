@@ -1,7 +1,7 @@
 {
   "DASHBOARD": {
     "DATA_POINTS": {
-      "WEATHER": {
+      "WEATHER_CONDITION": {
         "DEWPOINT": "Dew point",
         "HUMIDITY": "Humidity",
         "ICELAYERTHICKNESS": "Ice layer thickness",
@@ -11,9 +11,12 @@
         "EXTERNALSENSORTEMPERATURE": "External sensor temperature",
         "WATERLAYERTHICKNESS": "Water layer thickness",
         "WINDSPEED": "Wind speed",
-        "MOIST": "Moist",
         "DRY": "Dry",
-        "SNOW": "Snow"
+        "MOIST": "Moist",
+        "WET": "Wet",
+        "SLUSHY": "Slushy",
+        "SNOWY": "Snowy",
+        "Icy": "Icy"
       }
     }
   },

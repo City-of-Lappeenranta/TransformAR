@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable, delay, of } from 'rxjs';
 import {
   DataPointEndpoint,
   ParkingResponse,
@@ -19,14 +19,28 @@ export class MockHttpClient {
       throw Error(`${url} doesn't match an endpoint`);
     }
 
-    return of(mockResponses[match] as T);
+    return of(mockResponses[match] as T).pipe(delay(1000));
   }
 }
 
-const WEATHER_CONDITIONS: WeatherConditionsResponse = [{ key: 'value' }];
+const WEATHER_CONDITIONS: WeatherConditionsResponse = [
+  {
+    name: 'Lappeenranta Weather Station',
+    latitude: 61.05871,
+    longitude: 28.18871,
+    dataRetrievedTimestamp: 1711635283,
+    temperature: -4,
+    humidity: 60,
+    streetState: 'icy',
+  },
+];
+
 const WEATHER_AIR_QUALITY: WeatherAirQualityResponse = [];
+
 const WEATHER_STORM_WATER: WeatherStormWaterResponse = [];
+
 const PARKING: ParkingResponse = [];
+
 const ROAD_WORKS: RoadWorksResponse = [];
 
 export const mockResponses: Record<DataPointEndpoint, StreetAiResponse> = {
