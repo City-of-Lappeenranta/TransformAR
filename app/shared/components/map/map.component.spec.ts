@@ -4,7 +4,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subject, of } from 'rxjs';
 import * as leaflet from 'leaflet';
-import { SimpleChange } from '@angular/core';
 import { environment } from '@environments/environment';
 import { LatLong } from '@core/models/location';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
@@ -62,7 +61,7 @@ describe('MapComponent', () => {
         { location: [0, 0], active: false, color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
         { location: [1, 1], active: false },
       ];
-      const { find, fixture, instance, element } = await shallow.render({ bind: { markers } });
+      const { find, fixture, instance } = await shallow.render({ bind: { markers } });
 
       await fixture.whenStable();
 
