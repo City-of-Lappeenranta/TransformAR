@@ -44,7 +44,6 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
     name: 'Hurricane Delta',
     latitude: 61.06343,
     longitude: 28.18027,
-    dataRetrievedTimestamp: 1711635283,
     waterLevel: 3.5,
     waterTemperature: 28.6,
     electricalConductivity: 210,

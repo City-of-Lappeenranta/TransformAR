@@ -35,10 +35,9 @@ export class DataPointsApi {
   public getWeatherStormWater(): Observable<WeatherStormWaterDataPoint[]> {
     return this.httpClient.get<WeatherStormWaterResponse>(`${this.baseUrl}/${DataPointEndpoint.WEATHER_STORM_WATER}`).pipe(
       map((response) =>
-        response.map(({ name, latitude, longitude, dataRetrievedTimestamp, ...rest }) => ({
+        response.map(({ name, latitude, longitude, ...rest }) => ({
           name: name,
           location: [latitude, longitude],
-          lastUpdateOn: dataRetrievedTimestamp,
           type: DataPointType.STORM_WATER,
           quality: DataPointQuality.DEFAULT,
           data: { ...removeNil(rest) },

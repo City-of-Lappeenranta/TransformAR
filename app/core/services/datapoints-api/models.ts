@@ -33,7 +33,6 @@ export type WeatherStormWaterResponse = {
   name: string;
   latitude: number;
   longitude: number;
-  dataRetrievedTimestamp: number;
   waterLevel?: number | null;
   waterTemperature?: number | null;
   electricalConductivity?: number | null;
