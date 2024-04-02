@@ -128,3 +128,25 @@ small {
   padding: 8px 16px;
   background-color: white;
 }
+
+.search-input {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 999;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    background-color: #667085;
+    mask-image: url('/assets/icons/search.svg');
+    mask-size: cover;
+  }
+
+  input {
+    padding-left: 42px;
+  }
+}
