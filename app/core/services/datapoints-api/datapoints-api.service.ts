@@ -6,12 +6,14 @@ import {
   AIR_QUALITY_CONVERSION,
   DataPointQuality,
   DataPointType,
+  ParkingDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
 import {
   DataPointEndpoint,
+  ParkingResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
   WeatherStormWaterResponse,
@@ -61,6 +63,20 @@ export class DataPointsApi {
           location: [latitude, longitude],
           type: DataPointType.AIR_QUALITY,
           quality: AIR_QUALITY_CONVERSION[measurementIndex],
+        })),
+      ),
+    );
+  }
+
+  public getParking(): Observable<ParkingDataPoint[]> {
+    return this.httpClient.get<ParkingResponse>(`${this.baseUrl}/${DataPointEndpoint.PARKING}`).pipe(
+      map((response) =>
+        response.map(({ name, latitude, longitude, availableSpots }) => ({
+          name: name,
+          location: [latitude, longitude],
+          type: DataPointType.PARKING,
+          quality: DataPointQuality.DEFAULT,
+          availableSpots,
         })),
       ),
     );

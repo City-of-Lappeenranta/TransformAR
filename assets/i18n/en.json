@@ -33,6 +33,9 @@
         "FAIR": "Fair",
         "POOR": "Poor",
         "VERY_POOR": "Very poor"
+      },
+      "PARKING": {
+        "AVAILABLE_SPOTS": "Available parking places"
       }
     }
   },
