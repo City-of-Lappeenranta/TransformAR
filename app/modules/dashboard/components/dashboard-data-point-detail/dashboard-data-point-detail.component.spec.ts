@@ -78,7 +78,7 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('li').length).toEqual(Object.keys(dataPoint.data).length);
       });
 
-      it('when type is weather data point', async () => {
+      it('when type is weather condition', async () => {
         const name = 'Hurricane Delta';
 
         const dataPoint: WeatherConditionDataPoint = {
@@ -86,12 +86,9 @@ describe('DashboardDataPointDetailComponent', () => {
           type: DataPointType.WEATHER_CONDITIONS,
           quality: DataPointQuality.DEFAULT,
           data: {
-            waterLevel: 3.5,
-            waterTemperature: 28.6,
-            electricalConductivity: 210,
-            turbidity: 25,
-            flowRate: 1200,
-            fillLevel: 90,
+            humidity: 60,
+            streetState: 'icy',
+            temperature: -4,
           },
           lastUpdateOn: 1711635283,
           location: [61.05871, 28.18871],

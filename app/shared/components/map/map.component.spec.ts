@@ -7,6 +7,7 @@ import * as leaflet from 'leaflet';
 import { environment } from '@environments/environment';
 import { LatLong } from '@core/models/location';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
+import { SimpleChange } from '@angular/core';
 
 describe('MapComponent', () => {
   let shallow: Shallow<MapComponent>;
@@ -83,7 +84,9 @@ describe('MapComponent', () => {
         { location: [0, 0], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR], active: true },
       ];
       instance.markers = newMarkers;
-      instance.ngDoCheck();
+      instance.ngOnChanges({
+        markers: new SimpleChange(markers, newMarkers, false),
+      });
 
       fixture.detectChanges();
       await fixture.whenStable();
