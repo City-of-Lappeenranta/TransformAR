@@ -40,12 +40,12 @@ export type WeatherStormWaterResponse = {
   name: string;
   latitude: number;
   longitude: number;
-  waterLevel?: number | null;
-  waterTemperature?: number | null;
+  waterLevel: number;
+  waterTemperature: number;
   electricalConductivity?: number | null;
   turbidity?: number | null;
-  flowRate?: number | null;
-  fillLevel?: number | null;
+  flowRate: number;
+  fillLevel: number;
 }[];
 export type ParkingResponse = unknown[];
 export type RoadWorksResponse = unknown[];

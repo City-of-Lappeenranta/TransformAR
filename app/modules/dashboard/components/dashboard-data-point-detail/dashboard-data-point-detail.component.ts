@@ -79,7 +79,9 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   private getMetricUnit(type: string, key: string): string | undefined {
     if (type === 'WEATHER_CONDITION') {
       return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT];
-    } else if (type === 'STORM_WATER') {
+    }
+
+    if (type === 'STORM_WATER') {
       return WEATHER_STORM_WATER_METRIC_UNIT[key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT];
     }
 

@@ -37,8 +37,8 @@ import {
 export class DashboardMapComponent implements AfterViewInit {
   private dataPoints: DataPoint[] = [];
 
-  public _dataPointMarkers$ = new BehaviorSubject<Marker[]>([]);
-  public dataPointMarkers$: Observable<Marker[]> = this._dataPointMarkers$.pipe(
+  private _addMarkers$ = new BehaviorSubject<Marker[]>([]);
+  public dataPointMarkers$: Observable<Marker[]> = this._addMarkers$.pipe(
     scan((previousMarkers: Marker[], newMarkers: Marker[]) => {
       newMarkers.forEach((newMarker) => {
         const index = previousMarkers.findIndex(
@@ -53,6 +53,7 @@ export class DashboardMapComponent implements AfterViewInit {
 
       return previousMarkers;
     }, []),
+    map((markers) => [...markers]),
   );
 
   private _weatherConditionDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
@@ -138,7 +139,8 @@ export class DashboardMapComponent implements AfterViewInit {
 
   public async setActiveMarker(latLong?: LatLong): Promise<void> {
     const markers = await firstValueFrom(this.dataPointMarkers$);
-    this._dataPointMarkers$.next(
+
+    this._addMarkers$.next(
       markers.map((marker) => ({ ...marker, active: !!latLong && isSameLocation(marker.location, latLong) })),
     );
   }
@@ -171,7 +173,7 @@ export class DashboardMapComponent implements AfterViewInit {
   private handleWeatherConditionDataPoints(weatherConditionDataPoints: WeatherConditionDataPoint[]): void {
     this.dataPoints = this.dataPoints.concat(weatherConditionDataPoints);
 
-    this._dataPointMarkers$.next(
+    this._addMarkers$.next(
       weatherConditionDataPoints.map((point) => ({
         location: point.location,
         icon: DATA_POINT_TYPE_ICON[point.type],
@@ -184,7 +186,7 @@ export class DashboardMapComponent implements AfterViewInit {
   private handleWeatherStormWaterDataPoints(weatherStormWaterDataPoint: WeatherStormWaterDataPoint[]): void {
     this.dataPoints = this.dataPoints.concat(weatherStormWaterDataPoint);
 
-    this._dataPointMarkers$.next(
+    this._addMarkers$.next(
       weatherStormWaterDataPoint.map((point) => ({
         location: point.location,
         icon: DATA_POINT_TYPE_ICON[point.type],
