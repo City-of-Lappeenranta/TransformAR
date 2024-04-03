@@ -200,7 +200,7 @@ export class DashboardMapComponent implements AfterViewInit {
   private handleWeatherAirQualityDataPoints(weatherAirQualityDataPoint: WeatherAirQualityDataPoint[]): void {
     this.dataPoints = this.dataPoints.concat(weatherAirQualityDataPoint);
 
-    this._dataPointMarkers$.next(
+    this._addMarkers$.next(
       weatherAirQualityDataPoint.map((point) => ({
         location: point.location,
         icon: DATA_POINT_TYPE_ICON[point.type],
