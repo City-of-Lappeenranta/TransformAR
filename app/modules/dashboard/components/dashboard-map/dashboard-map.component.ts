@@ -117,6 +117,7 @@ export class DashboardMapComponent implements AfterViewInit {
       .pipe(
         filter((loading) => !loading),
         take(1),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => this._focusLocation$.next());
   }
