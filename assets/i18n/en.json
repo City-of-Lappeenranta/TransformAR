@@ -1,6 +1,13 @@
 {
   "DASHBOARD": {
     "DATA_POINTS": {
+      "TYPE": {
+        "WEATHER_CONDITIONS": "Conditions",
+        "AIR_QUALITY": "Air quality",
+        "STORM_WATER": "Storm water",
+        "PARKING": "Parking",
+        "ROAD_WORKS": "Road works"
+      },
       "WEATHER_CONDITION": {
         "DEWPOINT": "Dew point",
         "HUMIDITY": "Humidity",
@@ -37,6 +44,9 @@
       "PARKING": {
         "AVAILABLE_SPOTS": "Available parking places"
       }
+    },
+    "FILTER": {
+      "TITLE": "Map view"
     }
   },
   "FEEDBACK": {

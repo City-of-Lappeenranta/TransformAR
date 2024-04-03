@@ -5,6 +5,7 @@ import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
   DataPoint,
+  DataPointType,
   ParkingDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
@@ -26,6 +27,7 @@ import {
   distinctUntilChanged,
   firstValueFrom,
   map,
+  noop,
   scan,
   take,
 } from 'rxjs';
@@ -73,6 +75,9 @@ export class DashboardMapComponent implements AfterViewInit {
   public readonly TOAST_KEY = 'loading';
   private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
   public mapCenter$ = this._mapCenterSubject$.asObservable();
+
+  private _showFilterSubject$ = new BehaviorSubject<boolean>(true);
+  public showFilter$ = this._showFilterSubject$.asObservable();
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -127,6 +132,18 @@ export class DashboardMapComponent implements AfterViewInit {
   public onDataPointClose(): void {
     this.setActiveMarker();
     this._selectedDataPointSubject$.next(null);
+  }
+
+  public onFilterOpen(): void {
+    this._showFilterSubject$.next(true);
+  }
+
+  public onFilterClose(): void {
+    this._showFilterSubject$.next(false);
+  }
+
+  public onFilterChange(filter: DataPointType[]): void {
+    console.log('got filter', filter);
   }
 
   private async showLoadingDataToast(): Promise<void> {

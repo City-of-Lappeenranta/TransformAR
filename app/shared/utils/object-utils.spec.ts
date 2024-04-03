@@ -1,4 +1,4 @@
-import { removeNil } from './object-utils';
+import { enumToArray, removeNil } from './object-utils';
 
 describe('Object utils', () => {
   describe('removeNil', () => {
@@ -20,6 +20,35 @@ describe('Object utils', () => {
       };
 
       expect(removeNil(source)).toEqual(result);
+    });
+  });
+
+  describe('enumToArray', () => {
+    it('should return an array of numeric enums', () => {
+      enum Test {
+        Hello,
+        World,
+      }
+
+      expect(enumToArray(Test)).toEqual(['Hello', 'World']);
+    });
+
+    it('should return an array of string enums', () => {
+      enum Test {
+        Hello = 'hello',
+        World = 'world',
+      }
+
+      expect(enumToArray(Test)).toEqual(['hello', 'world']);
+    });
+
+    it('should return an array of heterogeneous enums', () => {
+      enum Test {
+        Hello,
+        World = 'WORLD',
+      }
+
+      expect(enumToArray(Test)).toEqual(['Hello', 'WORLD']);
     });
   });
 });

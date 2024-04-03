@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil, isString } from 'lodash';
 
 /**
  * Removes all null or undefined values from the object
@@ -15,4 +15,13 @@ export const removeNil = (source: Partial<Record<string, number | string | null>
   });
 
   return result;
+};
+
+/**
+ * Returns an array of numeric enum keys
+ * @param e a numeric enum
+ * @returns array of numeric enum keys
+ */
+export const enumToArray = (e: Record<string, number | string>): string[] => {
+  return Object.values(e).filter((value) => isString(value)) as string[];
 };

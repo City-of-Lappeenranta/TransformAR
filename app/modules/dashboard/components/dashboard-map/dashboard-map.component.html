@@ -5,15 +5,24 @@
   (markerClick)="onMarkerClick($event)"
 ></app-map>
 <app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
+
 <app-dashboard-data-point-detail
   *ngIf="selectedDataPoint$ | async as selectedDataPoint"
-  class="data-point-detail"
+  class="bottom-modal"
   [dataPoint]="selectedDataPoint"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
-<div class="actions">
+<app-dashboard-filter
+  class="bottom-modal"
+  *ngIf="showFilter$ | async"
+  (close)="onFilterClose()"
+  (change)="onFilterChange($event)"
+></app-dashboard-filter>
+
+<div class="actions flex-column">
+  <app-icon class="filter-button" icon="layers" (click)="onFilterOpen()"></app-icon>
   <app-icon
-    class="focus-location"
+    class="focus-location-button"
     [class.loading]="locationLoading$ | async"
     [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
     [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"
