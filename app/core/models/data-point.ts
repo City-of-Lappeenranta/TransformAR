@@ -24,7 +24,9 @@ export type WeatherStormWaterDataPoint = BaseDataPoint<DataPointType.STORM_WATER
   data: Record<string, string | number>;
 };
 
-export type DataPoint = WeatherConditionDataPoint | WeatherStormWaterDataPoint;
+export type WeatherAirQualityDataPoint = BaseDataPoint<DataPointType.AIR_QUALITY>;
+
+export type DataPoint = WeatherConditionDataPoint | WeatherStormWaterDataPoint | WeatherAirQualityDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,
@@ -75,4 +77,17 @@ export const WEATHER_STORM_WATER_METRIC_UNIT = {
   turbidity: ' NTU',
   flowRate: ' l/s',
   fillLevel: '%',
+};
+
+export const AIR_QUALITY_CONVERSION: Record<number, DataPointQuality> = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  1: DataPointQuality.GOOD,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  2: DataPointQuality.SATISFACTORY,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  3: DataPointQuality.FAIR,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  4: DataPointQuality.POOR,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  5: DataPointQuality.VERY_POOR,
 };

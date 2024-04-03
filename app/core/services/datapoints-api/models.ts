@@ -28,7 +28,14 @@ export type WeatherConditionsResponse = {
   ice?: number | null;
 }[];
 
-export type WeatherAirQualityResponse = unknown[];
+export type WeatherAirQualityResponse = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  dataRetrievedTimestamp: number;
+  measurementIndex: number;
+}[];
+
 export type WeatherStormWaterResponse = {
   name: string;
   latitude: number;

@@ -36,5 +36,19 @@
         }
       </ul>
     }
+    @case (DATA_POINT_TYPE.AIR_QUALITY) {
+      <ul class="weather-data-container">
+        <li>
+          <p class="button-sm">
+            {{ 'DASHBOARD.DATA_POINTS.AIR_QUALITY.TITLE' | translate }}
+          </p>
+          <p-chip
+            class="chip"
+            [style]="{ 'background-color': getDataQualityBackgroundColor(dataPoint.quality) }"
+            [label]="getWeatherAirQualityTranslationKey(dataPoint.quality) | translate"
+          ></p-chip>
+        </li>
+      </ul>
+    }
   }
 </div>

@@ -4,6 +4,7 @@ import {
   DataPointQuality,
   DataPointType,
   WEATHER_STORM_WATER_METRIC_UNIT,
+  WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
@@ -33,6 +34,9 @@ describe('DashboardMapComponent', () => {
         getWeatherStormWater: jest
           .fn()
           .mockReturnValue(of(WEATHER_STORM_WATER_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 2))),
+        getWeatherAirQuality: jest
+          .fn()
+          .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
       })
       .provideMock(SharedModule);
   });
@@ -63,14 +67,28 @@ describe('DashboardMapComponent', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false, true, false]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+      ]);
       expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_CONDITION_DATA_POINTS[0]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
 
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false, false, false]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
   });
@@ -83,6 +101,16 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers).toEqual([
+        {
+          location: [5, 5],
+          icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+        },
+        {
+          location: [6, 6],
+          icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+        },
         {
           location: [3, 3],
           icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
@@ -196,5 +224,20 @@ const WEATHER_STORM_WATER_DATA_POINTS: WeatherStormWaterDataPoint[] = [
     quality: DataPointQuality.FAIR,
     name: 'Lappeenranta Weather Hub',
     data: {},
+  },
+];
+
+const WEATHER_AIR_QUALITY_DATA_POINTS: WeatherAirQualityDataPoint[] = [
+  {
+    location: [5, 5],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.GOOD,
+    name: 'Air Quality Station 1',
+  },
+  {
+    location: [6, 6],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.VERY_POOR,
+    name: 'Air Quality Station 2',
   },
 ];

@@ -25,6 +25,14 @@
         "TURBIDITY": "Turbidity",
         "FLOWRATE": "Flow rate",
         "FILLLEVEL": "Fill level"
+      },
+      "AIR_QUALITY": {
+        "TITLE": "Air quality",
+        "GOOD": "Good",
+        "SATISFACTORY": "Satisfactory",
+        "FAIR": "Fair",
+        "POOR": "Poor",
+        "VERY_POOR": "Very poor"
       }
     }
   },

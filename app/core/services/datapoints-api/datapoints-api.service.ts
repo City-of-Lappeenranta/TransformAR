@@ -3,12 +3,19 @@ import { environment } from '@environments/environment';
 import { MockHttpClient } from '../mock-http-client';
 import { Observable, map } from 'rxjs';
 import {
+  AIR_QUALITY_CONVERSION,
   DataPointQuality,
   DataPointType,
+  WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
-import { DataPointEndpoint, WeatherConditionsResponse, WeatherStormWaterResponse } from './models';
+import {
+  DataPointEndpoint,
+  WeatherAirQualityResponse,
+  WeatherConditionsResponse,
+  WeatherStormWaterResponse,
+} from './models';
 import { removeNil } from '@shared/utils/object-utils';
 
 @Injectable({ providedIn: 'root' })
@@ -41,6 +48,19 @@ export class DataPointsApi {
           type: DataPointType.STORM_WATER,
           quality: DataPointQuality.DEFAULT,
           data: { ...removeNil(rest) },
+        })),
+      ),
+    );
+  }
+
+  public getWeatherAirQuality(): Observable<WeatherAirQualityDataPoint[]> {
+    return this.httpClient.get<WeatherAirQualityResponse>(`${this.baseUrl}/${DataPointEndpoint.WEATHER_AIR_QUALITY}`).pipe(
+      map((response) =>
+        response.map(({ name, latitude, longitude, measurementIndex }) => ({
+          name: name,
+          location: [latitude, longitude],
+          type: DataPointType.AIR_QUALITY,
+          quality: AIR_QUALITY_CONVERSION[measurementIndex],
         })),
       ),
     );
