@@ -14,13 +14,17 @@
 ></app-dashboard-data-point-detail>
 <app-dashboard-filter
   class="bottom-modal"
-  *ngIf="showFilter$ | async"
+  *ngIf="showDataPointTypeFilter()"
+  [filter]="dataPointTypeFilter()"
   (close)="onFilterClose()"
-  (change)="onFilterChange($event)"
+  (toggle)="onFilterToggle($event)"
 ></app-dashboard-filter>
 
 <div class="actions flex-column">
-  <app-icon class="filter-button" icon="layers" (click)="onFilterOpen()"></app-icon>
+  <div class="badge-button">
+    <small class="badge" *ngIf="dataPointTypeFilter().length > 0">{{ dataPointTypeFilter().length }}</small>
+    <app-icon class="filter-button" icon="layers" (click)="onFilterOpen()"></app-icon>
+  </div>
   <app-icon
     class="focus-location-button"
     [class.loading]="locationLoading$ | async"

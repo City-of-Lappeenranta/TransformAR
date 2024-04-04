@@ -53,6 +53,25 @@ $z-index: 999;
     .filter-button {
       border: none;
     }
+
+    .badge-button {
+      position: relative;
+
+      small {
+        position: absolute;
+        left: 24px;
+        top: 7px;
+        background-color: var(--primary-color);
+        color: white;
+        display: block;
+        width: 12px;
+        height: 12px;
+        padding: 3.5px;
+        border-radius: 12px;
+        font-size: 9px;
+        line-height: 5px;
+      }
+    }
   }
 
   .toast-content {

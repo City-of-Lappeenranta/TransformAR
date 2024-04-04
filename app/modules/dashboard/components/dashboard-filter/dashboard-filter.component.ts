@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, effect, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DATA_POINT_TYPE_ICON, DataPointType } from '@core/models/data-point';
 import { enumToArray } from '@shared/utils/object-utils';
 
@@ -8,32 +8,18 @@ import { enumToArray } from '@shared/utils/object-utils';
   styleUrls: ['./dashboard-filter.component.scss'],
 })
 export class DashboardFilterComponent {
-  @Output() public change = new EventEmitter<DataPointType[]>();
+  @Input() public filter: DataPointType[] = [];
+
+  @Output() public toggle = new EventEmitter<DataPointType>();
   @Output() public close = new EventEmitter<void>();
 
   public readonly DATA_POINT_TYPE = DataPointType;
   public readonly amount = enumToArray(DataPointType).length;
 
-  private selectedOptions = signal([] as DataPointType[]);
+  public constructor() {}
 
-  public constructor() {
-    effect(() => {
-      this.change.emit(this.selectedOptions());
-    });
-  }
-
-  public toggleOption(type: DataPointType): void {
-    this.selectedOptions.update((current) => {
-      const update = [...current];
-
-      if (!update.includes(type)) {
-        update.push(type);
-      } else {
-        update.splice(update.indexOf(type), 1);
-      }
-
-      return update;
-    });
+  public onClick(type: DataPointType): void {
+    this.toggle.emit(type);
   }
 
   public getIcon(type: DataPointType): string {
@@ -41,6 +27,6 @@ export class DashboardFilterComponent {
   }
 
   public isSelectedOption(type: DataPointType): boolean {
-    return Boolean(this.selectedOptions().find((value) => value === type));
+    return this.filter.findIndex((value) => value === type) > -1;
   }
 }

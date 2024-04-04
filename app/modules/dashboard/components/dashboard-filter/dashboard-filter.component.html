@@ -3,11 +3,11 @@
     <div class="full-width flex-column">
       <h1 class="display-xs">{{ 'DASHBOARD.FILTER.TITLE' | translate }}</h1>
     </div>
-    <app-icon icon="close" (click)="close.emit()"></app-icon>
+    <app-icon class="close" icon="close" (click)="close.emit()"></app-icon>
   </div>
   <div class="options-container">
     @for (option of [].constructor(this.amount); track option; let index = $index) {
-      <div class="shadow-md flex-column" [class.active]="isSelectedOption(index)" (click)="toggleOption(index)">
+      <div class="shadow-md flex-column" [class.active]="isSelectedOption(index)" (click)="onClick(index)">
         <app-icon [icon]="getIcon(index)"></app-icon>
         <p class="body-xs">{{ 'DASHBOARD.DATA_POINTS.TYPE.' + DATA_POINT_TYPE[index] | translate }}</p>
       </div>

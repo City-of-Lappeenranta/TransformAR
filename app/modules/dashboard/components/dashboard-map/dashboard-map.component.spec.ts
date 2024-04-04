@@ -14,11 +14,12 @@ import { LocationService, UserLocation } from '@core/services/location.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';
-import { delay, firstValueFrom, of, take } from 'rxjs';
+import { delay, filter, firstValueFrom, of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { DashboardMapComponent } from './dashboard-map.component';
+import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
 
 const NETWORK_REQUEST_TIME = 50;
 
@@ -69,14 +70,14 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
         true,
-        false,
+        undefined,
       ]);
       expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_CONDITION_DATA_POINTS[0]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
@@ -85,14 +86,14 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
       ]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
@@ -184,7 +185,7 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      find('.focus-location').triggerEventHandler('click');
+      find('.focus-location-button').triggerEventHandler('click');
 
       expect(await firstValueFrom(instance.mapCenter$)).toEqual(currentLocation);
     });
@@ -202,10 +203,94 @@ describe('DashboardMapComponent', () => {
 
       jest.spyOn(window, 'alert').mockImplementation(jest.fn);
 
-      find('.focus-location').triggerEventHandler('click');
+      find('.focus-location-button').triggerEventHandler('click');
       await fixture.whenStable();
 
       expect(window.alert).toHaveBeenCalled();
+    });
+  });
+
+  describe('filter', () => {
+    it('opening and selecting a filter should filter the markers', async () => {
+      const { find, findComponent, fixture } = await shallow.render();
+
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [1, 1],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [2, 2],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [3, 3],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [4, 4],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [5, 5],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [6, 6],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+          },
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
+
+      expect(find('.badge')).toHaveFound(0);
+      find('.filter-button').triggerEventHandler('click');
+      fixture.detectChanges();
+
+      const filterComponent = findComponent(DashboardFilterComponent);
+      expect(filterComponent).toHaveFound(1);
+
+      filterComponent.toggle.emit(DataPointType.WEATHER_CONDITIONS);
+      filterComponent.toggle.emit(DataPointType.PARKING);
+      filterComponent.toggle.emit(DataPointType.WEATHER_CONDITIONS); //toggled off
+      fixture.detectChanges();
+
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
+
+      filterComponent.close.emit();
+      fixture.detectChanges();
+
+      expect(findComponent(DashboardFilterComponent)).toHaveFound(0);
+      expect(find('.badge').nativeElement.innerHTML).toBe('1');
     });
   });
 });
