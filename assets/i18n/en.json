@@ -27,7 +27,9 @@
         "FILLLEVEL": "Fill level"
       },
       "AIR_QUALITY": {
-        "TITLE": "Air quality",
+        "TITLE": "Air quality"
+      },
+      "QUALITY": {
         "GOOD": "Good",
         "SATISFACTORY": "Satisfactory",
         "FAIR": "Fair",

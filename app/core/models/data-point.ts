@@ -79,15 +79,11 @@ export const WEATHER_STORM_WATER_METRIC_UNIT = {
   fillLevel: '%',
 };
 
-export const AIR_QUALITY_CONVERSION: Record<number, DataPointQuality> = {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  1: DataPointQuality.GOOD,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  2: DataPointQuality.SATISFACTORY,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  3: DataPointQuality.FAIR,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  4: DataPointQuality.POOR,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  5: DataPointQuality.VERY_POOR,
-};
+export const AIR_QUALITY_CONVERSION: (DataPointQuality | null)[] = [
+  null,
+  DataPointQuality.GOOD,
+  DataPointQuality.SATISFACTORY,
+  DataPointQuality.FAIR,
+  DataPointQuality.POOR,
+  DataPointQuality.VERY_POOR,
+];

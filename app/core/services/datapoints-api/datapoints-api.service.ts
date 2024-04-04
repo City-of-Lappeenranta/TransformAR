@@ -60,7 +60,7 @@ export class DataPointsApi {
           name: name,
           location: [latitude, longitude],
           type: DataPointType.AIR_QUALITY,
-          quality: AIR_QUALITY_CONVERSION[measurementIndex],
+          quality: AIR_QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
         })),
       ),
     );

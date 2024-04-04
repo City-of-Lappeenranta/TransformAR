@@ -69,7 +69,7 @@ export class DashboardDataPointDetailComponent implements OnChanges {
   }
 
   public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
-    return `DASHBOARD.DATA_POINTS.AIR_QUALITY.${DataPointQuality[quality]}`;
+    return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
   public getDataQualityBackgroundColor(quality: DataPointQuality): string {
