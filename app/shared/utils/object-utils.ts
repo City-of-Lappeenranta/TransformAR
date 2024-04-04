@@ -18,9 +18,9 @@ export const removeNil = (source: Partial<Record<string, number | string | null>
 };
 
 /**
- * Returns an array of numeric enum keys
- * @param e a numeric enum
- * @returns array of numeric enum keys
+ * Returns an array of enum values and falls back to keys
+ * @param e an enum
+ * @returns array of strings
  */
 export const enumToArray = (e: Record<string, number | string>): string[] => {
   return Object.values(e).filter((value) => isString(value)) as string[];

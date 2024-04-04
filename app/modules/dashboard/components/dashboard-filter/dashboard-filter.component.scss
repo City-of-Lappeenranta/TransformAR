@@ -2,32 +2,33 @@
   width: 100%;
   background-color: white;
 
-  .filter-container,
+  .header-container,
   .options-container {
     max-width: 100%;
     padding: 16px 32px;
   }
 
-  .filter-container {
+  .header-container {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
 
-    & > div {
-      gap: 4px;
+    .close {
+      min-width: 18px;
     }
   }
 
   .options-container {
     display: grid;
-    gap: 4px;
-    grid-template-columns: repeat(3, 33%);
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    & > div {
+    & > article {
       border-radius: 8px;
       height: 84px;
       align-items: center;
       justify-content: center;
+      gap: 4px;
 
       &.active {
         background-color: var(--primary-color);

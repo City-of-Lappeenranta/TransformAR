@@ -23,10 +23,10 @@
 <div class="actions flex-column">
   <div class="badge-button">
     <small class="badge" *ngIf="dataPointTypeFilter().length > 0">{{ dataPointTypeFilter().length }}</small>
-    <app-icon class="filter-button" icon="layers" (click)="onFilterOpen()"></app-icon>
+    <app-icon class="filter-button shadow-md" icon="layers" (click)="onFilterOpen()"></app-icon>
   </div>
   <app-icon
-    class="focus-location-button"
+    class="focus-location-button shadow-md"
     [class.loading]="locationLoading$ | async"
     [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
     [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"
