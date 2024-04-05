@@ -68,7 +68,17 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
   },
 ];
 
-const PARKING: ParkingResponse = [];
+const PARKING: ParkingResponse = [
+  {
+    name: 'Lappeenranta City Parking',
+    latitude: 61.05619,
+    longitude: 28.19263,
+    dataSource: 'PARKING_AIMOPARK',
+    capacity: null,
+    dataRetrievedTimestamp: 1711635283,
+    availableSpots: 40,
+  },
+];
 
 const ROAD_WORKS: RoadWorksResponse = [];
 

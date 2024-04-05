@@ -47,7 +47,17 @@ export type WeatherStormWaterResponse = {
   flowRate: number;
   fillLevel: number;
 }[];
-export type ParkingResponse = unknown[];
+
+export type ParkingResponse = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  dataSource: 'PARKING_FINNPARK' | 'PARKING_AIMOPARK';
+  dataRetrievedTimestamp: number;
+  availableSpots: number;
+  capacity: number | null;
+}[];
+
 export type RoadWorksResponse = unknown[];
 
 export type StreetAiResponse =

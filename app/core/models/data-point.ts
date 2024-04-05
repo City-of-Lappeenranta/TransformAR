@@ -26,7 +26,15 @@ export type WeatherStormWaterDataPoint = BaseDataPoint<DataPointType.STORM_WATER
 
 export type WeatherAirQualityDataPoint = BaseDataPoint<DataPointType.AIR_QUALITY>;
 
-export type DataPoint = WeatherConditionDataPoint | WeatherStormWaterDataPoint | WeatherAirQualityDataPoint;
+export type ParkingDataPoint = BaseDataPoint<DataPointType.PARKING> & {
+  availableSpots: number;
+};
+
+export type DataPoint =
+  | WeatherConditionDataPoint
+  | WeatherStormWaterDataPoint
+  | WeatherAirQualityDataPoint
+  | ParkingDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,

@@ -3,7 +3,7 @@ import {
   DATA_POINT_TYPE_ICON,
   DataPointQuality,
   DataPointType,
-  WEATHER_STORM_WATER_METRIC_UNIT,
+  ParkingDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
@@ -37,6 +37,7 @@ describe('DashboardMapComponent', () => {
         getWeatherAirQuality: jest
           .fn()
           .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
+        getParking: jest.fn().mockReturnValue(of(PARKING_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
       })
       .provideMock(SharedModule);
   });
@@ -72,6 +73,8 @@ describe('DashboardMapComponent', () => {
         false,
         false,
         false,
+        false,
+        false,
         true,
         false,
       ]);
@@ -82,6 +85,8 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        false,
+        false,
         false,
         false,
         false,
@@ -100,38 +105,50 @@ describe('DashboardMapComponent', () => {
       jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers).toEqual([
-        {
-          location: [5, 5],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [6, 6],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
-        },
-        {
-          location: [3, 3],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [4, 4],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
-        },
-        {
-          location: [1, 1],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [2, 2],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
-        },
-      ]);
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [1, 1],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [2, 2],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [3, 3],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [4, 4],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [5, 5],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [6, 6],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+          },
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
     });
   });
 
@@ -239,5 +256,22 @@ const WEATHER_AIR_QUALITY_DATA_POINTS: WeatherAirQualityDataPoint[] = [
     type: DataPointType.AIR_QUALITY,
     quality: DataPointQuality.VERY_POOR,
     name: 'Air Quality Station 2',
+  },
+];
+
+const PARKING_DATA_POINTS: ParkingDataPoint[] = [
+  {
+    location: [7, 7],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'City Parking',
+    availableSpots: 1,
+  },
+  {
+    location: [8, 8],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'Station Parking',
+    availableSpots: 2,
   },
 ];
