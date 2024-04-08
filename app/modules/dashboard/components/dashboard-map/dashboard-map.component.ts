@@ -1,15 +1,7 @@
-import { AfterViewInit, Component, DestroyRef, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import {
-  DATA_POINT_QUALITY_COLOR_CHART,
-  DATA_POINT_TYPE_ICON,
-  DataPoint,
-  ParkingDataPoint,
-  WeatherAirQualityDataPoint,
-  WeatherConditionDataPoint,
-  WeatherStormWaterDataPoint,
-} from '@core/models/data-point';
+import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, DataPointType } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService } from '@core/services/location.service';
@@ -18,52 +10,44 @@ import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  combineLatest,
-  distinctUntilChanged,
-  firstValueFrom,
-  map,
-  scan,
-  take,
-} from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
+
+//TODO: move data fetching to dashboard-map.service
 
 @Component({
   selector: 'app-dashboard-map',
   templateUrl: './dashboard-map.component.html',
   styleUrls: ['./dashboard-map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardMapComponent implements AfterViewInit {
-  private dataPoints: DataPoint[] = [];
+  private _allDataPoints = signal<DataPoint[]>([]);
 
-  private _addMarkers$ = new BehaviorSubject<Marker[]>([]);
-  public dataPointMarkers$: Observable<Marker[]> = this._addMarkers$.pipe(
-    scan((previousMarkers: Marker[], newMarkers: Marker[]) => {
-      newMarkers.forEach((newMarker) => {
-        const index = previousMarkers.findIndex(
-          (marker) => marker.icon === newMarker.icon && isSameLocation(marker.location, newMarker.location),
-        );
-        if (index !== -1) {
-          previousMarkers[index] = newMarker;
-        } else {
-          previousMarkers.push(newMarker);
-        }
-      });
-
-      return previousMarkers;
-    }, []),
-    map((markers) => [...markers]),
+  public showDataPointTypeFilter = signal<boolean>(false);
+  public dataPointTypeFilter = signal<DataPointType[]>([]);
+  private _filteredDataPoints$: Observable<DataPoint[]> = combineLatest([
+    toObservable(this._allDataPoints),
+    toObservable(this.dataPointTypeFilter),
+  ]).pipe(
+    map(([allDataPoints, filter]) =>
+      filter.length > 0 ? allDataPoints.filter((point) => filter.includes(point.type)) : allDataPoints,
+    ),
   );
+
+  private _activeLocation = signal<LatLong | undefined>(undefined);
+  public selectedDataPoint$: Observable<DataPoint | null> = toObservable(this._activeLocation).pipe(
+    map((latLong) => (latLong && this._allDataPoints().find((point) => isSameLocation(point.location, latLong))) ?? null),
+  );
+
+  public dataPointMarkers$: Observable<Marker[]> = combineLatest([
+    this._filteredDataPoints$,
+    toObservable(this._activeLocation),
+  ]).pipe(map(([points, activeLocation]) => this.createMarkersFromDataPoints(points, activeLocation)));
 
   private _weatherConditionDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _weatherStormWaterDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _weatherAirQualityDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _parkingDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
-
-  private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
-  public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
 
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
@@ -94,19 +78,22 @@ export class DashboardMapComponent implements AfterViewInit {
     this.dataPointsApi
       .getWeatherConditions()
       .pipe(take(1), takeUntilDestroyed())
-      .subscribe(this.handleWeatherConditionDataPoints.bind(this));
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.WEATHER_CONDITIONS));
 
     this.dataPointsApi
       .getWeatherStormWater()
       .pipe(take(1), takeUntilDestroyed())
-      .subscribe(this.handleWeatherStormWaterDataPoints.bind(this));
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.STORM_WATER));
 
     this.dataPointsApi
       .getWeatherAirQuality()
       .pipe(take(1), takeUntilDestroyed())
-      .subscribe(this.handleWeatherAirQualityDataPoints.bind(this));
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.AIR_QUALITY));
 
-    this.dataPointsApi.getParking().pipe(take(1), takeUntilDestroyed()).subscribe(this.handleParkingDataPoints.bind(this));
+    this.dataPointsApi
+      .getParking()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
   }
 
   public ngAfterViewInit(): void {
@@ -121,12 +108,32 @@ export class DashboardMapComponent implements AfterViewInit {
 
   public onMarkerClick(latLong: LatLong): void {
     this.setActiveMarker(latLong);
-    this._selectedDataPointSubject$.next(this.dataPoints.find((point) => isSameLocation(point.location, latLong)) ?? null);
   }
 
   public onDataPointClose(): void {
     this.setActiveMarker();
-    this._selectedDataPointSubject$.next(null);
+  }
+
+  public onFilterOpen(): void {
+    this.showDataPointTypeFilter.set(true);
+  }
+
+  public onFilterClose(): void {
+    this.showDataPointTypeFilter.set(false);
+  }
+
+  public onFilterToggle(type: DataPointType): void {
+    this.dataPointTypeFilter.update((current) => {
+      const update = [...current];
+
+      if (!update.includes(type)) {
+        update.push(type);
+      } else {
+        update.splice(update.indexOf(type), 1);
+      }
+
+      return update;
+    });
   }
 
   private async showLoadingDataToast(): Promise<void> {
@@ -143,11 +150,7 @@ export class DashboardMapComponent implements AfterViewInit {
   }
 
   public async setActiveMarker(latLong?: LatLong): Promise<void> {
-    const markers = await firstValueFrom(this.dataPointMarkers$);
-
-    this._addMarkers$.next(
-      markers.map((marker) => ({ ...marker, active: !!latLong && isSameLocation(marker.location, latLong) })),
-    );
+    this._activeLocation.set(latLong);
   }
 
   public focusLocation(): void {
@@ -175,58 +178,33 @@ export class DashboardMapComponent implements AfterViewInit {
       });
   }
 
-  private handleWeatherConditionDataPoints(weatherConditionDataPoints: WeatherConditionDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(weatherConditionDataPoints);
+  private createMarkersFromDataPoints(points: DataPoint[], activeLocation?: LatLong): Marker[] {
+    //TODO: merge points with same location
 
-    this._addMarkers$.next(
-      weatherConditionDataPoints.map((point) => ({
-        location: point.location,
-        icon: DATA_POINT_TYPE_ICON[point.type],
-        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-      })),
-    );
-    this._weatherConditionDataPointMarkersLoadingSubject$.next(false);
+    return points.map((point) => ({
+      location: point.location,
+      icon: DATA_POINT_TYPE_ICON[point.type],
+      color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      ...(activeLocation && isSameLocation(point.location, activeLocation) && { active: true }),
+    }));
   }
 
-  private handleWeatherStormWaterDataPoints(weatherStormWaterDataPoints: WeatherStormWaterDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(weatherStormWaterDataPoints);
+  private handleDataPointsByType(dataPoints: DataPoint[], type: DataPointType): void {
+    this._allDataPoints.update((current) => current.filter((point) => point.type !== type).concat(dataPoints));
 
-    this._addMarkers$.next(
-      weatherStormWaterDataPoints.map((point) => ({
-        location: point.location,
-        icon: DATA_POINT_TYPE_ICON[point.type],
-        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-      })),
-    );
-
-    this._weatherStormWaterDataPointMarkersLoadingSubject$.next(false);
-  }
-
-  private handleWeatherAirQualityDataPoints(weatherAirQualityDataPoints: WeatherAirQualityDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(weatherAirQualityDataPoints);
-
-    this._addMarkers$.next(
-      weatherAirQualityDataPoints.map((point) => ({
-        location: point.location,
-        icon: DATA_POINT_TYPE_ICON[point.type],
-        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-      })),
-    );
-
-    this._weatherAirQualityDataPointMarkersLoadingSubject$.next(false);
-  }
-
-  private handleParkingDataPoints(parkingDataPoints: ParkingDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(parkingDataPoints);
-
-    this._addMarkers$.next(
-      parkingDataPoints.map((point) => ({
-        location: point.location,
-        icon: DATA_POINT_TYPE_ICON[point.type],
-        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-      })),
-    );
-
-    this._parkingDataPointMarkersLoadingSubject$.next(false);
+    switch (type) {
+      case DataPointType.WEATHER_CONDITIONS:
+        this._weatherConditionDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.STORM_WATER:
+        this._weatherStormWaterDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.AIR_QUALITY:
+        this._weatherAirQualityDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.PARKING:
+        this._parkingDataPointMarkersLoadingSubject$.next(false);
+        break;
+    }
   }
 }
