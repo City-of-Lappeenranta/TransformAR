@@ -4,13 +4,13 @@ import { FormControl } from '@angular/forms';
 import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, DataPointType } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
-import { LocationService } from '@core/services/location.service';
+import { LocationService, UserLocation } from '@core/services/location.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, filter, map, take, withLatestFrom } from 'rxjs';
 
 //TODO: move data fetching to dashboard-map.service
 
@@ -29,8 +29,8 @@ export class DashboardMapComponent implements AfterViewInit {
     toObservable(this._allDataPoints),
     toObservable(this.dataPointTypeFilter),
   ]).pipe(
-    map(([allDataPoints, filter]) =>
-      filter.length > 0 ? allDataPoints.filter((point) => filter.includes(point.type)) : allDataPoints,
+    map(([allDataPoints, dataPointFilter]) =>
+      dataPointFilter.length > 0 ? allDataPoints.filter((point) => dataPointFilter.includes(point.type)) : allDataPoints,
     ),
   );
 
@@ -50,13 +50,16 @@ export class DashboardMapComponent implements AfterViewInit {
   private _parkingDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
 
   public locationLoading$: Observable<boolean> | undefined;
-  public locationPermissionState$: Observable<PermissionState> = this.locationService.locationPermissionState$;
+  public locationPermissionState$: Observable<PermissionState> | undefined;
 
   public locationFormControl = new FormControl<LatLong | null>(null);
 
   public readonly TOAST_KEY = 'loading';
+
   private _mapCenterSubject$ = new BehaviorSubject<LatLong>(environment.defaultLocation as LatLong);
   public mapCenter$ = this._mapCenterSubject$.asObservable();
+
+  private _focusLocation$ = new Subject<void>();
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -94,6 +97,7 @@ export class DashboardMapComponent implements AfterViewInit {
       .getParking()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
+    this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
   }
 
   public ngAfterViewInit(): void {
@@ -136,6 +140,10 @@ export class DashboardMapComponent implements AfterViewInit {
     });
   }
 
+  public onFocusLocationClick(): void {
+    this._focusLocation$.next();
+  }
+
   private async showLoadingDataToast(): Promise<void> {
     this.messageService.add({
       key: this.TOAST_KEY,
@@ -153,29 +161,34 @@ export class DashboardMapComponent implements AfterViewInit {
     this._activeLocation.set(latLong);
   }
 
-  public focusLocation(): void {
-    const userLocation$ = this.locationService.userLocation$;
-    this.locationLoading$ = userLocation$.pipe(map((userLocation) => userLocation.loading));
+  private onInitialFocusLocation(): void {
+    this.locationPermissionState$ = this.locationService.locationPermissionState$;
+    this.locationLoading$ = this.locationService.userLocation$.pipe(map(({ loading }) => loading));
 
-    combineLatest([userLocation$, this.locationPermissionState$])
+    this._focusLocation$
       .pipe(
-        map(([currentUserLocation, permissionState]) => ({ currentUserLocation, permissionState })),
-        distinctUntilChanged((prev, curr) => {
-          return (
-            prev.currentUserLocation.loading === curr.currentUserLocation.loading &&
-            prev.currentUserLocation.location === curr.currentUserLocation.location
-          );
-        }),
+        withLatestFrom(this.locationService.userLocation$, this.locationService.locationPermissionState$),
+        takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(({ currentUserLocation, permissionState }) => {
-        if (currentUserLocation?.location && permissionState === 'granted') {
-          this._mapCenterSubject$.next(currentUserLocation.location as LatLong);
-        }
+      .subscribe(([_, userLocation, permissionState]) => this.onFocusLocation(userLocation, permissionState));
 
-        if (!currentUserLocation.loading && permissionState === 'denied') {
-          alert(this.translateService.instant('PERMISSIONS.LOCATION.DENIED.ALERT'));
-        }
-      });
+    this.locationLoading$
+      .pipe(
+        filter((loading) => !loading),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this._focusLocation$.next());
+  }
+
+  private onFocusLocation(userLocation: UserLocation, permissionState: PermissionState): void {
+    if (userLocation.location && permissionState === 'granted') {
+      this._mapCenterSubject$.next(userLocation.location);
+    }
+
+    if (!userLocation.loading && permissionState === 'denied') {
+      alert(this.translateService.instant('PERMISSIONS.LOCATION.DENIED.ALERT'));
+    }
   }
 
   private createMarkersFromDataPoints(points: DataPoint[], activeLocation?: LatLong): Marker[] {

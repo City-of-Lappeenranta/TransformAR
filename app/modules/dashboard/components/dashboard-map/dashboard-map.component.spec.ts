@@ -40,6 +40,13 @@ describe('DashboardMapComponent', () => {
           .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
         getParking: jest.fn().mockReturnValue(of(PARKING_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
       })
+      .mock(LocationService, {
+        locationPermissionState$: of('granted' as PermissionState),
+        userLocation$: of({
+          loading: false,
+          location: [1, 1],
+        } as UserLocation),
+      })
       .provideMock(SharedModule);
   });
 
