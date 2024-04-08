@@ -1,7 +1,10 @@
 import {
+  DATA_POINT_QUALITY_COLOR_CHART,
   DataPoint,
   DataPointQuality,
   DataPointType,
+  ParkingDataPoint,
+  WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
@@ -10,7 +13,8 @@ import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from './dashboard-data-point-detail.component';
 import { SharedModule } from 'primeng/api';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Chip } from 'primeng/chip';
 
 jest.useFakeTimers();
 
@@ -72,7 +76,7 @@ describe('DashboardDataPointDetailComponent', () => {
 
         fixture.detectChanges();
 
-        expect(find('.weather-data-container')).toHaveFound(1);
+        expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(find('li').length).toEqual(Object.keys(dataPoint.data).length);
@@ -101,10 +105,64 @@ describe('DashboardDataPointDetailComponent', () => {
 
         fixture.detectChanges();
 
-        expect(find('.weather-data-container')).toHaveFound(1);
+        expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(find('li').length).toEqual(Object.keys(dataPoint.data).length);
+      });
+
+      it('when type is weather air quality', async () => {
+        const name = 'Air Quality Station';
+        const quality = DataPointQuality.GOOD;
+
+        const dataPoint: WeatherAirQualityDataPoint = {
+          name,
+          type: DataPointType.AIR_QUALITY,
+          quality,
+          lastUpdateOn: 1711635283,
+          location: [61.05871, 28.18871],
+        };
+
+        const { fixture, find, findComponent } = await shallow.render(
+          '<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>',
+          { bind: { dataPoint } },
+        );
+
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(find('.metric-container')).toHaveFound(1);
+        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
+        expect(find('p.button-sm').length).toEqual(1);
+        expect(findComponent(Chip)?.style?.['background-color']).toEqual(DATA_POINT_QUALITY_COLOR_CHART[quality]);
+      });
+
+      it('when type is parking', async () => {
+        const name = 'City Parking';
+        const quality = DataPointQuality.DEFAULT;
+
+        const dataPoint: ParkingDataPoint = {
+          name,
+          quality,
+          type: DataPointType.PARKING,
+          location: [61.05871, 28.18871],
+          availableSpots: 1,
+        };
+
+        const { fixture, find } = await shallow.render(
+          '<app-dashboard-data-point-detail [dataPoint]="dataPoint"></app-dashboard-data-point-detail>',
+          { bind: { dataPoint } },
+        );
+
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(find('.metric-container')).toHaveFound(1);
+        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
+        expect(find('p.button-sm').length).toEqual(1);
+        expect(find('.body-sm').nativeElement.innerHTML).toEqual('1');
       });
     });
   });

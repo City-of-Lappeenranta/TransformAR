@@ -37,7 +37,22 @@ const WEATHER_CONDITIONS: WeatherConditionsResponse = [
   },
 ];
 
-const WEATHER_AIR_QUALITY: WeatherAirQualityResponse = [];
+const WEATHER_AIR_QUALITY: WeatherAirQualityResponse = [
+  {
+    name: 'Air Quality Station',
+    latitude: 61.056371,
+    longitude: 28.173503,
+    dataRetrievedTimestamp: 1711635283,
+    measurementIndex: 1,
+  },
+  {
+    name: 'Air Quality Station 2',
+    latitude: 61.056871,
+    longitude: 28.183503,
+    dataRetrievedTimestamp: 1711635283,
+    measurementIndex: 5,
+  },
+];
 
 const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
   {
@@ -53,7 +68,17 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
   },
 ];
 
-const PARKING: ParkingResponse = [];
+const PARKING: ParkingResponse = [
+  {
+    name: 'Lappeenranta City Parking',
+    latitude: 61.05619,
+    longitude: 28.19263,
+    dataSource: 'PARKING_AIMOPARK',
+    capacity: null,
+    dataRetrievedTimestamp: 1711635283,
+    availableSpots: 40,
+  },
+];
 
 const ROAD_WORKS: RoadWorksResponse = [];
 

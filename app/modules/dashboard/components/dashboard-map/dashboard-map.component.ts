@@ -5,6 +5,8 @@ import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
   DataPoint,
+  ParkingDataPoint,
+  WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
@@ -57,6 +59,8 @@ export class DashboardMapComponent implements AfterViewInit {
 
   private _weatherConditionDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _weatherStormWaterDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  private _weatherAirQualityDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  private _parkingDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
 
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
@@ -81,6 +85,8 @@ export class DashboardMapComponent implements AfterViewInit {
     combineLatest([
       this._weatherConditionDataPointMarkersLoadingSubject$,
       this._weatherStormWaterDataPointMarkersLoadingSubject$,
+      this._weatherAirQualityDataPointMarkersLoadingSubject$,
+      this._parkingDataPointMarkersLoadingSubject$,
     ])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
@@ -94,6 +100,13 @@ export class DashboardMapComponent implements AfterViewInit {
       .getWeatherStormWater()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherStormWaterDataPoints.bind(this));
+
+    this.dataPointsApi
+      .getWeatherAirQuality()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe(this.handleWeatherAirQualityDataPoints.bind(this));
+
+    this.dataPointsApi.getParking().pipe(take(1), takeUntilDestroyed()).subscribe(this.handleParkingDataPoints.bind(this));
   }
 
   public ngAfterViewInit(): void {
@@ -175,11 +188,11 @@ export class DashboardMapComponent implements AfterViewInit {
     this._weatherConditionDataPointMarkersLoadingSubject$.next(false);
   }
 
-  private handleWeatherStormWaterDataPoints(weatherStormWaterDataPoint: WeatherStormWaterDataPoint[]): void {
-    this.dataPoints = this.dataPoints.concat(weatherStormWaterDataPoint);
+  private handleWeatherStormWaterDataPoints(weatherStormWaterDataPoints: WeatherStormWaterDataPoint[]): void {
+    this.dataPoints = this.dataPoints.concat(weatherStormWaterDataPoints);
 
     this._addMarkers$.next(
-      weatherStormWaterDataPoint.map((point) => ({
+      weatherStormWaterDataPoints.map((point) => ({
         location: point.location,
         icon: DATA_POINT_TYPE_ICON[point.type],
         color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
@@ -187,5 +200,33 @@ export class DashboardMapComponent implements AfterViewInit {
     );
 
     this._weatherStormWaterDataPointMarkersLoadingSubject$.next(false);
+  }
+
+  private handleWeatherAirQualityDataPoints(weatherAirQualityDataPoints: WeatherAirQualityDataPoint[]): void {
+    this.dataPoints = this.dataPoints.concat(weatherAirQualityDataPoints);
+
+    this._addMarkers$.next(
+      weatherAirQualityDataPoints.map((point) => ({
+        location: point.location,
+        icon: DATA_POINT_TYPE_ICON[point.type],
+        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      })),
+    );
+
+    this._weatherAirQualityDataPointMarkersLoadingSubject$.next(false);
+  }
+
+  private handleParkingDataPoints(parkingDataPoints: ParkingDataPoint[]): void {
+    this.dataPoints = this.dataPoints.concat(parkingDataPoints);
+
+    this._addMarkers$.next(
+      parkingDataPoints.map((point) => ({
+        location: point.location,
+        icon: DATA_POINT_TYPE_ICON[point.type],
+        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      })),
+    );
+
+    this._parkingDataPointMarkersLoadingSubject$.next(false);
   }
 }

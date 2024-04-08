@@ -3,7 +3,8 @@ import {
   DATA_POINT_TYPE_ICON,
   DataPointQuality,
   DataPointType,
-  WEATHER_STORM_WATER_METRIC_UNIT,
+  ParkingDataPoint,
+  WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
@@ -33,6 +34,10 @@ describe('DashboardMapComponent', () => {
         getWeatherStormWater: jest
           .fn()
           .mockReturnValue(of(WEATHER_STORM_WATER_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 2))),
+        getWeatherAirQuality: jest
+          .fn()
+          .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
+        getParking: jest.fn().mockReturnValue(of(PARKING_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
       })
       .provideMock(SharedModule);
   });
@@ -63,14 +68,32 @@ describe('DashboardMapComponent', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false, true, false]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+      ]);
       expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_CONDITION_DATA_POINTS[0]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
 
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false, false, false]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
   });
@@ -82,28 +105,50 @@ describe('DashboardMapComponent', () => {
       jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers).toEqual([
-        {
-          location: [3, 3],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [4, 4],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
-        },
-        {
-          location: [1, 1],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [2, 2],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
-        },
-      ]);
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [1, 1],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [2, 2],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [3, 3],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [4, 4],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [5, 5],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [6, 6],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+          },
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
     });
   });
 
@@ -196,5 +241,37 @@ const WEATHER_STORM_WATER_DATA_POINTS: WeatherStormWaterDataPoint[] = [
     quality: DataPointQuality.FAIR,
     name: 'Lappeenranta Weather Hub',
     data: {},
+  },
+];
+
+const WEATHER_AIR_QUALITY_DATA_POINTS: WeatherAirQualityDataPoint[] = [
+  {
+    location: [5, 5],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.GOOD,
+    name: 'Air Quality Station 1',
+  },
+  {
+    location: [6, 6],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.VERY_POOR,
+    name: 'Air Quality Station 2',
+  },
+];
+
+const PARKING_DATA_POINTS: ParkingDataPoint[] = [
+  {
+    location: [7, 7],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'City Parking',
+    availableSpots: 1,
+  },
+  {
+    location: [8, 8],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'Station Parking',
+    availableSpots: 2,
   },
 ];

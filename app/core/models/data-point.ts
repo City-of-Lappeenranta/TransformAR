@@ -24,7 +24,17 @@ export type WeatherStormWaterDataPoint = BaseDataPoint<DataPointType.STORM_WATER
   data: Record<string, string | number>;
 };
 
-export type DataPoint = WeatherConditionDataPoint | WeatherStormWaterDataPoint;
+export type WeatherAirQualityDataPoint = BaseDataPoint<DataPointType.AIR_QUALITY>;
+
+export type ParkingDataPoint = BaseDataPoint<DataPointType.PARKING> & {
+  availableSpots: number;
+};
+
+export type DataPoint =
+  | WeatherConditionDataPoint
+  | WeatherStormWaterDataPoint
+  | WeatherAirQualityDataPoint
+  | ParkingDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,
@@ -76,3 +86,12 @@ export const WEATHER_STORM_WATER_METRIC_UNIT = {
   flowRate: ' l/s',
   fillLevel: '%',
 };
+
+export const AIR_QUALITY_CONVERSION: (DataPointQuality | null)[] = [
+  null,
+  DataPointQuality.GOOD,
+  DataPointQuality.SATISFACTORY,
+  DataPointQuality.FAIR,
+  DataPointQuality.POOR,
+  DataPointQuality.VERY_POOR,
+];

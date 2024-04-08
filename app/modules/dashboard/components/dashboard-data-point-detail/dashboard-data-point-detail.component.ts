@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import {
+  DATA_POINT_QUALITY_COLOR_CHART,
   DataPoint,
+  DataPointQuality,
   DataPointType,
   WEATHER_CONDITIONS_METRIC_UNIT,
   WEATHER_STORM_WATER_METRIC_UNIT,
@@ -64,6 +66,14 @@ export class DashboardDataPointDetailComponent implements OnChanges {
 
   public getStormWaterMetricUnit(key: string): string | undefined {
     return this.getMetricUnit('STORM_WATER', key);
+  }
+
+  public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
+    return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
+  }
+
+  public getDataQualityBackgroundColor(quality: DataPointQuality): string {
+    return DATA_POINT_QUALITY_COLOR_CHART[quality];
   }
 
   private getMetricUnit(type: string, key: string): string | undefined {

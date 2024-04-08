@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { DashboardDataPointDetailComponent } from './components/dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.component';
 import { DashboardRoutingModule } from './dashboard.routing';
+import { ChipModule } from 'primeng/chip';
 
 @NgModule({
   declarations: [DashboardMapComponent, DashboardDataPointDetailComponent],
@@ -20,6 +21,7 @@ import { DashboardRoutingModule } from './dashboard.routing';
     IconComponent,
     SearchLocationInputComponent,
     ReactiveFormsModule,
+    ChipModule,
   ],
   providers: [MessageService],
 })

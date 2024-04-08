@@ -15,7 +15,7 @@
 
   @switch (dataPoint.type) {
     @case (DATA_POINT_TYPE.WEATHER_CONDITIONS) {
-      <ul class="weather-data-container">
+      <ul class="metric-container">
         @for (metric of dataPoint.data | keyvalue; track metric.key) {
           <li>
             <p class="button-sm">{{ getWeatherConditionMetricLabel(metric.key) }}</p>
@@ -27,13 +27,35 @@
       </ul>
     }
     @case (DATA_POINT_TYPE.STORM_WATER) {
-      <ul class="weather-data-container">
+      <ul class="metric-container">
         @for (metric of dataPoint.data | keyvalue; track metric.key) {
           <li>
             <p class="button-sm">{{ getStormWaterMetricLabel(metric.key) }}</p>
             <small class="body-sm"> {{ metric.value }}{{ getStormWaterMetricUnit(metric.key) }}</small>
           </li>
         }
+      </ul>
+    }
+    @case (DATA_POINT_TYPE.AIR_QUALITY) {
+      <ul class="metric-container">
+        <li>
+          <p class="button-sm">
+            {{ 'DASHBOARD.DATA_POINTS.AIR_QUALITY.TITLE' | translate }}
+          </p>
+          <p-chip
+            class="chip"
+            [style]="{ 'background-color': getDataQualityBackgroundColor(dataPoint.quality) }"
+            [label]="getWeatherAirQualityTranslationKey(dataPoint.quality) | translate"
+          ></p-chip>
+        </li>
+      </ul>
+    }
+    @case (DATA_POINT_TYPE.PARKING) {
+      <ul class="metric-container">
+        <li>
+          <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.PARKING.AVAILABLE_SPOTS' | translate }}</p>
+          <small class="body-sm">{{ dataPoint.availableSpots }}</small>
+        </li>
       </ul>
     }
   }
