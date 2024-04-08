@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ServiceDictionary } from '@core/models/service-api';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { ServiceApi, ServiceListApiResponse } from './service-api.service';
@@ -11,7 +11,9 @@ describe('ServiceApi', () => {
   let shallow: Shallow<ServiceApi>;
 
   beforeEach(() => {
-    shallow = new Shallow(ServiceApi, CoreModule).replaceModule(HttpClientModule, HttpClientTestingModule);
+    shallow = new Shallow(ServiceApi, CoreModule)
+      .replaceModule(HttpClientModule, HttpClientTestingModule)
+      .mock(HttpClient, { get: () => of(EMPTY), post: () => of(EMPTY) });
   });
 
   describe('getServices', () => {
@@ -36,7 +38,7 @@ describe('ServiceApi', () => {
     const phone = '+32412345678';
 
     it('should throw an error that the service_code is missing when the service_code is missing', () => {
-      const { instance } = shallow.mock(HttpClient, {}).createService();
+      const { instance } = shallow.createService();
 
       expect(() =>
         instance.postServiceRequest({
@@ -53,7 +55,7 @@ describe('ServiceApi', () => {
     });
 
     it('should throw an error that the description is missing when the description is missing', () => {
-      const { instance } = shallow.mock(HttpClient, {}).createService();
+      const { instance } = shallow.createService();
 
       expect(() =>
         instance.postServiceRequest({
@@ -70,7 +72,7 @@ describe('ServiceApi', () => {
     });
 
     it('should throw an error that the location is missing when the location is missing', () => {
-      const { instance } = shallow.mock(HttpClient, {}).createService();
+      const { instance } = shallow.createService();
 
       expect(() =>
         instance.postServiceRequest({
@@ -87,7 +89,7 @@ describe('ServiceApi', () => {
     });
 
     it('should return the email as response when the post request is successful when the email was set', () => {
-      const { instance } = shallow.mock(HttpClient, {}).createService();
+      const { instance } = shallow.createService();
 
       instance
         .postServiceRequest({
@@ -106,7 +108,7 @@ describe('ServiceApi', () => {
     });
 
     it('should return an empty string as response when the post request is successful when the email was not set', () => {
-      const { instance } = shallow.mock(HttpClient, {}).createService();
+      const { instance } = shallow.createService();
 
       instance
         .postServiceRequest({
