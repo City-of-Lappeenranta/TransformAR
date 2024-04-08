@@ -31,76 +31,88 @@ exports[`DashboardDataPointDetailComponent data point input it should show the c
         class="weather-data-container"
       >
         <li>
-          <label
-            class="button-sm"
-          >
-            Airmoisture
-          </label>
           <p
-            class="body-sm"
-          >
-            0
-          </p>
-        </li>
-        <li>
-          <label
             class="button-sm"
           >
             Airtemperature
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
-            0
-          </p>
+            0°C
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
             Dewpoint
-          </label>
-          <p
+          </p>
+          <small
             class="body-sm"
           >
-            0
-          </p>
+            0°C
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
-            Rainfall
-          </label>
-          <p
+            Icelayerthickness
+          </p>
+          <small
             class="body-sm"
           >
-            0
-          </p>
+            0 mm
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
-            Snowdepth
-          </label>
-          <p
+            Relativehumidity
+          </p>
+          <small
             class="body-sm"
           >
-            0
-          </p>
+            0%
+          </small>
         </li>
         <li>
-          <label
+          <p
             class="button-sm"
           >
-            Wind
-          </label>
-          <p
+            State
+          </p>
+          <small
             class="body-sm"
           >
-            0
+            State
+          </small>
+        </li>
+        <li>
+          <p
+            class="button-sm"
+          >
+            Waterlayerthickness
           </p>
+          <small
+            class="body-sm"
+          >
+            0 mm
+          </small>
+        </li>
+        <li>
+          <p
+            class="button-sm"
+          >
+            Windspeed
+          </p>
+          <small
+            class="body-sm"
+          >
+            0 m/s
+          </small>
         </li>
       </ul>
     </div>

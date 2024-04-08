@@ -15,10 +15,10 @@
   @switch (dataPoint.type) {
     @case (DATA_POINT_TYPE.WEATHER) {
       <ul class="weather-data-container">
-        @for (metric of dataPoint.data | keyvalue; track metric.key) {
+        @for (metric of castDataPointData(dataPoint.data) | keyvalue; track metric.key) {
           <li>
-            <label class="button-sm">{{ getMetricLabel(dataPoint.type, metric.key) }}</label>
-            <p class="body-sm">{{ metric.value }}{{ getMetricUnit(dataPoint.type, metric.key) }}</p>
+            <p class="button-sm">{{ getWeatherMetricLabel(metric.key) }}</p>
+            <small class="body-sm">{{ getWeatherMetricValue(metric.value) }}{{ getWeatherMetricUnit(metric.key) }}</small>
           </li>
         }
       </ul>
