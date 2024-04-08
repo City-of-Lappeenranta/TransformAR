@@ -40,8 +40,8 @@ const WEATHER_CONDITIONS: WeatherConditionsResponse = [
 const WEATHER_AIR_QUALITY: WeatherAirQualityResponse = [
   {
     name: 'Air Quality Station',
-    latitude: 61.056371,
-    longitude: 28.173503,
+    latitude: 61.05871,
+    longitude: 28.18871,
     dataRetrievedTimestamp: 1711635283,
     measurementIndex: 1,
   },

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, signal } from '@angular/core';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DataPoint,
@@ -10,21 +10,19 @@ import {
 import { RadarService } from '@core/services/radar.service';
 import { TranslateService } from '@ngx-translate/core';
 import { capitalize } from '@shared/utils/string-utils';
-import { Observable, Subject } from 'rxjs';
-
-// TODO: get rid of magic strings
 
 @Component({
   selector: 'app-dashboard-data-point-detail',
   templateUrl: './dashboard-data-point-detail.component.html',
   styleUrls: ['./dashboard-data-point-detail.component.scss'],
 })
-export class DashboardDataPointDetailComponent implements OnChanges {
-  @Input({ required: true }) public dataPoint!: DataPoint;
+export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
+  @Input() public dataPoints: DataPoint[] = [];
+
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
-  private _addressSubject$: Subject<string | null> = new Subject<string | null>();
-  public address$: Observable<string | null> = this._addressSubject$.asObservable();
+  public address = signal<string | null>(null);
+  public name = signal<string | null>(null);
 
   public DATA_POINT_TYPE = DataPointType;
 
@@ -33,13 +31,17 @@ export class DashboardDataPointDetailComponent implements OnChanges {
     private readonly radarService: RadarService,
   ) {}
 
-  public async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    if (changes['dataPoint']) {
-      this._addressSubject$.next(null);
+  public ngOnInit(): void {
+    this.setHeaderValues();
+  }
 
-      if (changes['dataPoint'].currentValue) {
-        const address = await this.radarService.reverseGeocode(this.dataPoint.location);
-        this._addressSubject$.next(address);
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dataPoints']) {
+      this.address.set(null);
+      this.name.set(null);
+
+      if (changes['dataPoints'].currentValue) {
+        this.setHeaderValues();
       }
     }
   }
@@ -74,6 +76,14 @@ export class DashboardDataPointDetailComponent implements OnChanges {
 
   public getDataQualityBackgroundColor(quality: DataPointQuality): string {
     return DATA_POINT_QUALITY_COLOR_CHART[quality];
+  }
+
+  private async setHeaderValues(): Promise<void> {
+    const dataPointNames = this.dataPoints.map(({ name }) => name);
+    this.name.set([...new Set(dataPointNames)].join(', '));
+
+    const address = await this.radarService.reverseGeocode(this.dataPoints[0].location);
+    this.address.set(address);
   }
 
   private getMetricUnit(type: string, key: string): string | undefined {

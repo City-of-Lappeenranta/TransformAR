@@ -1,7 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, DataPointType } from '@core/models/data-point';
+import {
+  DATA_POINT_QUALITY_COLOR_CHART,
+  DATA_POINT_TYPE_ICON,
+  DataPoint,
+  DataPointQuality,
+  DataPointType,
+} from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService, UserLocation } from '@core/services/location.service';
@@ -11,6 +17,7 @@ import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, filter, map, take, withLatestFrom } from 'rxjs';
+import { groupBy } from 'lodash';
 
 //TODO: move data fetching to dashboard-map.service
 
@@ -35,8 +42,8 @@ export class DashboardMapComponent implements AfterViewInit {
   );
 
   private _activeLocation = signal<LatLong | undefined>(undefined);
-  public selectedDataPoint$: Observable<DataPoint | null> = toObservable(this._activeLocation).pipe(
-    map((latLong) => (latLong && this._allDataPoints().find((point) => isSameLocation(point.location, latLong))) ?? null),
+  public selectedDataPoints$: Observable<DataPoint[] | null> = toObservable(this._activeLocation).pipe(
+    map((latLong) => (latLong && this._allDataPoints().filter((point) => isSameLocation(point.location, latLong))) ?? null),
   );
 
   public dataPointMarkers$: Observable<Marker[]> = combineLatest([
@@ -97,6 +104,7 @@ export class DashboardMapComponent implements AfterViewInit {
       .getParking()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
+
     this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
   }
 
@@ -192,14 +200,20 @@ export class DashboardMapComponent implements AfterViewInit {
   }
 
   private createMarkersFromDataPoints(points: DataPoint[], activeLocation?: LatLong): Marker[] {
-    //TODO: merge points with same location
+    const pointsByLocation = groupBy(points, 'location');
 
-    return points.map((point) => ({
-      location: point.location,
-      icon: DATA_POINT_TYPE_ICON[point.type],
-      color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-      ...(activeLocation && isSameLocation(point.location, activeLocation) && { active: true }),
-    }));
+    return Object.entries(pointsByLocation).map(([_, dataPoints]) => {
+      const hasMultipleDataPoints = dataPoints.length > 1;
+
+      return {
+        location: dataPoints[0].location,
+        icon: hasMultipleDataPoints ? 'multiple-data-points.svg' : DATA_POINT_TYPE_ICON[dataPoints[0].type],
+        color: hasMultipleDataPoints
+          ? DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT]
+          : DATA_POINT_QUALITY_COLOR_CHART[dataPoints[0].quality],
+        ...(activeLocation && isSameLocation(dataPoints[0].location, activeLocation) && { active: true }),
+      };
+    });
   }
 
   private handleDataPointsByType(dataPoints: DataPoint[], type: DataPointType): void {
