@@ -23,7 +23,7 @@ export function phoneNumberValidator(control: AbstractControl): { [key: string]:
     }
 
     return null;
-  } catch (error) {
+  } catch {
     return { invalidPhoneNumber: true };
   }
 }

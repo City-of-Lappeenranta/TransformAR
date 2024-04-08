@@ -1,3 +1,4 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
@@ -26,6 +27,18 @@ import { groupBy } from 'lodash';
   templateUrl: './dashboard-map.component.html',
   styleUrls: ['./dashboard-map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('slideInAndOut', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('200ms ease-in-out', style({ transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)' }),
+        animate('150ms ease-in-out', style({ transform: 'translateY(100%)' })),
+      ]),
+    ]),
+  ],
 })
 export class DashboardMapComponent implements AfterViewInit {
   private _allDataPoints = signal<DataPoint[]>([]);
