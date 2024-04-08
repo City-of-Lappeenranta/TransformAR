@@ -2,7 +2,13 @@
   <div class="location-information-container shadow-sm flex-row">
     <div class="full-width flex-column">
       <h1 class="display-xs">{{ dataPoint.name }}</h1>
-      <p class="body-xs">{{ dataPoint.location }}</p>
+
+      <ng-container *ngIf="address$ | async as address; else addressLoader">
+        <p class="body-xs">{{ address }}</p>
+      </ng-container>
+      <ng-template #addressLoader>
+        <p-skeleton class="address-loader"></p-skeleton>
+      </ng-template>
     </div>
     <app-icon icon="close" (click)="close.emit()"></app-icon>
   </div>
@@ -13,9 +19,19 @@
         @for (metric of dataPoint.data | keyvalue; track metric.key) {
           <li>
             <p class="button-sm">{{ getWeatherConditionMetricLabel(metric.key) }}</p>
-            <small class="body-sm"
-              >{{ getWeatherConditionMetricValue(metric.value) }}{{ getWeatherConditionMetricUnit(metric.key) }}</small
+            <small class="body-sm">
+              {{ getWeatherConditionMetricValue(metric.value) }}{{ getWeatherConditionMetricUnit(metric.key) }}</small
             >
+          </li>
+        }
+      </ul>
+    }
+    @case (DATA_POINT_TYPE.STORM_WATER) {
+      <ul class="weather-data-container">
+        @for (metric of dataPoint.data | keyvalue; track metric.key) {
+          <li>
+            <p class="button-sm">{{ getStormWaterMetricLabel(metric.key) }}</p>
+            <small class="body-sm"> {{ metric.value }}{{ getStormWaterMetricUnit(metric.key) }}</small>
           </li>
         }
       </ul>

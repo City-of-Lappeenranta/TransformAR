@@ -4,10 +4,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subject, of } from 'rxjs';
 import * as leaflet from 'leaflet';
-import { SimpleChange } from '@angular/core';
 import { environment } from '@environments/environment';
 import { LatLong } from '@core/models/location';
 import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '@core/models/data-point';
+import { SimpleChange } from '@angular/core';
 
 describe('MapComponent', () => {
   let shallow: Shallow<MapComponent>;
@@ -88,7 +88,7 @@ describe('MapComponent', () => {
         markers: new SimpleChange(markers, newMarkers, false),
       });
 
-      await fixture.whenStable();
+      fixture.detectChanges();
       await fixture.whenStable();
 
       expect(find('.leaflet-marker-icon').length).toBe(newMarkers.length);

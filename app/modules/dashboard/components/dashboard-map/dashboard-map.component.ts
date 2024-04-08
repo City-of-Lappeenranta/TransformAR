@@ -6,6 +6,7 @@ import {
   DATA_POINT_TYPE_ICON,
   DataPoint,
   WeatherConditionDataPoint,
+  WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
 import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
@@ -15,7 +16,17 @@ import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, map, take } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  combineLatest,
+  distinctUntilChanged,
+  firstValueFrom,
+  map,
+  scan,
+  take,
+} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -25,8 +36,27 @@ import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChang
 export class DashboardMapComponent implements AfterViewInit {
   private dataPoints: DataPoint[] = [];
 
+  private _addMarkers$ = new BehaviorSubject<Marker[]>([]);
+  public dataPointMarkers$: Observable<Marker[]> = this._addMarkers$.pipe(
+    scan((previousMarkers: Marker[], newMarkers: Marker[]) => {
+      newMarkers.forEach((newMarker) => {
+        const index = previousMarkers.findIndex(
+          (marker) => marker.icon === newMarker.icon && isSameLocation(marker.location, newMarker.location),
+        );
+        if (index !== -1) {
+          previousMarkers[index] = newMarker;
+        } else {
+          previousMarkers.push(newMarker);
+        }
+      });
+
+      return previousMarkers;
+    }, []),
+    map((markers) => [...markers]),
+  );
+
   private _weatherConditionDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
-  public weatherConditionDataPointMarkers: Marker[] = [];
+  private _weatherStormWaterDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
 
   private _selectedDataPointSubject$: Subject<DataPoint | null> = new Subject<DataPoint | null>();
   public selectedDataPoint$: Observable<DataPoint | null> = this._selectedDataPointSubject$.asObservable();
@@ -48,7 +78,10 @@ export class DashboardMapComponent implements AfterViewInit {
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
   ) {
-    combineLatest([this._weatherConditionDataPointMarkersLoadingSubject$])
+    combineLatest([
+      this._weatherConditionDataPointMarkersLoadingSubject$,
+      this._weatherStormWaterDataPointMarkersLoadingSubject$,
+    ])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
 
@@ -56,6 +89,11 @@ export class DashboardMapComponent implements AfterViewInit {
       .getWeatherConditions()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe(this.handleWeatherConditionDataPoints.bind(this));
+
+    this.dataPointsApi
+      .getWeatherStormWater()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe(this.handleWeatherStormWaterDataPoints.bind(this));
   }
 
   public ngAfterViewInit(): void {
@@ -91,11 +129,12 @@ export class DashboardMapComponent implements AfterViewInit {
     this.messageService.clear(this.TOAST_KEY);
   }
 
-  private setActiveMarker(latLong?: LatLong): void {
-    this.weatherConditionDataPointMarkers = this.weatherConditionDataPointMarkers.map((marker) => ({
-      ...marker,
-      active: latLong ? isSameLocation(marker.location, latLong) : false,
-    }));
+  public async setActiveMarker(latLong?: LatLong): Promise<void> {
+    const markers = await firstValueFrom(this.dataPointMarkers$);
+
+    this._addMarkers$.next(
+      markers.map((marker) => ({ ...marker, active: !!latLong && isSameLocation(marker.location, latLong) })),
+    );
   }
 
   public focusLocation(): void {
@@ -126,11 +165,27 @@ export class DashboardMapComponent implements AfterViewInit {
   private handleWeatherConditionDataPoints(weatherConditionDataPoints: WeatherConditionDataPoint[]): void {
     this.dataPoints = this.dataPoints.concat(weatherConditionDataPoints);
 
-    this.weatherConditionDataPointMarkers = weatherConditionDataPoints.map((point) => ({
-      location: point.location,
-      icon: DATA_POINT_TYPE_ICON[point.type],
-      color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
-    }));
+    this._addMarkers$.next(
+      weatherConditionDataPoints.map((point) => ({
+        location: point.location,
+        icon: DATA_POINT_TYPE_ICON[point.type],
+        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      })),
+    );
     this._weatherConditionDataPointMarkersLoadingSubject$.next(false);
+  }
+
+  private handleWeatherStormWaterDataPoints(weatherStormWaterDataPoint: WeatherStormWaterDataPoint[]): void {
+    this.dataPoints = this.dataPoints.concat(weatherStormWaterDataPoint);
+
+    this._addMarkers$.next(
+      weatherStormWaterDataPoint.map((point) => ({
+        location: point.location,
+        icon: DATA_POINT_TYPE_ICON[point.type],
+        color: DATA_POINT_QUALITY_COLOR_CHART[point.quality],
+      })),
+    );
+
+    this._weatherStormWaterDataPointMarkersLoadingSubject$.next(false);
   }
 }

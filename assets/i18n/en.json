@@ -17,6 +17,14 @@
         "SLUSHY": "Slushy",
         "SNOWY": "Snowy",
         "Icy": "Icy"
+      },
+      "STORM_WATER": {
+        "WATERLEVEL": "Water level",
+        "WATERTEMPERATURE": "Water temperature",
+        "ELECTRICALCONDUCTIVITY": "Electrical conductivity",
+        "TURBIDITY": "Turbidity",
+        "FLOWRATE": "Flow rate",
+        "FILLLEVEL": "Fill level"
       }
     }
   },
