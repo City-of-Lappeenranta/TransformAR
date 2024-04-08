@@ -84,12 +84,14 @@ export class FeedbackFormService {
   public currentStep$ = this._currentStepSubject$.asObservable();
   public currentChildComponent$ = this.currentStep$.pipe(map((i) => this.STEPS[i]));
 
-  public parentCategory$ = this.currentStep$.pipe(
+  public parentCategory$ = merge(
+    ...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges),
+  ).pipe(
     map(() => {
       const categoryKeys = environment.feedbackCategoryLevels;
       const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
       const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
-      return subCategory ? subCategory : mainCategory;
+      return subCategory ?? mainCategory;
     }),
   );
 
