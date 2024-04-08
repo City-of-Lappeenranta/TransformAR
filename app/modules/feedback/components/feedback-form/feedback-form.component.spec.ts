@@ -96,6 +96,7 @@ describe('FeedbackFormComponent', () => {
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
 
     instance.feedbackForm.controls.group.setValue('streets');
+
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
@@ -103,6 +104,7 @@ describe('FeedbackFormComponent', () => {
     expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
 
     instance.feedbackForm.controls.description.setValue('lamps');
+
     fixture.detectChanges();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);

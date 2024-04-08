@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { FeedbackFormService } from './feedback-form.service';
@@ -9,6 +9,7 @@ import { Category } from './input-feedback-category/input-feedback-category.comp
   templateUrl: './feedback-form.component.html',
   styleUrls: ['./feedback-form.component.scss'],
   providers: [FeedbackFormService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedbackFormComponent {
   public FEEDBACK_FORM_COMPONENT = FeedbackFormChildComponent;

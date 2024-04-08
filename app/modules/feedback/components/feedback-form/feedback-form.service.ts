@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest, finalize, map, merge, take } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
-import { Category } from './input-feedback-category/input-feedback-category.component';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { ServiceDictionary } from '@core/models/service-api';
@@ -40,7 +39,25 @@ export class FeedbackFormService {
     FeedbackFormChildComponent.CONTACT,
   ];
 
-  public serviceDictionary$: Observable<ServiceDictionary> = this.serviceApi.getServices();
+  public serviceDictionary$$ = signal<ServiceDictionary>({});
+  public categories$ = toObservable(this.serviceDictionary$$).pipe(
+    map((serviceDictionary) => {
+      const categoryKeys = environment.feedbackCategoryLevels;
+      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
+      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
+
+      if (!mainCategory) {
+        return Object.keys(serviceDictionary).map((key) => ({ value: key }));
+      } else if (!subCategory) {
+        return Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
+      } else {
+        return serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({
+          label: name,
+          value: code,
+        }));
+      }
+    }),
+  );
 
   public feedbackForm: FeedbackFormType = new FormGroup({
     message: new FormGroup({
@@ -67,11 +84,14 @@ export class FeedbackFormService {
   public currentStep$ = this._currentStepSubject$.asObservable();
   public currentChildComponent$ = this.currentStep$.pipe(map((i) => this.STEPS[i]));
 
-  private _categorySubject$ = new ReplaySubject<Category[]>(1);
-  public categories$ = this._categorySubject$.asObservable();
-
-  private _parentCategorySubject$ = new ReplaySubject<string | null>(1);
-  public parentCategory$ = this._parentCategorySubject$.asObservable();
+  public parentCategory$ = this.currentStep$.pipe(
+    map(() => {
+      const categoryKeys = environment.feedbackCategoryLevels;
+      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
+      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
+      return subCategory ? subCategory : mainCategory;
+    }),
+  );
 
   private _isNextInProgressSubject$ = new BehaviorSubject<boolean>(false);
   public isNextInProgress$ = this._isNextInProgressSubject$.asObservable();
@@ -89,8 +109,16 @@ export class FeedbackFormService {
     private readonly serviceApi: ServiceApi,
     private readonly router: Router,
   ) {
-    this.setCategoriesByFormValues();
-    this.handleFeedbackFormValueChanges();
+    this.serviceApi
+      .getServices()
+      .pipe(takeUntilDestroyed())
+      .subscribe((value) => this.serviceDictionary$$.set(value));
+
+    merge(...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges))
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.next();
+      });
 
     this._currentStepSubject$.next(0);
   }
@@ -136,39 +164,6 @@ export class FeedbackFormService {
       } else {
         this._currentStepSubject$.next(nextStep);
       }
-    });
-  }
-
-  private handleFeedbackFormValueChanges(): void {
-    merge(...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges))
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => {
-        this.setCategoriesByFormValues();
-        this.next();
-      });
-  }
-
-  private setCategoriesByFormValues(): void {
-    this.serviceDictionary$.pipe(take(1)).subscribe((serviceDictionary) => {
-      const categoryKeys = environment.feedbackCategoryLevels;
-      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
-      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
-
-      let categories: Category[] = [];
-      let parent: string | null = null;
-
-      if (!mainCategory) {
-        categories = Object.keys(serviceDictionary).map((key) => ({ value: key }));
-      } else if (!subCategory) {
-        parent = mainCategory;
-        categories = Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
-      } else {
-        parent = subCategory;
-        categories = serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({ label: name, value: code }));
-      }
-
-      this._parentCategorySubject$.next(parent);
-      this._categorySubject$.next(categories);
     });
   }
 
