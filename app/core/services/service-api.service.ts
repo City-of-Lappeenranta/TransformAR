@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PostServiceRequestProperties, Service, ServiceDictionary } from '@core/models/service-api';
 import { environment } from '@environments/environment';
-import { Observable, map, of, timeout } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,7 @@ import { Observable, map, of, timeout } from 'rxjs';
 export class ServiceApi {
   private baseUrl = environment.serviceApiUrl;
   private jurisdictionId = environment.serviceApiJurisdictionId;
+  private apiKey = environment.serviceApiApiKey;
 
   public constructor(private readonly httpClient: HttpClient) {}
 
@@ -36,9 +37,11 @@ export class ServiceApi {
 
     if (!serviceCode) {
       throw new Error('service_code is missing');
-    } else if (!description) {
+    }
+    if (!description) {
       throw new Error('description is missing');
-    } else if (!location) {
+    }
+    if (!location) {
       throw new Error('location is missing');
     }
 
@@ -48,7 +51,7 @@ export class ServiceApi {
     files?.forEach((file) => formData.append('media[]', file));
 
     formData.append('lat', location[0].toString());
-    formData.append('lon', location[1].toString());
+    formData.append('long', location[1].toString());
 
     if (email) {
       formData.append('email', email);
@@ -63,11 +66,11 @@ export class ServiceApi {
       formData.append('phone', phone);
     }
 
-    // return this.httpClient
-    //   .post<string>(`${this.baseUrl}/requests.json`, formData)
-    //   .pipe(map(() => formData.get('email') as string));
+    formData.append('api_key', this.apiKey);
 
-    return of(email ?? '').pipe(timeout(2000));
+    return this.httpClient
+      .post<string>(`${this.baseUrl}/requests.json?jurisdiction_id=${this.jurisdictionId}`, formData)
+      .pipe(map(() => formData.get('email') as string));
   }
 
   private mapServiceListApiResponseToServiceDictionary(response: ServiceListApiResponse): ServiceDictionary {
