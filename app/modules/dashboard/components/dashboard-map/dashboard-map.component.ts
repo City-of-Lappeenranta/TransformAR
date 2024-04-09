@@ -1,5 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import {
@@ -125,6 +134,8 @@ export class DashboardMapComponent implements AfterViewInit {
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
 
     this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
+
+    effect(() => this._activeLocation() && this.showDataPointTypeFilter.set(false), { allowSignalWrites: true });
   }
 
   public ngAfterViewInit(): void {
