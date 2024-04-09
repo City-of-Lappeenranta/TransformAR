@@ -29,5 +29,9 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  } // set as "true" to run 'prettier' last not first
+  },
+  "sonarlint.connectedMode.project": {
+    "connectionId": "pegusdigital",
+    "projectKey": "pegusapps_citizen-webapp"
+  }
 }
