@@ -2,7 +2,7 @@
   @switch (currentChildComponent$ | async) {
     @case (FEEDBACK_FORM_COMPONENT.CATEGORY) {
       <h2 class="title">{{ 'FEEDBACK.HEADER.CATEGORY_TITLE' | translate }}</h2>
-      <p *ngIf="parentCategory$ | async as parentCategory" class="description">
+      <p *ngIf="parentCategory() as parentCategory" class="description">
         {{ parentCategory }}
       </p>
       <ng-container *ngFor="let categoryStep of categorySteps">

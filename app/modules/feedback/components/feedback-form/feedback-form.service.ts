@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
-import { BehaviorSubject, Observable, ReplaySubject, combineLatest, finalize, map, merge, take } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, combineLatest, finalize, map, merge, scan, take } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
@@ -31,9 +31,10 @@ type FeedbackFormType = FormGroup<
 
 @Injectable({ providedIn: 'root' })
 export class FeedbackFormService {
-  private CATEGORY_START_INDEX = 0;
-  private STEPS = [
-    ...environment.feedbackCategoryLevels.map(() => FeedbackFormChildComponent.CATEGORY),
+  private readonly FEEDBACK_CATEGORY_LEVELS = environment.feedbackCategoryLevels;
+  private readonly CATEGORY_START_INDEX = 0;
+  private readonly STEPS = [
+    ...this.FEEDBACK_CATEGORY_LEVELS.map(() => FeedbackFormChildComponent.CATEGORY),
     FeedbackFormChildComponent.MESSAGE_AND_ATTACHMENTS,
     FeedbackFormChildComponent.LOCATION,
     FeedbackFormChildComponent.CONTACT,
@@ -53,20 +54,25 @@ export class FeedbackFormService {
       termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
     }),
     ...(Object.fromEntries(
-      environment.feedbackCategoryLevels.map((step) => [step, new FormControl<string | null>(null, Validators.required)]),
+      this.FEEDBACK_CATEGORY_LEVELS.map((step) => [step, new FormControl<string | null>(null, Validators.required)]),
     ) as {
-      [key in (typeof environment.feedbackCategoryLevels)[number]]: FormControl<string | null>;
+      [key in (typeof this.FEEDBACK_CATEGORY_LEVELS)[number]]: FormControl<string | null>;
     }),
   });
 
-  private mainCategoryChanges = toSignal(this.feedbackForm.controls[environment.feedbackCategoryLevels[0]].valueChanges);
-  private subCategoryChanges = toSignal(this.feedbackForm.controls[environment.feedbackCategoryLevels[1]].valueChanges);
-  private serviceDictionary = signal<ServiceDictionary>({});
+  private categoryFormValues$: Observable<{ [key: string]: any }> = merge(
+    ...environment.feedbackCategoryLevels.map((level) =>
+      this.feedbackForm.controls[level].valueChanges.pipe(map((value) => ({ [level]: value }))),
+    ),
+  ).pipe(scan((acc, curr) => ({ ...acc, ...curr }), {}));
+  private categoryFormValues = toSignal(this.categoryFormValues$);
 
+  private serviceDictionary = signal<ServiceDictionary>({});
   public categories = computed(() => {
     const serviceDictionary = this.serviceDictionary();
-    const mainCategory = this.mainCategoryChanges();
-    const subCategory = this.subCategoryChanges();
+
+    const mainCategory = this.categoryFormValues()?.[this.FEEDBACK_CATEGORY_LEVELS[0]];
+    const subCategory = this.categoryFormValues()?.[this.FEEDBACK_CATEGORY_LEVELS[1]];
 
     if (!mainCategory) {
       return Object.keys(serviceDictionary).map((key) => ({ value: key }));
@@ -85,17 +91,11 @@ export class FeedbackFormService {
   public currentStep$ = this._currentStepSubject$.asObservable();
   public currentChildComponent$ = this.currentStep$.pipe(map((i) => this.STEPS[i]));
 
-  private categoryFormValueChanges$ = merge(
-    ...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges),
-  );
-  public parentCategory$ = this.categoryFormValueChanges$.pipe(
-    map(() => {
-      const categoryKeys = environment.feedbackCategoryLevels;
-      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
-      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
-      return subCategory ?? mainCategory;
-    }),
-  );
+  public parentCategory = computed(() => {
+    const mainCategory = this.categoryFormValues()?.[this.FEEDBACK_CATEGORY_LEVELS[0]];
+    const subCategory = this.categoryFormValues()?.[this.FEEDBACK_CATEGORY_LEVELS[1]];
+    return subCategory ?? mainCategory;
+  });
 
   private _isNextInProgressSubject$ = new BehaviorSubject<boolean>(false);
   public isNextInProgress$ = this._isNextInProgressSubject$.asObservable();
@@ -104,7 +104,7 @@ export class FeedbackFormService {
     map(([currentStep]) => this.isNextEnabled(currentStep)),
   );
 
-  public categorySteps = environment.feedbackCategoryLevels.map((step) => ({
+  public categorySteps = this.FEEDBACK_CATEGORY_LEVELS.map((step) => ({
     formControlName: step,
     index: this.getIndexForCategoryStep(step),
   }));
@@ -144,7 +144,7 @@ export class FeedbackFormService {
     this.currentStep$.pipe(take(1)).subscribe((currentStep) => {
       const newIndex = currentStep - 1;
 
-      environment.feedbackCategoryLevels.forEach((step) => {
+      this.FEEDBACK_CATEGORY_LEVELS.forEach((step) => {
         if (newIndex === this.getIndexForCategoryStep(step)) {
           this.feedbackForm.controls[step].setValue(null);
         }
@@ -167,13 +167,13 @@ export class FeedbackFormService {
   }
 
   private handleFeedbackFormValueChanges(): void {
-    this.categoryFormValueChanges$.pipe(takeUntilDestroyed()).subscribe(() => {
+    this.categoryFormValues$.pipe(takeUntilDestroyed()).subscribe(() => {
       this.next();
     });
   }
 
   private getIndexForCategoryStep(level: string): number {
-    const index = environment.feedbackCategoryLevels.findIndex((name) => name === level);
+    const index = this.FEEDBACK_CATEGORY_LEVELS.findIndex((name) => name === level);
 
     if (index === -1) {
       return index;
