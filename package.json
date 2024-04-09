@@ -14,7 +14,7 @@
     "prebuild:production": "npm run theme; npm run generate-icons",
     "build": "ng build",
     "build:development": "ng build",
-    "build:staging": "ng build",
+    "build:staging": "ng build --configuration production",
     "build:production": "ng build --configuration production",
     "test": "jest",
     "test:ci": "npm run generate-icons; jest --ci --collect-coverage ",
