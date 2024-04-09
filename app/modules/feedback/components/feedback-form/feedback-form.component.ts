@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeedbackFormChildComponent } from './feedback-form-child-component.enum';
 import { FeedbackFormService } from './feedback-form.service';
@@ -19,8 +19,8 @@ export class FeedbackFormComponent {
   public currentChildComponent$: Observable<FeedbackFormChildComponent> = this.feedbackFormService.currentChildComponent$;
   public isNextEnabled$: Observable<boolean> = this.feedbackFormService.isNextEnabled$;
 
-  public parentCategory$: Observable<string | null> = this.feedbackFormService.parentCategory$;
-  public categories$: Observable<Category[]> = this.feedbackFormService.categories$;
+  public parentCategory: Signal<string | null | undefined> = this.feedbackFormService.parentCategory;
+  public categories: Signal<Category[]> = this.feedbackFormService.categories;
   public categorySteps = this.feedbackFormService.categorySteps;
 
   public isNextInProgress$: Observable<boolean> = this.feedbackFormService.isNextInProgress$;

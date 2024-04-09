@@ -6,5 +6,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
+
+    .category-loader {
+      border-radius: var(--border-radius);
+    }
   }
 }
