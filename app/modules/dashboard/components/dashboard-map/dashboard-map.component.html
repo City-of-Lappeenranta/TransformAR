@@ -8,9 +8,9 @@
 
 <app-dashboard-data-point-detail
   @slideInAndOut
-  *ngIf="selectedDataPoint$ | async as selectedDataPoint"
+  *ngIf="selectedDataPoints() as selectedDataPoints"
   class="bottom-modal"
-  [dataPoint]="selectedDataPoint"
+  [dataPoints]="selectedDataPoints"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
 <app-dashboard-filter

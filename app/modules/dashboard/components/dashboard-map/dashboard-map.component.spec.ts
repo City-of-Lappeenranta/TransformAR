@@ -1,3 +1,4 @@
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
@@ -18,9 +19,8 @@ import { delay, firstValueFrom, of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
-import { DashboardMapComponent } from './dashboard-map.component';
 import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { DashboardMapComponent } from './dashboard-map.component';
 
 const NETWORK_REQUEST_TIME = 50;
 
@@ -74,7 +74,7 @@ describe('DashboardMapComponent', () => {
 
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
 
-      findComponent(MapComponent).markerClick.emit([1, 1]);
+      findComponent(MapComponent).markerClick.emit([100, 100]);
 
       await fixture.whenStable();
       fixture.detectChanges();
@@ -88,8 +88,12 @@ describe('DashboardMapComponent', () => {
         undefined,
         true,
         undefined,
+        undefined,
       ]);
-      expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_CONDITION_DATA_POINTS[0]);
+      expect(findComponent(DashboardDataPointDetailComponent).dataPoints).toEqual([
+        WEATHER_STORM_WATER_DATA_POINTS[2],
+        WEATHER_CONDITION_DATA_POINTS[2],
+      ]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
 
       await fixture.whenStable();
@@ -104,12 +108,13 @@ describe('DashboardMapComponent', () => {
         undefined,
         undefined,
         undefined,
+        undefined,
       ]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
   });
 
-  describe('weather condition data points', () => {
+  describe('data points', () => {
     it('should create markers for every point', async () => {
       const { findComponent, fixture } = await shallow.render();
 
@@ -156,6 +161,11 @@ describe('DashboardMapComponent', () => {
           {
             location: [8, 8],
             icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [100, 100],
+            icon: 'multiple-data-points.svg',
             color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
           },
         ]),
@@ -320,6 +330,13 @@ const WEATHER_CONDITION_DATA_POINTS: WeatherConditionDataPoint[] = [
     name: 'Lappeenranta Weather Hub',
     data: {},
   },
+  {
+    location: [100, 100],
+    type: DataPointType.WEATHER_CONDITIONS,
+    quality: DataPointQuality.FAIR,
+    name: 'Lappeenranta Multi Hub - Conditions',
+    data: {},
+  },
 ];
 
 const WEATHER_STORM_WATER_DATA_POINTS: WeatherStormWaterDataPoint[] = [
@@ -335,6 +352,13 @@ const WEATHER_STORM_WATER_DATA_POINTS: WeatherStormWaterDataPoint[] = [
     type: DataPointType.STORM_WATER,
     quality: DataPointQuality.FAIR,
     name: 'Lappeenranta Weather Hub',
+    data: {},
+  },
+  {
+    location: [100, 100],
+    type: DataPointType.STORM_WATER,
+    quality: DataPointQuality.FAIR,
+    name: 'Lappeenranta Multi Hub - Storm water',
     data: {},
   },
 ];

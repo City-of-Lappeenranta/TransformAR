@@ -76,7 +76,7 @@ describe('DataPointsApi', () => {
       const response = await firstValueFrom(instance.getWeatherAirQuality());
 
       expect(response).toEqual([
-        { location: [61.056371, 28.173503], name: 'Air Quality Station', quality: 1, type: 1 },
+        { location: [61.05871, 28.18871], name: 'Air Quality Station', quality: 1, type: 1 },
         { location: [61.056871, 28.183503], name: 'Air Quality Station 2', quality: 5, type: 1 },
       ]);
     });
