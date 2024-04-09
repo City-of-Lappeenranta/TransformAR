@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { DATA_POINT_QUALITY_COLOR_CHART, DATA_POINT_TYPE_ICON, DataPoint, DataPointType } from '@core/models/data-point';
@@ -110,7 +110,10 @@ export class DashboardMapComponent implements AfterViewInit {
       .getParking()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
+
     this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
+
+    effect(() => this._activeLocation() && this.showDataPointTypeFilter.set(false), { allowSignalWrites: true });
   }
 
   public ngAfterViewInit(): void {
