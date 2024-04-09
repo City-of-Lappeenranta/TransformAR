@@ -7,12 +7,14 @@
 <app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
 
 <app-dashboard-data-point-detail
+  @slideInAndOut
   *ngIf="selectedDataPoint$ | async as selectedDataPoint"
   class="bottom-modal"
   [dataPoint]="selectedDataPoint"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
 <app-dashboard-filter
+  @slideInAndOut
   class="bottom-modal"
   *ngIf="showDataPointTypeFilter()"
   [filter]="dataPointTypeFilter()"

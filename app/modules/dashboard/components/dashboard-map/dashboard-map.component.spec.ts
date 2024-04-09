@@ -14,12 +14,13 @@ import { LocationService, UserLocation } from '@core/services/location.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';
-import { delay, filter, firstValueFrom, of, take } from 'rxjs';
+import { delay, firstValueFrom, of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
 import { DashboardMapComponent } from './dashboard-map.component';
 import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 const NETWORK_REQUEST_TIME = 50;
 
@@ -47,6 +48,8 @@ describe('DashboardMapComponent', () => {
           location: [1, 1],
         } as UserLocation),
       })
+      .import(BrowserAnimationsModule)
+      .replaceModule(BrowserAnimationsModule, NoopAnimationsModule)
       .provideMock(SharedModule);
   });
 
