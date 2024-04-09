@@ -9,7 +9,7 @@
         <app-input-feedback-category
           *ngIf="(currentStep$ | async) === categoryStep.index"
           class="content"
-          [categories]="(categories$ | async) ?? []"
+          [categories]="categories()"
           [formControlName]="categoryStep.formControlName"
         >
         </app-input-feedback-category

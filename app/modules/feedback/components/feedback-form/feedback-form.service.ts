@@ -1,5 +1,5 @@
-import { Injectable, signal } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { Injectable, computed, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LatLong } from '@core/models/location';
 import { ServiceApi } from '@core/services/service-api.service';
@@ -39,26 +39,6 @@ export class FeedbackFormService {
     FeedbackFormChildComponent.CONTACT,
   ];
 
-  public serviceDictionary$$ = signal<ServiceDictionary>({});
-  public categories$ = toObservable(this.serviceDictionary$$).pipe(
-    map((serviceDictionary) => {
-      const categoryKeys = environment.feedbackCategoryLevels;
-      const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
-      const subCategory = this.feedbackForm.controls[categoryKeys[1]].value;
-
-      if (!mainCategory) {
-        return Object.keys(serviceDictionary).map((key) => ({ value: key }));
-      } else if (!subCategory) {
-        return Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
-      } else {
-        return serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({
-          label: name,
-          value: code,
-        }));
-      }
-    }),
-  );
-
   public feedbackForm: FeedbackFormType = new FormGroup({
     message: new FormGroup({
       message: new FormControl<string | null>(null, Validators.required),
@@ -79,14 +59,36 @@ export class FeedbackFormService {
     }),
   });
 
+  private mainCategoryChanges = toSignal(this.feedbackForm.controls[environment.feedbackCategoryLevels[0]].valueChanges);
+  private subCategoryChanges = toSignal(this.feedbackForm.controls[environment.feedbackCategoryLevels[1]].valueChanges);
+  private serviceDictionary = signal<ServiceDictionary>({});
+
+  public categories = computed(() => {
+    const serviceDictionary = this.serviceDictionary();
+    const mainCategory = this.mainCategoryChanges();
+    const subCategory = this.subCategoryChanges();
+
+    if (!mainCategory) {
+      return Object.keys(serviceDictionary).map((key) => ({ value: key }));
+    } else if (!subCategory) {
+      return Object.keys(serviceDictionary[mainCategory]).map((key) => ({ value: key }));
+    } else {
+      return serviceDictionary[mainCategory][subCategory].map(({ name, code }) => ({
+        label: name,
+        value: code,
+      }));
+    }
+  });
+
   public amountOfSteps = this.STEPS.length;
   private _currentStepSubject$ = new ReplaySubject<FeedbackFormChildComponent>(1);
   public currentStep$ = this._currentStepSubject$.asObservable();
   public currentChildComponent$ = this.currentStep$.pipe(map((i) => this.STEPS[i]));
 
-  public parentCategory$ = merge(
+  private categoryFormValueChanges$ = merge(
     ...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges),
-  ).pipe(
+  );
+  public parentCategory$ = this.categoryFormValueChanges$.pipe(
     map(() => {
       const categoryKeys = environment.feedbackCategoryLevels;
       const mainCategory = this.feedbackForm.controls[categoryKeys[0]].value;
@@ -114,14 +116,9 @@ export class FeedbackFormService {
     this.serviceApi
       .getServices()
       .pipe(takeUntilDestroyed())
-      .subscribe((value) => this.serviceDictionary$$.set(value));
+      .subscribe((value) => this.serviceDictionary.set(value));
 
-    merge(...environment.feedbackCategoryLevels.map((step) => this.feedbackForm.controls[step].valueChanges))
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => {
-        this.next();
-      });
-
+    this.handleFeedbackFormValueChanges();
     this._currentStepSubject$.next(0);
   }
 
@@ -166,6 +163,12 @@ export class FeedbackFormService {
       } else {
         this._currentStepSubject$.next(nextStep);
       }
+    });
+  }
+
+  private handleFeedbackFormValueChanges(): void {
+    this.categoryFormValueChanges$.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.next();
     });
   }
 
