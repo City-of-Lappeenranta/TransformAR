@@ -4,7 +4,7 @@ $paginatorBg: #ffffff;
 
 /// Text color of a paginator
 /// @group data
-$paginatorTextColor: $textSecondaryColor;
+$paginatorTextColor: $secondaryTextColor;
 
 /// Border of a paginator
 /// @group data
@@ -36,7 +36,7 @@ $paginatorElementBorder: 0 none;
 
 /// Icon color of a paginator element
 /// @group data
-$paginatorElementIconColor: $textSecondaryColor;
+$paginatorElementIconColor: $secondaryTextColor;
 
 /// Background of a paginator element in hover state
 /// @group data
@@ -48,7 +48,7 @@ $paginatorElementHoverBorderColor: transparent;
 
 /// Icon color of a paginator element in hover state
 /// @group data
-$paginatorElementIconHoverColor: $textSecondaryColor;
+$paginatorElementIconHoverColor: $secondaryTextColor;
 
 /// Border radius of a paginator element
 /// @group data
@@ -120,11 +120,11 @@ $tableHeaderCellTextHoverColor: $textColor;
 
 /// Icon color of a table header cell
 /// @group data
-$tableHeaderCellIconColor: $textSecondaryColor;
+$tableHeaderCellIconColor: $secondaryTextColor;
 
 /// Icon color of a table header cell in hover state
 /// @group data
-$tableHeaderCellIconHoverColor: $textSecondaryColor;
+$tableHeaderCellIconHoverColor: $secondaryTextColor;
 
 /// Background of a table header cell in sorted state
 /// @group data
@@ -287,7 +287,7 @@ $treeNodeChildrenPadding: 0 0 0 1rem;
 
 /// Color of a treenode data icon, $dataActionIconColor for the toggler element
 /// @group data
-$treeNodeIconColor: $textSecondaryColor;
+$treeNodeIconColor: $secondaryTextColor;
 
 /// Padding of a vertical timeline content element
 /// @group data

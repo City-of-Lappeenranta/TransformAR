@@ -1,20 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { environment } from '@environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { SharedModule } from './shared/shared.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SharedModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.sass',
+  styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'citizen-webapp';
+export class AppComponent implements OnInit {
+  @ViewChild(RouterOutlet) public outlet: RouterOutlet | undefined;
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  public title = 'citizen-webapp';
 
-  ngOnInit() {
+  public constructor(
+    private readonly primengConfig: PrimeNGConfig,
+    private readonly translateService: TranslateService,
+  ) {
+    translateService.use(environment.locale);
+  }
+
+  public get navigationHeaderTitle(): string {
+    return this.outlet?.activatedRouteData?.['navigationHeaderTitle'];
+  }
+
+  public ngOnInit(): void {
     this.primengConfig.ripple = true;
   }
 }

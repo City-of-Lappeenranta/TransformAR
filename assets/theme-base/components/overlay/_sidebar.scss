@@ -1,27 +1,20 @@
 .p-sidebar {
-    background: $overlayContentBg;
-    color: $panelContentTextColor;
-    border: $overlayContentBorder;
-    box-shadow: $overlayContainerShadow;
+  background-color: $primaryColor;
 
-    .p-sidebar-header {
-        padding: $panelHeaderPadding;
+  .p-sidebar-header {
+    padding: 0;
+  }
 
-        .p-sidebar-close,
-        .p-sidebar-icon {
-            @include action-icon();
-        }
+  .p-sidebar-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
 
-        & + .p-sidebar-content {
-            padding-top: 0;
-        }
-    }
-
-    .p-sidebar-content {
-        padding: $panelContentPadding;
-    }
-
-    .p-sidebar-footer {
-        padding: $panelHeaderPadding;
-    }
+  .p-sidebar-footer {
+    display: flex;
+    justify-content: center;
+    padding: 0 0 75px 0;
+  }
 }

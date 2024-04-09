@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  width: var(--icon-width);
+  height: var(--icon-height);
+
+  svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

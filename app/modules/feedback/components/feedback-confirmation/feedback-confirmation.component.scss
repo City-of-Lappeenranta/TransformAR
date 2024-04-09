@@ -1,0 +1,48 @@
+:host {
+  z-index: 999;
+  height: 100%;
+
+  main {
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+  }
+
+  .content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 32px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+
+    app-icon {
+      width: 78px;
+      height: 78px;
+    }
+
+    p {
+      margin-top: 16px;
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    small {
+      margin-top: 32px;
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+
+  .wave {
+    width: 100%;
+    color: var(--primary-color);
+  }
+
+  .button {
+    display: block;
+    margin: 48px 0 16px 0;
+  }
+}

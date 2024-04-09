@@ -8,6 +8,7 @@ node_modules/
 /tmp
 /out-tsc
 /bazel-out
+svg-icons.generated.ts
 
 # Node
 /node_modules
@@ -32,6 +33,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+/.nx/cache
 /.angular/cache
 .sass-cache/
 /connect.lock
@@ -39,7 +41,18 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+.env
 
 # System files
 .DS_Store
+/reports
 Thumbs.db
+
+# Storybook
+/storybook-static
+
+# Styles
+svg-icons.generated.ts
+theme.css
+theme.css.map
+

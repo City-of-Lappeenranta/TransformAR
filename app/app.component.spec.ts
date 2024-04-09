@@ -1,29 +1,39 @@
-import { TestBed } from '@angular/core/testing';
+import { Shallow } from 'shallow-render';
 import { AppComponent } from './app.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NavigationHeaderComponent } from '@shared/components/navigation/navigation-header/navigation-header.component';
+import { SharedModule } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
+  let shallow: Shallow<AppComponent>;
+
+  beforeEach(() => {
+    shallow = new Shallow(AppComponent)
+      .mock(TranslateService, { instant: jest.fn(), use: jest.fn() })
+      .provideMock(SharedModule);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  it('should render', async () => {
+    const component = await shallow.render();
+
+    expect(component).toBeDefined();
   });
 
-  it(`should have the 'citizen-webapp' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('citizen-webapp');
-  });
+  it('should set the correct navigation header depending on the route', async () => {
+    const title = 'Title';
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const { findComponent, instance, fixture } = await shallow.replaceModule(RouterModule, RouterTestingModule).render();
+
+    instance.outlet = {
+      activatedRouteData: {
+        navigationHeaderTitle: title,
+      },
+    } as any as RouterOutlet;
+
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, citizen-webapp');
+
+    expect(findComponent(NavigationHeaderComponent).title).toEqual(title);
   });
 });

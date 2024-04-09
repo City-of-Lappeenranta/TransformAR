@@ -1,0 +1,108 @@
+$z-index: 999;
+
+:host {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .bottom-modal {
+    z-index: $z-index - 1;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .search {
+    z-index: 998;
+    position: absolute;
+    top: calc(35px + 16px);
+    right: 0;
+    left: 0;
+    padding: 0 32px;
+  }
+
+  .actions {
+    z-index: $z-index - 2;
+    position: absolute;
+    bottom: 60px;
+    right: 32px;
+    gap: 16px;
+
+    .focus-location-button,
+    .filter-button {
+      width: 42px;
+      height: 42px;
+      padding: 9px;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      background-color: white;
+      border-radius: 50%;
+
+      &.has-permission {
+        color: white;
+        border: none;
+        background-color: var(--primary-color);
+      }
+
+      &.loading {
+        padding: 11px;
+      }
+    }
+
+    .filter-button {
+      border: none;
+      color: black;
+    }
+
+    .badge-button {
+      position: relative;
+
+      small {
+        position: absolute;
+        left: 24px;
+        top: 7px;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 12px;
+        height: 12px;
+        border-radius: 12px;
+        font-size: 9px;
+      }
+    }
+  }
+
+  .toast-content {
+    p::after {
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+      animation: ellipsis steps(4, end) 900ms infinite;
+      content: '\2026';
+      width: 0;
+    }
+  }
+}
+
+@keyframes location-loading {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;
+  }
+}

@@ -1,75 +1,158 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+small {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
 }
 
 .p-component {
-    font-family: var(--font-family);
-    font-feature-settings: var(--font-feature-settings, normal);
-    font-size: $fontSize;
-    font-weight: $fontWeight;
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings, normal);
+  font-size: $fontSize;
+  font-weight: $fontWeight;
 }
 
 .p-component-overlay {
-    background-color: $maskBg;
-    transition-duration: $transitionDuration;
+  background-color: $maskBg;
+  transition-duration: $transitionDuration;
 }
 
-.p-disabled, .p-component:disabled {
-    opacity: $disabledOpacity;
+.p-disabled,
+.p-component:disabled {
+  opacity: $disabledOpacity;
 }
 
 .p-error {
-    color: $errorColor;
+  color: $errorColor;
 }
 
 .p-text-secondary {
-    color: $textSecondaryColor;
+  color: $secondaryTextColor;
 }
 
 .pi {
-    font-size: $primeIconFontSize;
+  font-size: $primeIconFontSize;
 }
 
 .p-icon {
-    width: $primeIconFontSize;
-    height: $primeIconFontSize;
+  width: $primeIconFontSize;
+  height: $primeIconFontSize;
 }
 
 .p-link {
-    font-family: var(--font-family);
-    font-feature-settings: var(--font-feature-settings, normal);
-    font-size: $fontSize;
-    border-radius: $borderRadius;
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings, normal);
+  font-size: $fontSize;
+  border-radius: $borderRadius;
 
-    &:focus-visible {
-        @include focused();
-    }
+  &:focus-visible {
+    @include focused();
+  }
 }
 
 .p-component-overlay-enter {
-    animation: p-component-overlay-enter-animation 150ms forwards;
+  animation: p-component-overlay-enter-animation 150ms forwards;
 }
 
 .p-component-overlay-leave {
-    animation: p-component-overlay-leave-animation 150ms forwards;
+  animation: p-component-overlay-leave-animation 150ms forwards;
 }
 
 .p-component-overlay {
-    @keyframes p-component-overlay-enter-animation {
-        from {
-            background-color: transparent;
-        }
-        to {
-            background-color: var(--maskbg);
-        }
+  @keyframes p-component-overlay-enter-animation {
+    from {
+      background-color: transparent;
     }
+    to {
+      background-color: var(--maskbg);
+    }
+  }
 
-    @keyframes p-component-overlay-leave-animation {
-        from {
-            background-color: var(--maskbg);
-        }
-        to {
-            background-color: transparent;
-        }
+  @keyframes p-component-overlay-leave-animation {
+    from {
+      background-color: var(--maskbg);
     }
+    to {
+      background-color: transparent;
+    }
+  }
+}
+
+.shadow-sm {
+  box-shadow: 0px 1px 2px 0px #1018280f;
+}
+
+.shadow-md {
+  box-shadow:
+    0px 4px 8px -2px rgba(16, 24, 40, 0.1),
+    0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+}
+
+.p-toast {
+  min-width: 275px !important;
+  max-width: 90vw !important;
+}
+
+.toast-content {
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: white;
+}
+
+.search-input {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 999;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    background-color: #667085;
+    mask-image: url('/assets/icons/search.svg');
+    mask-size: cover;
+  }
+
+  input {
+    padding-left: 42px;
+  }
 }

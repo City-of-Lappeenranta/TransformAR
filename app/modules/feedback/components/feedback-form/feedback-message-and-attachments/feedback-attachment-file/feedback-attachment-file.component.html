@@ -1,0 +1,13 @@
+<div class="file-content flex-row full-width">
+  <div class="file-details flex-row full-width">
+    <h5>{{ name }}</h5>
+    @if (size) {
+      <p>{{ size }}</p>
+    }
+  </div>
+  @if (loading) {
+    <p-progressBar class="full-width" [style]="{ height: '4px' }" mode="indeterminate"></p-progressBar>
+  }
+  <app-icon class="close" [icon]="getIcon()" (click)="remove.emit()"></app-icon>
+</div>
+<p-divider></p-divider>
