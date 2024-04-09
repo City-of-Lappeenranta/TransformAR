@@ -1,5 +1,5 @@
-import { trigger, transition, style, animate } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import {
@@ -16,9 +16,9 @@ import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
+import { groupBy } from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, filter, map, take, withLatestFrom } from 'rxjs';
-import { groupBy } from 'lodash';
 
 //TODO: move data fetching to dashboard-map.service
 
@@ -55,9 +55,15 @@ export class DashboardMapComponent implements AfterViewInit {
   );
 
   private _activeLocation = signal<LatLong | undefined>(undefined);
-  public selectedDataPoints$: Observable<DataPoint[] | null> = toObservable(this._activeLocation).pipe(
-    map((latLong) => (latLong && this._allDataPoints().filter((point) => isSameLocation(point.location, latLong))) ?? null),
-  );
+  public selectedDataPoints = computed(() => {
+    const latLong = this._activeLocation();
+
+    if (latLong) {
+      return this._allDataPoints().filter((point) => isSameLocation(point.location, latLong));
+    }
+
+    return null;
+  });
 
   public dataPointMarkers$: Observable<Marker[]> = combineLatest([
     this._filteredDataPoints$,

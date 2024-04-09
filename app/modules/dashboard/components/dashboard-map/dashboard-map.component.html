@@ -8,7 +8,7 @@
 
 <app-dashboard-data-point-detail
   @slideInAndOut
-  *ngIf="selectedDataPoints$ | async as selectedDataPoints"
+  *ngIf="selectedDataPoints() as selectedDataPoints"
   class="bottom-modal"
   [dataPoints]="selectedDataPoints"
   (close)="onDataPointClose()"

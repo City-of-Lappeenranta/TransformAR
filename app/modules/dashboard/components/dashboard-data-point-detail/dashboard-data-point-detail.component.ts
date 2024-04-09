@@ -17,7 +17,7 @@ import { capitalize } from '@shared/utils/string-utils';
   styleUrls: ['./dashboard-data-point-detail.component.scss'],
 })
 export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
-  @Input() public dataPoints: DataPoint[] = [];
+  @Input({ required: true }) public dataPoints: DataPoint[] = [];
 
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
