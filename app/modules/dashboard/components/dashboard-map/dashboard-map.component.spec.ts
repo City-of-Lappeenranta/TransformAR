@@ -1,21 +1,28 @@
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
   DATA_POINT_TYPE_ICON,
   DataPointQuality,
   DataPointType,
-  WeatherDataPoint,
+  ParkingDataPoint,
+  WeatherAirQualityDataPoint,
+  WeatherConditionDataPoint,
+  WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
 import { LatLong } from '@core/models/location';
-import { DataPointsApi } from '@core/services/datapoints-api.service';
+import { DataPointsApi } from '@core/services/datapoints-api/datapoints-api.service';
 import { LocationService, UserLocation } from '@core/services/location.service';
+import { TranslateService } from '@ngx-translate/core';
 import { MapComponent } from '@shared/components/map/map.component';
 import { MessageService, SharedModule } from 'primeng/api';
 import { delay, firstValueFrom, of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
+import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
 import { DashboardMapComponent } from './dashboard-map.component';
-import { TranslateService } from '@ngx-translate/core';
+
+const NETWORK_REQUEST_TIME = 50;
 
 describe('DashboardMapComponent', () => {
   let shallow: Shallow<DashboardMapComponent>;
@@ -25,7 +32,14 @@ describe('DashboardMapComponent', () => {
       .mock(TranslateService, { instant: jest.fn })
       .mock(MessageService, { add: jest.fn(), clear: jest.fn() })
       .mock(DataPointsApi, {
-        getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS)),
+        getWeatherConditions: jest.fn().mockReturnValue(of(WEATHER_CONDITION_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME))),
+        getWeatherStormWater: jest
+          .fn()
+          .mockReturnValue(of(WEATHER_STORM_WATER_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 2))),
+        getWeatherAirQuality: jest
+          .fn()
+          .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
+        getParking: jest.fn().mockReturnValue(of(PARKING_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
       })
       .mock(LocationService, {
         locationPermissionState$: of('granted' as PermissionState),
@@ -34,22 +48,19 @@ describe('DashboardMapComponent', () => {
           location: [1, 1],
         } as UserLocation),
       })
+      .import(BrowserAnimationsModule)
+      .replaceModule(BrowserAnimationsModule, NoopAnimationsModule)
       .provideMock(SharedModule);
   });
 
   describe('data fetching', () => {
     it('should show a loader when fetching data and clear when all data has been loaded', async () => {
-      jest.useFakeTimers();
-      const { inject } = await shallow
-        .mock(DataPointsApi, {
-          getWeatherDataPoints: jest.fn().mockReturnValue(of(WEATHER_DATA_POINTS).pipe(delay(2000))),
-        })
-        .render();
+      const { inject } = await shallow.render();
 
       const messageService = inject(MessageService);
       expect(messageService.add).toHaveBeenNthCalledWith(1, expect.objectContaining({ key: 'loading' }));
 
-      jest.advanceTimersByTime(2000);
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
 
       expect(messageService.clear).toHaveBeenNthCalledWith(1, 'loading');
     });
@@ -57,38 +68,108 @@ describe('DashboardMapComponent', () => {
 
   describe('markers', () => {
     it('should show marker detail on click and close on close', async () => {
-      const { findComponent, fixture } = await shallow.render();
+      const { fixture, findComponent } = await shallow.render();
+
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
+
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
 
-      findComponent(MapComponent).markerClick.emit([1, 1]);
+      findComponent(MapComponent).markerClick.emit([100, 100]);
+
+      await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([true, false]);
-      expect(findComponent(DashboardDataPointDetailComponent).dataPoint).toBe(WEATHER_DATA_POINTS[0]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+        undefined,
+        undefined,
+      ]);
+      expect(findComponent(DashboardDataPointDetailComponent).dataPoints).toEqual([
+        WEATHER_STORM_WATER_DATA_POINTS[2],
+        WEATHER_CONDITION_DATA_POINTS[2],
+      ]);
       findComponent(DashboardDataPointDetailComponent).close.emit();
+
+      await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([false, false]);
+      expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ]);
       expect(findComponent(DashboardDataPointDetailComponent)).toHaveFound(0);
     });
   });
 
-  describe('weather data points', () => {
+  describe('data points', () => {
     it('should create markers for every point', async () => {
-      const { findComponent } = await shallow.render();
+      const { findComponent, fixture } = await shallow.render();
 
-      expect(findComponent(MapComponent).markers).toEqual([
-        {
-          location: [1, 1],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
-        },
-        {
-          location: [2, 2],
-          icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER],
-          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
-        },
-      ]);
+      jest.advanceTimersByTime(NETWORK_REQUEST_TIME);
+      fixture.detectChanges();
+
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [1, 1],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [2, 2],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [3, 3],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [4, 4],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [5, 5],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [6, 6],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+          },
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [100, 100],
+            icon: 'multiple-data-points.svg',
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
     });
   });
 
@@ -124,7 +205,7 @@ describe('DashboardMapComponent', () => {
         })
         .render();
 
-      find('.focus-location').triggerEventHandler('click');
+      find('.focus-location-button').triggerEventHandler('click');
 
       expect(await firstValueFrom(instance.mapCenter$)).toEqual(currentLocation);
     });
@@ -142,43 +223,174 @@ describe('DashboardMapComponent', () => {
 
       jest.spyOn(window, 'alert').mockImplementation(jest.fn);
 
-      find('.focus-location').triggerEventHandler('click');
+      find('.focus-location-button').triggerEventHandler('click');
       await fixture.whenStable();
 
       expect(window.alert).toHaveBeenCalled();
     });
   });
+
+  describe('filter', () => {
+    it('opening and selecting a filter should filter the markers', async () => {
+      const { find, findComponent, fixture } = await shallow.render();
+
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [1, 1],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [2, 2],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.WEATHER_CONDITIONS],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [3, 3],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [4, 4],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.STORM_WATER],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.FAIR],
+          },
+          {
+            location: [5, 5],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+          },
+          {
+            location: [6, 6],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.AIR_QUALITY],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.VERY_POOR],
+          },
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
+
+      expect(find('.badge')).toHaveFound(0);
+      find('.filter-button').triggerEventHandler('click');
+      fixture.detectChanges();
+
+      const filterComponent = findComponent(DashboardFilterComponent);
+      expect(filterComponent).toHaveFound(1);
+
+      filterComponent.toggle.emit(DataPointType.WEATHER_CONDITIONS);
+      filterComponent.toggle.emit(DataPointType.PARKING);
+      filterComponent.toggle.emit(DataPointType.WEATHER_CONDITIONS); //toggled off
+      fixture.detectChanges();
+
+      expect(findComponent(MapComponent).markers).toEqual(
+        expect.arrayContaining([
+          {
+            location: [7, 7],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+          {
+            location: [8, 8],
+            icon: DATA_POINT_TYPE_ICON[DataPointType.PARKING],
+            color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+          },
+        ]),
+      );
+
+      filterComponent.close.emit();
+      fixture.detectChanges();
+
+      expect(findComponent(DashboardFilterComponent)).toHaveFound(0);
+      expect(find('.badge').nativeElement.innerHTML).toBe('1');
+    });
+  });
 });
 
-const WEATHER_DATA_POINTS: WeatherDataPoint[] = [
+const WEATHER_CONDITION_DATA_POINTS: WeatherConditionDataPoint[] = [
   {
     location: [1, 1],
-    type: DataPointType.WEATHER,
+    type: DataPointType.WEATHER_CONDITIONS,
     quality: DataPointQuality.GOOD,
-    dataSourceId: 'TECONER',
-    data: {
-      airTemperature: 0,
-      dewPoint: 0,
-      state: 'state',
-      windSpeed: 0,
-      relativeHumidity: 0,
-      iceLayerThickness: 0,
-      waterLayerThickness: 0,
-    },
+    name: 'Lappeenranta Weather Station',
+    data: {},
   },
   {
     location: [2, 2],
-    type: DataPointType.WEATHER,
+    type: DataPointType.WEATHER_CONDITIONS,
     quality: DataPointQuality.FAIR,
-    dataSourceId: 'TECONER',
-    data: {
-      airTemperature: 0,
-      dewPoint: 0,
-      state: 'state',
-      windSpeed: 0,
-      relativeHumidity: 0,
-      iceLayerThickness: 0,
-      waterLayerThickness: 0,
-    },
+    name: 'Lappeenranta Weather Hub',
+    data: {},
+  },
+  {
+    location: [100, 100],
+    type: DataPointType.WEATHER_CONDITIONS,
+    quality: DataPointQuality.FAIR,
+    name: 'Lappeenranta Multi Hub - Conditions',
+    data: {},
+  },
+];
+
+const WEATHER_STORM_WATER_DATA_POINTS: WeatherStormWaterDataPoint[] = [
+  {
+    location: [3, 3],
+    type: DataPointType.STORM_WATER,
+    quality: DataPointQuality.GOOD,
+    name: 'Lappeenranta Weather Station',
+    data: {},
+  },
+  {
+    location: [4, 4],
+    type: DataPointType.STORM_WATER,
+    quality: DataPointQuality.FAIR,
+    name: 'Lappeenranta Weather Hub',
+    data: {},
+  },
+  {
+    location: [100, 100],
+    type: DataPointType.STORM_WATER,
+    quality: DataPointQuality.FAIR,
+    name: 'Lappeenranta Multi Hub - Storm water',
+    data: {},
+  },
+];
+
+const WEATHER_AIR_QUALITY_DATA_POINTS: WeatherAirQualityDataPoint[] = [
+  {
+    location: [5, 5],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.GOOD,
+    name: 'Air Quality Station 1',
+  },
+  {
+    location: [6, 6],
+    type: DataPointType.AIR_QUALITY,
+    quality: DataPointQuality.VERY_POOR,
+    name: 'Air Quality Station 2',
+  },
+];
+
+const PARKING_DATA_POINTS: ParkingDataPoint[] = [
+  {
+    location: [7, 7],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'City Parking',
+    availableSpots: 1,
+  },
+  {
+    location: [8, 8],
+    type: DataPointType.PARKING,
+    quality: DataPointQuality.DEFAULT,
+    name: 'Station Parking',
+    availableSpots: 2,
   },
 ];

@@ -1,7 +1,14 @@
 {
   "DASHBOARD": {
     "DATA_POINTS": {
-      "WEATHER": {
+      "TYPE": {
+        "WEATHER_CONDITIONS": "Conditions",
+        "AIR_QUALITY": "Air quality",
+        "STORM_WATER": "Storm water",
+        "PARKING": "Parking",
+        "ROAD_WORKS": "Road works"
+      },
+      "WEATHER_CONDITION": {
         "DEWPOINT": "Dew point",
         "HUMIDITY": "Humidity",
         "ICELAYERTHICKNESS": "Ice layer thickness",
@@ -11,10 +18,37 @@
         "EXTERNALSENSORTEMPERATURE": "External sensor temperature",
         "WATERLAYERTHICKNESS": "Water layer thickness",
         "WINDSPEED": "Wind speed",
-        "MOIST": "Moist",
         "DRY": "Dry",
-        "SNOW": "Snow"
+        "MOIST": "Moist",
+        "WET": "Wet",
+        "SLUSHY": "Slushy",
+        "SNOWY": "Snowy",
+        "Icy": "Icy"
+      },
+      "STORM_WATER": {
+        "WATERLEVEL": "Water level",
+        "WATERTEMPERATURE": "Water temperature",
+        "ELECTRICALCONDUCTIVITY": "Electrical conductivity",
+        "TURBIDITY": "Turbidity",
+        "FLOWRATE": "Flow rate",
+        "FILLLEVEL": "Fill level"
+      },
+      "AIR_QUALITY": {
+        "TITLE": "Air quality"
+      },
+      "QUALITY": {
+        "GOOD": "Good",
+        "SATISFACTORY": "Satisfactory",
+        "FAIR": "Fair",
+        "POOR": "Poor",
+        "VERY_POOR": "Very poor"
+      },
+      "PARKING": {
+        "AVAILABLE_SPOTS": "Available parking places"
       }
+    },
+    "FILTER": {
+      "TITLE": "Map view"
     }
   },
   "FEEDBACK": {

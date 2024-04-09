@@ -22,6 +22,7 @@ import { FeedbackMessageAndAttachmentComponent } from './components/feedback-for
 import { FeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/feedback-category/feedback-category.component';
 import { InputFeedbackCategoryComponent } from './components/feedback-form/input-feedback-category/input-feedback-category.component';
 import { FeedbackRoutingModule } from './feedback.routing';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { FeedbackRoutingModule } from './feedback.routing';
     InputTextModule,
     DividerModule,
     ToastModule,
+    SkeletonModule,
   ],
   exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
   providers: [MessageService],

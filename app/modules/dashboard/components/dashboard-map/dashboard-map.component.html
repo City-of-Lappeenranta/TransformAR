@@ -1,19 +1,34 @@
 <app-map
   class="full-height"
   [center$]="mapCenter$"
-  [markers]="weatherDataPointMarkers"
+  [markers]="(dataPointMarkers$ | async) ?? []"
   (markerClick)="onMarkerClick($event)"
 ></app-map>
 <app-search-location-input class="search" [formControl]="locationFormControl"></app-search-location-input>
+
 <app-dashboard-data-point-detail
-  *ngIf="selectedDataPoint$ | async as selectedDataPoint"
-  class="data-point-detail"
-  [dataPoint]="selectedDataPoint"
+  @slideInAndOut
+  *ngIf="selectedDataPoints() as selectedDataPoints"
+  class="bottom-modal"
+  [dataPoints]="selectedDataPoints"
   (close)="onDataPointClose()"
 ></app-dashboard-data-point-detail>
-<div class="actions">
+<app-dashboard-filter
+  @slideInAndOut
+  class="bottom-modal"
+  *ngIf="showDataPointTypeFilter()"
+  [filter]="dataPointTypeFilter()"
+  (close)="onFilterClose()"
+  (toggle)="onFilterToggle($event)"
+></app-dashboard-filter>
+
+<div class="actions flex-column">
+  <div class="badge-button">
+    <small class="badge" *ngIf="dataPointTypeFilter().length > 0">{{ dataPointTypeFilter().length }}</small>
+    <app-icon class="filter-button shadow-md" icon="layers" (click)="onFilterOpen()"></app-icon>
+  </div>
   <app-icon
-    class="focus-location"
+    class="focus-location-button shadow-md"
     [class.loading]="locationLoading$ | async"
     [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
     [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"

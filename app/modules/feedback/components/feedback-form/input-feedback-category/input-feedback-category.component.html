@@ -1,13 +1,19 @@
 <div class="categories flex-column" [class.icons]="hasIcons">
-  @for (category of categoriesToShow; track category; let index = $index) {
-    <app-feedback-category
-      [withColor]="withColor"
-      [selected]="category.selected"
-      [index]="index"
-      [icon]="category?.icon"
-      (click)="toggleCategory(index)"
-    >
-      {{ category.label ?? category.value }}
-    </app-feedback-category>
+  @if (categoriesToShow.length > 0) {
+    @for (category of categoriesToShow; track category; let index = $index) {
+      <app-feedback-category
+        [withColor]="withColor"
+        [selected]="category.selected"
+        [index]="index"
+        [icon]="category?.icon"
+        (click)="toggleCategory(index)"
+      >
+        {{ category.label ?? category.value }}
+      </app-feedback-category>
+    }
+  } @else {
+    @for (step of [].constructor(4); track step) {
+      <p-skeleton class="category-loader" height="56px"></p-skeleton>
+    }
   }
 </div>

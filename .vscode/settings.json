@@ -32,5 +32,9 @@
   },
   "[groovy]": {
     "editor.defaultFormatter": "NicolasVuillamy.vscode-groovy-lint"
-  } // set as "true" to run 'prettier' last not first
+  },
+  "sonarlint.connectedMode.project": {
+    "connectionId": "pegusdigital",
+    "projectKey": "pegusapps_citizen-webapp"
+  }
 }
