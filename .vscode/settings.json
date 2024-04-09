@@ -30,6 +30,9 @@
   "[typescript]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
+  "[groovy]": {
+    "editor.defaultFormatter": "NicolasVuillamy.vscode-groovy-lint"
+  },
   "sonarlint.connectedMode.project": {
     "connectionId": "pegusdigital",
     "projectKey": "pegusapps_citizen-webapp"
