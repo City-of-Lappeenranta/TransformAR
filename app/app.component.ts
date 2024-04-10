@@ -21,6 +21,8 @@ export class AppComponent implements OnInit {
     private readonly primengConfig: PrimeNGConfig,
     private readonly translateService: TranslateService,
   ) {
+    throw Error('intentional Sentry test');
+
     translateService.use(environment.locale);
   }
 

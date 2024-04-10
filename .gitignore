@@ -53,3 +53,6 @@ svg-icons.generated.ts
 theme.css
 theme.css.map
 
+
+# Sentry Config File
+.sentryclirc

@@ -15,7 +15,7 @@
     "build": "ng build",
     "build:development": "ng build",
     "build:staging": "ng build --configuration production",
-    "build:production": "ng build --configuration production",
+    "build:production": "ng build --configuration production && npm run sentry:sourcemaps",
     "test": "jest",
     "test:ci": "npm run generate-icons; jest --ci --collect-coverage ",
     "lint": "npm run lint:ts && npm run lint:styles",
@@ -31,7 +31,8 @@
     "prestorybook": "npm run theme; npm run generate-icons",
     "storybook": "ng run citizen-webapp:storybook",
     "build-storybook": "ng run citizen-webapp:build-storybook",
-    "sonar-scanner": "sonar-scanner"
+    "sonar-scanner": "sonar-scanner",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org pegusapps --project citizen-webapp ./dist/citizen-webapp && sentry-cli sourcemaps upload --org pegusapps --project citizen-webapp ./dist/citizen-webapp"
   },
   "private": true,
   "dependencies": {
@@ -46,6 +47,8 @@
     "@angular/service-worker": "^17.1.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "@sentry/angular-ivy": "^7.109.0",
+    "@sentry/cli": "^2.31.0",
     "browser-image-compression": "^2.0.2",
     "concurrently": "^8.2.2",
     "eslint-plugin-html": "^8.0.0",
