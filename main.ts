@@ -5,8 +5,6 @@ import { environment } from '@environments/environment';
 import * as sentry from '@sentry/angular-ivy';
 
 if (environment.production) {
-  console.log('setting up Sentry');
-
   sentry.init({
     dsn: environment.sentryDsn,
     integrations: [
