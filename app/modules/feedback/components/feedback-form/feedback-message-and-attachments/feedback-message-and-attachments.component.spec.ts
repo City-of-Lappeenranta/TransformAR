@@ -107,7 +107,6 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
 
     const file = new File([''], fileName, { type: 'image/jpeg' });
     Object.defineProperty(file, 'size', { value: convertMegabytesToBytes(4) });
-
     instance.onFileInput({
       target: { files: [file] },
     } as any);
