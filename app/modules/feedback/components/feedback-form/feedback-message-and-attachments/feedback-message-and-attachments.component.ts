@@ -48,9 +48,10 @@ export class FeedbackMessageAndAttachmentComponent {
           loading: true,
         });
 
-        const compressedFile = await this.compressFile(file);
+        const compressedBlob = await this.compressFile(file);
 
-        if (this.hasValidFileSize(compressedFile)) {
+        if (this.hasValidFileSize(compressedBlob)) {
+          const compressedFile = new File([compressedBlob], file.name, { type: file.type });
           this.files = this.files.map((value) => ({
             ...value,
             size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
