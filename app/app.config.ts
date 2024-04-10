@@ -1,11 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, isDevMode } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, isDevMode } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { Router, provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-import { providei18n } from './providers/i18n';
-import { routes } from './app.routes';
 import * as sentry from '@sentry/angular-ivy';
+import { routes } from './app.routes';
+import { providei18n } from './providers/i18n';
 
 export const appConfig: ApplicationConfig = {
   providers: [
