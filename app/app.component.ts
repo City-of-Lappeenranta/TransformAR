@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { SharedModule } from './shared/shared.module';
+import * as sentry from '@sentry/angular-ivy';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
   public title = 'citizen-webapp';
 
   public constructor(
+    private readonly trace: sentry.TraceService,
     private readonly primengConfig: PrimeNGConfig,
     private readonly translateService: TranslateService,
   ) {

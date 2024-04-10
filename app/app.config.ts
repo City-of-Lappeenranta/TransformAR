@@ -24,18 +24,12 @@ export const appConfig: ApplicationConfig = {
     {
       provide: ErrorHandler,
       useValue: sentry.createErrorHandler({
-        showDialog: true,
+        showDialog: false,
       }),
     },
     {
       provide: sentry.TraceService,
       deps: [Router],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      deps: [sentry.TraceService],
-      multi: true,
     },
   ],
 };
