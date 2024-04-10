@@ -48,7 +48,8 @@ export class FeedbackMessageAndAttachmentComponent {
           loading: true,
         });
 
-        const compressedFile = await this.compressFile(file);
+        const compressedBlob = await this.compressFile(file);
+        const compressedFile = new File([compressedBlob], file.name, { type: file.type });
 
         if (this.hasValidFileSize(compressedFile)) {
           this.files = this.files.map((value) => ({
