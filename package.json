@@ -13,7 +13,7 @@
     "prebuild:production": "npm run theme; npm run generate-icons",
     "build": "ng build",
     "build:development": "ng build",
-    "build:production": "ng build --configuration production && npm run sentry:sourcemaps",
+    "build:production": "ng build --configuration production",
     "test": "jest",
     "test:ci": "npm run generate-icons; jest --ci --collect-coverage ",
     "lint": "npm run lint:ts && npm run lint:styles",
@@ -29,8 +29,7 @@
     "prestorybook": "npm run theme; npm run generate-icons",
     "storybook": "ng run citizen-webapp:storybook",
     "build-storybook": "ng run citizen-webapp:build-storybook",
-    "sonar-scanner": "sonar-scanner",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org pegusapps --project citizen-webapp ./dist/citizen-webapp && sentry-cli sourcemaps upload --org pegusapps --project citizen-webapp ./dist/citizen-webapp"
+    "sonar-scanner": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
