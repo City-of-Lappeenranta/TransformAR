@@ -1,19 +1,21 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ServiceDictionary } from '@core/models/service-api';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY, firstValueFrom, of } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../core.module';
 import { ServiceApi, ServiceListApiResponse } from './service-api.service';
 import { LatLong } from '@core/models/location';
+import { environment } from '@environments/environment';
 
 describe('ServiceApi', () => {
   let shallow: Shallow<ServiceApi>;
 
   beforeEach(() => {
     shallow = new Shallow(ServiceApi, CoreModule)
-      .replaceModule(HttpClientModule, HttpClientTestingModule)
-      .mock(HttpClient, { get: () => of(EMPTY), post: () => of(EMPTY) });
+      .import(HttpClientTestingModule)
+      .dontMock(HttpClientTestingModule)
+      .replaceModule(HttpClientModule, HttpClientTestingModule);
   });
 
   describe('getServices', () => {
@@ -29,9 +31,9 @@ describe('ServiceApi', () => {
 
   describe('postServiceRequest', () => {
     const serviceCode = 'streets';
-    const description = 'lamps';
-    const files = [new File([''], 'fileName.jpeg', { type: 'image/jpeg' })];
-    const location = [0, 0] as LatLong;
+    const message = 'this is my feedback message';
+    const files = [new File([''], '1.jpeg', { type: 'image/jpeg' }), new File([''], '2.jpeg', { type: 'image/jpeg' })];
+    const location = [1, 2] as LatLong;
     const email = 'john.doe@verhaert.digital';
     const firstName = 'John';
     const lastName = 'Doe';
@@ -43,9 +45,9 @@ describe('ServiceApi', () => {
       expect(() =>
         instance.postServiceRequest({
           serviceCode: null,
-          description,
-          files,
           location,
+          message,
+          files,
           email,
           firstName,
           lastName,
@@ -54,32 +56,15 @@ describe('ServiceApi', () => {
       ).toThrow('service_code is missing');
     });
 
-    it('should throw an error that the description is missing when the description is missing', () => {
-      const { instance } = shallow.createService();
-
-      expect(() =>
-        instance.postServiceRequest({
-          serviceCode,
-          description: null,
-          files,
-          location,
-          email,
-          firstName,
-          lastName,
-          phone,
-        }),
-      ).toThrow('description is missing');
-    });
-
     it('should throw an error that the location is missing when the location is missing', () => {
       const { instance } = shallow.createService();
 
       expect(() =>
         instance.postServiceRequest({
-          serviceCode,
-          description,
-          files,
           location: null,
+          serviceCode,
+          message,
+          files,
           email,
           firstName,
           lastName,
@@ -88,13 +73,27 @@ describe('ServiceApi', () => {
       ).toThrow('location is missing');
     });
 
-    it('should return the email as response when the post request is successful when the email was set', () => {
-      const { instance } = shallow.createService();
+    it('should post with correct data', async () => {
+      const { instance, inject } = shallow.createService();
+      const httpTestingController = inject(HttpTestingController);
+
+      const data = {
+        service_code: 'streets',
+        description: 'this is my feedback message',
+        'media[]': expect.any(File),
+        lat: '1',
+        long: '2',
+        email: 'john.doe@verhaert.digital',
+        first_name: 'John',
+        last_name: 'Doe',
+        phone: '+32412345678',
+        api_key: expect.any(String),
+      };
 
       instance
         .postServiceRequest({
           serviceCode,
-          description,
+          message,
           files,
           location,
           email,
@@ -102,28 +101,12 @@ describe('ServiceApi', () => {
           lastName,
           phone,
         })
-        .subscribe((response?: string) => {
-          expect(response).toEqual(email);
-        });
-    });
+        .subscribe();
 
-    it('should return an empty string as response when the post request is successful when the email was not set', () => {
-      const { instance } = shallow.createService();
-
-      instance
-        .postServiceRequest({
-          serviceCode,
-          description,
-          files,
-          location,
-          email: null,
-          firstName,
-          lastName,
-          phone,
-        })
-        .subscribe((response?: string) => {
-          expect(response).toEqual('');
-        });
+      const req = httpTestingController.expectOne(`${environment.serviceApiUrl}/requests.json?jurisdiction_id=citizenapp`);
+      expect(req.request.method).toBe('POST');
+      expect(Object.fromEntries([...req.request.body])).toEqual(data);
+      req.flush('');
     });
   });
 });
