@@ -74,7 +74,7 @@ describe('FeedbackFormComponent', () => {
     find(nextButtonSelector).triggerEventHandler('click', {});
 
     expect(inject(ServiceApi).postServiceRequest).toHaveBeenCalledWith({
-      description,
+      message,
       serviceCode,
       files,
       location,

@@ -184,14 +184,14 @@ export class FeedbackFormService {
 
   private postServiceRequest(): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { service_code, description, message, location, contact } = this.feedbackForm.controls;
+    const { service_code, message, location, contact } = this.feedbackForm.controls;
 
     this._isNextInProgressSubject$.next(true);
 
     this.serviceApi
       .postServiceRequest({
         serviceCode: service_code.value,
-        description: description.value,
+        message: message.controls.message.value,
         files: message.controls.files.value,
         location: location.value,
         email: contact.controls.email.value,
