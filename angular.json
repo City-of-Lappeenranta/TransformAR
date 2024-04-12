@@ -29,7 +29,8 @@
               "node_modules/primeng/resources/primeng.min.css",
               "styles.sass"
             ],
-            "scripts": []
+            "scripts": [],
+            "sourceMap": true
           },
           "configurations": {
             "production": {
