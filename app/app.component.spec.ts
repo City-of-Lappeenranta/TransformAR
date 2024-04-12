@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NavigationHeaderComponent } from '@shared/components/navigation/navigation-header/navigation-header.component';
 import { SharedModule } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { TraceService } from '@sentry/angular-ivy';
 
 describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
@@ -12,6 +13,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(AppComponent)
       .mock(TranslateService, { instant: jest.fn(), use: jest.fn() })
+      .mock(TraceService, {})
       .provideMock(SharedModule);
   });
 
