@@ -29,7 +29,8 @@
     "prestorybook": "npm run theme; npm run generate-icons",
     "storybook": "ng run citizen-webapp:storybook",
     "build-storybook": "ng run citizen-webapp:build-storybook",
-    "sonar-scanner": "sonar-scanner"
+    "sonar-scanner": "sonar-scanner",
+    "sentry-cli": "sentry-cli"
   },
   "private": true,
   "dependencies": {
