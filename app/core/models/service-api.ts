@@ -10,7 +10,7 @@ export type ServiceDictionary = Record<string, Record<string, Service[]>>;
 
 export interface PostServiceRequestProperties {
   serviceCode: string | null;
-  description: string | null;
+  message: string | null;
   files: File[];
   location: LatLong | null;
   email: string | null;

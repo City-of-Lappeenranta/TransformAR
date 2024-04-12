@@ -25,7 +25,7 @@ export class ServiceApi {
 
   public postServiceRequest({
     serviceCode,
-    description,
+    message,
     files,
     location,
     email,
@@ -38,18 +38,13 @@ export class ServiceApi {
     if (!serviceCode) {
       throw new Error('service_code is missing');
     }
-    if (!description) {
-      throw new Error('description is missing');
-    }
+
     if (!location) {
       throw new Error('location is missing');
     }
 
+    formData.append('api_key', this.apiKey);
     formData.append('service_code', serviceCode);
-    formData.append('description', description);
-
-    files?.forEach((file) => formData.append('media[]', file));
-
     formData.append('lat', location[0].toString());
     formData.append('long', location[1].toString());
 
@@ -65,8 +60,12 @@ export class ServiceApi {
     if (phone) {
       formData.append('phone', phone);
     }
-
-    formData.append('api_key', this.apiKey);
+    if (message) {
+      formData.append('description', message);
+    }
+    if (files) {
+      files.forEach((file) => formData.append('media[]', file));
+    }
 
     return this.httpClient
       .post<string>(`${this.baseUrl}/requests.json?jurisdiction_id=${this.jurisdictionId}`, formData)
