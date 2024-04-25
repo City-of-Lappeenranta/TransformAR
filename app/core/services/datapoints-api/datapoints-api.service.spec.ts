@@ -1,14 +1,16 @@
+import { HttpClient } from '@angular/common/http';
+import { DataPointQuality, DataPointType } from '@core/models/data-point';
 import { firstValueFrom } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { CoreModule } from '../../core.module';
+import { MockHttpClient } from '../mock-http-client';
 import { DataPointsApi } from './datapoints-api.service';
-import { DataPointQuality, DataPointType } from '@core/models/data-point';
 
 describe('DataPointsApi', () => {
   let shallow: Shallow<DataPointsApi>;
 
   beforeEach(() => {
-    shallow = new Shallow(DataPointsApi, CoreModule);
+    shallow = new Shallow(DataPointsApi, CoreModule).mock(HttpClient, { get: new MockHttpClient().get });
   });
 
   describe('weather', () => {
