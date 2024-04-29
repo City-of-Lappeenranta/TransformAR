@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { TraceService } from '@sentry/angular-ivy';
 import { PrimeNGConfig } from 'primeng/api';
 import { SharedModule } from './shared/shared.module';
-import { TraceService } from '@sentry/angular-ivy';
+import { getCountryCodeFromLanguageCode } from '@shared/utils/i18n-utils';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
     private readonly primengConfig: PrimeNGConfig,
     private readonly translateService: TranslateService,
   ) {
-    translateService.use(environment.locale);
+    translateService.use(getCountryCodeFromLanguageCode(navigator.language));
   }
 
   public get navigationHeaderTitle(): string {

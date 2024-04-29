@@ -4,7 +4,8 @@ import { TranslateLoader, TranslateModule, TranslateModuleConfig } from '@ngx-tr
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 const config: TranslateModuleConfig = {
-  useDefaultLang: false,
+  defaultLanguage: 'en',
+  useDefaultLang: true,
   loader: {
     provide: TranslateLoader,
     useFactory: (httpClient: HttpClient) => new TranslateHttpLoader(httpClient),
