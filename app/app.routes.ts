@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
+import { environment } from '@environments/environment';
 
 export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./modules/dashboard/dashboard.module').then((m) => m.DashboardModule),
-    data: { navigationHeaderTitle: 'Lappeenranta' },
+    data: { navigationHeaderTitle: environment.jurisdiction },
   },
   {
     path: 'feedback',
     loadChildren: () => import('./modules/feedback/feedback.module').then((m) => m.FeedbackModule),
-    data: { navigationHeaderTitle: 'Get in touch' },
+    data: { navigationHeaderTitle: 'NAVIGATION.HEADER.FEEDBACK' },
   },
 ];
