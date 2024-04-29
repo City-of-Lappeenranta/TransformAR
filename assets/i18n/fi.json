@@ -1,0 +1,131 @@
+{
+  "DASHBOARD": {
+    "DATA_POINTS": {
+      "TYPE": {
+        "WEATHER_CONDITIONS": "Sää ja keli",
+        "AIR_QUALITY": "Ilmanlaatu",
+        "STORM_WATER": "Hulevedet",
+        "PARKING": "Pysäköinti",
+        "ROAD_WORKS": "Katutyöt"
+      },
+      "WEATHER_CONDITION": {
+        "DEWPOINT": "Kastepiste",
+        "HUMIDITY": "Ilman kosteus",
+        "ICELAYERTHICKNESS": "Jääkerroksen paksuus",
+        "RELATIVEHUMIDITY": "Suhteellinen kosteus",
+        "STATE": "Tila",
+        "AIRTEMPERATURE": "Ilman lämpötila",
+        "EXTERNALSENSORTEMPERATURE": "Ulkoisen sensorin lämpötila",
+        "WATERLAYERTHICKNESS": "Vesikerroksen paksuus",
+        "WINDSPEED": "Tuulen nopeus",
+        "DRY": "Kuiva",
+        "MOIST": "Kostea",
+        "WET": "Märkä",
+        "SLUSHY": "Sohjoinen",
+        "SNOWY": "Luminen",
+        "Icy": "Jäinen"
+      },
+      "STORM_WATER": {
+        "WATERLEVEL": "Veden korkeus",
+        "WATERTEMPERATURE": "Veden lämpötila",
+        "ELECTRICALCONDUCTIVITY": "Sähkönjohtavuus",
+        "TURBIDITY": "Sameus",
+        "FLOWRATE": "Virtausnopeus",
+        "FILLLEVEL": "Täyttöaste"
+      },
+      "AIR_QUALITY": {
+        "TITLE": "Ilmanlaatu"
+      },
+      "QUALITY": {
+        "GOOD": "Hyvä",
+        "SATISFACTORY": "Tyydyttävä",
+        "FAIR": "Kohtuullinen",
+        "POOR": "Huono",
+        "VERY_POOR": "Erittäin huono"
+      },
+      "PARKING": {
+        "AVAILABLE_SPOTS": "Vapaita pysäköintipaikkoja"
+      }
+    },
+    "FILTER": {
+      "TITLE": "Katso kartta"
+    }
+  },
+  "FEEDBACK": {
+    "CONFIRMATION": {
+      "DESCRIPTION": "Vahvistusviesti palautteen vastaanottamisesta on lähetetty osoitteeseen",
+      "RESTART": "Haluan raportoida myös muista asioista",
+      "TITLE": "Kiitoksia palautteesta!"
+    },
+    "CONTACT": {
+      "EMAIL": "Sähköposti",
+      "FIRST_NAME": "Etunimi",
+      "I_ACCEPT_THE_SERVICES": "Hyväksyn palvelun",
+      "LAST_NAME": "Sukunimi",
+      "PHONE": "Puhelinnumero",
+      "PRIVACY_STATEMENT": "Tietosuojalausunto",
+      "TERMS_OF_USE": "Käyttöehdot",
+      "ERROR": {
+        "INVALID_EMAIL": "Sähköpostiosoitteen muoto on virheellinen",
+        "INVALID_PHONE_NUMBER": "Puhelinnumeron muoto on virheellinen (esim. {{phoneNumberFormat}})"
+      }
+    },
+    "MESSAGES_AND_ATTACHMENTS": {
+      "PUBLISH": {
+        "TITLE": "Palautteesi voidaan julkaista",
+        "DESCRIPTION": "Julkaistu palaute on nähtävissä palautesivuilla sekä RSS-syötteissä."
+      },
+      "ATTACHMENTS": {
+        "TITLE": "Liitteet",
+        "HINT": "Voit ladata palautteeseen yhden tai useamman kuvan (JPEG/PNG)",
+        "WARNING": "Tiedoston koko on liian suuri, eikä pakkaaminen onnistunut. Suurin sallittu koko on {{maxSize}}. Yritä uudelleen pienemmällä tiedostolla.",
+        "BUTTON": "Lataa tai ota valokuva"
+      },
+      "FILES": "Tiedosto(t)"
+    },
+    "FOOTER": {
+      "BACK": "Takaisin",
+      "NEXT": "Seuraava",
+      "SEND_FEEDBACK": "Lähetä palaute"
+    },
+    "HEADER": {
+      "CATEGORY_TITLE": "Mistä haluat antaa palautetta?",
+      "CONTACT_TITLE": "Kuinka voimme olla sinuun yhteydessä?",
+      "LOCATION_TITLE": "Mihin paikkaan palaute liittyy?",
+      "MESSAGES_AND_ATTACHMENTS_TITLE": "Anna palautteesi."
+    }
+  },
+  "LOADING_STATES": {
+    "FETCHING_DATA": "Noudetaan dataa"
+  },
+  "MISC": {
+    "AND": "ja",
+    "OPTIONAL": "Vapaaehtoinen",
+    "SKIP": "Ohita"
+  },
+  "NAVIGATION": {
+    "SIDEBAR": {
+      "FEEDBACK": "Anna palautetta",
+      "HOME": "Etusivu"
+    },
+    "HEADER": {
+      "FEEDBACK": "Ota yhteyttä"
+    }
+  },
+  "PERMISSIONS": {
+    "LOCATION": {
+      "DENIED": {
+        "ALERT": "Anna sovelluksen määrittää sijaintisi. Voit muuttaa tätä laitteesi asetuksista."
+      }
+    }
+  },
+  "SEARCH_LOCATION_INPUT": {
+    "CURRENT_LOCATION": {
+      "DETERMINED": "Nykyinen sijaintisi",
+      "FETCHING": "Noudetaan sijaintiasi...",
+      "INDETERMINED": "Emme pystyneet määrittelemään sijaintiasi"
+    },
+    "EMPTY_MESSAGE": "Ei tuloksia",
+    "PLACEHOLDER": "Etsi sijainti"
+  }
+}
