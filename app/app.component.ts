@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TraceService } from '@sentry/angular-ivy';
 import { PrimeNGConfig } from 'primeng/api';
 import { SharedModule } from './shared/shared.module';
+import { getCountryCodeFromLanguageCode } from '@shared/utils/i18n-utils';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
     private readonly primengConfig: PrimeNGConfig,
     private readonly translateService: TranslateService,
   ) {
-    translateService.use(navigator.language);
+    translateService.use(getCountryCodeFromLanguageCode(navigator.language));
   }
 
   public get navigationHeaderTitle(): string {
