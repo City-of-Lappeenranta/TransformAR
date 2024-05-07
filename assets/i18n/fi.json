@@ -71,6 +71,7 @@
       }
     },
     "MESSAGES_AND_ATTACHMENTS": {
+      "FEEDBACK_MESSAGE": "Palauteviesti",
       "PUBLISH": {
         "TITLE": "Palautteesi voidaan julkaista",
         "DESCRIPTION": "Julkaistu palaute on nähtävissä palautesivuilla sekä RSS-syötteissä."
