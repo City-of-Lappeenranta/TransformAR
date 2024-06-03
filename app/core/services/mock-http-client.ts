@@ -64,7 +64,11 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
     electricalConductivity: 210,
     turbidity: 25,
     flowRate: 1200,
-    fillLevel: 90,
+    fillLevel: {
+      value: 90,
+      result: 2,
+    },
+    waterQuality: 3,
   },
 ];
 
