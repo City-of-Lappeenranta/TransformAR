@@ -71,6 +71,7 @@
       }
     },
     "MESSAGES_AND_ATTACHMENTS": {
+      "FEEDBACK_MESSAGE": "Feedback message",
       "PUBLISH": {
         "TITLE": "Your feedback may be published",
         "DESCRIPTION": "The published feedback can be viewed on the search and browse feedback page and in RSS feeds."
