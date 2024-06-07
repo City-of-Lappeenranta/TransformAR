@@ -2,35 +2,35 @@
 
 // eslint-disable-next-line no-undef
 module.exports = {
-  preset: "jest-preset-angular",
-  setupFilesAfterEnv: ["<rootDir>/setup-jest.ts"],
+  preset: 'jest-preset-angular',
+  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   moduleNameMapper: {
-    "^@shared/(.*)$": "<rootDir>/app/shared/$1",
-    "^@core/(.*)$": "<rootDir>/app/core/$1",
-    "^@environments/(.*)$": "<rootDir>/environments/$1",
-    "^lodash-es$": "lodash",
+    '^@shared/(.*)$': '<rootDir>/app/shared/$1',
+    '^@core/(.*)$': '<rootDir>/app/core/$1',
+    '^@environments/(.*)$': '<rootDir>/environments/$1',
+    '^lodash-es$': 'lodash',
   },
-  coverageDirectory: "<rootDir>/reports",
+  coverageDirectory: '<rootDir>/reports',
   coverageReporters: [
-    "html",
+    'html',
     [
-      "lcovonly",
+      'lcovonly',
       {
-        file: "lcov-coverage-report.info",
+        file: 'lcov-coverage-report.info',
       },
     ],
   ],
-  modulePaths: ["<rootDir>/src"],
+  modulePaths: ['<rootDir>/src'],
   reporters: [
-    "jest-mocha-spec-reporter",
+    'jest-mocha-spec-reporter',
     [
-      "jest-junit",
+      'jest-junit',
       {
         allowEmptyResults: true,
-        outputDirectory: "reports",
-        outputName: "jest-report.xml",
+        outputDirectory: 'reports',
+        outputName: 'jest-report.xml',
       },
     ],
   ],
-  testResultsProcessor: "jest-sonar-reporter",
+  testResultsProcessor: 'jest-sonar-reporter',
 };

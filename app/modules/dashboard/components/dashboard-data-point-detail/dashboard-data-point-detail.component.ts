@@ -4,8 +4,10 @@ import {
   DataPoint,
   DataPointQuality,
   DataPointType,
+  WATERBAG_TESTKIT_METRIC_UNIT,
   WEATHER_CONDITIONS_METRIC_UNIT,
   WEATHER_STORM_WATER_METRIC_UNIT,
+  WaterbagTestKitDataPointData,
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -46,36 +48,50 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     }
   }
 
-  public getWeatherConditionMetricLabel(key: string): string {
-    return this.getDataPointTranslation('WEATHER_CONDITION', key);
-  }
-
   public getWeatherConditionMetricValue(value: string | number): string | number {
     if (typeof value === 'number') {
       return value;
     }
 
-    return this.getDataPointTranslation('WEATHER_CONDITION', value);
-  }
-
-  public getWeatherConditionMetricUnit(key: string): string | undefined {
-    return this.getMetricUnit('WEATHER_CONDITION', key);
-  }
-
-  public getStormWaterMetricLabel(key: string): string {
-    return this.getDataPointTranslation('STORM_WATER', key);
-  }
-
-  public getStormWaterMetricUnit(key: string): string | undefined {
-    return this.getMetricUnit('STORM_WATER', key);
+    return this.getDataPointTranslation(DataPointType.WEATHER_CONDITIONS, value);
   }
 
   public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
+  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData): number {
+    return value['calculatedValue'] ?? value['value'];
+  }
+
   public getDataQualityBackgroundColor(quality: DataPointQuality): string {
     return DATA_POINT_QUALITY_COLOR_CHART[quality];
+  }
+
+  public getDataQualityTextColor(quality: DataPointQuality): string {
+    return quality === DataPointQuality.DEFAULT ? 'white' : 'black';
+  }
+
+  public getMetricUnit(type: DataPointType, key: string): string | undefined {
+    if (type === DataPointType.WEATHER_CONDITIONS) {
+      return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT] ?? '';
+    }
+
+    if (type === DataPointType.STORM_WATER) {
+      return WEATHER_STORM_WATER_METRIC_UNIT[key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT] ?? '';
+    }
+
+    if (type === DataPointType.WATERBAG_TESTKIT) {
+      return WATERBAG_TESTKIT_METRIC_UNIT[key as keyof typeof WATERBAG_TESTKIT_METRIC_UNIT] ?? '';
+    }
+
+    return undefined;
+  }
+
+  public getDataPointTranslation(type: DataPointType, key: string): string {
+    const i18nKey = `DASHBOARD.DATA_POINTS.${type}.${key.toUpperCase()}`;
+    const translation = this.translateService.instant(i18nKey);
+    return translation === i18nKey ? capitalize(key) : translation;
   }
 
   private async setHeaderValues(): Promise<void> {
@@ -84,23 +100,5 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
     const address = await this.radarService.reverseGeocode(this.dataPoints[0].location);
     this.address.set(address);
-  }
-
-  private getMetricUnit(type: string, key: string): string | undefined {
-    if (type === 'WEATHER_CONDITION') {
-      return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT];
-    }
-
-    if (type === 'STORM_WATER') {
-      return WEATHER_STORM_WATER_METRIC_UNIT[key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT];
-    }
-
-    return undefined;
-  }
-
-  private getDataPointTranslation(type: string, key: string): string {
-    const i18nKey = `DASHBOARD.DATA_POINTS.${type}.${key.toUpperCase()}`;
-    const translation = this.translateService.instant(i18nKey);
-    return translation === i18nKey ? capitalize(key) : translation;
   }
 }

@@ -5,6 +5,7 @@ import {
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
@@ -15,6 +16,7 @@ import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
   ParkingResponse,
+  WaterbagTestKitResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
   WeatherStormWaterResponse,
@@ -96,6 +98,28 @@ export class DataPointsApi {
             quality: DataPointQuality.DEFAULT,
             availableSpots,
           })),
+        ),
+      );
+  }
+
+  public getWaterbagTestKits(): Observable<WaterbagTestKitDataPoint[]> {
+    return this.httpClient
+      .get<WaterbagTestKitResponse>(`${this.baseUrl}/${DataPointEndpoint.WATERBAG_TESTKIT}`, {
+        headers: this.defaultHeaders,
+      })
+      .pipe(
+        map((response) =>
+          response.map(({ id, coords, ...rest }) => {
+            const { dataRetrievedTimestamp, imageUrl, ...data } = rest;
+
+            return {
+              name: id,
+              location: [coords.latitudeValue, coords.longitudeValue],
+              type: DataPointType.WATERBAG_TESTKIT,
+              quality: DataPointQuality.DEFAULT,
+              data,
+            };
+          }),
         ),
       );
   }
