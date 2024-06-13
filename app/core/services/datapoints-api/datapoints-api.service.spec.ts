@@ -83,7 +83,7 @@ describe('DataPointsApi', () => {
   it('should return an observable of waterbag testkits', async () => {
     const { instance } = shallow.createService();
 
-    const response = await firstValueFrom(instance.getWaterbigTestKits());
+    const response = await firstValueFrom(instance.getWaterbagTestKits());
 
     expect(response).toEqual([
       {
