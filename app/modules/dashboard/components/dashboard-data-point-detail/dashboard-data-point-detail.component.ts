@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, signal } from '@angular/core';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
@@ -11,7 +12,6 @@ import {
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { TranslateService } from '@ngx-translate/core';
-import { capitalize } from '@shared/utils/string-utils';
 
 @Component({
   selector: 'app-dashboard-data-point-detail',
@@ -31,6 +31,7 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   public constructor(
     private readonly translateService: TranslateService,
     private readonly radarService: RadarService,
+    private readonly datePipe: DatePipe,
   ) {}
 
   public ngOnInit(): void {
@@ -54,6 +55,15 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     }
 
     return this.getDataPointTranslation(DataPointType.WEATHER_CONDITIONS, value);
+  }
+
+  public getStormWeatherMetricValue(value: string | number, key: string): string | number {
+    if (key === 'dataRetrievedTimestamp') {
+      const date = this.datePipe.transform(value, 'dd/MM/yyyy');
+      return date ? date : '';
+    }
+
+    return value;
   }
 
   public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
@@ -89,9 +99,8 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   }
 
   public getDataPointTranslation(type: DataPointType, key: string): string {
-    const i18nKey = `DASHBOARD.DATA_POINTS.${type}.${key.toUpperCase()}`;
-    const translation = this.translateService.instant(i18nKey);
-    return translation === i18nKey ? capitalize(key) : translation;
+    const i18nKey = `DASHBOARD.DATA_POINTS.${Object.values(DataPointType)[type]}.${key.toUpperCase()}`;
+    return this.translateService.instant(i18nKey);
   }
 
   private async setHeaderValues(): Promise<void> {

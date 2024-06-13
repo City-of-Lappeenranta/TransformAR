@@ -43,7 +43,7 @@ export class DataPointsApi {
             lastUpdateOn: dataRetrievedTimestamp,
             type: DataPointType.WEATHER_CONDITIONS,
             quality: DataPointQuality.DEFAULT,
-            data: { ...removeNil(rest) },
+            data: { ...removeEmpty(rest) },
           })),
         ),
       );
@@ -123,4 +123,12 @@ export class DataPointsApi {
         ),
       );
   }
+}
+
+function removeEmpty(object: any): any {
+  return Object.fromEntries(
+    Object.entries(object).filter(([_, value]) => {
+      return value !== null && value !== undefined && value !== '';
+    }),
+  );
 }

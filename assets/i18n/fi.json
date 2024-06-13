@@ -6,9 +6,10 @@
         "AIR_QUALITY": "Ilmanlaatu",
         "STORM_WATER": "Hulevedet",
         "PARKING": "Pysäköinti",
-        "ROAD_WORKS": "Katutyöt"
+        "ROAD_WORKS": "Katutyöt",
+        "WATERBAG_TESTKIT": "Vesipussin testisarja"
       },
-      "WEATHER_CONDITION": {
+      "WEATHER_CONDITIONS": {
         "DEWPOINT": "Kastepiste",
         "HUMIDITY": "Ilman kosteus",
         "ICELAYERTHICKNESS": "Jääkerroksen paksuus",
@@ -23,7 +24,17 @@
         "WET": "Märkä",
         "SLUSHY": "Sohjoinen",
         "SNOWY": "Luminen",
-        "Icy": "Jäinen"
+        "ICY": "Jäinen",
+        "VISIBILITY": "Näkyvyys",
+        "PRESSURE": "Paine",
+        "WINDDIRECTION": "Tuulen suunta",
+        "WINDGUST": "Puuskatuuli",
+        "CLOUDCOVER": "Pilvisyys",
+        "SNOWDEPTH": "Lumen syvyys",
+        "FRICTION": "Kitka",
+        "STREETSTATE": "Kadun kunto",
+        "ICE": "Jää",
+        "TEMPERATURE": "Lämpötila"
       },
       "STORM_WATER": {
         "WATERLEVEL": "Veden korkeus",
@@ -31,7 +42,20 @@
         "ELECTRICALCONDUCTIVITY": "Sähkönjohtavuus",
         "TURBIDITY": "Sameus",
         "FLOWRATE": "Virtausnopeus",
-        "FILLLEVEL": "Täyttöaste"
+        "FILLLEVEL": "Täyttöaste",
+        "DATARETRIEVEDTIMESTAMP": "Aikaleima",
+        "WATERQUALITY": "Veden laatu"
+      },
+      "WATERBAG_TESTKIT": {
+        "AIRTEMP": "Ilman lämpötila",
+        "WATERTEMP": "Veden lämpötila",
+        "VISIBILITY": "Näkyvyys",
+        "ALGAE": "Sinilevien määrä",
+        "WATERPH": "Veden happamuus/emäksisyys",
+        "TURBIDITY": "Sameus",
+        "DISSOLVEDOXYGEN": "Liuennut happi vedessä",
+        "NITRATE": "Nitraattipitoisuus vedessä",
+        "PHOSPHATE": "Fosfaattipitoisuus vedessä"
       },
       "AIR_QUALITY": {
         "TITLE": "Ilmanlaatu"

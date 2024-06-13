@@ -33,7 +33,10 @@
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
               <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.STORM_WATER, metric.key) }}</p>
-              <small class="body-sm"> {{ metric.value }}{{ getMetricUnit(DATA_POINT_TYPE.STORM_WATER, metric.key) }}</small>
+              <small class="body-sm">
+                {{ getStormWeatherMetricValue(metric.value, metric.key)
+                }}{{ getMetricUnit(DATA_POINT_TYPE.STORM_WATER, metric.key) }}</small
+              >
             </li>
           }
         </ul>
