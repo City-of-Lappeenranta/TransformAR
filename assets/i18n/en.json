@@ -44,7 +44,14 @@
         "FLOWRATE": "Flow rate",
         "FILLLEVEL": "Fill level",
         "DATARETRIEVEDTIMESTAMP": "Measurement date",
-        "WATERQUALITY": "Water quality"
+        "WATERQUALITY": "Water quality",
+        "FILLLEVEL_RESULT": {
+          "0": "No value",
+          "1": "Low",
+          "2": "Normal",
+          "3": "High",
+          "4": "Flooding"
+        }
       },
       "WATERBAG_TESTKIT": {
         "AIRTEMP": "Air temperature",
@@ -61,6 +68,7 @@
         "TITLE": "Air quality"
       },
       "QUALITY": {
+        "DEFAULT": "No value",
         "GOOD": "Good",
         "SATISFACTORY": "Satisfactory",
         "FAIR": "Fair",
@@ -126,7 +134,8 @@
   "MISC": {
     "AND": "and",
     "OPTIONAL": "Optional",
-    "SKIP": "Skip"
+    "SKIP": "Skip",
+    "QUALITY": "Quality"
   },
   "NAVIGATION": {
     "SIDEBAR": {

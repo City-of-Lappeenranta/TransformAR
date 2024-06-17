@@ -66,6 +66,10 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     return value;
   }
 
+  public getQualityTranslation(quality: DataPointQuality): string {
+    return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
+  }
+
   public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }

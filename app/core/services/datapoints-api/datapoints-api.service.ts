@@ -56,12 +56,14 @@ export class DataPointsApi {
       })
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, ...rest }) => ({
+          response.map(({ name, latitude, longitude, waterQuality, fillLevel }) => ({
             name: name,
             location: [latitude, longitude],
             type: DataPointType.STORM_WATER,
-            quality: DataPointQuality.DEFAULT,
-            data: { ...removeNil(rest) },
+            quality: waterQuality,
+            data: {
+              fillLevel: fillLevel.result,
+            },
           })),
         ),
       );

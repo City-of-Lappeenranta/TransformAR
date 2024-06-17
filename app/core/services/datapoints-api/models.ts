@@ -44,7 +44,11 @@ export type WeatherStormWaterResponse = {
   electricalConductivity?: number | null;
   turbidity?: number | null;
   flowRate: number;
-  fillLevel: number;
+  fillLevel: {
+    value: number;
+    result: number;
+  };
+  waterQuality: number;
 }[];
 
 export type ParkingResponse = {

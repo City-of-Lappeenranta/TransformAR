@@ -47,6 +47,7 @@ describe('DashboardDataPointDetailComponent', () => {
           location: [123, 456],
           quality: DataPointQuality.GOOD,
           name: 'Point 2',
+          data: { fillLevel: 2 },
         },
       ];
 
@@ -59,7 +60,7 @@ describe('DashboardDataPointDetailComponent', () => {
       fixture.detectChanges();
 
       expect(radarService.reverseGeocode).toHaveBeenCalledWith([123, 456]);
-      expect(find('p').nativeElement.innerHTML).toBe(address);
+      expect(find('p')[0].nativeElement.innerHTML).toBe(address);
       expect(find('h1').nativeElement.innerHTML).toBe('Point 1, Point 2');
     });
 
@@ -73,9 +74,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.STORM_WATER,
             quality: DataPointQuality.DEFAULT,
             data: {
-              humidity: 60,
-              streetState: 'icy',
-              temperature: -4,
+              fillLevel: 3,
             },
             lastUpdateOn: 1711635283,
             location: [61.05871, 28.18871],
@@ -92,7 +91,7 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('li').length).toEqual(Object.keys(dataPoints[0].data).length);
+        expect(find('li').length).toEqual(2);
       });
 
       it('when type is weather condition', async () => {

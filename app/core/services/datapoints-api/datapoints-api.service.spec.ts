@@ -54,16 +54,11 @@ describe('DataPointsApi', () => {
     expect(response).toEqual([
       {
         data: {
-          electricalConductivity: 210,
-          fillLevel: 90,
-          flowRate: 1200,
-          turbidity: 25,
-          waterLevel: 3.5,
-          waterTemperature: 28.6,
+          fillLevel: 2,
         },
         location: [61.06343, 28.18027],
         name: 'Storm water well',
-        quality: 0,
+        quality: 3,
         type: 2,
       },
     ]);

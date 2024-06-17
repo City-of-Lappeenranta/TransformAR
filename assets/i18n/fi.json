@@ -44,7 +44,14 @@
         "FLOWRATE": "Virtausnopeus",
         "FILLLEVEL": "Täyttöaste",
         "DATARETRIEVEDTIMESTAMP": "Aikaleima",
-        "WATERQUALITY": "Veden laatu"
+        "WATERQUALITY": "Veden laatu",
+        "FILLLEVEL_RESULT": {
+          "0": "Ei arvoa",
+          "1": "Vähän",
+          "2": "Normaali",
+          "3": "Korkea",
+          "4": "Tulvii"
+        }
       },
       "WATERBAG_TESTKIT": {
         "AIRTEMP": "Ilman lämpötila",
@@ -61,6 +68,7 @@
         "TITLE": "Ilmanlaatu"
       },
       "QUALITY": {
+        "DEFAULT": "Ei arvoa",
         "GOOD": "Hyvä",
         "SATISFACTORY": "Tyydyttävä",
         "FAIR": "Kohtuullinen",
@@ -126,7 +134,8 @@
   "MISC": {
     "AND": "ja",
     "OPTIONAL": "Vapaaehtoinen",
-    "SKIP": "Ohita"
+    "SKIP": "Ohita",
+    "QUALITY": "Laatu"
   },
   "NAVIGATION": {
     "SIDEBAR": {

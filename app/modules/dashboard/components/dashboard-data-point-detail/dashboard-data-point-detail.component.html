@@ -30,22 +30,31 @@
       }
       @case (DATA_POINT_TYPE.STORM_WATER) {
         <ul class="metric-container">
-          @for (metric of dataPoint.data | keyvalue; track metric.key) {
-            <li>
-              <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.STORM_WATER, metric.key) }}</p>
-              <small class="body-sm">
-                {{ getStormWeatherMetricValue(metric.value, metric.key)
-                }}{{ getMetricUnit(DATA_POINT_TYPE.STORM_WATER, metric.key) }}</small
-              >
-            </li>
-          }
+          <li>
+            <p class="button-sm">
+              {{ 'MISC.QUALITY' | translate }}
+            </p>
+            <p-chip
+              class="chip"
+              [style]="{ 'background-color': getDataQualityBackgroundColor(dataPoint.quality) }"
+              [label]="getQualityTranslation(dataPoint.quality) | translate"
+            ></p-chip>
+          </li>
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.STORM_WATER.FILLLEVEL' | translate }}</p>
+            <small class="body-sm">
+              {{
+                'DASHBOARD.DATA_POINTS.STORM_WATER.FILLLEVEL_RESULT.' + dataPoint.data['fillLevel'].toString() | translate
+              }}
+            </small>
+          </li>
         </ul>
       }
       @case (DATA_POINT_TYPE.AIR_QUALITY) {
         <ul class="metric-container">
           <li>
             <p class="button-sm">
-              {{ 'DASHBOARD.DATA_POINTS.AIR_QUALITY.TITLE' | translate }}
+              {{ 'MISC.QUALITY' | translate }}
             </p>
             <p-chip
               class="chip"
