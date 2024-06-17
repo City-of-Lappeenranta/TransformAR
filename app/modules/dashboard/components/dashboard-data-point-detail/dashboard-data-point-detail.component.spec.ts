@@ -4,6 +4,7 @@ import {
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
@@ -151,6 +152,44 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(find('p.button-sm').length).toEqual(1);
         expect(findComponent(Chip)?.style?.['background-color']).toEqual(DATA_POINT_QUALITY_COLOR_CHART[quality]);
+      });
+
+      it('when type is waterbag testkit', async () => {
+        const name = 'Testkit';
+        const quality = DataPointQuality.GOOD;
+
+        const dataPoints: WaterbagTestKitDataPoint[] = [
+          {
+            name,
+            type: DataPointType.WATERBAG_TESTKIT,
+            quality,
+            lastUpdateOn: 1711635283,
+            location: [61.05871, 28.18871],
+            data: {
+              airTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              waterTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              visibility: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              waterPh: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              turbidity: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              dissolvedOxygen: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              nitrate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              phosphate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+            },
+          },
+        ];
+
+        const { fixture, find, findComponent } = await shallow.render(
+          '<app-dashboard-data-point-detail [dataPoints]="dataPoints"></app-dashboard-data-point-detail>',
+          { bind: { dataPoints } },
+        );
+
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(find('.metric-container')).toHaveFound(1);
+        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
+        expect(findComponent(Chip).length).toEqual(8);
       });
 
       it('when type is parking', async () => {

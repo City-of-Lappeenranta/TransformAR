@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-
 export enum DataPointEndpoint {
   WEATHER_CONDITIONS = 'weather/conditions',
   WEATHER_AIR_QUALITY = 'weather/air-quality',
   WEATHER_STORM_WATER = 'weather/storm-water',
   PARKING = 'parking',
   ROAD_WORKS = 'road-works',
+  WATERBAG_TESTKIT = 'waterbag-testkit',
 }
 
 export type WeatherConditionsResponse = {
@@ -64,9 +63,38 @@ export type ParkingResponse = {
 
 export type RoadWorksResponse = unknown[];
 
+interface WaterbagTestKitResponseData {
+  value: number;
+  dataRetrievedTimestamp: number;
+}
+
+type WaterbagTestKitResponseDataWithResult = WaterbagTestKitResponseData & {
+  result: number;
+};
+
+export type WaterbagTestKitResponse = {
+  id: string;
+  coords: {
+    latitudeValue: number;
+    longitudeValue: number;
+  };
+  dataRetrievedTimestamp: number;
+  imageUrl: string;
+  airTemp: WaterbagTestKitResponseData;
+  waterTemp: WaterbagTestKitResponseData;
+  visibility: WaterbagTestKitResponseData;
+  algae: WaterbagTestKitResponseData;
+  waterPh: WaterbagTestKitResponseDataWithResult;
+  turbidity: WaterbagTestKitResponseDataWithResult;
+  dissolvedOxygen: WaterbagTestKitResponseDataWithResult & { calculatedValue: number };
+  nitrate: WaterbagTestKitResponseDataWithResult;
+  phosphate: WaterbagTestKitResponseDataWithResult;
+}[];
+
 export type StreetAiResponse =
   | WeatherConditionsResponse
   | WeatherAirQualityResponse
   | WeatherStormWaterResponse
   | ParkingResponse
-  | RoadWorksResponse;
+  | RoadWorksResponse
+  | WaterbagTestKitResponse;

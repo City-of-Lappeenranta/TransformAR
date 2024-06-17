@@ -13,69 +13,124 @@ describe('DataPointsApi', () => {
     shallow = new Shallow(DataPointsApi, CoreModule).mock(HttpClient, { get: new MockHttpClient().get });
   });
 
-  describe('weather', () => {
-    it('should return an observable of weather conditions', async () => {
-      const { instance } = shallow.createService();
+  it('should return an observable of weather conditions', async () => {
+    const { instance } = shallow.createService();
 
-      const response = await firstValueFrom(instance.getWeatherConditions());
+    const response = await firstValueFrom(instance.getWeatherConditions());
 
-      expect(response).toEqual([
-        {
-          data: expect.anything(),
-          lastUpdateOn: 1711635283,
-          location: [61.05871, 28.18871],
-          name: 'Lappeenranta Weather Station',
-          quality: DataPointQuality.DEFAULT,
-          type: DataPointType.WEATHER_CONDITIONS,
-        },
-      ]);
-    });
+    expect(response).toEqual([
+      {
+        data: expect.anything(),
+        lastUpdateOn: 1711635283,
+        location: [61.05871, 28.18871],
+        name: 'Lappeenranta Weather Station',
+        quality: DataPointQuality.DEFAULT,
+        type: DataPointType.WEATHER_CONDITIONS,
+      },
+    ]);
   });
 
-  describe('parking', () => {
-    it('should return an observable of parking data points', async () => {
-      const { instance } = shallow.createService();
+  it('should return an observable of parking data points', async () => {
+    const { instance } = shallow.createService();
 
-      const response = await firstValueFrom(instance.getParking());
+    const response = await firstValueFrom(instance.getParking());
 
-      expect(response).toEqual([
-        {
-          location: [61.05619, 28.19263],
-          name: 'Lappeenranta City Parking',
-          quality: DataPointQuality.DEFAULT,
-          type: DataPointType.PARKING,
-          availableSpots: 40,
+    expect(response).toEqual([
+      {
+        location: [61.05619, 28.19263],
+        name: 'Lappeenranta City Parking',
+        quality: DataPointQuality.DEFAULT,
+        type: DataPointType.PARKING,
+        availableSpots: 40,
+      },
+    ]);
+  });
+
+  it('should return an observable of the storm water', async () => {
+    const { instance } = shallow.createService();
+
+    const response = await firstValueFrom(instance.getWeatherStormWater());
+
+    expect(response).toEqual([
+      {
+        data: {
+          fillLevel: 2,
         },
-      ]);
-    });
+        location: [61.06343, 28.18027],
+        name: 'Storm water well',
+        quality: 3,
+        type: 2,
+      },
+    ]);
+  });
 
-    it('should return an observable of the storm water', async () => {
-      const { instance } = shallow.createService();
+  it('should return an observable of the air quality', async () => {
+    const { instance } = shallow.createService();
 
-      const response = await firstValueFrom(instance.getWeatherStormWater());
+    const response = await firstValueFrom(instance.getWeatherAirQuality());
 
-      expect(response).toEqual([
-        {
-          data: {
-            fillLevel: 2,
+    expect(response).toEqual([
+      { location: [61.05871, 28.18871], name: 'Air Quality Station', quality: 1, type: 1 },
+      { location: [61.056871, 28.183503], name: 'Air Quality Station 2', quality: 5, type: 1 },
+    ]);
+  });
+
+  it('should return an observable of waterbag testkits', async () => {
+    const { instance } = shallow.createService();
+
+    const response = await firstValueFrom(instance.getWaterbagTestKits());
+
+    expect(response).toEqual([
+      {
+        location: [61.06433, 28.19235],
+        name: 'test-2',
+        quality: DataPointQuality.DEFAULT,
+        type: DataPointType.WATERBAG_TESTKIT,
+        data: {
+          algae: {
+            dataRetrievedTimestamp: 1717155485,
+            value: 1,
           },
-          location: [61.06343, 28.18027],
-          name: 'Storm water well',
-          quality: 3,
-          type: 2,
+          airTemp: {
+            dataRetrievedTimestamp: 1717155485,
+            value: 27.3,
+          },
+          visibility: {
+            dataRetrievedTimestamp: 1717155485,
+            value: 155,
+          },
+          nitrate: {
+            dataRetrievedTimestamp: 1717155485,
+            result: 2,
+            value: 5,
+          },
+          turbidity: {
+            dataRetrievedTimestamp: 1717155485,
+            result: 3,
+            value: 0,
+          },
+          waterTemp: {
+            dataRetrievedTimestamp: 1717155485,
+            value: 21,
+          },
+          waterPh: {
+            dataRetrievedTimestamp: 1717155485,
+            result: 4,
+            value: 7,
+          },
+          phosphate: {
+            dataRetrievedTimestamp: 1717155485,
+            result: 3,
+            value: 1,
+          },
+          dissolvedOxygen: {
+            result: 3,
+            calculatedValue: 90,
+            dataRetrievedTimestamp: 1717155485,
+            value: 8,
+          },
         },
-      ]);
-    });
-
-    it('should return an observable of the air quality', async () => {
-      const { instance } = shallow.createService();
-
-      const response = await firstValueFrom(instance.getWeatherAirQuality());
-
-      expect(response).toEqual([
-        { location: [61.05871, 28.18871], name: 'Air Quality Station', quality: 1, type: 1 },
-        { location: [61.056871, 28.183503], name: 'Air Quality Station 2', quality: 5, type: 1 },
-      ]);
-    });
+      },
+    ]);
   });
 });

@@ -5,6 +5,7 @@ import {
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
@@ -40,6 +41,9 @@ describe('DashboardMapComponent', () => {
           .fn()
           .mockReturnValue(of(WEATHER_AIR_QUALITY_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 3))),
         getParking: jest.fn().mockReturnValue(of(PARKING_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
+        getWaterbagTestKits: jest
+          .fn()
+          .mockReturnValue(of(WATERBAG_TESTKIT_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
       })
       .mock(LocationService, {
         locationPermissionState$: of('granted' as PermissionState),
@@ -86,6 +90,7 @@ describe('DashboardMapComponent', () => {
         undefined,
         undefined,
         undefined,
+        undefined,
         true,
         undefined,
         undefined,
@@ -100,6 +105,7 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -392,5 +398,25 @@ const PARKING_DATA_POINTS: ParkingDataPoint[] = [
     quality: DataPointQuality.DEFAULT,
     name: 'Station Parking',
     availableSpots: 2,
+  },
+];
+
+const WATERBAG_TESTKIT_DATA_POINTS: WaterbagTestKitDataPoint[] = [
+  {
+    name: 'Testkit',
+    type: DataPointType.WATERBAG_TESTKIT,
+    quality: DataPointQuality.DEFAULT,
+    lastUpdateOn: 1711635283,
+    location: [61.05871, 28.18871],
+    data: {
+      airTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      waterTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      visibility: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      waterPh: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      turbidity: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      dissolvedOxygen: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      nitrate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+      phosphate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+    },
   },
 ];
