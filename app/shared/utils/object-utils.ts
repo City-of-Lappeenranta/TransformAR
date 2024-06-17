@@ -18,6 +18,19 @@ export const removeNil = (source: Partial<Record<string, number | string | null>
 };
 
 /**
+ * Removes all null, undefined or empty string values from the object
+ * @param source Any object
+ * @returns The source object without null, undefined or empty string values
+ */
+export const removeEmpty = (object: any): any => {
+  return Object.fromEntries(
+    Object.entries(object).filter(([_, value]) => {
+      return value !== null && value !== undefined && value !== '';
+    }),
+  );
+};
+
+/**
  * Returns an array of enum values and falls back to keys
  * @param e an enum
  * @returns array of strings

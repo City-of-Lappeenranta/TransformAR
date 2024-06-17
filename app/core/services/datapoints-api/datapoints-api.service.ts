@@ -11,7 +11,7 @@ import {
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
 import { environment } from '@environments/environment';
-import { removeNil } from '@shared/utils/object-utils';
+import { removeEmpty, removeNil } from '@shared/utils/object-utils';
 import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
@@ -123,12 +123,4 @@ export class DataPointsApi {
         ),
       );
   }
-}
-
-function removeEmpty(object: any): any {
-  return Object.fromEntries(
-    Object.entries(object).filter(([_, value]) => {
-      return value !== null && value !== undefined && value !== '';
-    }),
-  );
 }
