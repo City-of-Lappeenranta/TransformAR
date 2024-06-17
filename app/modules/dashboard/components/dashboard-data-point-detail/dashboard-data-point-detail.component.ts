@@ -5,7 +5,6 @@ import {
   DataPointQuality,
   DataPointType,
   WEATHER_CONDITIONS_METRIC_UNIT,
-  WEATHER_STORM_WATER_METRIC_UNIT,
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -62,15 +61,7 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     return this.getMetricUnit('WEATHER_CONDITION', key);
   }
 
-  public getStormWaterMetricLabel(key: string): string {
-    return this.getDataPointTranslation('STORM_WATER', key);
-  }
-
-  public getStormWaterMetricUnit(key: string): string | undefined {
-    return this.getMetricUnit('STORM_WATER', key);
-  }
-
-  public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
+  public getQualityTranslation(quality: DataPointQuality): string {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
@@ -89,10 +80,6 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   private getMetricUnit(type: string, key: string): string | undefined {
     if (type === 'WEATHER_CONDITION') {
       return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT];
-    }
-
-    if (type === 'STORM_WATER') {
-      return WEATHER_STORM_WATER_METRIC_UNIT[key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT];
     }
 
     return undefined;

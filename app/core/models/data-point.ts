@@ -78,15 +78,6 @@ export const WEATHER_CONDITIONS_METRIC_UNIT = {
   ice: ' mm',
 };
 
-export const WEATHER_STORM_WATER_METRIC_UNIT = {
-  waterLevel: ' mm',
-  waterTemperature: '°C',
-  electricalConductivity: ' µS/cm',
-  turbidity: ' NTU',
-  flowRate: ' l/s',
-  fillLevel: '%',
-};
-
 export const AIR_QUALITY_CONVERSION: (DataPointQuality | null)[] = [
   null,
   DataPointQuality.GOOD,
