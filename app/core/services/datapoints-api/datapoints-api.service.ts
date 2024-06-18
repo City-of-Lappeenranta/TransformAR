@@ -11,7 +11,7 @@ import {
   WeatherStormWaterDataPoint,
 } from '@core/models/data-point';
 import { environment } from '@environments/environment';
-import { removeEmpty, removeNil } from '@shared/utils/object-utils';
+import { removeEmpty } from '@shared/utils/object-utils';
 import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
