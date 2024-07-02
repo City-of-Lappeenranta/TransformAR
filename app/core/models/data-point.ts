@@ -112,7 +112,7 @@ export const WATERBAG_TESTKIT_METRIC_UNIT = {
   phosphate: ' ppm / (mg/l)',
 };
 
-export const AIR_QUALITY_CONVERSION: (DataPointQuality | null)[] = [
+export const QUALITY_CONVERSION: (DataPointQuality | null)[] = [
   null,
   DataPointQuality.GOOD,
   DataPointQuality.SATISFACTORY,

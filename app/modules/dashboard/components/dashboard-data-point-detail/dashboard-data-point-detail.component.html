@@ -65,7 +65,7 @@
                 'background-color': getDataQualityBackgroundColor(dataPoint.quality),
                 color: getDataQualityTextColor(dataPoint.quality)
               }"
-              [label]="getWeatherAirQualityTranslationKey(dataPoint.quality) | translate"
+              [label]="getQualityTranslation(dataPoint.quality) | translate"
             ></p-chip>
           </li>
         </ul>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  AIR_QUALITY_CONVERSION,
+  QUALITY_CONVERSION,
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
@@ -80,7 +80,7 @@ export class DataPointsApi {
             name: name,
             location: [latitude, longitude],
             type: DataPointType.AIR_QUALITY,
-            quality: AIR_QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
+            quality: QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
           })),
         ),
       );
@@ -119,7 +119,11 @@ export class DataPointsApi {
               location: [coords.latitudeValue, coords.longitudeValue],
               type: DataPointType.WATERBAG_TESTKIT,
               quality: DataPointQuality.DEFAULT,
-              data,
+              data: Object.fromEntries(
+                Object.entries(data).filter(([_, metric]) => {
+                  return metric.value !== null;
+                }),
+              ),
             };
           }),
         ),

@@ -51,7 +51,7 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
   public getWeatherConditionMetricValue(value: string | number): string | number {
     if (typeof value === 'number') {
-      return value;
+      return Math.round(value * 10) / 10;
     }
 
     return this.getDataPointTranslation(DataPointType.WEATHER_CONDITIONS, value);
@@ -67,10 +67,6 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   }
 
   public getQualityTranslation(quality: DataPointQuality): string {
-    return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
-  }
-
-  public getWeatherAirQualityTranslationKey(quality: DataPointQuality): string {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
