@@ -61,7 +61,12 @@ export type ParkingResponse = {
   capacity: number | null;
 }[];
 
-export type RoadWorksResponse = unknown[];
+export type RoadWorksResponse = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  validityPeriod: string;
+}[];
 
 interface WaterbagTestKitResponseData {
   value: number;

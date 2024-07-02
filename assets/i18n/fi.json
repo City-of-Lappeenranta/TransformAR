@@ -77,6 +77,10 @@
       },
       "PARKING": {
         "AVAILABLE_SPOTS": "Vapaita pysäköintipaikkoja"
+      },
+      "ROAD_WORKS": {
+        "VALID_FROM": "Aloituspäivämäärä",
+        "VALID_TO": "Odotettu päättymispäivä"
       }
     },
     "FILTER": {

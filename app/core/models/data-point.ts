@@ -31,6 +31,11 @@ export type ParkingDataPoint = BaseDataPoint<DataPointType.PARKING> & {
   availableSpots: number;
 };
 
+export type RoadWorksDataPoint = BaseDataPoint<DataPointType.ROAD_WORKS> & {
+  validFrom: string;
+  validTo: string;
+};
+
 export interface WaterbagTestKitDataPointData {
   dataRetrievedTimestamp: number;
   value: number;
@@ -47,7 +52,8 @@ export type DataPoint =
   | WeatherStormWaterDataPoint
   | WeatherAirQualityDataPoint
   | ParkingDataPoint
-  | WaterbagTestKitDataPoint;
+  | WaterbagTestKitDataPoint
+  | RoadWorksDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,

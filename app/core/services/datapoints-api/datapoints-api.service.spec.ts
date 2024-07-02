@@ -46,6 +46,23 @@ describe('DataPointsApi', () => {
     ]);
   });
 
+  it('should return an observable of road works data points', async () => {
+    const { instance } = shallow.createService();
+
+    const response = await firstValueFrom(instance.getRoadWorks());
+
+    expect(response).toEqual([
+      {
+        location: [61.05619, 28.19263],
+        name: 'Filling potholes',
+        quality: DataPointQuality.DEFAULT,
+        type: DataPointType.ROAD_WORKS,
+        validFrom: '01.06.2024',
+        validTo: '28.06.2024',
+      },
+    ]);
+  });
+
   it('should return an observable of the storm water', async () => {
     const { instance } = shallow.createService();
 

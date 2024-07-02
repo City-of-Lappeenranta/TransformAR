@@ -97,6 +97,18 @@
           }
         </ul>
       }
+      @case (DATA_POINT_TYPE.ROAD_WORKS) {
+        <ul class="metric-container">
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_FROM' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validFrom }}</small>
+          </li>
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_TO' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validTo }}</small>
+          </li>
+        </ul>
+      }
     }
   }
 </div>

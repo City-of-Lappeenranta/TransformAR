@@ -9,6 +9,7 @@ import {
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
+  RoadWorksDataPoint,
 } from '@core/models/data-point';
 import { environment } from '@environments/environment';
 import { removeEmpty } from '@shared/utils/object-utils';
@@ -16,6 +17,7 @@ import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
   ParkingResponse,
+  RoadWorksResponse,
   WaterbagTestKitResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
@@ -124,6 +126,29 @@ export class DataPointsApi {
                   return metric.value !== null;
                 }),
               ),
+            };
+          }),
+        ),
+      );
+  }
+
+  public getRoadWorks(): Observable<RoadWorksDataPoint[]> {
+    return this.httpClient
+      .get<RoadWorksResponse>(`${this.baseUrl}/${DataPointEndpoint.ROAD_WORKS}`, {
+        headers: this.defaultHeaders,
+      })
+      .pipe(
+        map((response) =>
+          response.map(({ name, latitude, longitude, validityPeriod }) => {
+            const [from, to] = validityPeriod.split(' - ');
+
+            return {
+              name,
+              location: [latitude, longitude],
+              type: DataPointType.ROAD_WORKS,
+              quality: DataPointQuality.DEFAULT,
+              validFrom: from,
+              validTo: to,
             };
           }),
         ),

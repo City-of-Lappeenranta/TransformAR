@@ -82,6 +82,7 @@ export class DashboardMapComponent implements AfterViewInit {
   private _weatherAirQualityDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _parkingDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _waterbagTestkitDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  private _roadWorksDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
 
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> | undefined;
@@ -109,6 +110,7 @@ export class DashboardMapComponent implements AfterViewInit {
       this._weatherAirQualityDataPointMarkersLoadingSubject$,
       this._parkingDataPointMarkersLoadingSubject$,
       this._waterbagTestkitDataPointMarkersLoadingSubject$,
+      this._roadWorksDataPointMarkersLoadingSubject$,
     ])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
@@ -137,6 +139,11 @@ export class DashboardMapComponent implements AfterViewInit {
       .getWaterbagTestKits()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.WATERBAG_TESTKIT));
+
+    this.dataPointsApi
+      .getRoadWorks()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.ROAD_WORKS));
 
     this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
 
@@ -269,6 +276,9 @@ export class DashboardMapComponent implements AfterViewInit {
         break;
       case DataPointType.WATERBAG_TESTKIT:
         this._waterbagTestkitDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.ROAD_WORKS:
+        this._roadWorksDataPointMarkersLoadingSubject$.next(false);
         break;
     }
   }
