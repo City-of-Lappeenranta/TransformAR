@@ -4,6 +4,7 @@ import {
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  RoadWorksDataPoint,
   WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
@@ -219,6 +220,37 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(find('p.button-sm').length).toEqual(1);
         expect(find('.body-sm').nativeElement.innerHTML).toEqual('1');
+      });
+
+      it('when type is road works', async () => {
+        const name = 'Road works';
+        const quality = DataPointQuality.DEFAULT;
+
+        const dataPoints: RoadWorksDataPoint[] = [
+          {
+            name,
+            quality,
+            type: DataPointType.ROAD_WORKS,
+            location: [61.05871, 28.18871],
+            validFrom: '01.01.2024',
+            validTo: '01.02.2024',
+          },
+        ];
+
+        const { fixture, find } = await shallow.render(
+          '<app-dashboard-data-point-detail [dataPoints]="dataPoints"></app-dashboard-data-point-detail>',
+          { bind: { dataPoints } },
+        );
+
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(find('.metric-container')).toHaveFound(1);
+        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
+        expect(find('p.button-sm').length).toEqual(2);
+        expect(find('.body-sm')[0].nativeElement.innerHTML).toEqual('01.01.2024');
+        expect(find('.body-sm')[1].nativeElement.innerHTML).toEqual('01.02.2024');
       });
 
       it('should show multiple data points', async () => {

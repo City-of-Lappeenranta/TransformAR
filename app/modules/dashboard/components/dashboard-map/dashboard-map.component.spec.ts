@@ -5,6 +5,7 @@ import {
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  RoadWorksDataPoint,
   WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
@@ -44,6 +45,7 @@ describe('DashboardMapComponent', () => {
         getWaterbagTestKits: jest
           .fn()
           .mockReturnValue(of(WATERBAG_TESTKIT_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 4))),
+        getRoadWorks: jest.fn().mockReturnValue(of(ROAD_WORKS_DATA_POINTS).pipe(delay(NETWORK_REQUEST_TIME / 5))),
       })
       .mock(LocationService, {
         locationPermissionState$: of('granted' as PermissionState),
@@ -84,6 +86,8 @@ describe('DashboardMapComponent', () => {
       fixture.detectChanges();
 
       expect(findComponent(MapComponent).markers.map(({ active }) => active)).toEqual([
+        undefined,
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -398,6 +402,25 @@ const PARKING_DATA_POINTS: ParkingDataPoint[] = [
     quality: DataPointQuality.DEFAULT,
     name: 'Station Parking',
     availableSpots: 2,
+  },
+];
+
+const ROAD_WORKS_DATA_POINTS: RoadWorksDataPoint[] = [
+  {
+    location: [9, 9],
+    type: DataPointType.ROAD_WORKS,
+    quality: DataPointQuality.DEFAULT,
+    name: 'Road',
+    validFrom: '01.01.2024',
+    validTo: '01.02.2024',
+  },
+  {
+    location: [10, 10],
+    type: DataPointType.ROAD_WORKS,
+    quality: DataPointQuality.DEFAULT,
+    name: 'Works',
+    validFrom: '01.03.2024',
+    validTo: '01.04.2024',
   },
 ];
 

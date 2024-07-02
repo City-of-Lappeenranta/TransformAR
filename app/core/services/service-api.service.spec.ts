@@ -87,7 +87,6 @@ describe('ServiceApi', () => {
         first_name: 'John',
         last_name: 'Doe',
         phone: '+32412345678',
-        api_key: expect.any(String),
       };
 
       instance
@@ -105,6 +104,7 @@ describe('ServiceApi', () => {
 
       const req = httpTestingController.expectOne(`${environment.serviceApiUrl}/requests.json?jurisdiction_id=citizenapp`);
       expect(req.request.method).toBe('POST');
+      expect(req.request.headers.get('Authorization')).toContain('Bearer ');
       expect(Object.fromEntries([...req.request.body])).toEqual(data);
       req.flush('');
     });
