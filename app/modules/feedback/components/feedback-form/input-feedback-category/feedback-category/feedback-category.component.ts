@@ -19,6 +19,6 @@ export class FeedbackCategoryComponent {
   public get color(): string {
     const colors = ['green', 'blue', 'lime', 'grey', 'cream', 'pink', 'orange', 'yellow'];
 
-    return colors[this.index ?? 0 % colors.length];
+    return colors[(this.index ?? 0) % colors.length];
   }
 }
