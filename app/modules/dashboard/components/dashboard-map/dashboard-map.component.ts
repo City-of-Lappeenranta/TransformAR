@@ -29,8 +29,6 @@ import { groupBy } from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject, combineLatest, filter, map, take, withLatestFrom } from 'rxjs';
 
-//TODO: move data fetching to dashboard-map.service
-
 @Component({
   selector: 'app-dashboard-map',
   templateUrl: './dashboard-map.component.html',
@@ -83,6 +81,8 @@ export class DashboardMapComponent implements AfterViewInit {
   private _weatherStormWaterDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _weatherAirQualityDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
   private _parkingDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  private _waterbagTestkitDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
+  private _roadWorksDataPointMarkersLoadingSubject$ = new BehaviorSubject(true);
 
   public locationLoading$: Observable<boolean> | undefined;
   public locationPermissionState$: Observable<PermissionState> | undefined;
@@ -109,6 +109,8 @@ export class DashboardMapComponent implements AfterViewInit {
       this._weatherStormWaterDataPointMarkersLoadingSubject$,
       this._weatherAirQualityDataPointMarkersLoadingSubject$,
       this._parkingDataPointMarkersLoadingSubject$,
+      this._waterbagTestkitDataPointMarkersLoadingSubject$,
+      this._roadWorksDataPointMarkersLoadingSubject$,
     ])
       .pipe(takeUntilDestroyed())
       .subscribe((loadingStates) => loadingStates.every((loading) => !loading) && this.closeLoadingDataToast());
@@ -132,6 +134,16 @@ export class DashboardMapComponent implements AfterViewInit {
       .getParking()
       .pipe(take(1), takeUntilDestroyed())
       .subscribe((points) => this.handleDataPointsByType(points, DataPointType.PARKING));
+
+    this.dataPointsApi
+      .getWaterbagTestKits()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.WATERBAG_TESTKIT));
+
+    this.dataPointsApi
+      .getRoadWorks()
+      .pipe(take(1), takeUntilDestroyed())
+      .subscribe((points) => this.handleDataPointsByType(points, DataPointType.ROAD_WORKS));
 
     this._focusLocation$.pipe(take(1), takeUntilDestroyed()).subscribe(this.onInitialFocusLocation.bind(this));
 
@@ -261,6 +273,12 @@ export class DashboardMapComponent implements AfterViewInit {
         break;
       case DataPointType.PARKING:
         this._parkingDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.WATERBAG_TESTKIT:
+        this._waterbagTestkitDataPointMarkersLoadingSubject$.next(false);
+        break;
+      case DataPointType.ROAD_WORKS:
+        this._roadWorksDataPointMarkersLoadingSubject$.next(false);
         break;
     }
   }

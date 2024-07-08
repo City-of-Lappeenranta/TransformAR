@@ -6,6 +6,7 @@ export enum DataPointType {
   STORM_WATER,
   PARKING,
   ROAD_WORKS,
+  WATERBAG_TESTKIT,
 }
 
 interface BaseDataPoint<T extends DataPointType> {
@@ -30,11 +31,29 @@ export type ParkingDataPoint = BaseDataPoint<DataPointType.PARKING> & {
   availableSpots: number;
 };
 
+export type RoadWorksDataPoint = BaseDataPoint<DataPointType.ROAD_WORKS> & {
+  validFrom: string;
+  validTo: string;
+};
+
+export interface WaterbagTestKitDataPointData {
+  dataRetrievedTimestamp: number;
+  value: number;
+  result?: number;
+  calculatedValue?: number;
+}
+
+export type WaterbagTestKitDataPoint = BaseDataPoint<DataPointType.WATERBAG_TESTKIT> & {
+  data: Record<string, WaterbagTestKitDataPointData>;
+};
+
 export type DataPoint =
   | WeatherConditionDataPoint
   | WeatherStormWaterDataPoint
   | WeatherAirQualityDataPoint
-  | ParkingDataPoint;
+  | ParkingDataPoint
+  | WaterbagTestKitDataPoint
+  | RoadWorksDataPoint;
 
 export enum DataPointQuality {
   DEFAULT,
@@ -62,6 +81,7 @@ export const DATA_POINT_TYPE_ICON: Record<DataPointType, string> = {
   [DataPointType.PARKING]: 'parking-icon.svg',
   [DataPointType.ROAD_WORKS]: 'road-works-icon.svg',
   [DataPointType.STORM_WATER]: 'flood-water-level-icon.svg',
+  [DataPointType.WATERBAG_TESTKIT]: 'waterbag-testkit.svg',
 };
 
 export const WEATHER_CONDITIONS_METRIC_UNIT = {
@@ -87,7 +107,18 @@ export const WEATHER_STORM_WATER_METRIC_UNIT = {
   fillLevel: '%',
 };
 
-export const AIR_QUALITY_CONVERSION: (DataPointQuality | null)[] = [
+export const WATERBAG_TESTKIT_METRIC_UNIT = {
+  airTemp: '°C',
+  waterTemp: '°C',
+  visibility: ' cm',
+  waterPh: ' pH',
+  turbidity: ' JTU',
+  dissolvedOxygen: '%',
+  nitrate: ' ppm / (mg/l)',
+  phosphate: ' ppm / (mg/l)',
+};
+
+export const QUALITY_CONVERSION: (DataPointQuality | null)[] = [
   null,
   DataPointQuality.GOOD,
   DataPointQuality.SATISFACTORY,

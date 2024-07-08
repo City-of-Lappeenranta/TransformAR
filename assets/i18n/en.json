@@ -6,9 +6,10 @@
         "AIR_QUALITY": "Air quality",
         "STORM_WATER": "Storm water",
         "PARKING": "Parking",
-        "ROAD_WORKS": "Road works"
+        "ROAD_WORKS": "Road works",
+        "WATERBAG_TESTKIT": "Waterbag testkit"
       },
-      "WEATHER_CONDITION": {
+      "WEATHER_CONDITIONS": {
         "DEWPOINT": "Dew point",
         "HUMIDITY": "Humidity",
         "ICELAYERTHICKNESS": "Ice layer thickness",
@@ -23,7 +24,17 @@
         "WET": "Wet",
         "SLUSHY": "Slushy",
         "SNOWY": "Snowy",
-        "Icy": "Icy"
+        "ICY": "Icy",
+        "VISIBILITY": "Visibility",
+        "PRESSURE": "Pressure",
+        "WINDDIRECTION": "Wind direction",
+        "WINDGUST": "Wind gust",
+        "CLOUDCOVER": "Cloud cover",
+        "SNOWDEPTH": "Snow depth",
+        "FRICTION": "Friction",
+        "STREETSTATE": "Street state",
+        "ICE": "Ice",
+        "TEMPERATURE": "Temperature"
       },
       "STORM_WATER": {
         "WATERLEVEL": "Water level",
@@ -31,12 +42,33 @@
         "ELECTRICALCONDUCTIVITY": "Electrical conductivity",
         "TURBIDITY": "Turbidity",
         "FLOWRATE": "Flow rate",
-        "FILLLEVEL": "Fill level"
+        "FILLLEVEL": "Fill level",
+        "DATARETRIEVEDTIMESTAMP": "Measurement date",
+        "WATERQUALITY": "Water quality",
+        "FILLLEVEL_RESULT": {
+          "0": "No value",
+          "1": "Low",
+          "2": "Normal",
+          "3": "High",
+          "4": "Flooding"
+        }
+      },
+      "WATERBAG_TESTKIT": {
+        "AIRTEMP": "Air temperature",
+        "WATERTEMP": "Water temperature",
+        "VISIBILITY": "Max visibility",
+        "ALGAE": "Amount of blue algae",
+        "WATERPH": "Water acidicity/basic reading",
+        "TURBIDITY": "Turbidity",
+        "DISSOLVEDOXYGEN": "Oxygen particles in water",
+        "NITRATE": "Nitrate particles in water",
+        "PHOSPHATE": "Phosphate particles in water"
       },
       "AIR_QUALITY": {
         "TITLE": "Air quality"
       },
       "QUALITY": {
+        "DEFAULT": "No value",
         "GOOD": "Good",
         "SATISFACTORY": "Satisfactory",
         "FAIR": "Fair",
@@ -45,6 +77,10 @@
       },
       "PARKING": {
         "AVAILABLE_SPOTS": "Available parking places"
+      },
+      "ROAD_WORKS": {
+        "VALID_FROM": "Start date",
+        "VALID_TO": "Expected end date"
       }
     },
     "FILTER": {
@@ -71,6 +107,7 @@
       }
     },
     "MESSAGES_AND_ATTACHMENTS": {
+      "FEEDBACK_MESSAGE": "Feedback message",
       "PUBLISH": {
         "TITLE": "Your feedback may be published",
         "DESCRIPTION": "The published feedback can be viewed on the search and browse feedback page and in RSS feeds."
@@ -101,7 +138,8 @@
   "MISC": {
     "AND": "and",
     "OPTIONAL": "Optional",
-    "SKIP": "Skip"
+    "SKIP": "Skip",
+    "QUALITY": "Quality"
   },
   "NAVIGATION": {
     "SIDEBAR": {

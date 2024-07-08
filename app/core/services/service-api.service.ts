@@ -43,7 +43,6 @@ export class ServiceApi {
       throw new Error('location is missing');
     }
 
-    formData.append('api_key', this.apiKey);
     formData.append('service_code', serviceCode);
     formData.append('lat', location[0].toString());
     formData.append('long', location[1].toString());
@@ -68,7 +67,9 @@ export class ServiceApi {
     }
 
     return this.httpClient
-      .post<string>(`${this.baseUrl}/requests.json?jurisdiction_id=${this.jurisdictionId}`, formData)
+      .post<string>(`${this.baseUrl}/requests.json?jurisdiction_id=${this.jurisdictionId}`, formData, {
+        headers: { Authorization: `Bearer ${this.apiKey}` },
+      })
       .pipe(map(() => formData.get('email') as string));
   }
 

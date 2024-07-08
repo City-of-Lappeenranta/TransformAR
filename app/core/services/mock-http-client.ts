@@ -4,6 +4,7 @@ import {
   ParkingResponse,
   RoadWorksResponse,
   StreetAiResponse,
+  WaterbagTestKitResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
   WeatherStormWaterResponse,
@@ -64,7 +65,11 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
     electricalConductivity: 210,
     turbidity: 25,
     flowRate: 1200,
-    fillLevel: 90,
+    fillLevel: {
+      value: 90,
+      result: 2,
+    },
+    waterQuality: 3,
   },
 ];
 
@@ -80,7 +85,68 @@ const PARKING: ParkingResponse = [
   },
 ];
 
-const ROAD_WORKS: RoadWorksResponse = [];
+const WATERBAG_TESTKITS: WaterbagTestKitResponse = [
+  {
+    algae: {
+      dataRetrievedTimestamp: 1717155485,
+      value: 1,
+    },
+    airTemp: {
+      dataRetrievedTimestamp: 1717155485,
+      value: 27.3,
+    },
+    visibility: {
+      dataRetrievedTimestamp: 1717155485,
+      value: 155,
+    },
+    nitrate: {
+      dataRetrievedTimestamp: 1717155485,
+      result: 2,
+      value: 5,
+    },
+    turbidity: {
+      dataRetrievedTimestamp: 1717155485,
+      result: 3,
+      value: 0,
+    },
+    waterTemp: {
+      dataRetrievedTimestamp: 1717155485,
+      value: 21,
+    },
+    waterPh: {
+      dataRetrievedTimestamp: 1717155485,
+      result: 4,
+      value: 7,
+    },
+    imageUrl: '',
+    dissolvedOxygen: {
+      result: 3,
+      calculatedValue: 90,
+      dataRetrievedTimestamp: 1717155485,
+      value: 8,
+    },
+    coords: {
+      latitudeValue: 61.06433,
+      longitudeValue: 28.19235,
+    },
+    id: 'test-2',
+    phosphate: {
+      dataRetrievedTimestamp: 1717155485,
+      result: 3,
+      value: 1,
+    },
+    dataRetrievedTimestamp: 1717155485,
+  },
+];
+
+const ROAD_WORKS: RoadWorksResponse = [
+  {
+    name: 'Filling potholes',
+    latitude: 61.05619,
+    longitude: 28.19263,
+    validityPeriod: '01.06.2024 - 28.06.2024',
+  },
+];
 
 export const mockResponses: Record<DataPointEndpoint, StreetAiResponse> = {
   [DataPointEndpoint.WEATHER_CONDITIONS]: WEATHER_CONDITIONS,
@@ -88,4 +154,5 @@ export const mockResponses: Record<DataPointEndpoint, StreetAiResponse> = {
   [DataPointEndpoint.WEATHER_STORM_WATER]: WEATHER_STORM_WATER,
   [DataPointEndpoint.PARKING]: PARKING,
   [DataPointEndpoint.ROAD_WORKS]: ROAD_WORKS,
+  [DataPointEndpoint.WATERBAG_TESTKIT]: WATERBAG_TESTKITS,
 };

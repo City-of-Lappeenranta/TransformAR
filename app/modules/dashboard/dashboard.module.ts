@@ -11,6 +11,7 @@ import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.
 import { DashboardRoutingModule } from './dashboard.routing';
 import { ChipModule } from 'primeng/chip';
 import { DashboardFilterComponent } from './components/dashboard-filter/dashboard-filter.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [DashboardMapComponent, DashboardDataPointDetailComponent, DashboardFilterComponent],
@@ -24,6 +25,6 @@ import { DashboardFilterComponent } from './components/dashboard-filter/dashboar
     ReactiveFormsModule,
     ChipModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, DatePipe],
 })
 export class DashboardModule {}

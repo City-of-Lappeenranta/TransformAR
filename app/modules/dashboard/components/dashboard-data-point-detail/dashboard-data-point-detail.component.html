@@ -19,9 +19,10 @@
         <ul class="metric-container">
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
-              <p class="button-sm">{{ getWeatherConditionMetricLabel(metric.key) }}</p>
+              <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WEATHER_CONDITIONS, metric.key) }}</p>
               <small class="body-sm">
-                {{ getWeatherConditionMetricValue(metric.value) }}{{ getWeatherConditionMetricUnit(metric.key) }}</small
+                {{ getWeatherConditionMetricValue(metric.value)
+                }}{{ getMetricUnit(DATA_POINT_TYPE.WEATHER_CONDITIONS, metric.key) }}</small
               >
             </li>
           }
@@ -29,24 +30,42 @@
       }
       @case (DATA_POINT_TYPE.STORM_WATER) {
         <ul class="metric-container">
-          @for (metric of dataPoint.data | keyvalue; track metric.key) {
-            <li>
-              <p class="button-sm">{{ getStormWaterMetricLabel(metric.key) }}</p>
-              <small class="body-sm"> {{ metric.value }}{{ getStormWaterMetricUnit(metric.key) }}</small>
-            </li>
-          }
+          <li>
+            <p class="button-sm">
+              {{ 'MISC.QUALITY' | translate }}
+            </p>
+            <p-chip
+              class="chip"
+              [style]="{
+                'background-color': getDataQualityBackgroundColor(dataPoint.quality),
+                color: getDataQualityTextColor(dataPoint.quality)
+              }"
+              [label]="getQualityTranslation(dataPoint.quality) | translate"
+            ></p-chip>
+          </li>
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.STORM_WATER.FILLLEVEL' | translate }}</p>
+            <small class="body-sm">
+              {{
+                'DASHBOARD.DATA_POINTS.STORM_WATER.FILLLEVEL_RESULT.' + dataPoint.data['fillLevel'].toString() | translate
+              }}
+            </small>
+          </li>
         </ul>
       }
       @case (DATA_POINT_TYPE.AIR_QUALITY) {
         <ul class="metric-container">
           <li>
             <p class="button-sm">
-              {{ 'DASHBOARD.DATA_POINTS.AIR_QUALITY.TITLE' | translate }}
+              {{ 'MISC.QUALITY' | translate }}
             </p>
             <p-chip
               class="chip"
-              [style]="{ 'background-color': getDataQualityBackgroundColor(dataPoint.quality) }"
-              [label]="getWeatherAirQualityTranslationKey(dataPoint.quality) | translate"
+              [style]="{
+                'background-color': getDataQualityBackgroundColor(dataPoint.quality),
+                color: getDataQualityTextColor(dataPoint.quality)
+              }"
+              [label]="getQualityTranslation(dataPoint.quality) | translate"
             ></p-chip>
           </li>
         </ul>
@@ -56,6 +75,37 @@
           <li>
             <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.PARKING.AVAILABLE_SPOTS' | translate }}</p>
             <small class="body-sm">{{ dataPoint.availableSpots }}</small>
+          </li>
+        </ul>
+      }
+      @case (DATA_POINT_TYPE.WATERBAG_TESTKIT) {
+        <ul class="metric-container">
+          @for (metric of dataPoint.data | keyvalue; track metric.key) {
+            <li>
+              <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key) }}</p>
+              <p-chip
+                class="chip"
+                [style]="{
+                  'background-color': getDataQualityBackgroundColor(metric.value.result ?? 0),
+                  color: getDataQualityTextColor(metric.value.result ?? 0)
+                }"
+                [label]="
+                  getWaterbagTestkitValue(metric.value) + '' + getMetricUnit(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key)
+                "
+              ></p-chip>
+            </li>
+          }
+        </ul>
+      }
+      @case (DATA_POINT_TYPE.ROAD_WORKS) {
+        <ul class="metric-container">
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_FROM' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validFrom }}</small>
+          </li>
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_TO' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validTo }}</small>
           </li>
         </ul>
       }

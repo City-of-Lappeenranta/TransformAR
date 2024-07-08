@@ -1,20 +1,24 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  AIR_QUALITY_CONVERSION,
+  QUALITY_CONVERSION,
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
+  WaterbagTestKitDataPoint,
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
+  RoadWorksDataPoint,
 } from '@core/models/data-point';
 import { environment } from '@environments/environment';
-import { removeNil } from '@shared/utils/object-utils';
+import { removeEmpty } from '@shared/utils/object-utils';
 import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
   ParkingResponse,
+  RoadWorksResponse,
+  WaterbagTestKitResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
   WeatherStormWaterResponse,
@@ -41,7 +45,7 @@ export class DataPointsApi {
             lastUpdateOn: dataRetrievedTimestamp,
             type: DataPointType.WEATHER_CONDITIONS,
             quality: DataPointQuality.DEFAULT,
-            data: { ...removeNil(rest) },
+            data: { ...removeEmpty(rest) },
           })),
         ),
       );
@@ -54,12 +58,14 @@ export class DataPointsApi {
       })
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, ...rest }) => ({
+          response.map(({ name, latitude, longitude, waterQuality, fillLevel }) => ({
             name: name,
             location: [latitude, longitude],
             type: DataPointType.STORM_WATER,
-            quality: DataPointQuality.DEFAULT,
-            data: { ...removeNil(rest) },
+            quality: waterQuality,
+            data: {
+              fillLevel: fillLevel.result,
+            },
           })),
         ),
       );
@@ -76,7 +82,7 @@ export class DataPointsApi {
             name: name,
             location: [latitude, longitude],
             type: DataPointType.AIR_QUALITY,
-            quality: AIR_QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
+            quality: QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
           })),
         ),
       );
@@ -96,6 +102,55 @@ export class DataPointsApi {
             quality: DataPointQuality.DEFAULT,
             availableSpots,
           })),
+        ),
+      );
+  }
+
+  public getWaterbagTestKits(): Observable<WaterbagTestKitDataPoint[]> {
+    return this.httpClient
+      .get<WaterbagTestKitResponse>(`${this.baseUrl}/${DataPointEndpoint.WATERBAG_TESTKIT}`, {
+        headers: this.defaultHeaders,
+      })
+      .pipe(
+        map((response) =>
+          response.map(({ id, coords, ...rest }) => {
+            const { dataRetrievedTimestamp, imageUrl, ...data } = rest;
+
+            return {
+              name: id,
+              location: [coords.latitudeValue, coords.longitudeValue],
+              type: DataPointType.WATERBAG_TESTKIT,
+              quality: DataPointQuality.DEFAULT,
+              data: Object.fromEntries(
+                Object.entries(data).filter(([_, metric]) => {
+                  return metric.value !== null;
+                }),
+              ),
+            };
+          }),
+        ),
+      );
+  }
+
+  public getRoadWorks(): Observable<RoadWorksDataPoint[]> {
+    return this.httpClient
+      .get<RoadWorksResponse>(`${this.baseUrl}/${DataPointEndpoint.ROAD_WORKS}`, {
+        headers: this.defaultHeaders,
+      })
+      .pipe(
+        map((response) =>
+          response.map(({ name, latitude, longitude, validityPeriod }) => {
+            const [from, to] = validityPeriod.split(' - ');
+
+            return {
+              name,
+              location: [latitude, longitude],
+              type: DataPointType.ROAD_WORKS,
+              quality: DataPointQuality.DEFAULT,
+              validFrom: from,
+              validTo: to,
+            };
+          }),
         ),
       );
   }
