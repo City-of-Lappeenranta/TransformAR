@@ -65,7 +65,7 @@
                 'background-color': getDataQualityBackgroundColor(dataPoint.quality),
                 color: getDataQualityTextColor(dataPoint.quality)
               }"
-              [label]="getWeatherAirQualityTranslationKey(dataPoint.quality) | translate"
+              [label]="getQualityTranslation(dataPoint.quality) | translate"
             ></p-chip>
           </li>
         </ul>
@@ -95,6 +95,18 @@
               ></p-chip>
             </li>
           }
+        </ul>
+      }
+      @case (DATA_POINT_TYPE.ROAD_WORKS) {
+        <ul class="metric-container">
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_FROM' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validFrom }}</small>
+          </li>
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.ROAD_WORKS.VALID_TO' | translate }}</p>
+            <small class="body-sm">{{ dataPoint.validTo }}</small>
+          </li>
         </ul>
       }
     }

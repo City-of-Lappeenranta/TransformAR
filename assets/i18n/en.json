@@ -77,6 +77,10 @@
       },
       "PARKING": {
         "AVAILABLE_SPOTS": "Available parking places"
+      },
+      "ROAD_WORKS": {
+        "VALID_FROM": "Start date",
+        "VALID_TO": "Expected end date"
       }
     },
     "FILTER": {

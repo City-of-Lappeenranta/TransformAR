@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  AIR_QUALITY_CONVERSION,
+  QUALITY_CONVERSION,
   DataPointQuality,
   DataPointType,
   ParkingDataPoint,
@@ -9,6 +9,7 @@ import {
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
+  RoadWorksDataPoint,
 } from '@core/models/data-point';
 import { environment } from '@environments/environment';
 import { removeEmpty } from '@shared/utils/object-utils';
@@ -16,6 +17,7 @@ import { Observable, map } from 'rxjs';
 import {
   DataPointEndpoint,
   ParkingResponse,
+  RoadWorksResponse,
   WaterbagTestKitResponse,
   WeatherAirQualityResponse,
   WeatherConditionsResponse,
@@ -80,7 +82,7 @@ export class DataPointsApi {
             name: name,
             location: [latitude, longitude],
             type: DataPointType.AIR_QUALITY,
-            quality: AIR_QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
+            quality: QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
           })),
         ),
       );
@@ -119,7 +121,34 @@ export class DataPointsApi {
               location: [coords.latitudeValue, coords.longitudeValue],
               type: DataPointType.WATERBAG_TESTKIT,
               quality: DataPointQuality.DEFAULT,
-              data,
+              data: Object.fromEntries(
+                Object.entries(data).filter(([_, metric]) => {
+                  return metric.value !== null;
+                }),
+              ),
+            };
+          }),
+        ),
+      );
+  }
+
+  public getRoadWorks(): Observable<RoadWorksDataPoint[]> {
+    return this.httpClient
+      .get<RoadWorksResponse>(`${this.baseUrl}/${DataPointEndpoint.ROAD_WORKS}`, {
+        headers: this.defaultHeaders,
+      })
+      .pipe(
+        map((response) =>
+          response.map(({ name, latitude, longitude, validityPeriod }) => {
+            const [from, to] = validityPeriod.split(' - ');
+
+            return {
+              name,
+              location: [latitude, longitude],
+              type: DataPointType.ROAD_WORKS,
+              quality: DataPointQuality.DEFAULT,
+              validFrom: from,
+              validTo: to,
             };
           }),
         ),

@@ -139,7 +139,14 @@ const WATERBAG_TESTKITS: WaterbagTestKitResponse = [
   },
 ];
 
-const ROAD_WORKS: RoadWorksResponse = [];
+const ROAD_WORKS: RoadWorksResponse = [
+  {
+    name: 'Filling potholes',
+    latitude: 61.05619,
+    longitude: 28.19263,
+    validityPeriod: '01.06.2024 - 28.06.2024',
+  },
+];
 
 export const mockResponses: Record<DataPointEndpoint, StreetAiResponse> = {
   [DataPointEndpoint.WEATHER_CONDITIONS]: WEATHER_CONDITIONS,
