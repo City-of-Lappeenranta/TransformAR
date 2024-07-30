@@ -144,7 +144,8 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Anna palautetta",
-      "HOME": "Etusivu"
+      "HOME": "Etusivu",
+      "INPUT_MEASUREMENTS": "Syötä mittauksia"
     },
     "HEADER": {
       "FEEDBACK": "Ota yhteyttä"
