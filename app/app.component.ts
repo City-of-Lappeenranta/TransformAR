@@ -16,7 +16,7 @@ import { getCountryCodeFromLanguageCode } from '@shared/utils/i18n-utils';
 export class AppComponent implements OnInit {
   @ViewChild(RouterOutlet) public outlet: RouterOutlet | undefined;
 
-  public title = 'citizen-webapp';
+  public title = 'CitySen';
 
   public constructor(
     private readonly traceService: TraceService,

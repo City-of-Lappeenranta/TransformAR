@@ -1,6 +1,6 @@
 {
-  "name": "citizen-webapp",
-  "short_name": "citizen-webapp",
+  "name": "CitySen",
+  "short_name": "CitySen",
   "theme_color": " #275D38",
   "background_color": "#fafafa",
   "display": "standalone",
