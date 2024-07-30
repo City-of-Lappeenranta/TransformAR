@@ -144,10 +144,12 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Give feedback",
-      "HOME": "Home"
+      "HOME": "Home",
+      "ABOUT": "About the app"
     },
     "HEADER": {
-      "FEEDBACK": "Get in touch"
+      "FEEDBACK": "Get in touch",
+      "ABOUT": "About the app"
     }
   },
   "PERMISSIONS": {

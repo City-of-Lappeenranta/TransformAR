@@ -144,10 +144,12 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Anna palautetta",
-      "HOME": "Etusivu"
+      "HOME": "Etusivu",
+      "ABOUT": "Tietoa sovelluksesta"
     },
     "HEADER": {
-      "FEEDBACK": "Ota yhteyttä"
+      "FEEDBACK": "Ota yhteyttä",
+      "ABOUT": "Tietoa sovelluksesta"
     }
   },
   "PERMISSIONS": {

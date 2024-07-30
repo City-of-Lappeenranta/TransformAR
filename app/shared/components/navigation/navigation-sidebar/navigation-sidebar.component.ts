@@ -25,6 +25,11 @@ export class NavigationSidebarComponent {
       icon: 'feedback',
       route: 'feedback',
     },
+    {
+      name: 'NAVIGATION.SIDEBAR.ABOUT',
+      icon: 'info',
+      route: 'about',
+    },
   ];
 
   public constructor(private readonly translateService: TranslateService) {}
