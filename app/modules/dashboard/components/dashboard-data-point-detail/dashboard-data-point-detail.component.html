@@ -83,6 +83,7 @@
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
               <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key) }}</p>
+              <span class="body-xs">{{ metric.value.dataRetrievedTimestamp | date: 'dd.MM.YYYY HH:mm' }}</span>
               <p-chip
                 class="chip"
                 [style]="{
