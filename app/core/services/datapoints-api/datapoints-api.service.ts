@@ -119,6 +119,7 @@ export class DataPointsApi {
             return {
               name: id,
               location: [coords.latitudeValue, coords.longitudeValue],
+              imageUrl,
               type: DataPointType.WATERBAG_TESTKIT,
               quality: DataPointQuality.DEFAULT,
               data: Object.fromEntries(

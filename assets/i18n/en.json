@@ -54,6 +54,7 @@
         }
       },
       "WATERBAG_TESTKIT": {
+        "VIEW_IMAGE": "View image",
         "AIRTEMP": "Air temperature",
         "WATERTEMP": "Water temperature",
         "VISIBILITY": "Max visibility",

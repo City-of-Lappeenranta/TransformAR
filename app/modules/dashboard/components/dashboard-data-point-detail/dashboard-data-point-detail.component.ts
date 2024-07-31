@@ -12,6 +12,7 @@ import {
   WaterbagTestKitDataPointData,
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
+import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -26,6 +27,7 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
   public address = signal<string | null>(null);
   public name = signal<string | null>(null);
+  public imageUrlBase = environment.streetAiUploadUrl;
 
   public DATA_POINT_TYPE = DataPointType;
 

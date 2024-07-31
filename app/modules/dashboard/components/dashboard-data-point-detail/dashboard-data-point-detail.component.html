@@ -103,6 +103,11 @@
             </li>
           }
         </ul>
+        @if (dataPoint.imageUrl) {
+          <a target="_blank" [href]="imageUrlBase + '/' + dataPoint.imageUrl">{{
+            'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.VIEW_IMAGE' | translate
+          }}</a>
+        }
       }
       @case (DATA_POINT_TYPE.ROAD_WORKS) {
         <ul class="metric-container">

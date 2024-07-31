@@ -44,6 +44,7 @@ export interface WaterbagTestKitDataPointData {
 }
 
 export type WaterbagTestKitDataPoint = BaseDataPoint<DataPointType.WATERBAG_TESTKIT> & {
+  imageUrl?: string;
   data: Record<string, WaterbagTestKitDataPointData>;
 };
 
