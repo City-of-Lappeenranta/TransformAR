@@ -58,6 +58,12 @@
         "WATERTEMP": "Veden lämpötila",
         "VISIBILITY": "Näkyvyys",
         "ALGAE": "Sinilevien määrä",
+        "ALGAE_DESCRIPTION": {
+          "1": "Ei havaittavissa määrin",
+          "2": "Hieman sinilevää",
+          "3": "Runsaasti sinilevää",
+          "4": "Erittäin runsaasti sinilevää"
+        },
         "WATERPH": "Veden happamuus/emäksisyys",
         "TURBIDITY": "Sameus",
         "DISSOLVEDOXYGEN": "Liuennut happi vedessä",
@@ -144,10 +150,13 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Anna palautetta",
-      "HOME": "Etusivu"
+      "ABOUT": "Tietoa sovelluksesta",
+      "HOME": "Kartta",
+      "INPUT_MEASUREMENTS": "Havaintoilmoitus"
     },
     "HEADER": {
-      "FEEDBACK": "Ota yhteyttä"
+      "FEEDBACK": "Ota yhteyttä",
+      "ABOUT": "Tietoa sovelluksesta"
     }
   },
   "PERMISSIONS": {
@@ -165,5 +174,17 @@
     },
     "EMPTY_MESSAGE": "Ei tuloksia",
     "PLACEHOLDER": "Etsi sijainti"
+  },
+  "ABOUT": {
+    "INTRO_TITLE": "Tietoa sovelluksesta",
+    "INTRO_DESCRIPTION": "CitySen -sovelluksen avulla kaupungit ja kunnat jakavat ajantasaista tietoa elinympäristön tilasta ja tilanteesta. Sovelluksen keskeisin tavoite on välittää tietoa ilmastonmuutokseen sopeutumisesta sekä hulevesien hallinnasta ja hyödyntämisestä lämpenevässä maailmassa.",
+    "MAP_TITLE": "Kartta",
+    "MAP_DESCRIPTION": "Sovelluksessa esitettävät tiedot tulevat pääosin automaattisista sensoreista, mittauspisteistä ja -järjestelmistä StreetAI-palvelun kautta. Mittaukset analysoidaan ja esitetään sovelluksessa tiivistetysti. Karttanäkymässä voit tarkastella tietoja mm. hulevesistä ja vesistöistä, säästä sekä ilmanlaadusta. Lisäksi tarjolla on tietoja käynnissä olevista katutöistä ja vapaista pysäköintipaikoista.",
+    "NOTICE_TITLE": "Havaintoilmoitus",
+    "NOTICE_DESCRIPTION": "Jokainen voi myös itse osallistua tiedon keräämiseen tekemällä mittauksia vesistöjen ja hulevesien laadusta ja syöttämällä tiedot havaintoilmoitukseen. Mittauksia voi tehdä omilla välineillä tai hankkia välineet käyttöohjeineen esimerkiksi osoitteesta vesireppu.com. Omia ja muiden tekemiä havaintoja pääsee tarkastelemaan karttanäkymästä.",
+    "FEEDBACK_TITLE": "Palaute",
+    "FEEDBACK_DESCRIPTION": "Palautepalvelun kautta voi antaa palautetta kaupungin palveluista, toiminnasta ja päätöksenteosta. Valitsemalla palautekategorian tarkasti, varmistat, että palaute päätyy oikealle vastaanottajalle. Palautetta tästä sovelluksesta ja ehdotuksia uusista ominaisuuksista voi antaa palautepalvelun kohdassa “Asiointi, asiakaspalvelu, viestintä ja yleinen palaute / Verkkoasiointi”.",
+    "FOOTER": "Jatkossa sovellukseen tuodaan tarjolle lisää tietoa. Voit käyttää sovellusta joko verkkoselaimella tai asentamalla sovelluksen omalle laitteellesi.",
+    "EU_HORIZON": "Lappeenrannan kaupunki on kehittänyt tämän sovelluksen osana EU Horizon 2020 -rahoitteista TransformAR -hanketta."
   }
 }
