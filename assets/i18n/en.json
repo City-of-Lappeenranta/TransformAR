@@ -144,8 +144,8 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Give feedback",
-      "HOME": "Home",
-      "INPUT_MEASUREMENTS": "Input measurements"
+      "HOME": "Map",
+      "INPUT_MEASUREMENTS": "Input observation"
     },
     "HEADER": {
       "FEEDBACK": "Get in touch"
