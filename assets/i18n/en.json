@@ -150,11 +150,13 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Give feedback",
+      "ABOUT": "About the app",
       "HOME": "Map",
       "INPUT_MEASUREMENTS": "Input observation"
     },
     "HEADER": {
-      "FEEDBACK": "Get in touch"
+      "FEEDBACK": "Get in touch",
+      "ABOUT": "About the app"
     }
   },
   "PERMISSIONS": {
@@ -172,5 +174,17 @@
     },
     "EMPTY_MESSAGE": "No results",
     "PLACEHOLDER": "Search location"
+  },
+  "ABOUT": {
+    "INTRO_TITLE": "About the application",
+    "INTRO_DESCRIPTION": "With the CitySen application, cities and municipalities share up-to-date information about the state and situation of the living environment. The main goal of the application is to convey information about adapting to climate change and managing and utilizing stormwater in a warming world.",
+    "MAP_TITLE": "Map",
+    "MAP_DESCRIPTION": "The information presented in the application mainly comes from automatic sensors, measurement points and systems via the StreetAI service. The measurements are analyzed and summarized in the application. In the map view, you can view information on e.g. stormwater and waterways, weather and air quality. In addition, there is information about ongoing street works and free parking spaces.",
+    "NOTICE_TITLE": "Input observation",
+    "NOTICE_DESCRIPTION": "Everyone can also participate in the collection of information by taking measurements of the quality of waterways and stormwater and entering the information into the observation report. Measurements can be made with your own equipment or you can purchase equipment with instructions for use from, for example, vesireppu.com. You can view your own and others' observations from the map view.",
+    "FEEDBACK_TITLE": "Feedback",
+    "FEEDBACK_DESCRIPTION": "Through the feedback service, you can give feedback on the city's services, operations and decision-making. By choosing the feedback category carefully, you ensure that the feedback reaches the right recipient. Feedback on this application and suggestions for new features can be given in the feedback service section 'Business, customer service, communication and general feedback / Online business'.",
+    "FOOTER": "In the future, more information will be made available in the application. You can use the application either with a web browser or by installing the application on your own device.",
+    "EU_HORIZON": "The city of Lappeenranta has developed this application as part of the EU Horizon 2020-funded TransformAR project."
   }
 }
