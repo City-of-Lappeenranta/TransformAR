@@ -100,6 +100,7 @@ describe('DataPointsApi', () => {
     expect(response).toEqual([
       {
         location: [61.06433, 28.19235],
+        imageUrl: 'img-url',
         name: 'test-2',
         quality: DataPointQuality.DEFAULT,
         type: DataPointType.WATERBAG_TESTKIT,
