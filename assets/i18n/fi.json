@@ -54,6 +54,7 @@
         }
       },
       "WATERBAG_TESTKIT": {
+        "TITLE": "Havaintoilmoitus",
         "AIRTEMP": "Ilman lämpötila",
         "WATERTEMP": "Veden lämpötila",
         "VISIBILITY": "Näkyvyys",

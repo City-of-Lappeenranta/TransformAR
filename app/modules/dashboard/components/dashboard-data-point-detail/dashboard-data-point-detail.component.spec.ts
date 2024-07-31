@@ -188,7 +188,7 @@ describe('DashboardDataPointDetailComponent', () => {
         fixture.detectChanges();
 
         expect(find('.metric-container')).toHaveFound(1);
-        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('h1').nativeElement.innerHTML).toEqual('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE');
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(findComponent(Chip).length).toEqual(8);
       });
