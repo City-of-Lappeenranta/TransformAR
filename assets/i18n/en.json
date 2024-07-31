@@ -54,6 +54,7 @@
         }
       },
       "WATERBAG_TESTKIT": {
+        "TITLE": "Observation data",
         "AIRTEMP": "Air temperature",
         "WATERTEMP": "Water temperature",
         "VISIBILITY": "Max visibility",

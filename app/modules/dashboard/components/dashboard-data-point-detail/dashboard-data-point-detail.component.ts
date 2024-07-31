@@ -104,7 +104,11 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   }
 
   private async setHeaderValues(): Promise<void> {
-    const dataPointNames = this.dataPoints.map(({ name }) => name);
+    const dataPointNames = this.dataPoints.map(({ name, type }) =>
+      type === DataPointType.WATERBAG_TESTKIT
+        ? this.translateService.instant('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE')
+        : name,
+    );
     this.name.set([...new Set(dataPointNames)].join(', '));
 
     const address = await this.radarService.reverseGeocode(this.dataPoints[0].location);
