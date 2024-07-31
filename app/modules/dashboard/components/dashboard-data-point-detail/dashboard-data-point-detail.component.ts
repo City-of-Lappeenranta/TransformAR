@@ -8,6 +8,7 @@ import {
   WATERBAG_TESTKIT_METRIC_UNIT,
   WEATHER_CONDITIONS_METRIC_UNIT,
   WEATHER_STORM_WATER_METRIC_UNIT,
+  WaterbagTestKitDataPoint,
   WaterbagTestKitDataPointData,
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
@@ -70,8 +71,12 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
-  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData): number {
-    return value['calculatedValue'] ?? value['value'];
+  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData, key: keyof WaterbagTestKitDataPoint['data']): number {
+    if (key === 'algae') {
+      return this.translateService.instant(`DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.ALGAE_DESCRIPTION.${value.value}`);
+    }
+
+    return value.calculatedValue ?? value.value;
   }
 
   public getDataQualityBackgroundColor(quality: DataPointQuality): string {
