@@ -58,6 +58,12 @@
         "WATERTEMP": "Veden lämpötila",
         "VISIBILITY": "Näkyvyys",
         "ALGAE": "Sinilevien määrä",
+        "ALGAE_DESCRIPTION": {
+          "1": "Ei havaittavissa määrin",
+          "2": "Hieman sinilevää",
+          "3": "Runsaasti sinilevää",
+          "4": "Erittäin runsaasti sinilevää"
+        },
         "WATERPH": "Veden happamuus/emäksisyys",
         "TURBIDITY": "Sameus",
         "DISSOLVEDOXYGEN": "Liuennut happi vedessä",

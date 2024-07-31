@@ -58,6 +58,12 @@
         "WATERTEMP": "Water temperature",
         "VISIBILITY": "Max visibility",
         "ALGAE": "Amount of blue algae",
+        "ALGAE_DESCRIPTION": {
+          "1": "Non observable amount",
+          "2": "Small amounts",
+          "3": "Plenty",
+          "4": "A lot"
+        },
         "WATERPH": "Water acidicity/basic reading",
         "TURBIDITY": "Turbidity",
         "DISSOLVEDOXYGEN": "Oxygen particles in water",
