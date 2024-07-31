@@ -33,6 +33,7 @@
         width: fit-content;
         gap: 8px;
         align-items: center;
+        text-decoration: none;
 
         .icon,
         p {
@@ -45,6 +46,12 @@
           font-weight: 400;
           line-height: 28px;
         }
+      }
+
+      app-icon {
+        max-width: 24px;
+        max-height: 24px;
+        cursor: pointer;
       }
     }
   }

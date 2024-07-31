@@ -150,7 +150,8 @@
   "NAVIGATION": {
     "SIDEBAR": {
       "FEEDBACK": "Give feedback",
-      "HOME": "Home"
+      "HOME": "Map",
+      "INPUT_MEASUREMENTS": "Input observation"
     },
     "HEADER": {
       "FEEDBACK": "Get in touch"
