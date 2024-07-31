@@ -83,16 +83,22 @@
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
               <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key) }}</p>
-              <p-chip
-                class="chip"
-                [style]="{
-                  'background-color': getDataQualityBackgroundColor(metric.value.result ?? 0),
-                  color: getDataQualityTextColor(metric.value.result ?? 0)
-                }"
-                [label]="
-                  getWaterbagTestkitValue(metric.value) + '' + getMetricUnit(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key)
-                "
-              ></p-chip>
+              @if (metric.key === 'algae') {
+                <small class="body-sm">{{ getWaterbagTestkitValue(metric.value, metric.key) }}</small>
+              } @else {
+                <p-chip
+                  class="chip"
+                  [style]="{
+                    'background-color': getDataQualityBackgroundColor(metric.value.result ?? 0),
+                    color: getDataQualityTextColor(metric.value.result ?? 0)
+                  }"
+                  [label]="
+                    getWaterbagTestkitValue(metric.value, metric.key) +
+                    '' +
+                    getMetricUnit(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key)
+                  "
+                ></p-chip>
+              }
             </li>
           }
         </ul>
