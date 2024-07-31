@@ -80,10 +80,13 @@
       }
       @case (DATA_POINT_TYPE.WATERBAG_TESTKIT) {
         <ul class="metric-container">
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.LAST_UPDATED_ON' | translate }}</p>
+            <p class="body-sm">{{ dataPoint.lastUpdatedOn | date: 'dd/MM/yyyy HH:mm' }}</p>
+          </li>
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
               <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key) }}</p>
-              <span class="body-xs">{{ metric.value.dataRetrievedTimestamp | date: 'dd.MM.YYYY HH:mm' }}</span>
               @if (metric.key === 'algae') {
                 <p class="body-sm">{{ getWaterbagTestkitValue(metric.value, metric.key) }}</p>
               } @else {

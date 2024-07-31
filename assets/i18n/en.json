@@ -68,7 +68,8 @@
         "TURBIDITY": "Turbidity",
         "DISSOLVEDOXYGEN": "Oxygen particles in water",
         "NITRATE": "Nitrate particles in water",
-        "PHOSPHATE": "Phosphate particles in water"
+        "PHOSPHATE": "Phosphate particles in water",
+        "LAST_UPDATED_ON": "Last updated on"
       },
       "AIR_QUALITY": {
         "TITLE": "Air quality"

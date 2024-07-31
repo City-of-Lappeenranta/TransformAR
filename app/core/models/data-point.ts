@@ -14,7 +14,7 @@ interface BaseDataPoint<T extends DataPointType> {
   name: string;
   location: LatLong;
   quality: DataPointQuality;
-  lastUpdateOn?: number;
+  lastUpdatedOn?: Date;
 }
 
 export type WeatherConditionDataPoint = BaseDataPoint<DataPointType.WEATHER_CONDITIONS> & {
@@ -37,7 +37,6 @@ export type RoadWorksDataPoint = BaseDataPoint<DataPointType.ROAD_WORKS> & {
 };
 
 export interface WaterbagTestKitDataPointData {
-  dataRetrievedTimestamp: number;
   value: number;
   result?: number;
   calculatedValue?: number;
