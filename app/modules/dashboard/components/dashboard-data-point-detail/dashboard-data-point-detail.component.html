@@ -80,22 +80,37 @@
       }
       @case (DATA_POINT_TYPE.WATERBAG_TESTKIT) {
         <ul class="metric-container">
+          <li>
+            <p class="button-sm">{{ 'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.LAST_UPDATED_ON' | translate }}</p>
+            <p class="body-sm">{{ dataPoint.lastUpdatedOn | date: 'dd/MM/yyyy HH:mm' }}</p>
+          </li>
           @for (metric of dataPoint.data | keyvalue; track metric.key) {
             <li>
               <p class="button-sm">{{ getDataPointTranslation(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key) }}</p>
-              <p-chip
-                class="chip"
-                [style]="{
-                  'background-color': getDataQualityBackgroundColor(metric.value.result ?? 0),
-                  color: getDataQualityTextColor(metric.value.result ?? 0)
-                }"
-                [label]="
-                  getWaterbagTestkitValue(metric.value) + '' + getMetricUnit(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key)
-                "
-              ></p-chip>
+              @if (metric.key === 'algae') {
+                <p class="body-sm">{{ getWaterbagTestkitValue(metric.value, metric.key) }}</p>
+              } @else {
+                <p-chip
+                  class="chip"
+                  [style]="{
+                    'background-color': getDataQualityBackgroundColor(metric.value.result ?? 0),
+                    color: getDataQualityTextColor(metric.value.result ?? 0)
+                  }"
+                  [label]="
+                    getWaterbagTestkitValue(metric.value, metric.key) +
+                    '' +
+                    getMetricUnit(DATA_POINT_TYPE.WATERBAG_TESTKIT, metric.key)
+                  "
+                ></p-chip>
+              }
             </li>
           }
         </ul>
+        @if (dataPoint.imageUrl) {
+          <a target="_blank" [href]="imageUrlBase + '/' + dataPoint.imageUrl">{{
+            'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.VIEW_IMAGE' | translate
+          }}</a>
+        }
       }
       @case (DATA_POINT_TYPE.ROAD_WORKS) {
         <ul class="metric-container">

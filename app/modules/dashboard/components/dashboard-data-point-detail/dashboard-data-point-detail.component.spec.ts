@@ -77,7 +77,7 @@ describe('DashboardDataPointDetailComponent', () => {
             data: {
               fillLevel: 3,
             },
-            lastUpdateOn: 1711635283,
+            lastUpdatedOn: new Date(1711635283),
             location: [61.05871, 28.18871],
           },
         ];
@@ -108,7 +108,7 @@ describe('DashboardDataPointDetailComponent', () => {
               streetState: 'icy',
               temperature: -4,
             },
-            lastUpdateOn: 1711635283,
+            lastUpdatedOn: new Date(1711635283),
             location: [61.05871, 28.18871],
           },
         ];
@@ -135,7 +135,7 @@ describe('DashboardDataPointDetailComponent', () => {
             name,
             type: DataPointType.AIR_QUALITY,
             quality,
-            lastUpdateOn: 1711635283,
+            lastUpdatedOn: new Date(1711635283),
             location: [61.05871, 28.18871],
           },
         ];
@@ -164,17 +164,17 @@ describe('DashboardDataPointDetailComponent', () => {
             name,
             type: DataPointType.WATERBAG_TESTKIT,
             quality,
-            lastUpdateOn: 1711635283,
+            lastUpdatedOn: new Date(1711635283),
             location: [61.05871, 28.18871],
             data: {
-              airTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              waterTemp: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              visibility: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              waterPh: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              turbidity: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              dissolvedOxygen: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              nitrate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
-              phosphate: { dataRetrievedTimestamp: 1711635283, value: 1, result: 1 },
+              airTemp: { value: 1, result: 1 },
+              waterTemp: { value: 1, result: 1 },
+              visibility: { value: 1, result: 1 },
+              waterPh: { value: 1, result: 1 },
+              turbidity: { value: 1, result: 1 },
+              dissolvedOxygen: { value: 1, result: 1 },
+              nitrate: { value: 1, result: 1 },
+              phosphate: { value: 1, result: 1 },
             },
           },
         ];
@@ -188,7 +188,7 @@ describe('DashboardDataPointDetailComponent', () => {
         fixture.detectChanges();
 
         expect(find('.metric-container')).toHaveFound(1);
-        expect(find('h1').nativeElement.innerHTML).toEqual(name);
+        expect(find('h1').nativeElement.innerHTML).toEqual('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE');
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(findComponent(Chip).length).toEqual(8);
       });

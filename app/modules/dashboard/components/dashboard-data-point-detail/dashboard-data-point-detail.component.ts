@@ -8,9 +8,11 @@ import {
   WATERBAG_TESTKIT_METRIC_UNIT,
   WEATHER_CONDITIONS_METRIC_UNIT,
   WEATHER_STORM_WATER_METRIC_UNIT,
+  WaterbagTestKitDataPoint,
   WaterbagTestKitDataPointData,
 } from '@core/models/data-point';
 import { RadarService } from '@core/services/radar.service';
+import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -25,6 +27,7 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
   public address = signal<string | null>(null);
   public name = signal<string | null>(null);
+  public imageUrlBase = environment.streetAiUploadUrl;
 
   public DATA_POINT_TYPE = DataPointType;
 
@@ -70,8 +73,12 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
-  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData): number {
-    return value['calculatedValue'] ?? value['value'];
+  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData, key: keyof WaterbagTestKitDataPoint['data']): number {
+    if (key === 'algae') {
+      return this.translateService.instant(`DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.ALGAE_DESCRIPTION.${value.value}`);
+    }
+
+    return value.calculatedValue ?? value.value;
   }
 
   public getDataQualityBackgroundColor(quality: DataPointQuality): string {
@@ -104,7 +111,11 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   }
 
   private async setHeaderValues(): Promise<void> {
-    const dataPointNames = this.dataPoints.map(({ name }) => name);
+    const dataPointNames = this.dataPoints.map(({ name, type }) =>
+      type === DataPointType.WATERBAG_TESTKIT
+        ? this.translateService.instant('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE')
+        : name,
+    );
     this.name.set([...new Set(dataPointNames)].join(', '));
 
     const address = await this.radarService.reverseGeocode(this.dataPoints[0].location);

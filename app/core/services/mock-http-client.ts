@@ -118,7 +118,7 @@ const WATERBAG_TESTKITS: WaterbagTestKitResponse = [
       result: 4,
       value: 7,
     },
-    imageUrl: '',
+    imageUrl: 'img-url',
     dissolvedOxygen: {
       result: 3,
       calculatedValue: 90,

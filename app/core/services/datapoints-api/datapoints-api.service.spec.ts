@@ -21,7 +21,7 @@ describe('DataPointsApi', () => {
     expect(response).toEqual([
       {
         data: expect.anything(),
-        lastUpdateOn: 1711635283,
+        lastUpdatedOn: new Date(1711635283),
         location: [61.05871, 28.18871],
         name: 'Lappeenranta Weather Station',
         quality: DataPointQuality.DEFAULT,
@@ -100,7 +100,9 @@ describe('DataPointsApi', () => {
     expect(response).toEqual([
       {
         location: [61.06433, 28.19235],
+        imageUrl: 'img-url',
         name: 'test-2',
+        lastUpdatedOn: new Date(1717155485),
         quality: DataPointQuality.DEFAULT,
         type: DataPointType.WATERBAG_TESTKIT,
         data: {

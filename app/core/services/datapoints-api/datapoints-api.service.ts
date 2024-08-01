@@ -42,7 +42,7 @@ export class DataPointsApi {
           response.map(({ name, latitude, longitude, dataRetrievedTimestamp, ...rest }) => ({
             name: name,
             location: [latitude, longitude],
-            lastUpdateOn: dataRetrievedTimestamp,
+            lastUpdatedOn: new Date(dataRetrievedTimestamp),
             type: DataPointType.WEATHER_CONDITIONS,
             quality: DataPointQuality.DEFAULT,
             data: { ...removeEmpty(rest) },
@@ -119,8 +119,10 @@ export class DataPointsApi {
             return {
               name: id,
               location: [coords.latitudeValue, coords.longitudeValue],
+              imageUrl,
               type: DataPointType.WATERBAG_TESTKIT,
               quality: DataPointQuality.DEFAULT,
+              lastUpdatedOn: new Date(dataRetrievedTimestamp),
               data: Object.fromEntries(
                 Object.entries(data).filter(([_, metric]) => {
                   return metric.value !== null;
