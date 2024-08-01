@@ -54,6 +54,7 @@
         }
       },
       "WATERBAG_TESTKIT": {
+        "TITLE": "Observation data",
         "VIEW_IMAGE": "View image",
         "AIRTEMP": "Air temperature",
         "WATERTEMP": "Water temperature",
