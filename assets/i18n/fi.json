@@ -55,6 +55,7 @@
       },
       "WATERBAG_TESTKIT": {
         "TITLE": "Havaintoilmoitus",
+        "VIEW_IMAGE": "Näytä kuva",
         "AIRTEMP": "Ilman lämpötila",
         "WATERTEMP": "Veden lämpötila",
         "VISIBILITY": "Näkyvyys",
@@ -69,7 +70,8 @@
         "TURBIDITY": "Sameus",
         "DISSOLVEDOXYGEN": "Liuennut happi vedessä",
         "NITRATE": "Nitraattipitoisuus vedessä",
-        "PHOSPHATE": "Fosfaattipitoisuus vedessä"
+        "PHOSPHATE": "Fosfaattipitoisuus vedessä",
+        "LAST_UPDATED_ON": "Viimeksi päivitetty"
       },
       "AIR_QUALITY": {
         "TITLE": "Ilmanlaatu"
