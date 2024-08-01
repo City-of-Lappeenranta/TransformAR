@@ -54,6 +54,7 @@
         }
       },
       "WATERBAG_TESTKIT": {
+        "VIEW_IMAGE": "Näytä kuva",
         "AIRTEMP": "Ilman lämpötila",
         "WATERTEMP": "Veden lämpötila",
         "VISIBILITY": "Näkyvyys",
