@@ -1,7 +1,7 @@
 {
   "name": "CitySen",
   "short_name": "CitySen",
-  "theme_color": " #275D38",
+  "theme_color": "#275D38",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
