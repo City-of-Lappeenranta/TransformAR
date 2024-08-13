@@ -18,11 +18,22 @@
     }
   }
 
+  .content {
+    height: 100%;
+    padding-top: 48px;
+
+    &-title {
+      color: var(--text-color);
+      font-size: 40px;
+      font-weight: 400;
+    }
+  }
+
   .menu-items-container {
     position: relative;
     z-index: 2;
     justify-content: center;
-    height: 100%;
+    margin-top: 64px;
 
     .menu-items {
       width: fit-content;

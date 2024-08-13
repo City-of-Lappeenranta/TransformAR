@@ -152,6 +152,7 @@
   },
   "NAVIGATION": {
     "SIDEBAR": {
+      "TITLE": "CitySen",
       "FEEDBACK": "Anna palautetta",
       "ABOUT": "Tietoa sovelluksesta",
       "HOME": "Kartta",
