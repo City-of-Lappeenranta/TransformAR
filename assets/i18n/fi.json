@@ -7,7 +7,7 @@
         "STORM_WATER": "Hulevedet",
         "PARKING": "Pysäköinti",
         "ROAD_WORKS": "Katutyöt",
-        "WATERBAG_TESTKIT": "Vesipussin testisarja"
+        "WATERBAG_TESTKIT": "Vesihavainnot"
       },
       "WEATHER_CONDITIONS": {
         "DEWPOINT": "Kastepiste",
@@ -43,7 +43,7 @@
         "TURBIDITY": "Sameus",
         "FLOWRATE": "Virtausnopeus",
         "FILLLEVEL": "Täyttöaste",
-        "DATARETRIEVEDTIMESTAMP": "Aikaleima",
+        "DATARETRIEVEDTIMESTAMP": "Mittausaika",
         "WATERQUALITY": "Veden laatu",
         "FILLLEVEL_RESULT": {
           "0": "Ei arvoa",
@@ -58,15 +58,15 @@
         "VIEW_IMAGE": "Näytä kuva",
         "AIRTEMP": "Ilman lämpötila",
         "WATERTEMP": "Veden lämpötila",
-        "VISIBILITY": "Näkyvyys",
+        "VISIBILITY": "Näkösyvyys",
         "ALGAE": "Sinilevien määrä",
         "ALGAE_DESCRIPTION": {
           "1": "Ei havaittavissa määrin",
-          "2": "Hieman sinilevää",
-          "3": "Runsaasti sinilevää",
-          "4": "Erittäin runsaasti sinilevää"
+          "2": "Hieman",
+          "3": "Runsaasti",
+          "4": "Erittäin runsaasti"
         },
-        "WATERPH": "Veden happamuus/emäksisyys",
+        "WATERPH": "Veden happamuus tai emäksisyys",
         "TURBIDITY": "Sameus",
         "DISSOLVEDOXYGEN": "Liuennut happi vedessä",
         "NITRATE": "Nitraattipitoisuus vedessä",
@@ -105,10 +105,10 @@
     "CONTACT": {
       "EMAIL": "Sähköposti",
       "FIRST_NAME": "Etunimi",
-      "I_ACCEPT_THE_SERVICES": "Hyväksyn palvelun",
+      "I_ACCEPT_THE_SERVICES": "Hyväksyn seuraavat:",
       "LAST_NAME": "Sukunimi",
       "PHONE": "Puhelinnumero",
-      "PRIVACY_STATEMENT": "Tietosuojalausunto",
+      "PRIVACY_STATEMENT": "Tietosuojaseloste",
       "TERMS_OF_USE": "Käyttöehdot",
       "ERROR": {
         "INVALID_EMAIL": "Sähköpostiosoitteen muoto on virheellinen",
@@ -152,7 +152,6 @@
   },
   "NAVIGATION": {
     "SIDEBAR": {
-      "TITLE": "CitySen.app",
       "FEEDBACK": "Anna palautetta",
       "ABOUT": "Tietoa sovelluksesta",
       "HOME": "Kartta",

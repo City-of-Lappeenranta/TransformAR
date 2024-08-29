@@ -26,7 +26,7 @@ export class NavigationSidebarComponent {
     {
       name: 'NAVIGATION.SIDEBAR.INPUT_MEASUREMENTS',
       icon: 'waterbag-testkit',
-      route: 'https://opendata.streetai.net/waterbag-testkit/',
+      route: 'https://opendata.streetai.net/observation/water/',
       isExternal: true,
     },
     {
