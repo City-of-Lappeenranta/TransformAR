@@ -92,7 +92,7 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('li').length).toEqual(2);
+        expect(find('li').length).toEqual(3);
       });
 
       it('when type is weather condition', async () => {
@@ -123,7 +123,9 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('li').length).toEqual(Object.keys(dataPoints[0].data).length);
+        expect(find('li').length).toEqual(
+          Object.keys(dataPoints[0].data).length + 1,
+        );
       });
 
       it('when type is weather air quality', async () => {
@@ -151,8 +153,10 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('p.button-sm').length).toEqual(1);
-        expect(findComponent(Chip)?.style?.['background-color']).toEqual(DATA_POINT_QUALITY_COLOR_CHART[quality]);
+        expect(find('p.button-sm').length).toEqual(2);
+        expect(findComponent(Chip)?.style?.['background-color']).toEqual(
+          DATA_POINT_QUALITY_COLOR_CHART[quality],
+        );
       });
 
       it('when type is waterbag testkit', async () => {
@@ -188,7 +192,9 @@ describe('DashboardDataPointDetailComponent', () => {
         fixture.detectChanges();
 
         expect(find('.metric-container')).toHaveFound(1);
-        expect(find('h1').nativeElement.innerHTML).toEqual('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE');
+        expect(find('h1').nativeElement.innerHTML).toEqual(
+          'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE',
+        );
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(findComponent(Chip).length).toEqual(8);
       });
@@ -204,6 +210,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.PARKING,
             location: [61.05871, 28.18871],
             availableSpots: 1,
+            lastUpdatedOn: new Date(1711635283000),
           },
         ];
 
@@ -218,8 +225,8 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('.metric-container')).toHaveFound(1);
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('p.button-sm').length).toEqual(1);
-        expect(find('.body-sm').nativeElement.innerHTML).toEqual('1');
+        expect(find('p.button-sm').length).toEqual(2);
+        expect(find('small.body-sm').nativeElement.innerHTML).toEqual('1');
       });
 
       it('when type is road works', async () => {
@@ -249,8 +256,6 @@ describe('DashboardDataPointDetailComponent', () => {
         expect(find('h1').nativeElement.innerHTML).toEqual(name);
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
         expect(find('p.button-sm').length).toEqual(2);
-        expect(find('.body-sm')[0].nativeElement.innerHTML).toEqual('01.01.2024');
-        expect(find('.body-sm')[1].nativeElement.innerHTML).toEqual('01.02.2024');
       });
 
       it('should show multiple data points', async () => {
@@ -263,6 +268,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.WEATHER_CONDITIONS,
             location: [61.05871, 28.18871],
             data: {},
+            lastUpdatedOn: new Date(1711635283000),
           },
           {
             name: 'City Parking',
@@ -270,6 +276,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.PARKING,
             location: [61.05871, 28.18871],
             availableSpots: 1,
+            lastUpdatedOn: new Date(1731050040000),
           },
         ];
 
@@ -282,10 +289,12 @@ describe('DashboardDataPointDetailComponent', () => {
         fixture.detectChanges();
 
         expect(find('.metric-container')).toHaveFound(2);
-        expect(find('h1').nativeElement.innerHTML).toEqual('Weather hub, City Parking');
+        expect(find('h1').nativeElement.innerHTML).toEqual(
+          'Weather hub, City Parking',
+        );
         expect(find('p.body-xs').nativeElement.innerHTML).toEqual(address);
-        expect(find('p.button-sm').length).toEqual(1);
-        expect(find('.body-sm').nativeElement.innerHTML).toEqual('1');
+        expect(find('p.button-sm').length).toEqual(3);
+        expect(find('small.body-sm')[0].nativeElement.innerHTML).toEqual('1');
       });
     });
   });

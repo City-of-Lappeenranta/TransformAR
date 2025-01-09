@@ -34,56 +34,94 @@ export class DataPointsApi {
 
   public getWeatherConditions(): Observable<WeatherConditionDataPoint[]> {
     return this.httpClient
-      .get<WeatherConditionsResponse>(`${this.baseUrl}/${DataPointEndpoint.WEATHER_CONDITIONS}`, {
-        headers: this.defaultHeaders,
-      })
+      .get<WeatherConditionsResponse>(
+        `${this.baseUrl}/${DataPointEndpoint.WEATHER_CONDITIONS}`,
+        {
+          headers: this.defaultHeaders,
+        },
+      )
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, dataRetrievedTimestamp, ...rest }) => ({
-            name: name,
-            location: [latitude, longitude],
-            lastUpdatedOn: new Date(dataRetrievedTimestamp),
-            type: DataPointType.WEATHER_CONDITIONS,
-            quality: DataPointQuality.DEFAULT,
-            data: { ...removeEmpty(rest) },
-          })),
+          response.map(
+            ({
+              name,
+              latitude,
+              longitude,
+              dataRetrievedTimestamp,
+              ...rest
+            }) => ({
+              name: name,
+              location: [latitude, longitude],
+              lastUpdatedOn: new Date(dataRetrievedTimestamp * 1000),
+              type: DataPointType.WEATHER_CONDITIONS,
+              quality: DataPointQuality.DEFAULT,
+              data: { ...removeEmpty(rest) },
+            }),
+          ),
         ),
       );
   }
 
   public getWeatherStormWater(): Observable<WeatherStormWaterDataPoint[]> {
     return this.httpClient
-      .get<WeatherStormWaterResponse>(`${this.baseUrl}/${DataPointEndpoint.WEATHER_STORM_WATER}`, {
-        headers: this.defaultHeaders,
-      })
+      .get<WeatherStormWaterResponse>(
+        `${this.baseUrl}/${DataPointEndpoint.WEATHER_STORM_WATER}`,
+        {
+          headers: this.defaultHeaders,
+        },
+      )
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, waterQuality, fillLevel }) => ({
-            name: name,
-            location: [latitude, longitude],
-            type: DataPointType.STORM_WATER,
-            quality: waterQuality,
-            data: {
-              fillLevel: fillLevel.result,
-            },
-          })),
+          response.map(
+            ({
+              name,
+              latitude,
+              longitude,
+              waterQuality,
+              fillLevel,
+              dataRetrievedTimestamp,
+            }) => ({
+              name: name,
+              location: [latitude, longitude],
+              lastUpdatedOn: new Date(dataRetrievedTimestamp),
+              type: DataPointType.STORM_WATER,
+              quality: waterQuality,
+              data: {
+                fillLevel: fillLevel.result,
+              },
+            }),
+          ),
         ),
       );
   }
 
   public getWeatherAirQuality(): Observable<WeatherAirQualityDataPoint[]> {
     return this.httpClient
-      .get<WeatherAirQualityResponse>(`${this.baseUrl}/${DataPointEndpoint.WEATHER_AIR_QUALITY}`, {
-        headers: this.defaultHeaders,
-      })
+      .get<WeatherAirQualityResponse>(
+        `${this.baseUrl}/${DataPointEndpoint.WEATHER_AIR_QUALITY}`,
+        {
+          headers: this.defaultHeaders,
+        },
+      )
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, measurementIndex }) => ({
-            name: name,
-            location: [latitude, longitude],
-            type: DataPointType.AIR_QUALITY,
-            quality: QUALITY_CONVERSION[measurementIndex] ?? DataPointQuality.DEFAULT,
-          })),
+          response.map(
+            ({
+              name,
+              latitude,
+              longitude,
+              measurementIndex,
+              dataRetrievedTimestamp,
+            }) => ({
+              name: name,
+              location: [latitude, longitude],
+              lastUpdatedOn: new Date(dataRetrievedTimestamp * 1000),
+              type: DataPointType.AIR_QUALITY,
+              quality:
+                QUALITY_CONVERSION[measurementIndex] ??
+                DataPointQuality.DEFAULT,
+            }),
+          ),
         ),
       );
   }
@@ -95,22 +133,34 @@ export class DataPointsApi {
       })
       .pipe(
         map((response) =>
-          response.map(({ name, latitude, longitude, availableSpots }) => ({
-            name: name,
-            location: [latitude, longitude],
-            type: DataPointType.PARKING,
-            quality: DataPointQuality.DEFAULT,
-            availableSpots,
-          })),
+          response.map(
+            ({
+              name,
+              latitude,
+              longitude,
+              availableSpots,
+              dataRetrievedTimestamp,
+            }) => ({
+              name: name,
+              location: [latitude, longitude],
+              lastUpdatedOn: new Date(dataRetrievedTimestamp),
+              type: DataPointType.PARKING,
+              quality: DataPointQuality.DEFAULT,
+              availableSpots,
+            }),
+          ),
         ),
       );
   }
 
   public getWaterbagTestKits(): Observable<WaterbagTestKitDataPoint[]> {
     return this.httpClient
-      .get<WaterbagTestKitResponse>(`${this.baseUrl}/${DataPointEndpoint.WATERBAG_TESTKIT}`, {
-        headers: this.defaultHeaders,
-      })
+      .get<WaterbagTestKitResponse>(
+        `${this.baseUrl}/${DataPointEndpoint.WATERBAG_TESTKIT}`,
+        {
+          headers: this.defaultHeaders,
+        },
+      )
       .pipe(
         map((response) =>
           response.map(({ id, coords, ...rest }) => {
@@ -136,9 +186,12 @@ export class DataPointsApi {
 
   public getRoadWorks(): Observable<RoadWorksDataPoint[]> {
     return this.httpClient
-      .get<RoadWorksResponse>(`${this.baseUrl}/${DataPointEndpoint.ROAD_WORKS}`, {
-        headers: this.defaultHeaders,
-      })
+      .get<RoadWorksResponse>(
+        `${this.baseUrl}/${DataPointEndpoint.ROAD_WORKS}`,
+        {
+          headers: this.defaultHeaders,
+        },
+      )
       .pipe(
         map((response) =>
           response.map(({ name, latitude, longitude, validityPeriod }) => {
