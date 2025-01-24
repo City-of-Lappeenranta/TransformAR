@@ -83,7 +83,7 @@ export class DataPointsApi {
             }) => ({
               name: name,
               location: [latitude, longitude],
-              lastUpdatedOn: new Date(dataRetrievedTimestamp),
+              lastUpdatedOn: new Date(dataRetrievedTimestamp * 1000),
               type: DataPointType.STORM_WATER,
               quality: waterQuality,
               data: {
@@ -143,7 +143,7 @@ export class DataPointsApi {
             }) => ({
               name: name,
               location: [latitude, longitude],
-              lastUpdatedOn: new Date(dataRetrievedTimestamp),
+              lastUpdatedOn: new Date(dataRetrievedTimestamp * 1000),
               type: DataPointType.PARKING,
               quality: DataPointQuality.DEFAULT,
               availableSpots,
@@ -172,7 +172,7 @@ export class DataPointsApi {
               imageUrl,
               type: DataPointType.WATERBAG_TESTKIT,
               quality: DataPointQuality.DEFAULT,
-              lastUpdatedOn: new Date(dataRetrievedTimestamp),
+              lastUpdatedOn: new Date(dataRetrievedTimestamp * 1000),
               data: Object.fromEntries(
                 Object.entries(data).filter(([_, metric]) => {
                   return metric.value !== null;
