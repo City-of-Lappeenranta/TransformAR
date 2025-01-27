@@ -17,4 +17,8 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/about/about.module').then((m) => m.AboutModule),
     data: { navigationHeaderTitle: 'NAVIGATION.HEADER.ABOUT' },
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
