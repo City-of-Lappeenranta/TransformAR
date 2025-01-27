@@ -210,7 +210,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.PARKING,
             location: [61.05871, 28.18871],
             availableSpots: 1,
-            lastUpdatedOn: new Date(1711635283000),
+            lastUpdatedOn: new Date(1728453600 * 1000),
           },
         ];
 
@@ -268,7 +268,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.WEATHER_CONDITIONS,
             location: [61.05871, 28.18871],
             data: {},
-            lastUpdatedOn: new Date(1711635283000),
+            lastUpdatedOn: new Date(1711635283 * 1000),
           },
           {
             name: 'City Parking',
@@ -276,7 +276,7 @@ describe('DashboardDataPointDetailComponent', () => {
             type: DataPointType.PARKING,
             location: [61.05871, 28.18871],
             availableSpots: 1,
-            lastUpdatedOn: new Date(1731050040000),
+            lastUpdatedOn: new Date(1731050040 * 1000),
           },
         ];
 

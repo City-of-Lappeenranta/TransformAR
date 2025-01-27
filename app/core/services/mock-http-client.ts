@@ -70,7 +70,7 @@ const WEATHER_STORM_WATER: WeatherStormWaterResponse = [
       result: 2,
     },
     waterQuality: 3,
-    dataRetrievedTimestamp: 1711635283000
+    dataRetrievedTimestamp: 1711635283
   },
 ];
 
