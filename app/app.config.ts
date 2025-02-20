@@ -15,6 +15,7 @@ import {
   NgxGoogleAnalyticsModule,
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
+import {environment} from '@environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,7 +42,7 @@ export const appConfig: ApplicationConfig = {
       deps: [Router],
     },
     importProvidersFrom([
-      NgxGoogleAnalyticsModule.forRoot('G-BE9DHH3SEG'),
+      NgxGoogleAnalyticsModule.forRoot(environment.trackingCode),
       NgxGoogleAnalyticsRouterModule,
     ]),
   ],
