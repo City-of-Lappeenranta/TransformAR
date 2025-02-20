@@ -56,6 +56,7 @@
     "leaflet": "^1.9.4",
     "lodash-es": "^4.17.21",
     "mkdirp": "^3.0.1",
+    "ngx-google-analytics": "^14.0.1",
     "primeng": "^17.5.0",
     "rxjs": "~7.8.0",
     "sonarqube-scanner": "^3.3.0",
