@@ -23,12 +23,26 @@ describe('AppComponent', () => {
     });
 
     jest.spyOn(sessionStorage, 'setItem').mockImplementation(() => {});
+
+    Object.defineProperty(window, 'location', {
+      value: {
+        pathname: '/mocked-path',
+      },
+      writable: true,
+    });
   });
 
   it('should render', async () => {
     const component = await shallow.render();
 
     expect(component).toBeDefined();
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: window.location,
+      writable: false, // Reset to the default behavior
+    });
   });
 
   it('should set the correct navigation header depending on the route', async () => {
@@ -62,7 +76,10 @@ describe('AppComponent', () => {
 
       expect(sessionStorage.getItem('ga-tracked')).toBeNull();
 
-      expect(googleAnalyticsService.pageView).toHaveBeenCalled();
+      expect(googleAnalyticsService.pageView).toHaveBeenCalledWith(
+        '/mocked-path',
+        'CitySen.app',
+      );
       expect(sessionStorage.setItem).toHaveBeenCalledWith('ga-tracked', 'true');
     });
   });
