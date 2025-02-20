@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
     if (!sessionStorage.getItem('ga-tracked')) {
       this.googleAnalyticsService.pageView(
         window.location.pathname,
-        'citizen-webapp',
+        'CitySen.app',
       );
 
       sessionStorage.setItem('ga-tracked', 'true');
