@@ -1,11 +1,21 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, ErrorHandler, isDevMode } from '@angular/core';
+import {
+  ApplicationConfig,
+  ErrorHandler,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { Router, provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import * as sentry from '@sentry/angular-ivy';
 import { routes } from './app.routes';
 import { providei18n } from './providers/i18n';
+import {
+  NgxGoogleAnalyticsModule,
+  NgxGoogleAnalyticsRouterModule,
+} from 'ngx-google-analytics';
+import {environment} from '@environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,5 +41,9 @@ export const appConfig: ApplicationConfig = {
       provide: sentry.TraceService,
       deps: [Router],
     },
+    importProvidersFrom([
+      NgxGoogleAnalyticsModule.forRoot(environment.trackingCode),
+      NgxGoogleAnalyticsRouterModule,
+    ]),
   ],
 };

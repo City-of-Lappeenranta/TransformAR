@@ -21,7 +21,7 @@ describe('DataPointsApi', () => {
     expect(response).toEqual([
       {
         data: expect.anything(),
-        lastUpdatedOn: new Date(1711635283),
+        lastUpdatedOn: new Date(1711635283 * 1000),
         location: [61.05871, 28.18871],
         name: 'Lappeenranta Weather Station',
         quality: DataPointQuality.DEFAULT,
@@ -42,6 +42,7 @@ describe('DataPointsApi', () => {
         quality: DataPointQuality.DEFAULT,
         type: DataPointType.PARKING,
         availableSpots: 40,
+        lastUpdatedOn: new Date(1711635283 * 1000),
       },
     ]);
   });
@@ -77,6 +78,7 @@ describe('DataPointsApi', () => {
         name: 'Storm water well',
         quality: 3,
         type: 2,
+        lastUpdatedOn: new Date(1711635283 * 1000)
       },
     ]);
   });
@@ -87,8 +89,8 @@ describe('DataPointsApi', () => {
     const response = await firstValueFrom(instance.getWeatherAirQuality());
 
     expect(response).toEqual([
-      { location: [61.05871, 28.18871], name: 'Air Quality Station', quality: 1, type: 1 },
-      { location: [61.056871, 28.183503], name: 'Air Quality Station 2', quality: 5, type: 1 },
+      { location: [61.05871, 28.18871], name: 'Air Quality Station', quality: 1, type: 1, lastUpdatedOn: new Date(1711635283 * 1000) },
+      { location: [61.056871, 28.183503], name: 'Air Quality Station 2', quality: 5, type: 1, lastUpdatedOn: new Date(1711635283 * 1000) },
     ]);
   });
 
@@ -102,7 +104,7 @@ describe('DataPointsApi', () => {
         location: [61.06433, 28.19235],
         imageUrl: 'img-url',
         name: 'test-2',
-        lastUpdatedOn: new Date(1717155485),
+        lastUpdatedOn: new Date(1717155485 * 1000),
         quality: DataPointQuality.DEFAULT,
         type: DataPointType.WATERBAG_TESTKIT,
         data: {
