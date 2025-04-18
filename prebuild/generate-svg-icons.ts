@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { resolve } = require('path');
 
-const directoryPath = path.join(resolve(__dirname, '..', 'assets'));
+const directoryPath = path.join(resolve(__dirname, '..', 'src', 'assets'));
 
 function generateSvgIconNames(dirPath) {
   const svgIconNames = [];
@@ -54,7 +54,7 @@ function getSvgDimensions(svgContent) {
 }
 
 const svgIconNames = generateSvgIconNames(directoryPath);
-const outputFilePath = resolve(__dirname, '..', 'app', 'shared', 'components', 'icon', 'svg-icons.generated.ts');
+const outputFilePath = resolve(__dirname, '..', 'src', 'app', 'shared', 'components', 'icon', 'svg-icons.generated.ts');
 const exportContent = `export const SVG_ICONS = ${JSON.stringify(svgIconNames, null, 2)}`;
 
 fs.writeFileSync(outputFilePath, exportContent);
