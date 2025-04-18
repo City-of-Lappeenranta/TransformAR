@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import {DatePipe, KeyValuePipe, NgIf} from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, signal } from '@angular/core';
 import {
   DATA_POINT_QUALITY_COLOR_CHART,
@@ -10,15 +10,28 @@ import {
   WEATHER_STORM_WATER_METRIC_UNIT,
   WaterbagTestKitDataPoint,
   WaterbagTestKitDataPointData,
-} from '../../../../core/models/data-point';
-import { RadarService } from '../../../../core/services/radar.service';
-import { environment } from '../../../../../environments/environment';
-import { TranslateService } from '@ngx-translate/core';
+} from '@core/models/data-point';
+import { RadarService } from '@core/services/radar.service';
+import { environment } from '@environments/environment';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {Chip} from 'primeng/chip';
+import {Skeleton} from 'primeng/skeleton';
+import {IconComponent} from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-dashboard-data-point-detail',
   templateUrl: './dashboard-data-point-detail.component.html',
   styleUrls: ['./dashboard-data-point-detail.component.scss'],
+  imports: [
+    Chip,
+    Skeleton,
+    IconComponent,
+    TranslatePipe,
+    NgIf,
+    DatePipe,
+    KeyValuePipe,
+  ],
+  standalone: true,
 })
 export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   @Input({ required: true }) public dataPoints: DataPoint[] = [];
@@ -32,9 +45,9 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
   public DATA_POINT_TYPE = DataPointType;
 
   public constructor(
-    private readonly translateService: TranslateService,
-    private readonly radarService: RadarService,
-    private readonly datePipe: DatePipe,
+      private readonly translateService: TranslateService,
+      private readonly radarService: RadarService,
+      private readonly datePipe: DatePipe,
   ) {}
 
   public ngOnInit(): void {
@@ -52,15 +65,23 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     }
   }
 
-  public getWeatherConditionMetricValue(value: string | number): string | number {
+  public getWeatherConditionMetricValue(
+      value: string | number,
+  ): string | number {
     if (typeof value === 'number') {
       return Math.round(value * 10) / 10;
     }
 
-    return this.getDataPointTranslation(DataPointType.WEATHER_CONDITIONS, value);
+    return this.getDataPointTranslation(
+        DataPointType.WEATHER_CONDITIONS,
+        value,
+    );
   }
 
-  public getStormWeatherMetricValue(value: string | number, key: string): string | number {
+  public getStormWeatherMetricValue(
+      value: string | number,
+      key: string,
+  ): string | number {
     if (key === 'dataRetrievedTimestamp') {
       const date = this.datePipe.transform(value, 'dd/MM/yyyy');
       return date ? date : '';
@@ -73,9 +94,14 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
     return `DASHBOARD.DATA_POINTS.QUALITY.${DataPointQuality[quality]}`;
   }
 
-  public getWaterbagTestkitValue(value: WaterbagTestKitDataPointData, key: keyof WaterbagTestKitDataPoint['data']): number {
+  public getWaterbagTestkitValue(
+      value: WaterbagTestKitDataPointData,
+      key: keyof WaterbagTestKitDataPoint['data'],
+  ): number {
     if (key === 'algae') {
-      return this.translateService.instant(`DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.ALGAE_DESCRIPTION.${value.value}`);
+      return this.translateService.instant(
+          `DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.ALGAE_DESCRIPTION.${value.value}`,
+      );
     }
 
     return value.calculatedValue ?? value.value;
@@ -91,15 +117,27 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
   public getMetricUnit(type: DataPointType, key: string): string | undefined {
     if (type === DataPointType.WEATHER_CONDITIONS) {
-      return WEATHER_CONDITIONS_METRIC_UNIT[key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT] ?? '';
+      return (
+          WEATHER_CONDITIONS_METRIC_UNIT[
+              key as keyof typeof WEATHER_CONDITIONS_METRIC_UNIT
+              ] ?? ''
+      );
     }
 
     if (type === DataPointType.STORM_WATER) {
-      return WEATHER_STORM_WATER_METRIC_UNIT[key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT] ?? '';
+      return (
+          WEATHER_STORM_WATER_METRIC_UNIT[
+              key as keyof typeof WEATHER_STORM_WATER_METRIC_UNIT
+              ] ?? ''
+      );
     }
 
     if (type === DataPointType.WATERBAG_TESTKIT) {
-      return WATERBAG_TESTKIT_METRIC_UNIT[key as keyof typeof WATERBAG_TESTKIT_METRIC_UNIT] ?? '';
+      return (
+          WATERBAG_TESTKIT_METRIC_UNIT[
+              key as keyof typeof WATERBAG_TESTKIT_METRIC_UNIT
+              ] ?? ''
+      );
     }
 
     return undefined;
@@ -112,13 +150,17 @@ export class DashboardDataPointDetailComponent implements OnInit, OnChanges {
 
   private async setHeaderValues(): Promise<void> {
     const dataPointNames = this.dataPoints.map(({ name, type }) =>
-      type === DataPointType.WATERBAG_TESTKIT
-        ? this.translateService.instant('DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE')
-        : name,
+        type === DataPointType.WATERBAG_TESTKIT
+            ? this.translateService.instant(
+                'DASHBOARD.DATA_POINTS.WATERBAG_TESTKIT.TITLE',
+            )
+            : name,
     );
     this.name.set([...new Set(dataPointNames)].join(', '));
 
-    const address = await this.radarService.reverseGeocode(this.dataPoints[0].location);
+    const address = await this.radarService.reverseGeocode(
+        this.dataPoints[0].location,
+    );
     this.address.set(address);
   }
 }

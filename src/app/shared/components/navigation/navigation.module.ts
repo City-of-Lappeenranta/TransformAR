@@ -8,8 +8,16 @@ import { NavigationSidebarComponent } from './navigation-sidebar/navigation-side
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [NavigationHeaderComponent, NavigationSidebarComponent],
-  imports: [CommonModule, IconComponent, SidebarModule, RouterModule, TranslateModule],
+  declarations: [],
+  imports: [
+    CommonModule,
+    IconComponent,
+    SidebarModule,
+    RouterModule,
+    TranslateModule,
+    NavigationHeaderComponent,
+    NavigationSidebarComponent,
+  ],
   exports: [NavigationHeaderComponent],
 })
 export class NavigationModule {}

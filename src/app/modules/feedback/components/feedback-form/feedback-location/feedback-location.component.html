@@ -1,9 +1,15 @@
 <article class="location-container flex-column">
-  <app-search-location-input [formControl]="locationFormControl"></app-search-location-input>
+  <app-search-location-input
+    [formControl]="locationFormControl"
+  ></app-search-location-input>
   <div class="map-container full-width full-height">
     <app-map
       [center$]="mapCenter$"
-      [markers]="locationFormControl.value ? [{ location: locationFormControl.value }] : []"
+      [markers]="
+        locationFormControl.value
+          ? [{ location: locationFormControl.value }]
+          : []
+      "
       (mapClick)="onClickMap($event)"
     ></app-map>
   </div>

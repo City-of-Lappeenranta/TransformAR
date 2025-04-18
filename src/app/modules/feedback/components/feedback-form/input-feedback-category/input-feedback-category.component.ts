@@ -1,4 +1,10 @@
-import { Component, Injector, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Injector,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import {
   FormControl,
   FormControlDirective,
@@ -7,7 +13,9 @@ import {
   NG_VALUE_ACCESSOR,
   NgControl,
 } from '@angular/forms';
-import { ControlValueAccessorHelper } from '../../../../../shared/abstract-control-value-accessor';
+import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+import { FeedbackCategoryComponent } from './feedback-category/feedback-category.component';
+import { Skeleton } from 'primeng/skeleton';
 
 export interface Category {
   value: string;
@@ -30,8 +38,13 @@ type CategoryToShow = Category & {
       multi: true,
     },
   ],
+  imports: [FeedbackCategoryComponent, Skeleton],
+  standalone: true,
 })
-export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnChanges {
+export class InputFeedbackCategoryComponent
+  extends ControlValueAccessorHelper<string>
+  implements OnChanges
+{
   @Input({ required: true }) public categories!: Category[];
   @Input() public withColor = true;
 
@@ -79,9 +92,12 @@ export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<s
     const injectedControl = this.injector.get(NgControl);
 
     if (injectedControl.constructor === FormControlName) {
-      return this.injector.get(FormGroupDirective).getControl(injectedControl as FormControlName).value;
+      return this.injector
+        .get(FormGroupDirective)
+        .getControl(injectedControl as FormControlName).value;
     }
 
-    return ((injectedControl as FormControlDirective).form as FormControl)?.value;
+    return ((injectedControl as FormControlDirective).form as FormControl)
+      ?.value;
   }
 }

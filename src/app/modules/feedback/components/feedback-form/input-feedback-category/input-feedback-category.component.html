@@ -1,6 +1,6 @@
 <div class="categories flex-column" [class.icons]="hasIcons">
   @if (categoriesToShow.length > 0) {
-    @for (category of categoriesToShow; track category; let index = $index) {
+    @for (category of categoriesToShow; track category.value; let index = $index) {
       <app-feedback-category
         [withColor]="withColor"
         [selected]="category.selected"
@@ -12,7 +12,7 @@
       </app-feedback-category>
     }
   } @else {
-    @for (step of [].constructor(4); track step) {
+    @for (step of [].constructor(4); track $index) {
       <p-skeleton class="category-loader" height="56px"></p-skeleton>
     }
   }

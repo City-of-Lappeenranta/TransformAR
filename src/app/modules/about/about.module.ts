@@ -6,8 +6,13 @@ import { AboutRoutingModule } from './about.routing';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [AboutPageComponent],
-  imports: [CommonModule, AboutRoutingModule, TranslateModule.forChild()],
+  declarations: [],
+  imports: [
+    CommonModule,
+    AboutRoutingModule,
+    TranslateModule.forChild(),
+    AboutPageComponent,
+  ],
   providers: [MessageService],
 })
 export class AboutModule {}

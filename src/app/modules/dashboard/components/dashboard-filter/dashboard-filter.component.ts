@@ -1,11 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DATA_POINT_TYPE_ICON, DataPointType } from '../../../../core/models/data-point';
-import { enumToArray } from '../../../../shared/utils/object-utils';
+import { DATA_POINT_TYPE_ICON, DataPointType } from '@core/models/data-point';
+import { enumToArray } from '@shared/utils/object-utils';
+import { IconComponent } from '@shared/components/icon/icon.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard-filter',
   templateUrl: './dashboard-filter.component.html',
   styleUrls: ['./dashboard-filter.component.scss'],
+  imports: [IconComponent, TranslatePipe],
+  standalone: true,
 })
 export class DashboardFilterComponent {
   @Input() public filter: DataPointType[] = [];

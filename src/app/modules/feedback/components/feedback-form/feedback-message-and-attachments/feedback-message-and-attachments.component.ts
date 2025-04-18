@@ -1,9 +1,20 @@
 import { Component, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { convertBytesToMegabytes } from '../../../../../shared/utils/file-utils';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { convertBytesToMegabytes } from '@shared/utils/file-utils';
 import imageCompression, { Options } from 'browser-image-compression';
-import { MessageService } from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
+import { IconComponent } from '@shared/components/icon/icon.component';
+import { Button } from 'primeng/button';
+import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feedback-attachment-file.component';
+import { Toast } from 'primeng/toast';
+import { Textarea } from 'primeng/textarea';
 
 interface FormFile {
   name: string;
@@ -15,6 +26,17 @@ interface FormFile {
   selector: 'app-feedback-message-and-attachments',
   templateUrl: './feedback-message-and-attachments.component.html',
   styleUrls: ['./feedback-message-and-attachments.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    TranslatePipe,
+    IconComponent,
+    Button,
+    FeedbackAttachmentFileComponent,
+    Toast,
+    Textarea,
+    PrimeTemplate,
+  ],
+  standalone: true,
 })
 export class FeedbackMessageAndAttachmentComponent {
   @Input({ required: true }) public reasonForm!: FormGroup<{
@@ -51,21 +73,28 @@ export class FeedbackMessageAndAttachmentComponent {
         const compressedBlob = await this.compressFile(file);
 
         if (this.hasValidFileSize(compressedBlob)) {
-          const compressedFile = new File([compressedBlob], file.name, { type: file.type });
+          const compressedFile = new File([compressedBlob], file.name, {
+            type: file.type,
+          });
           this.files = this.files.map((value) => ({
             ...value,
             size: `${Math.round(convertBytesToMegabytes(compressedFile.size) * 100) / 100} MB`,
             loading: false,
           }));
 
-          this.reasonForm.controls.files.push(this.formBuilder.nonNullable.control(compressedFile));
+          this.reasonForm.controls.files.push(
+            this.formBuilder.nonNullable.control(compressedFile),
+          );
         } else {
           this.files = this.files.filter((value) => value.name !== file.name);
           this.messageService.add({
             key: this.TOAST_KEY,
-            detail: this.translateService.instant('FEEDBACK.MESSAGES_AND_ATTACHMENTS.ATTACHMENTS.WARNING', {
-              maxSize: this.MAX_FILE_SIZE_MB,
-            }),
+            detail: this.translateService.instant(
+              'FEEDBACK.MESSAGES_AND_ATTACHMENTS.ATTACHMENTS.WARNING',
+              {
+                maxSize: this.MAX_FILE_SIZE_MB,
+              },
+            ),
           });
         }
       }
@@ -74,7 +103,9 @@ export class FeedbackMessageAndAttachmentComponent {
 
   public onFileRemove(indexToRemove: number): void {
     this.reasonForm.controls.files.removeAt(indexToRemove);
-    this.files = this.files.filter((_, index: number) => index !== indexToRemove);
+    this.files = this.files.filter(
+      (_, index: number) => index !== indexToRemove,
+    );
   }
 
   private async compressFile(file: File): Promise<File> {

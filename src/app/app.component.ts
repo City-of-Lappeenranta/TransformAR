@@ -1,21 +1,18 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { TraceService } from '@sentry/angular-ivy';
-import { PrimeNGConfig } from 'primeng/api';
-import { SharedModule } from './shared/shared.module';
-import { getCountryCodeFromLanguageCode } from './shared/utils/i18n-utils';
+import { getCountryCodeFromLanguageCode } from '@shared/utils/i18n-utils';
+import { SharedModule } from '@shared/shared.module';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, SharedModule],
-  providers: [GoogleAnalyticsService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   @ViewChild(RouterOutlet) public outlet: RouterOutlet | undefined;
 
   public title = 'CitySen';
@@ -24,11 +21,7 @@ export class AppComponent implements OnInit {
     GoogleAnalyticsService,
   );
 
-  public constructor(
-    private readonly traceService: TraceService,
-    private readonly primengConfig: PrimeNGConfig,
-    private readonly translateService: TranslateService,
-  ) {
+  public constructor(private readonly translateService: TranslateService) {
     translateService.use(getCountryCodeFromLanguageCode(navigator.language));
   }
 
@@ -37,8 +30,6 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.primengConfig.ripple = true;
-
     this.gaTracked();
   }
 

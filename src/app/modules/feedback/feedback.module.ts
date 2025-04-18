@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IconComponent } from '../../shared/components/icon/icon.component';
-import { StepsComponent } from '../../shared/components/steps/steps.component';
-import { SharedModule } from '../../shared/shared.module';
+import { IconComponent } from '@shared/components/icon/icon.component';
+import { StepsComponent } from '@shared/components/steps/steps.component';
+import { SharedModule } from '@shared/shared.module';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/inputtextarea';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { FeedbackConfirmationComponent } from './components/feedback-confirmation/feedback-confirmation.component';
@@ -25,16 +25,7 @@ import { FeedbackRoutingModule } from './feedback.routing';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
-  declarations: [
-    FeedbackFormComponent,
-    FeedbackCategoryComponent,
-    InputFeedbackCategoryComponent,
-    FeedbackMessageAndAttachmentComponent,
-    FeedbackAttachmentFileComponent,
-    FeedbackLocationComponent,
-    FeedbackContactComponent,
-    FeedbackConfirmationComponent,
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     SharedModule,
@@ -44,7 +35,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     StepsComponent,
     ButtonModule,
     IconComponent,
-    InputTextareaModule,
+    Textarea,
     CheckboxModule,
     FileUploadModule,
     ProgressBarModule,
@@ -54,8 +45,21 @@ import { SkeletonModule } from 'primeng/skeleton';
     DividerModule,
     ToastModule,
     SkeletonModule,
+    FeedbackMessageAndAttachmentComponent,
+    FeedbackFormComponent,
+    FeedbackCategoryComponent,
+    InputFeedbackCategoryComponent,
+    FeedbackLocationComponent,
+    FeedbackAttachmentFileComponent,
+    FeedbackContactComponent,
+    FeedbackConfirmationComponent,
   ],
-  exports: [FeedbackCategoryComponent, InputFeedbackCategoryComponent],
+  exports: [
+    FeedbackCategoryComponent,
+    InputFeedbackCategoryComponent,
+    FeedbackMessageAndAttachmentComponent,
+    FeedbackLocationComponent,
+  ],
   providers: [MessageService],
 })
 export class FeedbackModule {}

@@ -1,4 +1,10 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { SVG_ICONS as svgIcons } from './svg-icons.generated';
 
 @Component({
@@ -20,13 +26,20 @@ export class IconComponent implements OnChanges {
 
   private setIcon(iconToSet: string): void {
     const svgIcon = svgIcons.find(
-      (icon: { name: string; width: number; height: number; svg: string }) => icon.name === iconToSet,
+      (icon: { name: string; width: number; height: number; svg: string }) =>
+        icon.name === iconToSet,
     );
 
     if (svgIcon) {
-      this.elementRef.nativeElement.style.setProperty('--icon-width', `${svgIcon.width}px`);
+      this.elementRef.nativeElement.style.setProperty(
+        '--icon-width',
+        `${svgIcon.width}px`,
+      );
 
-      this.elementRef.nativeElement.style.setProperty('--icon-height', `${svgIcon.height}px`);
+      this.elementRef.nativeElement.style.setProperty(
+        '--icon-height',
+        `${svgIcon.height}px`,
+      );
 
       (this.elementRef.nativeElement as HTMLElement).innerHTML = svgIcon.svg;
     } else {

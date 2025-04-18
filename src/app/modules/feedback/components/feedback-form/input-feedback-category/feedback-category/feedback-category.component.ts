@@ -1,9 +1,12 @@
 import { Component, HostListener, Input } from '@angular/core';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-feedback-category',
   templateUrl: './feedback-category.component.html',
   styleUrls: ['./feedback-category.component.scss'],
+  imports: [IconComponent],
+  standalone: true,
 })
 export class FeedbackCategoryComponent {
   @Input({ required: true }) public withColor!: boolean;
@@ -17,7 +20,16 @@ export class FeedbackCategoryComponent {
   }
 
   public get color(): string {
-    const colors = ['green', 'blue', 'lime', 'grey', 'cream', 'pink', 'orange', 'yellow'];
+    const colors = [
+      'green',
+      'blue',
+      'lime',
+      'grey',
+      'cream',
+      'pink',
+      'orange',
+      'yellow',
+    ];
 
     return colors[(this.index ?? 0) % colors.length];
   }

@@ -6,7 +6,11 @@
     }
   </div>
   @if (loading) {
-    <p-progressBar class="full-width" [style]="{ height: '4px' }" mode="indeterminate"></p-progressBar>
+    <p-progressBar
+      class="full-width"
+      [style]="{ height: '4px' }"
+      mode="indeterminate"
+    ></p-progressBar>
   }
   <app-icon class="close" [icon]="getIcon()" (click)="remove.emit()"></app-icon>
 </div>

@@ -1,15 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { LatLong, LocationSearchResult } from '../../../core/models/location';
-import { LocationService, UserLocation } from '../../../core/services/location.service';
-import { RadarService } from '../../../core/services/radar.service';
+import {
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { LatLong, LocationSearchResult } from '@core/models/location';
+import { LocationService, UserLocation } from '@core/services/location.service';
+import { RadarService } from '@core/services/radar.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ControlValueAccessorHelper } from '../../abstract-control-value-accessor';
-import { isSameLocation } from '../../utils/location-utils';
-import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
-import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, firstValueFrom, map, of } from 'rxjs';
+import { ControlValueAccessorHelper } from '@shared/abstract-control-value-accessor';
+import { isSameLocation } from '@shared/utils/location-utils';
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+  AutoCompleteSelectEvent,
+} from 'primeng/autocomplete';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+  Subject,
+} from 'rxjs';
 import { IconComponent } from '../icon/icon.component';
 
 export interface LocationSuggestion {
@@ -24,7 +42,13 @@ export interface LocationSuggestion {
   selector: 'app-search-location-input',
   templateUrl: './search-location-input.component.html',
   styleUrls: ['./search-location-input.component.scss'],
-  imports: [CommonModule, AutoCompleteModule, IconComponent, ReactiveFormsModule, TranslateModule],
+  imports: [
+    CommonModule,
+    IconComponent,
+    ReactiveFormsModule,
+    TranslateModule,
+    AutoComplete,
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,7 +65,8 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   });
   public locationSuggestions$: Observable<LocationSuggestion[]> | undefined;
 
-  private _locationSearchResults$: Subject<LocationSearchResult[]> = new BehaviorSubject([] as LocationSearchResult[]);
+  private _locationSearchResults$: Subject<LocationSearchResult[]> =
+    new BehaviorSubject([] as LocationSearchResult[]);
   private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
@@ -58,7 +83,9 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
       .subscribe(this.onLocationChange.bind(this));
   }
 
-  public async onSearchLocation(event: AutoCompleteCompleteEvent): Promise<void> {
+  public async onSearchLocation(
+    event: AutoCompleteCompleteEvent,
+  ): Promise<void> {
     const { query } = event;
 
     const results = await this.radarService.autocomplete(query);
@@ -73,20 +100,36 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
   }
 
   public async onLocationChange(latLong: LatLong): Promise<void> {
-    const locationSuggestions = await firstValueFrom(this.locationSuggestions$ ?? of([]));
-    const locationSuggestion = locationSuggestions.find((suggestion) => isSameLocation(suggestion.latLong, latLong));
-    const address = locationSuggestion?.address ?? (await this.radarService.reverseGeocode(latLong, 'formattedAddress'));
+    const locationSuggestions = await firstValueFrom(
+      this.locationSuggestions$ ?? of([]),
+    );
+    const locationSuggestion = locationSuggestions.find((suggestion) =>
+      isSameLocation(suggestion.latLong, latLong),
+    );
+    const address =
+      locationSuggestion?.address ??
+      (await this.radarService.reverseGeocode(latLong, 'formattedAddress'));
 
-    this.selectedSuggestionFormGroup.patchValue({ suggestion: { address, latLong } });
+    this.selectedSuggestionFormGroup.patchValue({
+      suggestion: { address, latLong },
+    });
   }
 
   public onAutocompleteFocus(): void {
-    const userLocation$: Observable<UserLocation> = this.locationService.userLocation$;
-    const locationSearchResults$: Observable<LocationSearchResult[]> = this._locationSearchResults$.asObservable();
+    const userLocation$: Observable<UserLocation> =
+      this.locationService.userLocation$;
+    const locationSearchResults$: Observable<LocationSearchResult[]> =
+      this._locationSearchResults$.asObservable();
 
-    this.locationSuggestions$ = combineLatest([userLocation$, locationSearchResults$]).pipe(
+    this.locationSuggestions$ = combineLatest([
+      userLocation$,
+      locationSearchResults$,
+    ]).pipe(
       map(([currentUserLocation, locationSearchResults]) =>
-        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(locationSearchResults, currentUserLocation),
+        this.mapCurrentUserLocationAndLocationSearchResultToLocationOptions(
+          locationSearchResults,
+          currentUserLocation,
+        ),
       ),
     );
   }
@@ -95,13 +138,19 @@ export class SearchLocationInputComponent extends ControlValueAccessorHelper<Lat
     results: LocationSearchResult[],
     currentUserLocation: UserLocation,
   ): LocationSuggestion[] {
-    let currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.FETCHING');
+    let currentUserLocationName = this.translateService.instant(
+      'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.FETCHING',
+    );
 
     if (!currentUserLocation.loading) {
       if (currentUserLocation.location) {
-        currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.DETERMINED');
+        currentUserLocationName = this.translateService.instant(
+          'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.DETERMINED',
+        );
       } else {
-        currentUserLocationName = this.translateService.instant('SEARCH_LOCATION_INPUT.CURRENT_LOCATION.INDETERMINED');
+        currentUserLocationName = this.translateService.instant(
+          'SEARCH_LOCATION_INPUT.CURRENT_LOCATION.INDETERMINED',
+        );
       }
     }
 

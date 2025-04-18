@@ -1,7 +1,7 @@
 <main class="feedback-form" [formGroup]="feedbackForm">
   @switch (currentChildComponent$ | async) {
     @case (FEEDBACK_FORM_COMPONENT.CATEGORY) {
-      <h2 class="title">{{ 'FEEDBACK.HEADER.CATEGORY_TITLE' | translate }}</h2>
+      <h2 class="title">{{ "FEEDBACK.HEADER.CATEGORY_TITLE" | translate }}</h2>
       <p *ngIf="parentCategory() as parentCategory" class="description">
         {{ parentCategory }}
       </p>
@@ -17,7 +17,7 @@
     }
     @case (FEEDBACK_FORM_COMPONENT.MESSAGE_AND_ATTACHMENTS) {
       <h2 class="title">
-        {{ 'FEEDBACK.HEADER.MESSAGES_AND_ATTACHMENTS_TITLE' | translate }}
+        {{ "FEEDBACK.HEADER.MESSAGES_AND_ATTACHMENTS_TITLE" | translate }}
       </h2>
       <app-feedback-message-and-attachments
         class="content"
@@ -25,17 +25,24 @@
       ></app-feedback-message-and-attachments>
     }
     @case (FEEDBACK_FORM_COMPONENT.LOCATION) {
-      <h2 class="title">{{ 'FEEDBACK.HEADER.LOCATION_TITLE' | translate }}</h2>
-      <app-feedback-location [locationFormControl]="feedbackForm.controls.location"></app-feedback-location>
+      <h2 class="title">{{ "FEEDBACK.HEADER.LOCATION_TITLE" | translate }}</h2>
+      <app-feedback-location
+        [locationFormControl]="feedbackForm.controls.location"
+      ></app-feedback-location>
     }
     @case (FEEDBACK_FORM_COMPONENT.CONTACT) {
-      <h2 class="title">{{ 'FEEDBACK.HEADER.CONTACT_TITLE' | translate }}</h2>
-      <app-feedback-contact [contactForm]="feedbackForm.controls.contact"></app-feedback-contact>
+      <h2 class="title">{{ "FEEDBACK.HEADER.CONTACT_TITLE" | translate }}</h2>
+      <app-feedback-contact
+        [contactForm]="feedbackForm.controls.contact"
+      ></app-feedback-contact>
     }
   }
 </main>
 <footer class="footer flex-column">
-  <app-steps [amount]="amountOfSteps" [active]="(currentStep$ | async) ?? 0"></app-steps>
+  <app-steps
+    [amount]="amountOfSteps"
+    [active]="(currentStep$ | async) ?? 0"
+  ></app-steps>
   <div class="flex-row">
     @if (((currentStep$ | async) ?? 0) > 0) {
       <p-button
@@ -45,7 +52,9 @@
         (click)="onClickBack()"
       ></p-button>
     }
-    @if ((currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY) {
+    @if (
+      (currentChildComponent$ | async) !== FEEDBACK_FORM_COMPONENT.CATEGORY
+    ) {
       <p-button
         class="next-button"
         [label]="nextButtonLabel | translate"
