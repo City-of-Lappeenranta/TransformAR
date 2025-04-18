@@ -6,16 +6,20 @@ import {
   isDevMode,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { Router, provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-import * as sentry from '@sentry/angular-ivy';
+import * as sentry from '@sentry/angular';
 import { routes } from './app.routes';
 import { providei18n } from './providers/i18n';
 import {
   NgxGoogleAnalyticsModule,
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
+import { providePrimeNG } from 'primeng/config';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import Aura from '@primeng/themes/aura';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,5 +49,11 @@ export const appConfig: ApplicationConfig = {
       NgxGoogleAnalyticsModule.forRoot(environment.trackingCode),
       NgxGoogleAnalyticsRouterModule,
     ]),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+      },
+      ripple: true,
+    }),
   ],
 };

@@ -24,19 +24,19 @@ For service workers to be registered, the application must be accessed over HTTP
 
 We adhere to the structure as described in [this article](https://www.devbyseb.com/article/best-practices-for-angular-app-development-folder-structure-naming-lazy-loading-and-more)
 
-- `app` folder: This folder contains all the application-specific code.
+- `src/app` folder: This folder contains all the application-specific code.
 
-- `app/core` folder: This folder contains the code that is shared across the entire application, such as services, models, guards, and interceptors. The `core.module.ts` file is responsible for importing and exporting these shared items.
+- `src/app/core` folder: This folder contains the code that is shared across the entire application, such as services, models, guards, and interceptors. The `core.module.ts` file is responsible for importing and exporting these shared items.
 
-- `app/modules` folder: This folder contains the feature modules of the application. Each feature module is organized into its own folder, which contains all the components, services, and routing information for that feature. The naming convention for feature modules is typically [feature-name].module.ts. Use lazy loading to load modules on-demand, improving the performance of the application and reducing the initial loading time.
+- `src/app/modules` folder: This folder contains the feature modules of the application. Each feature module is organized into its own folder, which contains all the components, services, and routing information for that feature. The naming convention for feature modules is typically [feature-name].module.ts. Use lazy loading to load modules on-demand, improving the performance of the application and reducing the initial loading time.
 
-- `app/shared` folder: This folder contains shared components, directives, and pipes that are used across the application. The `shared.module.ts` file is responsible for importing and exporting shared items, for instance `TranslateModule.forChild()`.
+- `src/app/shared` folder: This folder contains shared components, directives, and pipes that are used across the application. The `shared.module.ts` file is responsible for importing and exporting shared items, for instance `TranslateModule.forChild()`.
 
-- `assets` folder: This folder contains static files used in the application, such as images, fonts, and stylesheets. The config.json file can also be stored here to hold any configuration data.
+- `src/assets` folder: This folder contains static files used in the application, such as images, fonts, and stylesheets. The config.json file can also be stored here to hold any configuration data.
 
 ### Theming
 
 We use [PrimeNG](https://primeng.org/theming) as UI suite for this project. Theming is also handled by PrimeNG and can be changed by the following steps:
 
-- Navigate to `/assets/themes/mytheme` and make your changes
+- Navigate to `src/assets/themes/mytheme` and make your changes
 - Run `npm run theme` to generate the `theme.css` file (which is already imported in `/styles.sass`)

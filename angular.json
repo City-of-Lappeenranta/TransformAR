@@ -23,19 +23,19 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ],
             "styles": [
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
               "node_modules/leaflet/dist/leaflet.css",
               "src/styles.scss"
             ],
             "scripts": [],
             "sourceMap": true,
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/theme"
-              ]
+              "includePaths": ["src/theme"]
             }
           },
           "configurations": {
@@ -117,9 +117,7 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ],
+    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
   }
 }
