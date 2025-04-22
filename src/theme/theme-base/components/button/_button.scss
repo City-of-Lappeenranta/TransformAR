@@ -1,11 +1,11 @@
 .p-button {
-  color: $buttonTextColor;
-  background: $buttonBg;
-  border: $buttonBorder;
-  padding: $buttonPadding;
-  font-size: $fontSize;
-  transition: $formElementTransition;
-  border-radius: $borderRadius;
+  color: $buttonTextColor !important;
+  background: $buttonBg !important;
+  border: $buttonBorder !important;
+  padding: $buttonPadding !important;
+  font-size: $fontSize !important;
+  transition: $formElementTransition !important;
+  border-radius: $borderRadius !important;
 
   &:not(:disabled):hover {
     background: $buttonHoverBg;
@@ -20,9 +20,9 @@
   }
 
   &.p-button-outlined {
-    background-color: transparent;
-    color: $buttonBg;
-    border: $outlinedButtonBorder;
+    background-color: transparent !important;
+    color: $buttonBg !important;
+    border: $outlinedButtonBorder !important;
 
     &:not(:disabled):hover {
       background: rgba($buttonBg, $textButtonHoverBgOpacity);

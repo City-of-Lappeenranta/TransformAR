@@ -70,7 +70,7 @@
   box-shadow: $inputOverlayShadow;
 
   .p-autocomplete-items {
-    padding: $inputListPadding;
+    padding: $inputListPadding !important;
 
     .p-autocomplete-item,
     .p-autocomplete-empty-message {
@@ -115,6 +115,11 @@
 .p-autocomplete {
   .p-overlay {
     max-width: 100%;
+    margin-top: 0 !important;
+
+    // .p-autocomplete-list {
+    //   padding: 0 4px !important;
+    // }
   }
 }
 

@@ -1,18 +1,18 @@
-.p-sidebar {
-  background-color: $primaryColor;
+.p-drawer {
+  background-color: var(--primary-color);
 
-  .p-sidebar-header {
+  .p-drawer-header {
     padding: 0;
   }
 
-  .p-sidebar-content {
+  .p-drawer-content {
     display: flex;
     align-items: start;
     justify-content: center;
     padding: 0;
   }
 
-  .p-sidebar-footer {
+  .p-drawer-footer {
     display: flex;
     justify-content: center;
     padding: 0 0 75px 0;

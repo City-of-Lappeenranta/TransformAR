@@ -29,6 +29,7 @@ import {
   Subject,
 } from 'rxjs';
 import { IconComponent } from '../icon/icon.component';
+import {PrimeTemplate} from 'primeng/api';
 
 export interface LocationSuggestion {
   address: string;
@@ -48,6 +49,7 @@ export interface LocationSuggestion {
     ReactiveFormsModule,
     TranslateModule,
     AutoComplete,
+    PrimeTemplate,
   ],
   providers: [
     {

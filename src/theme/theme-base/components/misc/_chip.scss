@@ -3,16 +3,16 @@
 .p-element:has(.p-chip) {
   width: fit-content;
   background-color: $chipBg;
-  border-radius: 38px;
+  border-radius: 38px !important;
 }
 
 .p-chip {
   background-color: inherit;
   color: #000;
-  padding: 0.5rem 1rem;
-  border-radius: 38px;
+  padding: 0.5rem 1rem !important;
+  border-radius: 38px !important;
 
-  .p-chip-text {
+  .p-chip-label {
     margin: 0;
     font-weight: 500;
     font-size: 14px;

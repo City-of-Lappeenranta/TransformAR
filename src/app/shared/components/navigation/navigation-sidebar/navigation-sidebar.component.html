@@ -1,4 +1,4 @@
-<p-drawer [(visible)]="sidebarOpen" [fullScreen]="true">
+<!--<p-drawer class="sidebar" [(visible)]="sidebarOpen" [fullScreen]="true">
   <ng-template pTemplate="header">
     <div class="close-container flex-row">
       <app-icon
@@ -45,6 +45,58 @@
   </ng-template>
 
   <ng-template pTemplate="footer">
+    <app-icon class="logo" icon="logo-with-name"></app-icon>
+  </ng-template>
+</p-drawer>
+-->
+
+<p-drawer [(visible)]="sidebarOpen" [closable]="false" [fullScreen]="true">
+  <ng-template #header>
+    <div class="close-container flex-row">
+      <app-icon
+        class="close-icon"
+        icon="close"
+        (click)="onSidebarClose.emit()"
+      ></app-icon>
+    </div>
+  </ng-template>
+
+  <ng-template #content>
+    <div class="content">
+      <img src="assets/logo.svg" alt="CitySen.app" />
+      <div class="menu-items-container flex-row">
+        <div class="menu-items flex-column">
+          @for (item of menuItems; track item.route) {
+            @if (item.isExternal) {
+              <a
+                class="menu-item flex-row"
+                target="_blank"
+                rel="noopener"
+                [href]="item.route"
+              >
+                <app-icon class="icon" [icon]="item.icon"></app-icon>
+                <p>{{ item.name | translate }}</p>
+              </a>
+            } @else {
+              <div
+                class="menu-item flex-row"
+                [routerLink]="item.route"
+                (click)="onSidebarClose.emit()"
+              >
+                <app-icon class="icon" [icon]="item.icon"></app-icon>
+                <p>{{ item.name | translate }}</p>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+    <div class="background-container">
+      <app-icon class="background" icon="logo"></app-icon>
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
     <app-icon class="logo" icon="logo-with-name"></app-icon>
   </ng-template>
 </p-drawer>

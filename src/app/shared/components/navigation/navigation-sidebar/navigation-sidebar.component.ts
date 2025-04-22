@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Sidebar } from 'primeng/sidebar';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
-import {PrimeTemplate} from 'primeng/api';
-import {Drawer} from 'primeng/drawer';
+import { DrawerModule } from 'primeng/drawer';
 
 interface MenuItem {
   name: string;
@@ -18,14 +16,7 @@ interface MenuItem {
   templateUrl: './navigation-sidebar.component.html',
   styleUrls: ['./navigation-sidebar.component.scss'],
   standalone: true,
-  imports: [
-    Sidebar,
-    IconComponent,
-    TranslatePipe,
-    RouterLink,
-    PrimeTemplate,
-    Drawer,
-  ],
+  imports: [IconComponent, TranslatePipe, RouterLink, DrawerModule],
 })
 export class NavigationSidebarComponent {
   @Input({ required: true }) public sidebarOpen!: boolean;
