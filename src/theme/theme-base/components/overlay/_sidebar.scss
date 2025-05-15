@@ -1,5 +1,6 @@
 .p-drawer {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
+  border: 0 !important;
 
   .p-drawer-header {
     padding: 0;
