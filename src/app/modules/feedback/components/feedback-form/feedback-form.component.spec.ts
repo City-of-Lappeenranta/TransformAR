@@ -1,19 +1,18 @@
 import { FormControl } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { LatLong } from '../../../../core/models/location';
-import { ServiceDictionary } from '../../../../core/models/service-api';
-import { ServiceApi } from '../../../../core/services/service-api.service';
+import { Router } from '@angular/router';
+import { LatLong } from '@core/models/location';
+import { ServiceDictionary } from '@core/models/service-api';
+import { ServiceApi } from '@core/services/service-api.service';
 import { SharedModule } from 'primeng/api';
 import { of } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../feedback.module';
 import { FeedbackContactComponent } from './feedback-contact/feedback-contact.component';
 import { FeedbackFormComponent } from './feedback-form.component';
 import { FeedbackFormService } from './feedback-form.service';
 import { FeedbackLocationComponent } from './feedback-location/feedback-location.component';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments/feedback-message-and-attachments.component';
 import { InputFeedbackCategoryComponent } from './input-feedback-category/input-feedback-category.component';
+import { AsyncPipe } from '@angular/common';
 
 describe('FeedbackFormComponent', () => {
   const email = 'john.doe@verhaert.digital';
@@ -21,13 +20,13 @@ describe('FeedbackFormComponent', () => {
   let shallow: Shallow<FeedbackFormComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackFormComponent, FeedbackModule)
+    shallow = new Shallow(FeedbackFormComponent)
       .provideMock(SharedModule)
-      .replaceModule(RouterModule, RouterTestingModule)
       .mock(ServiceApi, {
         getServices: jest.fn().mockReturnValue(of(SERVICE_DICTIONARY)),
         postServiceRequest: jest.fn().mockReturnValue(of(email)),
       })
+      .provideMock(AsyncPipe)
       .dontMock(FeedbackFormService);
   });
 
@@ -57,7 +56,9 @@ describe('FeedbackFormComponent', () => {
     fixture.detectChanges();
     instance.feedbackForm.controls.message.controls.message.setValue(message);
     files.forEach((file) =>
-      instance.feedbackForm.controls.message.controls.files.push(new FormControl<File>(file, { nonNullable: true })),
+      instance.feedbackForm.controls.message.controls.files.push(
+        new FormControl<File>(file, { nonNullable: true }),
+      ),
     );
     find(nextButtonSelector).triggerEventHandler('click', {});
 
@@ -67,7 +68,9 @@ describe('FeedbackFormComponent', () => {
 
     fixture.detectChanges();
     instance.feedbackForm.controls.contact.controls.email.setValue(email);
-    instance.feedbackForm.controls.contact.controls.firstName.setValue(firstName);
+    instance.feedbackForm.controls.contact.controls.firstName.setValue(
+      firstName,
+    );
     instance.feedbackForm.controls.contact.controls.lastName.setValue(lastName);
     instance.feedbackForm.controls.contact.controls.phone.setValue(phone);
 
@@ -83,7 +86,9 @@ describe('FeedbackFormComponent', () => {
       lastName,
       phone,
     });
-    expect(inject(Router).navigateByUrl).toHaveBeenCalledWith(`feedback/confirmed?email=${email}`);
+    expect(inject(Router).navigateByUrl).toHaveBeenCalledWith(
+      `feedback/confirmed?email=${email}`,
+    );
   });
 
   it('feedback form flow', async () => {
@@ -93,7 +98,10 @@ describe('FeedbackFormComponent', () => {
     const { find, findComponent, instance, fixture } = await shallow.render();
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
-    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'streets' }, { value: 'parcs' }]);
+    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([
+      { value: 'streets' },
+      { value: 'parcs' },
+    ]);
 
     instance.feedbackForm.controls.group.setValue('streets');
 
@@ -101,7 +109,9 @@ describe('FeedbackFormComponent', () => {
 
     expect(findComponent(InputFeedbackCategoryComponent)).toHaveFound(1);
     expect(find('.description').nativeElement.innerHTML.trim()).toBe('streets');
-    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([{ value: 'lamps' }]);
+    expect(findComponent(InputFeedbackCategoryComponent).categories).toEqual([
+      { value: 'lamps' },
+    ]);
 
     instance.feedbackForm.controls.description.setValue('lamps');
 

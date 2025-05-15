@@ -1,10 +1,9 @@
 import { FormControl } from '@angular/forms';
-import { LatLong } from '../../../../../core/models/location';
-import { LocationService, UserLocation } from '../../../../../core/services/location.service';
-import { NavigationHeaderService } from '../../../../../shared/components/navigation/navigation-header/navigation-header.service';
+import { LatLong } from '@core/models/location';
+import { LocationService, UserLocation } from '@core/services/location.service';
+import { NavigationHeaderService } from '@shared/components/navigation/navigation-header/navigation-header.service';
 import { of, take } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackLocationComponent } from './feedback-location.component';
 import { SharedModule } from 'primeng/api';
 
@@ -12,7 +11,7 @@ describe('FeedbackLocationComponent', () => {
   let shallow: Shallow<FeedbackLocationComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackLocationComponent, FeedbackModule)
+    shallow = new Shallow(FeedbackLocationComponent)
       .mock(LocationService, {
         userLocation$: of({
           loading: false,
@@ -39,7 +38,9 @@ describe('FeedbackLocationComponent', () => {
       locationFormControl.setValue(latLong);
 
       expect(locationFormControl.value).toEqual(latLong);
-      instance.mapCenter$.pipe(take(1)).subscribe((result) => expect(result === latLong));
+      instance.mapCenter$
+        .pipe(take(1))
+        .subscribe((result) => expect(result === latLong));
     });
   });
 });

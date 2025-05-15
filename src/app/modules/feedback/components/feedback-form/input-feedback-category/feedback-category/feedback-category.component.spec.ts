@@ -1,5 +1,4 @@
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../../../feedback.module';
 import { FeedbackCategoryComponent } from './feedback-category.component';
 import { SharedModule } from 'primeng/api';
 
@@ -7,7 +6,7 @@ describe('FeedbackCategoryComponent', () => {
   let shallow: Shallow<FeedbackCategoryComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackCategoryComponent, FeedbackModule).provideMock(SharedModule);
+    shallow = new Shallow(FeedbackCategoryComponent).provideMock(SharedModule);
   });
 
   describe('should render the component', () => {

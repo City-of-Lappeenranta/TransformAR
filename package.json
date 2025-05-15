@@ -14,8 +14,11 @@
     "build": "ng build",
     "build:development": "ng build",
     "build:production": "ng build --configuration production",
-    "test": "jest",
-    "test:ci": "npm run generate-icons; jest --ci --collect-coverage ",
+    "test:jest": "jest --watch",
+    "test": "NODE_OPTIONS='--no-warnings' jest --config ./jest.config.ts",
+    "test:watch": "npm run test -- --watch",
+    "test:ci": "npm run generate-icons; npm run test:unit:ci",
+    "test:unit:ci": "npm run test -- --coverage --ci --force-exit --collect-coverage --no-watchman --detect-open-handles",
     "lint": "npm run lint:ts && npm run lint:styles",
     "lint:ts": "ng lint",
     "lint:styles": "stylelint \"app/**/*.scss\"",
@@ -67,6 +70,7 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
+    "@angular-builders/jest": "~19.0.1",
     "@angular-devkit/build-angular": "19.1.6",
     "@angular-eslint/builder": "19.0.2",
     "@angular-eslint/eslint-plugin": "19.0.2",
@@ -88,6 +92,7 @@
     "@types/node": "~20.11.19",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
+    "esbuild-jest": "~0.5.0",
     "eslint": "~8.57.0",
     "eslint-config-standard-with-typescript": "~43.0.1",
     "eslint-plugin-import": "~2.31.0",
@@ -105,6 +110,7 @@
     "prettier-eslint": "~16.3.0",
     "shallow-render": "~19.0.1",
     "storybook": "~8.5.0",
+    "ts-jest": "~29.3.3",
     "typescript": "~5.6.3"
   },
   "jestSonar": {

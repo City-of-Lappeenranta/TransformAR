@@ -9,16 +9,16 @@ import {
   WeatherAirQualityDataPoint,
   WeatherConditionDataPoint,
   WeatherStormWaterDataPoint,
-} from '../../../../core/models/data-point';
-import { RadarService } from '../../../../core/services/radar.service';
+} from '@core/models/data-point';
+import { RadarService } from '@core/services/radar.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SharedModule } from 'primeng/api';
 import { Chip } from 'primeng/chip';
 import { Shallow } from 'shallow-render';
-import { DashboardModule } from '../../dashboard.module';
 import { DashboardDataPointDetailComponent } from './dashboard-data-point-detail.component';
+import { DatePipe, KeyValuePipe } from '@angular/common';
 
-jest.useFakeTimers();
+// jest.useFakeTimers();
 
 describe('DashboardDataPointDetailComponent', () => {
   let shallow: Shallow<DashboardDataPointDetailComponent>;
@@ -26,11 +26,13 @@ describe('DashboardDataPointDetailComponent', () => {
   const address = 'Huopatehtaankatu 4';
 
   beforeEach(() => {
-    shallow = new Shallow(DashboardDataPointDetailComponent, DashboardModule)
+    shallow = new Shallow(DashboardDataPointDetailComponent)
       .mock(TranslateService, { instant: jest.fn((key) => key) })
       .mock(RadarService, {
         reverseGeocode: jest.fn().mockReturnValue(address),
       })
+      .provideMock(DatePipe)
+      .provideMock(KeyValuePipe)
       .provideMock(SharedModule);
   });
 

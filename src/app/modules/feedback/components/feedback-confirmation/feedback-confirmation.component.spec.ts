@@ -1,6 +1,5 @@
 import { Shallow } from 'shallow-render';
 import { FeedbackConfirmationComponent } from './feedback-confirmation.component';
-import { FeedbackModule } from '../../feedback.module';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { SharedModule } from 'primeng/api';
 
@@ -8,7 +7,7 @@ describe('FeedbackConfirmationComponent', () => {
   let shallow: Shallow<FeedbackConfirmationComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackConfirmationComponent, FeedbackModule)
+    shallow = new Shallow(FeedbackConfirmationComponent)
       .mock(ActivatedRoute, {
         snapshot: { queryParamMap: convertToParamMap({}) },
       })
@@ -23,7 +22,11 @@ describe('FeedbackConfirmationComponent', () => {
 
     it('should show feedback has been sent when email is present in the url', async () => {
       const { find } = await shallow
-        .mock(ActivatedRoute, { snapshot: { queryParamMap: convertToParamMap({ email: 'email@webapp.com' }) } })
+        .mock(ActivatedRoute, {
+          snapshot: {
+            queryParamMap: convertToParamMap({ email: 'email@webapp.com' }),
+          },
+        })
         .render();
 
       const small = find('small');

@@ -10,8 +10,8 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { LatLong } from '../../../core/models/location';
-import { environment } from '../../../../environments/environment';
+import { LatLong } from '@core/models/location';
+import { environment } from '@environments/environment';
 import { isSameLocation } from '../../utils/location-utils';
 import * as leaflet from 'leaflet';
 import { isEqual } from 'lodash';
@@ -74,7 +74,10 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         attributionControl: false,
       })
       .on('click', this.onClickMap.bind(this))
-      .setView(new leaflet.LatLng(...(environment.defaultLocation as LatLong)), this.zoom);
+      .setView(
+        new leaflet.LatLng(...(environment.defaultLocation as LatLong)),
+        this.zoom,
+      );
 
     leaflet
       .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -106,29 +109,52 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       }) ?? null;
   }
 
-  private getMarkersToAdd(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+  private getMarkersToAdd(
+    previousMarkers: Marker[],
+    newMarkers: Marker[],
+  ): Marker[] {
     return newMarkers.filter(
-      (marker) => !previousMarkers.some((prevMarker) => isSameLocation(marker.location, prevMarker.location)),
+      (marker) =>
+        !previousMarkers.some((prevMarker) =>
+          isSameLocation(marker.location, prevMarker.location),
+        ),
     );
   }
 
-  private getMarkersToRemove(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+  private getMarkersToRemove(
+    previousMarkers: Marker[],
+    newMarkers: Marker[],
+  ): Marker[] {
     return previousMarkers.filter(
-      (prevMarker) => !newMarkers.some((marker) => isSameLocation(marker.location, prevMarker.location)),
+      (prevMarker) =>
+        !newMarkers.some((marker) =>
+          isSameLocation(marker.location, prevMarker.location),
+        ),
     );
   }
 
-  private getMarkersToChange(previousMarkers: Marker[], newMarkers: Marker[]): Marker[] {
+  private getMarkersToChange(
+    previousMarkers: Marker[],
+    newMarkers: Marker[],
+  ): Marker[] {
     return newMarkers.filter((newMarker) => {
-      const previousMarker = previousMarkers.find((marker) => isSameLocation(marker.location, newMarker.location));
+      const previousMarker = previousMarkers.find((marker) =>
+        isSameLocation(marker.location, newMarker.location),
+      );
       return previousMarker && !isEqual(newMarker, previousMarker);
     });
   }
 
   private renderMarkers(previousMarkers: Marker[], newMarkers: Marker[]): void {
-    this.getMarkersToAdd(previousMarkers, newMarkers).forEach(this.renderMarker.bind(this));
-    this.getMarkersToRemove(previousMarkers, newMarkers).forEach(this.removeMarker.bind(this));
-    this.getMarkersToChange(previousMarkers, newMarkers).forEach(this.updateMarker.bind(this));
+    this.getMarkersToAdd(previousMarkers, newMarkers).forEach(
+      this.renderMarker.bind(this),
+    );
+    this.getMarkersToRemove(previousMarkers, newMarkers).forEach(
+      this.removeMarker.bind(this),
+    );
+    this.getMarkersToChange(previousMarkers, newMarkers).forEach(
+      this.updateMarker.bind(this),
+    );
   }
 
   private removeMarker(marker: Marker): void {
@@ -171,15 +197,21 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private async getMarkerDivIcon(marker: Marker): Promise<leaflet.DivIcon> {
     const { color, active, icon } = marker;
-    const markerSvg = await firstValueFrom(this.http.get('/assets/icons/marker.svg', { responseType: 'text' }));
+    const markerSvg = await firstValueFrom(
+      this.http.get('/assets/icons/marker.svg', { responseType: 'text' }),
+    );
 
     const fillColor = color ?? '#275D38';
     const strokeColor = active ? '#275D38' : fillColor;
-    const styledMarkerSvg = markerSvg.replace('currentColor', fillColor).replace('strokeColor', strokeColor);
+    const styledMarkerSvg = markerSvg
+      .replace('currentColor', fillColor)
+      .replace('strokeColor', strokeColor);
 
     let iconSvg = '';
     if (icon) {
-      iconSvg = await firstValueFrom(this.http.get(`/assets/icons/${icon}`, { responseType: 'text' }));
+      iconSvg = await firstValueFrom(
+        this.http.get(`/assets/icons/${icon}`, { responseType: 'text' }),
+      );
     }
 
     const svg = `

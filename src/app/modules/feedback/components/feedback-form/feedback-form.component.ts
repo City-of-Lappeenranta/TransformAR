@@ -7,7 +7,7 @@ import {
   InputFeedbackCategoryComponent,
 } from './input-feedback-category/input-feedback-category.component';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackContactComponent } from './feedback-contact/feedback-contact.component';
 import { StepsComponent } from '@shared/components/steps/steps.component';
@@ -32,8 +32,6 @@ import { FeedbackLocationComponent } from './feedback-location/feedback-location
     InputFeedbackCategoryComponent,
     FeedbackMessageAndAttachmentComponent,
     FeedbackLocationComponent,
-    NgIf,
-    NgForOf,
   ],
   standalone: true,
 })

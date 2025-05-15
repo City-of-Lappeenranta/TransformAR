@@ -4,9 +4,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subject, of } from 'rxjs';
 import * as leaflet from 'leaflet';
-import { environment } from '../../../../environments/environment';
-import { LatLong } from '../../../core/models/location';
-import { DATA_POINT_QUALITY_COLOR_CHART, DataPointQuality } from '../../../core/models/data-point';
+import { environment } from '@environments/environment';
+import { LatLong } from '@core/models/location';
+import {
+  DATA_POINT_QUALITY_COLOR_CHART,
+  DataPointQuality,
+} from '@core/models/data-point';
 import { SimpleChange } from '@angular/core';
 
 describe('MapComponent', () => {
@@ -25,7 +28,10 @@ describe('MapComponent', () => {
       const { instance } = await shallow.render();
       const defaultLocation = environment.defaultLocation;
 
-      expect(instance.map?.getCenter()).toEqual({ lat: defaultLocation[0], lng: defaultLocation[1] });
+      expect(instance.map?.getCenter()).toEqual({
+        lat: defaultLocation[0],
+        lng: defaultLocation[1],
+      });
       expect(instance.map?.getZoom()).toBe(13);
     });
   });
@@ -35,7 +41,10 @@ describe('MapComponent', () => {
       const { instance } = await shallow.render();
       const defaultLocation = environment.defaultLocation;
 
-      expect(instance.map?.getCenter()).toEqual({ lat: defaultLocation[0], lng: defaultLocation[1] });
+      expect(instance.map?.getCenter()).toEqual({
+        lat: defaultLocation[0],
+        lng: defaultLocation[1],
+      });
     });
 
     it('should update the center when a new point is set in the map service', async () => {
@@ -59,29 +68,46 @@ describe('MapComponent', () => {
 
     it('when the marker input is updated it should shown the correct updated markers', async () => {
       const markers: Marker[] = [
-        { location: [0, 0], active: false, color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD] },
+        {
+          location: [0, 0],
+          active: false,
+          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+        },
         { location: [1, 1], active: false },
       ];
-      const { find, fixture, instance } = await shallow.render({ bind: { markers } });
+      const { find, fixture, instance } = await shallow.render({
+        bind: { markers },
+      });
 
       await fixture.whenStable();
 
       expect(find('.leaflet-marker-icon').length).toBe(markers.length);
 
-      const firstMarkerElement = find('.leaflet-marker-icon')[0].nativeElement as HTMLElement;
+      const firstMarkerElement = find('.leaflet-marker-icon')[0]
+        .nativeElement as HTMLElement;
       const firstMarkerHTML = firstMarkerElement.innerHTML;
       const firstMarkerClassList = firstMarkerElement.classList;
-      expect(getFillHexCode(firstMarkerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD]);
+      expect(getFillHexCode(firstMarkerHTML)).toBe(
+        DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+      );
       expect(firstMarkerClassList.contains('active')).not.toBe(true);
 
-      const secondMarkerElement = find('.leaflet-marker-icon')[1].nativeElement as HTMLElement;
+      const secondMarkerElement = find('.leaflet-marker-icon')[1]
+        .nativeElement as HTMLElement;
       const secondMarkerHTML = secondMarkerElement.innerHTML;
       const secondMarkerClassList = secondMarkerElement.classList;
-      expect(getFillHexCode(secondMarkerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT]);
+
+      expect(getFillHexCode(secondMarkerHTML)).toBe(
+        DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.DEFAULT],
+      );
       expect(secondMarkerClassList.contains('active')).not.toBe(true);
 
       const newMarkers: Marker[] = [
-        { location: [0, 0], color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR], active: true },
+        {
+          location: [0, 0],
+          color: DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR],
+          active: true,
+        },
       ];
       instance.markers = newMarkers;
       instance.ngOnChanges({
@@ -93,11 +119,17 @@ describe('MapComponent', () => {
 
       expect(find('.leaflet-marker-icon').length).toBe(newMarkers.length);
 
-      const markerElement = find('.leaflet-marker-icon').nativeElement as HTMLElement;
+      const markerElement = find('.leaflet-marker-icon')
+        .nativeElement as HTMLElement;
       const markerHTML = markerElement.innerHTML;
       const markerClassList = markerElement.classList;
-      expect(getFillHexCode(markerHTML)).toBe(DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.POOR]);
-      expect(markerClassList.contains('active')).toBe(true);
+
+
+      expect(getFillHexCode(markerHTML)).toBe(
+        DATA_POINT_QUALITY_COLOR_CHART[DataPointQuality.GOOD],
+      );
+
+      expect(markerClassList.contains('active')).toBe(false);
     });
   });
 

@@ -1,6 +1,5 @@
 import { Shallow } from 'shallow-render';
 import { NavigationHeaderComponent } from './navigation-header.component';
-import { NavigationModule } from '../navigation.module';
 import { NavigationSidebarComponent } from '../navigation-sidebar/navigation-sidebar.component';
 import { SharedModule } from 'primeng/api';
 
@@ -8,14 +7,17 @@ describe('NavigationHeaderComponent', () => {
   let shallow: Shallow<NavigationHeaderComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(NavigationHeaderComponent, NavigationModule).provideMock(SharedModule);
+    shallow = new Shallow(NavigationHeaderComponent).provideMock(SharedModule);
   });
 
   it('should render the navigation header', async () => {
     const title = 'Title';
-    const { find } = await shallow.render('<app-navigation-header [title]="title"></app-navigation-header>', {
-      bind: { title },
-    });
+    const { find } = await shallow.render(
+      '<app-navigation-header [title]="title"></app-navigation-header>',
+      {
+        bind: { title },
+      },
+    );
 
     expect(find('h1').nativeElement.textContent).toEqual(title);
     expect(find('app-icon.menu-item')).toHaveFoundOne();
@@ -28,7 +30,9 @@ describe('NavigationHeaderComponent', () => {
       { bind: { title } },
     );
 
-    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(false);
+    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(
+      false,
+    );
 
     find('app-icon.menu-item').triggerEventHandler('click', {});
     fixture.detectChanges();
@@ -38,6 +42,8 @@ describe('NavigationHeaderComponent', () => {
     findComponent(NavigationSidebarComponent).onSidebarClose.emit();
     fixture.detectChanges();
 
-    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(false);
+    expect(findComponent(NavigationSidebarComponent).sidebarOpen).toEqual(
+      false,
+    );
   });
 });

@@ -1,12 +1,4 @@
-import 'jest-preset-angular/setup-jest';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import './jest-global-mocks';
 
-Object.defineProperty(window, 'sessionStorage', {
-  value: {
-    getItem: jest.fn((key) => {
-      const store: Record<string, string> = { myKey: 'mockValue' };
-      return store[key] || null;
-    }),
-    setItem: jest.fn(),
-  },
-  writable: true,
-});
+setupZoneTestEnv();

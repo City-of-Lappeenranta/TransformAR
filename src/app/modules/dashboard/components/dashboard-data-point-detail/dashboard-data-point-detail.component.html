@@ -3,12 +3,11 @@
     <div class="full-width flex-column">
       <h1 class="display-xs">{{ name() }}</h1>
 
-      <ng-container *ngIf="address(); else addressLoader">
+      @if (address()) {
         <p class="body-xs">{{ address() }}</p>
-      </ng-container>
-      <ng-template #addressLoader>
+      } @else {
         <p-skeleton class="address-loader"></p-skeleton>
-      </ng-template>
+      }
     </div>
     <app-icon icon="close" (click)="close.emit()"></app-icon>
   </div>
@@ -71,7 +70,7 @@
                 'background-color': getDataQualityBackgroundColor(
                   dataPoint.quality
                 ),
-                color: getDataQualityTextColor(dataPoint.quality)
+                color: getDataQualityTextColor(dataPoint.quality),
               }"
               [label]="getQualityTranslation(dataPoint.quality) | translate"
             ></p-chip>
@@ -112,7 +111,7 @@
                 'background-color': getDataQualityBackgroundColor(
                   dataPoint.quality
                 ),
-                color: getDataQualityTextColor(dataPoint.quality)
+                color: getDataQualityTextColor(dataPoint.quality),
               }"
               [label]="getQualityTranslation(dataPoint.quality) | translate"
             ></p-chip>
@@ -174,7 +173,7 @@
                     'background-color': getDataQualityBackgroundColor(
                       metric.value.result ?? 0
                     ),
-                    color: getDataQualityTextColor(metric.value.result ?? 0)
+                    color: getDataQualityTextColor(metric.value.result ?? 0),
                   }"
                   [label]="
                     getWaterbagTestkitValue(metric.value, metric.key) +

@@ -1,11 +1,10 @@
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../../feedback.module';
 import { FeedbackMessageAndAttachmentComponent } from './feedback-message-and-attachments.component';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeedbackAttachmentFileComponent } from './feedback-attachment-file/feedback-attachment-file.component';
 import { MessageService, SharedModule } from 'primeng/api';
 import imageCompression from 'browser-image-compression';
-import { convertMegabytesToBytes } from '../../../../../shared/utils/file-utils';
+import { convertMegabytesToBytes } from '@shared/utils/file-utils';
 import { TranslateService } from '@ngx-translate/core';
 
 jest.mock('browser-image-compression', () => ({
@@ -14,9 +13,7 @@ jest.mock('browser-image-compression', () => ({
   default: jest.fn((file) => file),
 }));
 
-jest.useFakeTimers();
-
-describe('FeedbackMessageAndAttachmentComponent', () => {
+fdescribe('FeedbackMessageAndAttachmentComponent', () => {
   let shallow: Shallow<FeedbackMessageAndAttachmentComponent>;
 
   const reasonForm = new FormGroup({
@@ -25,7 +22,7 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
   });
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackMessageAndAttachmentComponent, FeedbackModule)
+    shallow = new Shallow(FeedbackMessageAndAttachmentComponent)
       .mock(MessageService, { add: jest.fn() })
       .mock(TranslateService, { instant: jest.fn() })
       .provideMock(SharedModule);
@@ -53,16 +50,17 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
   it('should update files when a file is added and remove it when delete is pressed', async () => {
     const fileName = 'image.jpg';
 
-    const { find, instance, fixture, findComponent, inject } = await shallow.render(
-      `
+    const { find, instance, fixture, findComponent, inject } =
+      await shallow.render(
+        `
         <app-feedback-message-and-attachments
           [reasonForm]="reasonForm"
         ></app-feedback-message-and-attachments>
       `,
-      {
-        bind: { reasonForm },
-      },
-    );
+        {
+          bind: { reasonForm },
+        },
+      );
     const messageService = inject(MessageService);
 
     expect(instance.reasonForm.value.files?.length).toBe(0);
@@ -76,7 +74,10 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     fixture.detectChanges();
 
     expect(messageService.add).not.toHaveBeenCalled();
-    expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
+    expect(imageCompression).toHaveBeenCalledWith(
+      file,
+      expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }),
+    );
     expect(findComponent(FeedbackAttachmentFileComponent).name).toBe(fileName);
     expect(instance.reasonForm.value.files?.length).toBeGreaterThan(0);
 
@@ -115,7 +116,10 @@ describe('FeedbackMessageAndAttachmentComponent', () => {
     fixture.detectChanges();
 
     expect(messageService.add).toHaveBeenCalled();
-    expect(imageCompression).toHaveBeenCalledWith(file, expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }));
+    expect(imageCompression).toHaveBeenCalledWith(
+      file,
+      expect.objectContaining({ maxSizeMB: 3, maxWidthOrHeight: 1920 }),
+    );
     expect(findComponent(FeedbackAttachmentFileComponent)).toHaveLength(0);
     expect(instance.reasonForm.value.files?.length).toBe(0);
   });

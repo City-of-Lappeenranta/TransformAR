@@ -1,5 +1,4 @@
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../../../feedback.module';
 import { FeedbackAttachmentFileComponent } from './feedback-attachment-file.component';
 import { SharedModule } from 'primeng/api';
 
@@ -7,7 +6,9 @@ describe('FeedbackAttachmentFileComponent', () => {
   let shallow: Shallow<FeedbackAttachmentFileComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackAttachmentFileComponent, FeedbackModule).provideMock(SharedModule);
+    shallow = new Shallow(FeedbackAttachmentFileComponent).provideMock(
+      SharedModule,
+    );
   });
 
   it('should render the title and description', async () => {
@@ -49,7 +50,11 @@ describe('FeedbackAttachmentFileComponent', () => {
     );
 
     expect(find('p-progressbar')).toHaveFoundOne();
-    expect((find('.close').nativeElement as HTMLElement).getAttribute('ng-reflect-icon')).toBe('close-circle');
+    expect(
+      (find('.close').nativeElement as HTMLElement).getAttribute(
+        'ng-reflect-icon',
+      ),
+    ).toBe('close-circle');
   });
   it('should hide the progress bar and show trash icon when the upload is complete', async () => {
     const name = 'Name';
@@ -69,7 +74,11 @@ describe('FeedbackAttachmentFileComponent', () => {
     );
 
     expect(find('p-progressbar')).not.toHaveFoundOne();
-    expect((find('.close').nativeElement as HTMLElement).getAttribute('ng-reflect-icon')).toBe('trash');
+    expect(
+      (find('.close').nativeElement as HTMLElement).getAttribute(
+        'ng-reflect-icon',
+      ),
+    ).toBe('trash');
   });
 
   it('should emit remove when clicking the icon', async () => {

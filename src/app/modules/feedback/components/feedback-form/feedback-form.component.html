@@ -2,18 +2,22 @@
   @switch (currentChildComponent$ | async) {
     @case (FEEDBACK_FORM_COMPONENT.CATEGORY) {
       <h2 class="title">{{ "FEEDBACK.HEADER.CATEGORY_TITLE" | translate }}</h2>
-      <p *ngIf="parentCategory() as parentCategory" class="description">
-        {{ parentCategory }}
-      </p>
-      <ng-container *ngFor="let categoryStep of categorySteps">
-        <app-input-feedback-category
-          *ngIf="(currentStep$ | async) === categoryStep.index"
-          class="content"
-          [categories]="categories()"
-          [formControlName]="categoryStep.formControlName"
-        >
-        </app-input-feedback-category
-      ></ng-container>
+
+      @if (parentCategory(); as parentCategory) {
+        <p class="description">
+          {{ parentCategory }}
+        </p>
+      }
+
+      @for (categoryStep of categorySteps; track $index) {
+        @if ((currentStep$ | async) === categoryStep.index) {
+          <app-input-feedback-category
+            class="content"
+            [categories]="categories()"
+            [formControlName]="categoryStep.formControlName"
+          ></app-input-feedback-category>
+        }
+      }
     }
     @case (FEEDBACK_FORM_COMPONENT.MESSAGE_AND_ATTACHMENTS) {
       <h2 class="title">

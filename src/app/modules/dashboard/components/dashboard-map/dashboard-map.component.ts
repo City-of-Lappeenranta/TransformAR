@@ -3,8 +3,8 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   computed,
+  DestroyRef,
   effect,
   inject,
   signal,
@@ -26,23 +26,23 @@ import { TranslateService } from '@ngx-translate/core';
 import { MapComponent, Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
 import { groupBy } from 'lodash';
-import {MessageService, PrimeTemplate} from 'primeng/api';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 import {
   BehaviorSubject,
-  Observable,
-  Subject,
   combineLatest,
   filter,
   map,
+  Observable,
+  Subject,
   take,
   withLatestFrom,
 } from 'rxjs';
 import { SearchLocationInputComponent } from '@shared/components/search-location-input/search-location-input.component';
 import { DashboardDataPointDetailComponent } from '../dashboard-data-point-detail/dashboard-data-point-detail.component';
-import { DashboardModule } from '../../dashboard.module';
 import { IconComponent } from '@shared/components/icon/icon.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Toast } from 'primeng/toast';
+import { DashboardFilterComponent } from '../dashboard-filter/dashboard-filter.component';
 
 @Component({
   selector: 'app-dashboard-map',
@@ -67,12 +67,11 @@ import { Toast } from 'primeng/toast';
     SearchLocationInputComponent,
     ReactiveFormsModule,
     DashboardDataPointDetailComponent,
-    DashboardModule,
     IconComponent,
     AsyncPipe,
     Toast,
-    NgIf,
     PrimeTemplate,
+    DashboardFilterComponent,
   ],
 })
 export class DashboardMapComponent implements AfterViewInit {

@@ -8,7 +8,7 @@ describe('DashboardFilterComponent', () => {
   let shallow: Shallow<DashboardFilterComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(DashboardFilterComponent, DashboardModule).provideMock(SharedModule);
+    shallow = new Shallow(DashboardFilterComponent).provideMock(SharedModule);
   });
 
   describe('inputs', () => {

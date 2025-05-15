@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FeedbackCategoryComponent should render the component with color and icon and selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row green selected"
@@ -15,7 +17,9 @@ exports[`FeedbackCategoryComponent should render the component with color and ic
 `;
 
 exports[`FeedbackCategoryComponent should render the component with color, without icon and not selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row green"
@@ -26,7 +30,9 @@ exports[`FeedbackCategoryComponent should render the component with color, witho
 `;
 
 exports[`FeedbackCategoryComponent should render the component with color, without icon and selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row green selected"
@@ -37,7 +43,9 @@ exports[`FeedbackCategoryComponent should render the component with color, witho
 `;
 
 exports[`FeedbackCategoryComponent should render the component without color, icon and not selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row"
@@ -48,7 +56,9 @@ exports[`FeedbackCategoryComponent should render the component without color, ic
 `;
 
 exports[`FeedbackCategoryComponent should render the component without color, icon and selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row selected"
@@ -59,7 +69,9 @@ exports[`FeedbackCategoryComponent should render the component without color, ic
 `;
 
 exports[`FeedbackCategoryComponent should render the component without color, with icon and not selected 1`] = `
-<ng-component>
+<ng-component
+  bindings={[Function Object]}
+>
   <app-feedback-category>
     <div
       class="feedback-category flex-row"

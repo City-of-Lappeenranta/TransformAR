@@ -1,18 +1,17 @@
 import { Shallow } from 'shallow-render';
-import { FeedbackModule } from '../../../feedback.module';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedbackContactComponent } from './feedback-contact.component';
-import { phoneNumberValidator } from '../../../../../shared/validators/phone-number.validator';
+import { phoneNumberValidator } from '@shared/validators/phone-number.validator';
 import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '@environments/environment';
 
 describe('FeedbackContactComponent', () => {
   let shallow: Shallow<FeedbackContactComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(FeedbackContactComponent, FeedbackModule)
+    shallow = new Shallow(FeedbackContactComponent)
       .mock(TranslateService, { instant: jest.fn() })
       .provideMock(SharedModule);
   });
@@ -64,9 +63,12 @@ describe('FeedbackContactComponent', () => {
 
     expect(find('small')).toHaveFoundOne();
 
-    expect(inject(TranslateService).instant).toHaveBeenCalledWith('FEEDBACK.CONTACT.ERROR.INVALID_PHONE_NUMBER', {
-      phoneNumberFormat,
-    });
+    expect(inject(TranslateService).instant).toHaveBeenCalledWith(
+      'FEEDBACK.CONTACT.ERROR.INVALID_PHONE_NUMBER',
+      {
+        phoneNumberFormat,
+      },
+    );
   });
 });
 
@@ -76,6 +78,9 @@ function createContactForm(): FormGroup {
     firstName: new FormControl<string | null>(null),
     lastName: new FormControl<string | null>(null),
     phone: new FormControl<string | null>(null, phoneNumberValidator),
-    termsOfUseAccepted: new FormControl<boolean>(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+    termsOfUseAccepted: new FormControl<boolean>(false, {
+      nonNullable: true,
+      validators: [Validators.requiredTrue],
+    }),
   });
 }

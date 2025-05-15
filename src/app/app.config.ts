@@ -15,7 +15,7 @@ import {
   NgxGoogleAnalyticsModule,
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
-import { environment } from '../environments/environment';
+import { environment } from '@environments/environment';
 import { providePrimeNG } from 'primeng/config';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
