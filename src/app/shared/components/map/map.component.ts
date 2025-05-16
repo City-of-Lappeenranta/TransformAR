@@ -14,7 +14,7 @@ import { LatLong } from '@core/models/location';
 import { environment } from '@environments/environment';
 import { isSameLocation } from '../../utils/location-utils';
 import * as leaflet from 'leaflet';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
 
 export interface Marker {

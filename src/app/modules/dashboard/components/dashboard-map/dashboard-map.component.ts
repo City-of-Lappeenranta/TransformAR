@@ -25,7 +25,7 @@ import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { MapComponent, Marker } from '@shared/components/map/map.component';
 import { isSameLocation } from '@shared/utils/location-utils';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import {
   BehaviorSubject,

@@ -1,4 +1,4 @@
-import { isNil, isString } from 'lodash';
+import { isNil, isString } from 'lodash-es';
 
 /**
  * Removes all null or undefined values from the object
