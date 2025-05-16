@@ -41,10 +41,7 @@ type CategoryToShow = Category & {
   imports: [FeedbackCategoryComponent, Skeleton],
   standalone: true,
 })
-export class InputFeedbackCategoryComponent
-  extends ControlValueAccessorHelper<string>
-  implements OnChanges
-{
+export class InputFeedbackCategoryComponent extends ControlValueAccessorHelper<string> implements OnChanges {
   @Input({ required: true }) public categories!: Category[];
   @Input() public withColor = true;
 
