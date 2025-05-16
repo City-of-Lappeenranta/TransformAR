@@ -4,7 +4,16 @@
  * @returns The value in megabytes
  */
 export const convertBytesToMegabytes = (value: number): number => {
-  return value / 1024 / 1024;
+  return convertBytesToKilobytes(value) / 1024;
+};
+
+/**
+ * Convert a value in bytes to kilobytes
+ * @param value The value in bytes.
+ * @returns The value in kilobytes
+ */
+export const convertBytesToKilobytes = (value: number): number => {
+  return value / 1024;
 };
 
 /**

@@ -36,6 +36,7 @@
           #fileInput
           type="file"
           accept="image/png, image/jpeg"
+          (click)="resetFileInput($event)"
           (change)="onFileInput($event)"
           style="display: none"
         />
