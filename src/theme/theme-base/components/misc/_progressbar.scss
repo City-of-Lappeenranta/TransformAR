@@ -6,9 +6,9 @@
 
   .p-progressbar-value {
     border: 0 none;
-    margin: 0;
-    background: $progressBarValueBg;
-    border-radius: $borderRadius;
+    margin: 0 !important;
+    background: $progressBarValueBg !important;
+    border-radius: $borderRadius !important;
   }
 
   .p-progressbar-label {
