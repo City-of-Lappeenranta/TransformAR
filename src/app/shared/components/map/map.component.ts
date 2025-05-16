@@ -186,12 +186,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     const { location } = marker;
     const divIcon = await this.getMarkerDivIcon(marker);
 
-    leaflet
-      .marker(new leaflet.LatLng(...location), {
-        icon: divIcon,
-      })
-      .on('click', this.onClickMarker.bind(this))
-      .addTo(this.map as leaflet.Map);
+    if (this.map) {
+      leaflet
+        .marker(new leaflet.LatLng(...location), {
+          icon: divIcon,
+        })
+        .on('click', this.onClickMarker.bind(this))
+        .addTo(this.map);
+    }
   }
 
   private async getMarkerDivIcon(marker: Marker): Promise<leaflet.DivIcon> {

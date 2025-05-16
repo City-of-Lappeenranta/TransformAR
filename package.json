@@ -18,7 +18,7 @@
     "test": "NODE_OPTIONS='--no-warnings' jest --config ./jest.config.ts",
     "test:watch": "npm run test -- --watch",
     "test:ci": "npm run generate-icons; npm run test:unit:ci",
-    "test:unit:ci": "npm run test -- --coverage --ci --force-exit --collect-coverage --no-watchman --detect-open-handles",
+    "test:unit:ci": "npm run test -- --coverage --ci --force-exit --collect-coverage --silent --detectOpenHandles",
     "lint": "npm run lint:ts && npm run lint:styles",
     "lint:ts": "ng lint",
     "lint:styles": "stylelint \"./src/app/**/*.scss\"",
