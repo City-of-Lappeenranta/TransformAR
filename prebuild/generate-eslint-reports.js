@@ -4,7 +4,7 @@ const { writeJson } = require("fs-extra");
 
 (async function main() {
   const eslint = new ESLint();
-  const results = await eslint.lintFiles(["app"]);
+  const results = await eslint.lintFiles(["src/app/**/*.ts"]);
 
   const filteredResults = results.filter((lintResult) => {
     return lintResult.messages.length > 0;

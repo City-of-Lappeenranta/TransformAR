@@ -1,0 +1,18 @@
+<main class="flex-column">
+  <section class="content flex-column">
+    <app-icon icon="check"></app-icon>
+    <p>{{ "FEEDBACK.CONFIRMATION.TITLE" | translate }}</p>
+    @if (email) {
+      <small
+        >{{ "FEEDBACK.CONFIRMATION.DESCRIPTION" | translate }}
+        {{ email }}</small
+      >
+    }
+  </section>
+  <app-icon class="wave" icon="navigation-header-wave"></app-icon>
+  <p-button
+    routerLink="/feedback"
+    class="button"
+    [label]="'FEEDBACK.CONFIRMATION.RESTART' | translate"
+  ></p-button>
+</main>
