@@ -1,0 +1,54 @@
+:host {
+  width: 100%;
+  background-color: white;
+
+  .location-information-container,
+  .metric-container {
+    max-width: 100%;
+
+    .chip {
+      margin-top: 8px;
+    }
+  }
+
+  .location-information-container {
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 32px;
+
+    & > div {
+      gap: 4px;
+    }
+  }
+
+  .metric-container {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 32px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eaecf0;
+  }
+
+  .metric-container + a {
+    padding: 16px 0;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: var(--primary-color);
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  .address-loader {
+    height: 20px;
+    width: 50%;
+  }
+
+  app-icon {
+    cursor: pointer;
+  }
+}

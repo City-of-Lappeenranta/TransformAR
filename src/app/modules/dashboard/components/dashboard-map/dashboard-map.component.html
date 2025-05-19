@@ -1,0 +1,57 @@
+<app-map
+  class="full-height"
+  [center$]="mapCenter$"
+  [markers]="(dataPointMarkers$ | async) ?? []"
+  (markerClick)="onMarkerClick($event)"
+></app-map>
+<app-search-location-input
+  class="search"
+  [formControl]="locationFormControl"
+></app-search-location-input>
+
+@if (selectedDataPoints(); as selectedDataPoints) {
+  <app-dashboard-data-point-detail
+    @slideInAndOut
+    class="bottom-modal"
+    [dataPoints]="selectedDataPoints"
+    (close)="onDataPointClose()"
+  ></app-dashboard-data-point-detail>
+}
+
+@if (showDataPointTypeFilter()) {
+  <app-dashboard-filter
+    @slideInAndOut
+    class="bottom-modal"
+    [filter]="dataPointTypeFilter()"
+    (close)="onFilterClose()"
+    (toggle)="onFilterToggle($event)"
+  ></app-dashboard-filter>
+}
+
+<div class="actions flex-column">
+  <div class="badge-button">
+    @if (dataPointTypeFilter().length > 0) {
+      <small class="badge">{{ dataPointTypeFilter().length }}</small>
+    }
+    <app-icon
+      class="filter-button shadow-md"
+      icon="layers"
+      (click)="onFilterOpen()"
+    ></app-icon>
+  </div>
+  <app-icon
+    class="focus-location-button shadow-md"
+    [class.loading]="locationLoading$ | async"
+    [class.has-permission]="(locationPermissionState$ | async) === 'granted'"
+    [icon]="(locationLoading$ | async) ? 'spinner' : 'target'"
+    (click)="onFocusLocationClick()"
+  ></app-icon>
+</div>
+<p-toast position="bottom-center" [key]="TOAST_KEY" styleClass="toast">
+  <ng-template let-message pTemplate="headless">
+    <section class="toast-content flex-row">
+      <p class="body-xs">{{ message.detail }}</p>
+      <app-icon icon="spinner"></app-icon>
+    </section>
+  </ng-template>
+</p-toast>

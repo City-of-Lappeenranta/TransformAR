@@ -7,30 +7,36 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "scss"
         }
       },
       "root": "",
-      "sourceRoot": "",
+      "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/citizen-webapp",
-            "index": "index.html",
-            "browser": "main.ts",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "sass",
-            "assets": ["favicon.ico", "assets", "manifest.webmanifest"],
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ],
             "styles": [
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "styles.sass"
+              "node_modules/leaflet/dist/leaflet.css",
+              "src/styles.scss"
             ],
             "scripts": [],
-            "sourceMap": true
+            "sourceMap": true,
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/theme/theme-base", "src/theme/themes"]
+            }
           },
           "configurations": {
             "production": {
@@ -55,8 +61,8 @@
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "environments/environment.ts",
-                  "with": "environments/environment.development.ts"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
                 }
               ]
             }
@@ -106,11 +112,30 @@
             "ignorePath": ".eslintignore",
             "lintFilePatterns": ["app/**/*.ts", "app/**/*.html"]
           }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.config.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": ["scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ],
+            "styles": [
+              "node_modules/leaflet/dist/leaflet.css",
+              "src/styles.scss"
+            ],
+            "scripts": []
+          }
         }
       }
     }
   },
   "cli": {
-    "schematicCollections": ["@angular-eslint/schematics"]
+    "schematicCollections": ["@angular-eslint/schematics"],
+    "analytics": false
   }
 }

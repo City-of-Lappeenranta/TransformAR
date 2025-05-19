@@ -3,9 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@shared/*": ["./app/shared/*"],
-      "@core/*": ["./app/core/*"],
-      "@environments/*": ["./environments/*"]
+      "@shared/*": ["./src/app/shared/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@environments/*": ["./src/environments/*"]
     },
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
