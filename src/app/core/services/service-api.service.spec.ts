@@ -78,6 +78,7 @@ describe('ServiceApi', () => {
       const httpTestingController = inject(HttpTestingController);
 
       const data = {
+        api_key: environment.serviceApiApiKey,
         service_code: 'streets',
         description: 'this is my feedback message',
         'media[]': expect.any(File),
@@ -104,7 +105,6 @@ describe('ServiceApi', () => {
 
       const req = httpTestingController.expectOne(`${environment.serviceApiUrl}/requests.json?jurisdiction_id=citizenapp`);
       expect(req.request.method).toBe('POST');
-      expect(req.request.headers.get('Authorization')).toContain('Bearer ');
       expect(Object.fromEntries([...req.request.body])).toEqual(data);
       req.flush('');
     });
